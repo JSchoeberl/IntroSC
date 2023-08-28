@@ -20,7 +20,7 @@ Prerequisites:
 * install cmake (available within vs-code as ...)
 
 look for project draft 
-[ASC-bla](https://github.com/JSchoeberl/test_projectdev)
+[ASC-bla](https://github.com/JSchoeberl/ASC-bla)
 
 and git-clone it. Either
 * use vscode ...
