@@ -1,2 +1,0 @@
-## Refresh our C++ knowledge
-

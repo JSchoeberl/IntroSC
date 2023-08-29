@@ -1,11 +1,3 @@
-# Basic Linear Algebra
-
-We are developing a library for basic linear algebra operations. For this we
-* are implementing classes for vectors and matrices in modern C++
-* make them available to Python for simple usability
-
-We are practicing software development in teams using git.
-
 
 ## Clone a prepared project from github
 
@@ -41,7 +33,6 @@ Again, *vscode* is doing the work for you. If you use a terminal, go to the ASC-
 
 You should now be able to run the executeable.
 
-- [Refresh your C++](bla-explainCpp.md)
 
 
 ## Extend ASC-bla in team-work
@@ -72,11 +63,3 @@ The other team-member can
     git merge 
 
 the contributions. Experiment with changing the same code reagions. 
-
-- [Creating documentation](bla-docu.md)
-
-
-
-
-
-

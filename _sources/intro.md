@@ -1,4 +1,4 @@
-# Introduction to Scientific Computig
+# Introduction to Scientific Computing
 
 Course given by Prof. J. Schöberl at TU Wien
 
