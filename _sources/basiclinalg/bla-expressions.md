@@ -1,4 +1,4 @@
-# Expression templates
+## Expression templates
 
 Think of a code like
 
@@ -27,11 +27,11 @@ SumExpr< Vector , ScaleExpr< double, Vector > >
 ```
 
 The use of templates for encoding such expressions is called the expression template paradigm.
-One also referes to *lazy evaluation*, since the evaluation happens later, just when the result is written to the destination vector.
+One also refers to *lazy evaluation*, since the evaluation happens later, just when the result is written to the destination vector.
 
 
 
-The ASC-bla library implements such expression templates for vectos. Git-clone from
+The ASC-bla library implements such expression templates for vectors. Git-clone from
 [branch *expr*](https://github.com/JSchoeberl/ASC-bla/tree/expr).
 
 Here we have the base class template `Expr` for all vector and matrix expressions,
@@ -71,9 +71,10 @@ The fancy trick is that `SumExpr` derives from the base class `Expr`, and gives 
 This idiom is known as
 [curiously recurring template pattern (CRTP)](https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern) or 
 [Barton–Nackman trick](https://en.wikipedia.org/wiki/Barton–Nackman_trick#:~:text=The%20idiom%20is%20characterized%20by,recurring%20template%20pattern%20(CRTP).&text=The%20Barton–Nackman%20trick%2C%20then,to%20deal%20with%20such%20ambiguities).
+In the breaking work by Todd Veldhuizen [Expression Templates](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=ca2f8a9b7407de039957a358f995265ec8b769a9) the expression templates paradigm for vector operations was introduced. However, back in 1995, it was too much for compiler technology.
 
 
-If we call the paranthesis operator `operator()(size_t)` of an `Expr<T>` object, if upcasts to `T`, and calls the paranthesis operator there. In this example the `operator()` of a `SumExpr` calls the `operator()` of both of its members.
+If we call the call operator `operator()(size_t)` of an `Expr<T>` object, it upcasts to `T`, and calls the call operator there. In this example the `operator()` of a `SumExpr` calls the `operator()` of both of its members.
 
 
 

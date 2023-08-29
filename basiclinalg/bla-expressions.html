@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Expression templates &#8212; Introduction to Scientific Computing</title>
+    <title>5. Expression templates &#8212; Introduction to Scientific Computing</title>
   
   
   
@@ -64,6 +64,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'basiclinalg/bla-expressions';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="6. Partial differential equations" href="../PDEs/PDEs.html" />
+    <link rel="prev" title="4. Creating documentation" href="bla-docu.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -154,9 +156,17 @@ const thebe_selector_output = ".output, .cell_output"
                 </a>
             </li>
         </ul>
-        <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="bla.html">Basic Linear Algebra</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">Partial differential equations</a></li>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Basic Linear Algebra</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="bla.html">1. Basic Linear Algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bla-git.html">2. Clone a project from github</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bla-explainCpp.html">3. Refresh our C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bla-docu.html">4. Creating documentation</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">5. Expression templates</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">PDEs</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">6. Partial differential equations</a></li>
 </ul>
 
     </div>
@@ -352,8 +362,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="expression-templates">
-<h1>Expression templates<a class="headerlink" href="#expression-templates" title="Permalink to this heading">#</a></h1>
+  <section id="expression-templates">
+<h1><span class="section-number">5. </span>Expression templates<a class="headerlink" href="#expression-templates" title="Permalink to this heading">#</a></h1>
 <p>Think of a code like</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">3</span><span class="o">*</span><span class="n">y</span><span class="p">;</span>
 </pre></div>
@@ -371,8 +381,8 @@ document.write(`
 </pre></div>
 </div>
 <p>The use of templates for encoding such expressions is called the expression template paradigm.
-One also referes to <em>lazy evaluation</em>, since the evaluation happens later, just when the result is written to the destination vector.</p>
-<p>The ASC-bla library implements such expression templates for vectos. Git-clone from
+One also refers to <em>lazy evaluation</em>, since the evaluation happens later, just when the result is written to the destination vector.</p>
+<p>The ASC-bla library implements such expression templates for vectors. Git-clone from
 <a class="reference external" href="https://github.com/JSchoeberl/ASC-bla/tree/expr">branch <em>expr</em></a>.</p>
 <p>Here we have the base class template <code class="docutils literal notranslate"><span class="pre">Expr</span></code> for all vector and matrix expressions,
 the <code class="docutils literal notranslate"><span class="pre">SumExpr</span></code>, and the <code class="docutils literal notranslate"><span class="pre">operator+</span></code> for creating such a SumExpr.</p>
@@ -408,8 +418,9 @@ the <code class="docutils literal notranslate"><span class="pre">SumExpr</span><
 <p>The fancy trick is that <code class="docutils literal notranslate"><span class="pre">SumExpr</span></code> derives from the base class <code class="docutils literal notranslate"><span class="pre">Expr</span></code>, and gives itself as the template argument to the base. So, we can statically up-cast the base to the derived class.
 This idiom is known as
 <a class="reference external" href="https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern">curiously recurring template pattern (CRTP)</a> or
-<a class="reference external" href="https://en.wikipedia.org/wiki/Barton%E2%80%93Nackman_trick#:~:text=The%20idiom%20is%20characterized%20by,recurring%20template%20pattern%20(CRTP).&amp;text=The%20Barton%E2%80%93Nackman%20trick%2C%20then,to%20deal%20with%20such%20ambiguities">Barton–Nackman trick</a>.</p>
-<p>If we call the paranthesis operator <code class="docutils literal notranslate"><span class="pre">operator()(size_t)</span></code> of an <code class="docutils literal notranslate"><span class="pre">Expr&lt;T&gt;</span></code> object, if upcasts to <code class="docutils literal notranslate"><span class="pre">T</span></code>, and calls the paranthesis operator there. In this example the <code class="docutils literal notranslate"><span class="pre">operator()</span></code> of a <code class="docutils literal notranslate"><span class="pre">SumExpr</span></code> calls the <code class="docutils literal notranslate"><span class="pre">operator()</span></code> of both of its members.</p>
+<a class="reference external" href="https://en.wikipedia.org/wiki/Barton%E2%80%93Nackman_trick#:~:text=The%20idiom%20is%20characterized%20by,recurring%20template%20pattern%20(CRTP).&amp;text=The%20Barton%E2%80%93Nackman%20trick%2C%20then,to%20deal%20with%20such%20ambiguities">Barton–Nackman trick</a>.
+In the breaking work by Todd Veldhuizen <a class="reference external" href="https://citeseerx.ist.psu.edu/document?repid=rep1&amp;type=pdf&amp;doi=ca2f8a9b7407de039957a358f995265ec8b769a9">Expression Templates</a> the expression templates paradigm for vector operations was introduced. However, back in 1995, it was too much for compiler technology.</p>
+<p>If we call the call operator <code class="docutils literal notranslate"><span class="pre">operator()(size_t)</span></code> of an <code class="docutils literal notranslate"><span class="pre">Expr&lt;T&gt;</span></code> object, it upcasts to <code class="docutils literal notranslate"><span class="pre">T</span></code>, and calls the call operator there. In this example the <code class="docutils literal notranslate"><span class="pre">operator()</span></code> of a <code class="docutils literal notranslate"><span class="pre">SumExpr</span></code> calls the <code class="docutils literal notranslate"><span class="pre">operator()</span></code> of both of its members.</p>
 <p>But can the compiler really generate good code from all of this nested functions and expression objects ? Yes ! It is important that the compiler can inline all the functions, sees the whole flow of data, and optimizes everything as a single function.</p>
 <p>To verify what the compiler generates, we can have a look into the generated assembly code. There is a online tool <a class="reference external" href="https://godbolt.org/z/qePEhvaov">Compiler Explorer</a>. You copy in the source code, and it immediately displays the generated assembly code. It allows to choose between a lot of compilers, versions and provided flags.</p>
 <p>What we see is ….</p>
@@ -446,6 +457,24 @@ This idiom is known as
   
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="bla-docu.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><span class="section-number">4. </span>Creating documentation</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../PDEs/PDEs.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">6. </span>Partial differential equations</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div></div>
   
 </div>

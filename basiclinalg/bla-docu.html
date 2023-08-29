@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Creating documentation &#8212; Introduction to Scientific Computing</title>
+    <title>4. Creating documentation &#8212; Introduction to Scientific Computing</title>
   
   
   
@@ -64,6 +64,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'basiclinalg/bla-docu';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="5. Expression templates" href="bla-expressions.html" />
+    <link rel="prev" title="3. Refresh our C++ knowledge" href="bla-explainCpp.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -154,8 +156,16 @@ const thebe_selector_output = ".output, .cell_output"
                 </a>
             </li>
         </ul>
-        <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="bla.html">Basic Linear Algebra</a></li>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Basic Linear Algebra</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="bla.html">1. Basic Linear Algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bla-git.html">2. Clone a prepared project from github</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bla-explainCpp.html">3. Refresh our C++ knowledge</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">4. Creating documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bla-expressions.html">5. Expression templates</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">PDEs</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">Partial differential equations</a></li>
 </ul>
 
@@ -353,7 +363,7 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section id="creating-documentation">
-<h1>Creating documentation<a class="headerlink" href="#creating-documentation" title="Permalink to this heading">#</a></h1>
+<h1><span class="section-number">4. </span>Creating documentation<a class="headerlink" href="#creating-documentation" title="Permalink to this heading">#</a></h1>
 <p>We use <a class="reference external" href="https://docs.readthedocs.io">ReadTheDocs</a> based on <a class="reference external" href="https://www.sphinx-doc.org">Sphinx</a> for creating documentation.</p>
 <p>Quick steps to setup the documentation:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mkdir docs
@@ -363,7 +373,9 @@ make
 </pre></div>
 </div>
 <p>in <a class="reference external" href="http://conf.py">conf.py</a> you can select the theme, for example:</p>
-<p>html_theme = ‘sphinx_rtd_theme’</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>html_theme = &#39;sphinx_rtd_theme&#39;
+</pre></div>
+</div>
 <p>Register to readthedocs with your github account.
 On your dash-board you can see your (public!) github projects. Import the project.</p>
 </section>
@@ -399,6 +411,24 @@ On your dash-board you can see your (public!) github projects. Import the projec
   
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="bla-explainCpp.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><span class="section-number">3. </span>Refresh our C++ knowledge</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="bla-expressions.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">5. </span>Expression templates</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div></div>
   
 </div>

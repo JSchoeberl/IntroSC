@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Refresh our C++ knowledge &#8212; Introduction to Scientific Computing</title>
+    <title>3. Refresh our C++ &#8212; Introduction to Scientific Computing</title>
   
   
   
@@ -64,6 +64,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'basiclinalg/bla-explainCpp';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="4. Creating documentation" href="bla-docu.html" />
+    <link rel="prev" title="2. Clone a project from github" href="bla-git.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -154,9 +156,17 @@ const thebe_selector_output = ".output, .cell_output"
                 </a>
             </li>
         </ul>
-        <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="bla.html">Basic Linear Algebra</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">Partial differential equations</a></li>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Basic Linear Algebra</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="bla.html">1. Basic Linear Algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bla-git.html">2. Clone a project from github</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">3. Refresh our C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bla-docu.html">4. Creating documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bla-expressions.html">5. Expression templates</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">PDEs</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">6. Partial differential equations</a></li>
 </ul>
 
     </div>
@@ -338,7 +348,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Refresh our C++ knowledge</h1>
+    <h1>Refresh our C++</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -352,8 +362,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section id="refresh-our-c-knowledge">
-<h1>Refresh our C++ knowledge<a class="headerlink" href="#refresh-our-c-knowledge" title="Permalink to this heading">#</a></h1>
+  <section id="refresh-our-c">
+<h1><span class="section-number">3. </span>Refresh our C++<a class="headerlink" href="#refresh-our-c" title="Permalink to this heading">#</a></h1>
 <p>We assume you have a basic knowledge of C++, and repeat only shortly some features of the C++ programming language. Here is a list of <a class="reference external" href="https://stackoverflow.com/questions/388242/the-definitive-c-book-guide-and-list">C++ books</a>.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">Vector</span>
@@ -402,11 +412,12 @@ document.write(`
 </div>
 <ul class="simple">
 <li><p>We define a class template <code class="docutils literal notranslate"><span class="pre">Vector</span></code>. The type of the vector elements is given by template argument <code class="docutils literal notranslate"><span class="pre">T</span></code>. For example, one can define a vector of double precision entries as <code class="docutils literal notranslate"><span class="pre">Vector&lt;double&gt;</span></code>.</p></li>
-<li><p>A Vector object can be created by one of its constructores, and is destroyed by the desctructor.</p></li>
-<li><p>We use the <em>move-semantics</em> introduced with C++11. If a Vector is initialized from a return-value Vector (which will be destroyed anyway), the move-constructor can steal resources from the temporary vector.</p></li>
-<li><p>All data members are private, what means unvisible form outside. The interaction with an Vector object happens only via its methods (<code class="docutils literal notranslate"><span class="pre">Size</span></code>, assignment <code class="docutils literal notranslate"><span class="pre">operator=</span></code> and paranthesis <code class="docutils literal notranslate"><span class="pre">operator()</span></code>). We have chosen () instead of [] for consistency with the <code class="docutils literal notranslate"><span class="pre">Matrix</span></code> class.</p></li>
+<li><p>A Vector object can be created by one of its constructors, and is destroyed by the destructor.</p></li>
+<li><p>We use the <em>move-semantics</em> introduced with C++11. If a Vector is initialized from a return-value Vector (which will be destroyed anyway), the move-constructor can steal resources from the temporary vector
+(see <a class="reference external" href="https://en.cppreference.com/w/cpp/language/rule_of_three">rule of five</a>).</p></li>
+<li><p>All data members are private, what means invisible form outside. The interaction with an Vector object happens only via its methods (<code class="docutils literal notranslate"><span class="pre">Size</span></code>, assignment <code class="docutils literal notranslate"><span class="pre">operator=</span></code> and call <code class="docutils literal notranslate"><span class="pre">operator()</span></code>). We have chosen the call operator () instead of bracket operator [] for consistency with the <code class="docutils literal notranslate"><span class="pre">Matrix</span></code> class.</p></li>
 </ul>
-<p>The function <code class="docutils literal notranslate"><span class="pre">operator+</span></code> for adding two vectors of type <code class="docutils literal notranslate"><span class="pre">T</span></code> is as follows:</p>
+<p>The function <code class="docutils literal notranslate"><span class="pre">operator+</span></code> for adding two vectors of the same type <code class="docutils literal notranslate"><span class="pre">T</span></code> is as follows:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
 <span class="n">Vector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="k">operator</span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Vector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Vector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">b</span><span class="p">)</span>
 <span class="p">{</span>
@@ -417,6 +428,12 @@ document.write(`
 <span class="p">}</span><span class="w">  </span>
 </pre></div>
 </div>
+<p>Coding styles: it is a good recommendation to follow a coherent programming style within one project, this includes</p>
+<ul class="simple">
+<li><p>naming convention for classes, functions, and variables</p></li>
+<li><p>indentation, spaces before/after operators and brackets</p></li>
+</ul>
+<p>We try to follow the <a class="reference external" href="https://google.github.io/styleguide/cppguide.html">Google C++ Style Guide</a>.</p>
 </section>
 
     <script type="text/x-thebe-config">
@@ -450,6 +467,24 @@ document.write(`
   
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
+    <a class="left-prev"
+       href="bla-git.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><span class="section-number">2. </span>Clone a project from github</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="bla-docu.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">4. </span>Creating documentation</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
 </div></div>
   
 </div>
