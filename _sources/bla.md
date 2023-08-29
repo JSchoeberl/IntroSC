@@ -73,13 +73,7 @@ The other team-member can
 
 the contributions. Experiment with changing the same code reagions. 
 
-## Preparing documentation
-
-The Together with 
-Read the Docs
-
-Together with the 
-
+- [Creating documentation](bla-docu.md)
 
 
 
