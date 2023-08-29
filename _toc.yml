@@ -4,7 +4,10 @@
 format: jb-book
 root: intro
 chapters:
-- file: bla
-- file: markdown
-- file: notebooks
-- file: markdown-notebooks
+- file: basiclinalg/bla
+- file: PDEs/PDEs
+
+
+
+# - file: notebooks
+# - file: markdown-notebooks
