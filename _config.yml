@@ -4,6 +4,8 @@
 title: Introduction to Scientific Computing
 author: J. Schöberl
 logo: TU_Signet.png
+copyright : "2023"  # Copyright year to be placed in the footer
+
 
 # Force re-execution of notebooks on each build.
 # See https://jupyterbook.org/content/execute.html

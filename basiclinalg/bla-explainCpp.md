@@ -53,11 +53,11 @@ public:
 
 * We define a class template `Vector`. The type of the vector elements is given by template argument `T`. For example, one can define a vector of double precision entries as `Vector<double>`.
 
-* A Vector object can be created by one of its constructores, and is destroyed by the desctructor.
+* A Vector object can be created by one of its constructors, and is destroyed by the destructor.
 
 * We use the *move-semantics* introduced with C++11. If a Vector is initialized from a return-value Vector (which will be destroyed anyway), the move-constructor can steal resources from the temporary vector.
 
-* All data members are private, what means unvisible form outside. The interaction with an Vector object happens only via its methods (`Size`, assignment `operator=` and paranthesis `operator()`). We have chosen () instead of [] for consistency with the `Matrix` class.
+* All data members are private, what means invisible form outside. The interaction with an Vector object happens only via its methods (`Size`, assignment `operator=` and call `operator()`). We have chosen () instead of [] for consistency with the `Matrix` class.
 
 
 

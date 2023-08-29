@@ -14,7 +14,7 @@ Quick steps to setup the documentation:
 
 in conf.py you can select the theme, for example:
 
-   html_theme = 'sphinx_rtd_theme'
+    html_theme = 'sphinx_rtd_theme'
 
 
 

@@ -31,7 +31,7 @@ Again, *vscode* is doing the work for you. If you use a terminal, go to the ASC-
     make
     
 
-You should now be able to run the executeable.
+You should now be able to run the executable.
 
 
 
@@ -39,7 +39,7 @@ You should now be able to run the executeable.
 
 You will now add more functionality to ASC-bla. You want to do it in team-work.
 Form teams by 2-4 students. Go back to github. One of the team will *fork* ASC-bla (name it as you like),
-and invites collaegues to the project.
+and invites colleagues to the project.
 
 Repeat the steps from before: Clone, configure, build, run
 
@@ -62,4 +62,4 @@ The other team-member can
     git fetch
     git merge 
 
-the contributions. Experiment with changing the same code reagions. 
+the contributions. Experiment with changing the same code regions. 
