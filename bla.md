@@ -20,7 +20,7 @@ Prerequisites:
 * install cmake (available within vs-code as ...)
 
 look for project draft 
-[ASC-bla](https://github.com/JSchoeberl/test_projectdev)
+[ASC-bla](https://github.com/JSchoeberl/ASC-bla)
 
 and git-clone it. Either
 * use vscode ...
@@ -73,13 +73,7 @@ The other team-member can
 
 the contributions. Experiment with changing the same code reagions. 
 
-## Preparing documentation
-
-The Together with 
-Read the Docs
-
-Together with the 
-
+- [Creating documentation](bla-docu.md)
 
 
 
