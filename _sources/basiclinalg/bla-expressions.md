@@ -83,3 +83,4 @@ But can the compiler really generate good code from all of this nested functions
 To verify what the compiler generates, we can have a look into the generated assembly code. There is a online tool [Compiler Explorer](https://godbolt.org/z/qePEhvaov). You copy in the source code, and it immediately displays the generated assembly code. It allows to choose between a lot of compilers, versions and provided flags.
 
 What we see is ....
+
