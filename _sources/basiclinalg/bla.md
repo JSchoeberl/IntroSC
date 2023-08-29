@@ -13,7 +13,7 @@ readability.
 - [Working with git](bla-git.md)
 - [Refresh your C++](bla-explainCpp.md)
 - [Creating documentation](bla-docu.md)
-- Expression templates
+- [Expression templates](bla-expressions.md)
 
 - Python bindings
 - Overview of libraries
