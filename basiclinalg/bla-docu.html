@@ -158,7 +158,7 @@ const thebe_selector_output = ".output, .cell_output"
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Basic Linear Algebra</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="bla.html">1. Basic Linear Algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bla.html">1. Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bla-git.html">2. Clone a project from github</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bla-refreshCpp.html">3. Refresh your C++</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">4. Creating documentation</a></li>
@@ -215,53 +215,6 @@ const thebe_selector_output = ".output, .cell_output"
         <div class="header-article-item">
 
 <div class="article-header-buttons">
-
-
-
-
-
-<div class="dropdown dropdown-source-buttons">
-  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
-    <i class="fab fa-github"></i>
-  </button>
-  <ul class="dropdown-menu">
-      
-      
-      
-      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
-   class="btn btn-sm btn-source-repository-button dropdown-item"
-   title="Source repository"
-   data-bs-placement="left" data-bs-toggle="tooltip"
->
-  
-
-<span class="btn__icon-container">
-  <i class="fab fa-github"></i>
-  </span>
-<span class="btn__text-container">Repository</span>
-</a>
-</li>
-      
-      
-      
-      
-      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fbasiclinalg/bla-docu.html&body=Your%20issue%20content%20here." target="_blank"
-   class="btn btn-sm btn-source-issues-button dropdown-item"
-   title="Open an issue"
-   data-bs-placement="left" data-bs-toggle="tooltip"
->
-  
-
-<span class="btn__icon-container">
-  <i class="fas fa-lightbulb"></i>
-  </span>
-<span class="btn__text-container">Open issue</span>
-</a>
-</li>
-      
-  </ul>
-</div>
-
 
 
 
@@ -372,19 +325,24 @@ document.write(`
   <section id="creating-documentation">
 <h1><span class="section-number">4. </span>Creating documentation<a class="headerlink" href="#creating-documentation" title="Permalink to this heading">#</a></h1>
 <p>We use <a class="reference external" href="https://docs.readthedocs.io">ReadTheDocs</a> based on <a class="reference external" href="https://www.sphinx-doc.org">Sphinx</a> for creating documentation.</p>
-<p>Quick steps to setup the documentation:</p>
+<p>Install the python packages <em>sphinx</em> and the rtd-theme using</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pip install sphinx sphinx_rtd_theme
+</pre></div>
+</div>
+<p>Quick steps to setup the documentation are as follows. You don’t have to do it for the bla projects, files are already there. Only run make after changing the documentation files.</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mkdir docs
 cd docs
 sphinx-quickstart
 make
 </pre></div>
 </div>
-<p>in <a class="reference external" href="http://conf.py">conf.py</a> you can select the theme, for example:</p>
+<p>in <code class="docutils literal notranslate"><span class="pre">conf.py</span></code> you can select the theme, for example:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>html_theme = &#39;sphinx_rtd_theme&#39;
 </pre></div>
 </div>
-<p>Register to readthedocs with your github account.
-On your dash-board you can see your (public!) github projects. Import the project.</p>
+<p>Register to <span class="xref myst">readthedocs.org</span> with your github account.
+On your dash-board you can see your (public!) github projects. Import your
+bla-project.</p>
 </section>
 
     <script type="text/x-thebe-config">
