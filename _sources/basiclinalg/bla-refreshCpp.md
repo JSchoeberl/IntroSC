@@ -1,4 +1,4 @@
-## Refresh our C++
+## Refresh your C++
 
 We assume you have a basic knowledge of C++, and repeat only shortly some features of the C++ programming language. Here is a list of [C++ books](https://stackoverflow.com/questions/388242/the-definitive-c-book-guide-and-list).
 

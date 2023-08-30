@@ -11,7 +11,7 @@ Prerequisites:
 * install cmake (available within vs-code as ...)
 
 look for project draft 
-[ASC-bla](https://github.com/JSchoeberl/ASC-bla)
+[ASC-bla](https://github.com/TUWien-ASC/ASC-bla)
 
 and git-clone it. Either
 * use vscode ...

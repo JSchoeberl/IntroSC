@@ -64,7 +64,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'basiclinalg/bla-expressions';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="6. Partial differential equations" href="../PDEs/PDEs.html" />
+    <link rel="next" title="6. Python bindings" href="bla-python.html" />
     <link rel="prev" title="4. Creating documentation" href="bla-docu.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -160,13 +160,20 @@ const thebe_selector_output = ".output, .cell_output"
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="bla.html">1. Basic Linear Algebra</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bla-git.html">2. Clone a project from github</a></li>
-<li class="toctree-l1"><a class="reference internal" href="bla-explainCpp.html">3. Refresh our C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bla-refreshCpp.html">3. Refresh your C++</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bla-docu.html">4. Creating documentation</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">5. Expression templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bla-python.html">6. Python bindings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bla-libs.html">7. Overview of libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bla-performance.html">8. Performance</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">PDEs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">6. Partial differential equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">9. Partial differential equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-Poisson.html">10. Poisson Equation and the 5-point stencil</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-iterative.html">11. Iterative Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-waves.html">12. Wave equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-flows.html">13. Navier-Stokes Equation</a></li>
 </ul>
 
     </div>
@@ -383,7 +390,7 @@ document.write(`
 <p>The use of templates for encoding such expressions is called the expression template paradigm.
 One also refers to <em>lazy evaluation</em>, since the evaluation happens later, just when the result is written to the destination vector.</p>
 <p>The ASC-bla library implements such expression templates for vectors. Git-clone from
-<a class="reference external" href="https://github.com/JSchoeberl/ASC-bla/tree/expr">branch <em>expr</em></a>.</p>
+<a class="reference external" href="https://github.com/TUWien-ASC/ASC-bla/tree/expr">branch <em>expr</em></a>.</p>
 <p>Here we have the base class template <code class="docutils literal notranslate"><span class="pre">Expr</span></code> for all vector and matrix expressions,
 the <code class="docutils literal notranslate"><span class="pre">SumExpr</span></code>, and the <code class="docutils literal notranslate"><span class="pre">operator+</span></code> for creating such a SumExpr.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
@@ -467,11 +474,11 @@ In the breaking work by Todd Veldhuizen <a class="reference external" href="http
       </div>
     </a>
     <a class="right-next"
-       href="../PDEs/PDEs.html"
+       href="bla-python.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">6. </span>Partial differential equations</p>
+        <p class="prev-next-title"><span class="section-number">6. </span>Python bindings</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

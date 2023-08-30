@@ -64,7 +64,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'intro';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="1. Basic Linear Algebra" href="basiclinalg/bla.html" />
+    <link rel="next" title="1. Overview" href="basiclinalg/bla.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -157,15 +157,22 @@ const thebe_selector_output = ".output, .cell_output"
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Basic Linear Algebra</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="basiclinalg/bla.html">1. Basic Linear Algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basiclinalg/bla.html">1. Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="basiclinalg/bla-git.html">2. Clone a project from github</a></li>
-<li class="toctree-l1"><a class="reference internal" href="basiclinalg/bla-explainCpp.html">3. Refresh our C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basiclinalg/bla-refreshCpp.html">3. Refresh your C++</a></li>
 <li class="toctree-l1"><a class="reference internal" href="basiclinalg/bla-docu.html">4. Creating documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="basiclinalg/bla-expressions.html">5. Expression templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basiclinalg/bla-python.html">6. Python bindings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basiclinalg/bla-libs.html">7. Overview of libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basiclinalg/bla-performance.html">8. Performance</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">PDEs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="PDEs/PDEs.html">6. Partial differential equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PDEs/PDEs.html">9. Partial differential equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PDEs/PDEs-Poisson.html">10. Poisson Equation and the 5-point stencil</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PDEs/PDEs-iterative.html">11. Iterative Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PDEs/PDEs-waves.html">12. Wave equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PDEs/PDEs-flows.html">13. Navier-Stokes Equation</a></li>
 </ul>
 
     </div>
@@ -363,22 +370,33 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="introduction-to-scientific-computing">
 <h1>Introduction to Scientific Computing<a class="headerlink" href="#introduction-to-scientific-computing" title="Permalink to this heading">#</a></h1>
-<p>Course given by Prof. J. Schöberl at TU Wien</p>
+<p>Joachim Schöberl</p>
+<p>TU Wien, Institute of Analysis and Scientific Computing</p>
+<p>Many scientific challenges require non-trivial software solutions, which have to be tackeled by researchers with diverse skills.</p>
+<p>In this class we learn the development of scientific software in a <em>learning by doing</em> approach.</p>
+<p>We have chosen two typical application areas: Basic Linear Algebra, i.e. computing with vectors and matrices, and numerical solution of partial differential equations.</p>
 <p>This lecture is designed for students in applied mathematics in an early stage.</p>
 <div class="toctree-wrapper compound">
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Basic Linear Algebra</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="basiclinalg/bla.html">1. Basic Linear Algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basiclinalg/bla.html">1. Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="basiclinalg/bla-git.html">2. Clone a project from github</a></li>
-<li class="toctree-l1"><a class="reference internal" href="basiclinalg/bla-explainCpp.html">3. Refresh our C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basiclinalg/bla-refreshCpp.html">3. Refresh your C++</a></li>
 <li class="toctree-l1"><a class="reference internal" href="basiclinalg/bla-docu.html">4. Creating documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="basiclinalg/bla-expressions.html">5. Expression templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basiclinalg/bla-python.html">6. Python bindings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basiclinalg/bla-libs.html">7. Overview of libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="basiclinalg/bla-performance.html">8. Performance</a></li>
 </ul>
 </div>
 <div class="toctree-wrapper compound">
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">PDEs</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="PDEs/PDEs.html">6. Partial differential equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PDEs/PDEs.html">9. Partial differential equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PDEs/PDEs-Poisson.html">10. Poisson Equation and the 5-point stencil</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PDEs/PDEs-iterative.html">11. Iterative Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PDEs/PDEs-waves.html">12. Wave equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PDEs/PDEs-flows.html">13. Navier-Stokes Equation</a></li>
 </ul>
 </div>
 </section>
@@ -419,7 +437,7 @@ document.write(`
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">1. </span>Basic Linear Algebra</p>
+        <p class="prev-next-title"><span class="section-number">1. </span>Overview</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

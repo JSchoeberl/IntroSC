@@ -1,4 +1,4 @@
-# Basic Linear Algebra
+# Overview
 
 We are developing a library for basic linear algebra operations. For this we
 are implementing classes for vectors and matrices in modern C++,
@@ -7,17 +7,7 @@ We are practicing software development in teams using git, and start with
 maintaining documentation from the beginning.
 
 We learn tricks like expression templates to combine performance and
-readability.
-
-
-- [Working with git](bla-git.md)
-- [Refresh your C++](bla-explainCpp.md)
-- [Creating documentation](bla-docu.md)
-- [Expression templates](bla-expressions.md)
-
-- Python bindings
-- Overview of libraries
-- Performance
+readability. We learn how modern CPUs operate, and design algorithms to utilize the potential.
 
 
 

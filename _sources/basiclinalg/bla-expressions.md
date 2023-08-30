@@ -32,7 +32,7 @@ One also refers to *lazy evaluation*, since the evaluation happens later, just w
 
 
 The ASC-bla library implements such expression templates for vectors. Git-clone from
-[branch *expr*](https://github.com/JSchoeberl/ASC-bla/tree/expr).
+[branch *expr*](https://github.com/TUWien-ASC/ASC-bla/tree/expr).
 
 Here we have the base class template `Expr` for all vector and matrix expressions,
 the `SumExpr`, and the `operator+` for creating such a SumExpr.
