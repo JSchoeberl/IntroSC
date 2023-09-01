@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>6. Python bindings &#8212; Introduction to Scientific Computing</title>
+    <title>Python bindings &#8212; Introduction to Scientific Computing</title>
   
   
   
@@ -64,8 +64,6 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'basiclinalg/bla-python';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="7. Overview of libraries" href="bla-libs.html" />
-    <link rel="prev" title="5. Expression templates" href="bla-expressions.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -157,13 +155,13 @@ const thebe_selector_output = ".output, .cell_output"
             </li>
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Basic Linear Algebra</span></p>
-<ul class="current nav bd-sidenav">
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="bla.html">1. Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bla-git.html">2. Clone a project from github</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bla-refreshCpp.html">3. Refresh your C++</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bla-docu.html">4. Creating documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bla-expressions.html">5. Expression templates</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">6. Python bindings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bla-python2.html">6. Python bindings</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bla-libs.html">7. Overview of libraries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bla-performance.html">8. Performance</a></li>
 </ul>
@@ -323,17 +321,20 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="python-bindings">
-<h1><span class="section-number">6. </span>Python bindings<a class="headerlink" href="#python-bindings" title="Permalink to this heading">#</a></h1>
+<h1>Python bindings<a class="headerlink" href="#python-bindings" title="Permalink to this heading">#</a></h1>
 <p>C++ and Python are are strong combination: With C++ we can program for maximal performance, with Python we can work with objects in a very convenient way. Both share a similar object oriented paradigm.</p>
 <p>Python bindings allow to use C++ functions and classes from Python.</p>
-<p>A very popular library for wrapping C++ objects to Python is
+<p>A popular library for wrapping C++ objects to Python is
 <a class="reference external" href="https://pybind11.readthedocs.io/en/stable/">pybind11</a>.</p>
-<p>Now you have to install (Python)[<a class="reference external" href="https://www.python.org">https://www.python.org</a>]. Choose a recent version (at least Python 3.8 should be ok). Using conda is also fine, you have to replace <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code> by <code class="docutils literal notranslate"><span class="pre">conda-install</span></code> in the following.</p>
+<p>Now you have to install <span class="xref myst">Python</span>. Choose a recent version (at least Python 3.8 should be ok). Using conda is also fine, you have to replace <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code> by <code class="docutils literal notranslate"><span class="pre">conda-install</span></code> in the following.</p>
 <p>Install pybind11 as a Python package:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pip install pybind11
 </pre></div>
 </div>
-<p>Now clone the pybind-branch from the <span class="xref myst">ASC-git/pybind</span></p>
+<p>Now clone the pybind-branch from the ASC-git:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>git clone --branch pybind https://github.com/TUWien-ASC/ASC-bla.git
+</pre></div>
+</div>
 </section>
 
     <script type="text/x-thebe-config">
@@ -367,24 +368,6 @@ document.write(`
   
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="bla-expressions.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">5. </span>Expression templates</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="bla-libs.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">7. </span>Overview of libraries</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div></div>
   
 </div>
