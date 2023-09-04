@@ -3,9 +3,36 @@
 
 format: jb-book
 root: intro
-chapters:
-- file: basiclinalg/bla
-- file: PDEs/PDEs
+parts:
+  - caption: Basic Linear Algebra
+    numbered: True
+    chapters:
+    - file: basiclinalg/bla
+    - file: basiclinalg/bla-git
+    - file: basiclinalg/bla-refreshCpp
+    - file: basiclinalg/bla-docu.md
+    - file: basiclinalg/bla-expressions.md
+    - file: basiclinalg/bla-python2.ipynb
+    - file: basiclinalg/bla-libs.md
+    - file: basiclinalg/bla-performance.md
+    
+  - caption: PDEs
+    numbered: True  
+    chapters:
+    - file: PDEs/PDEs
+    - file: PDEs/PDEs-Poisson
+    - file: PDEs/PDEs-iterative
+    - file: PDEs/PDEs-waves
+    - file: PDEs/PDEs-flows            
+
+
+
+
+
+#  - file: basiclinalg/bla
+#  - file: basiclinalg/bla-git
+#  - file: basiclinalg/bla-explainCpp
+#  - file: PDEs/PDEs
 
 
 

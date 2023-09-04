@@ -1,5 +1,4 @@
-
-## Clone a prepared project from github
+## Clone a project from github
 
 [Git](https://git-scm.com) is a popular version control system. It is free and open source.
 
@@ -12,7 +11,7 @@ Prerequisites:
 * install cmake (available within vs-code as ...)
 
 look for project draft 
-[ASC-bla](https://github.com/JSchoeberl/ASC-bla)
+[ASC-bla](https://github.com/TUWien-ASC/ASC-bla)
 
 and git-clone it. Either
 * use vscode ...
@@ -35,7 +34,7 @@ You should now be able to run the executable.
 
 
 
-## Extend ASC-bla in team-work
+### Extend ASC-bla in team-work
 
 You will now add more functionality to ASC-bla. You want to do it in team-work.
 Form teams by 2-4 students. Go back to github. One of the team will *fork* ASC-bla (name it as you like),

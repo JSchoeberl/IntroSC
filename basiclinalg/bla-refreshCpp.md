@@ -1,4 +1,4 @@
-## Refresh our C++ knowledge
+## Refresh your C++
 
 We assume you have a basic knowledge of C++, and repeat only shortly some features of the C++ programming language. Here is a list of [C++ books](https://stackoverflow.com/questions/388242/the-definitive-c-book-guide-and-list).
 
@@ -55,13 +55,14 @@ public:
 
 * A Vector object can be created by one of its constructors, and is destroyed by the destructor.
 
-* We use the *move-semantics* introduced with C++11. If a Vector is initialized from a return-value Vector (which will be destroyed anyway), the move-constructor can steal resources from the temporary vector.
+* We use the *move-semantics* introduced with C++11. If a Vector is initialized from a return-value Vector (which will be destroyed anyway), the move-constructor can steal resources from the temporary vector
+(see [rule of five](https://en.cppreference.com/w/cpp/language/rule_of_three)).
 
-* All data members are private, what means invisible form outside. The interaction with an Vector object happens only via its methods (`Size`, assignment `operator=` and call `operator()`). We have chosen () instead of [] for consistency with the `Matrix` class.
+* All data members are private, what means invisible form outside. The interaction with an Vector object happens only via its methods (`Size`, assignment `operator=` and call `operator()`). We have chosen the call operator () instead of bracket operator [] for consistency with the `Matrix` class.
 
 
 
-The function `operator+` for adding two vectors of type `T` is as follows:
+The function `operator+` for adding two vectors of the same type `T` is as follows:
 
 ```cpp
 template <typename T>
@@ -73,4 +74,12 @@ Vector<T> operator+ (const Vector<T> & a, const Vector<T> & b)
   return sum;
 }  
 ```
+
+
+Coding styles: it is a good recommendation to follow a coherent programming style within one project, this includes
+* naming convention for classes, functions, and variables
+* indentation, spaces before/after operators and brackets
+
+We try to follow the [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html).
+
 
