@@ -228,7 +228,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="../_sources/basiclinalg/bla-libs.md" target="_blank"
+      <li><a href="../_sources/basiclinalg/bla-libs.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -238,7 +238,7 @@ const thebe_selector_output = ".output, .cell_output"
 <span class="btn__icon-container">
   <i class="fas fa-file"></i>
   </span>
-<span class="btn__text-container">.md</span>
+<span class="btn__text-container">.ipynb</span>
 </a>
 </li>
       
@@ -297,7 +297,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -313,6 +315,16 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lapack">7.1. Lapack</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#c-libraries">7.2. C++ libraries</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise">7.3. Exercise:</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -324,6 +336,117 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="overview-of-libraries">
 <h1><span class="section-number">7. </span>Overview of libraries<a class="headerlink" href="#overview-of-libraries" title="Permalink to this heading">#</a></h1>
+<p>We are trying out various freely available linear algebra libraries</p>
+<section id="lapack">
+<h2><span class="section-number">7.1. </span>Lapack<a class="headerlink" href="#lapack" title="Permalink to this heading">#</a></h2>
+<p><a class="reference external" href="https://netlib.org/lapack/">Lapack</a> is the legacy linear algebra library. It contains matrix operations, factorizations, linear systems, eigen-system calculation, and more. It is a quasi standard, highly optimized implementations are available for all major computer systems.</p>
+<p>Some implementations are:</p>
+<ul class="simple">
+<li><p>Intel MKL (for Intel processors + compatible)</p></li>
+<li><p>OpenBlas (open source, for many architectures)</p></li>
+<li><p>Accelerator framework (for Apple systems)</p></li>
+</ul>
+<p>If not available, install Lapack on your computer.</p>
+<p>Add this line to your <em>CMakeLists.txt</em> file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">find_package</span><span class="p">(</span><span class="n">LAPACK</span> <span class="n">REQUIRED</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Run cmake, and look for output showing <em>BLAS</em> and <em>LAPACK</em>.</p>
+<p>Lapack was written in Fortran, and automatically translated to C using the f2c compiler. There is one C-header file <a class="reference external" href="https://netlib.org/clapack/clapack.h">clapack.h</a> which one includes like that:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;complex&gt;</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">integer</span><span class="p">;</span>
+<span class="k">typedef</span><span class="w"> </span><span class="n">integer</span><span class="w"> </span><span class="n">logical</span><span class="p">;</span>
+<span class="k">typedef</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">real</span><span class="p">;</span>
+<span class="k">typedef</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">doublereal</span><span class="p">;</span>
+<span class="k">typedef</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">complex</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="w"> </span><span class="n">singlecomplex</span><span class="p">;</span>
+<span class="k">typedef</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">complex</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">doublecomplex</span><span class="p">;</span>
+
+<span class="c1">// Windows SDK defines VOID in the file WinNT.h</span>
+<span class="cp">#ifndef VOID</span>
+<span class="w">    </span><span class="k">typedef</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">VOID</span><span class="p">;</span>
+<span class="cp">#endif</span>
+<span class="k">typedef</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">ftnlen</span><span class="p">;</span>
+<span class="k">typedef</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">L_fp</span><span class="p">;</span><span class="w">  </span><span class="c1">// ?</span>
+
+
+<span class="k">extern</span><span class="w"> </span><span class="s">&quot;C&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;clapack.h&gt;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>With origin in Fortran-times, all functions have a short name from abbreviations, like
+<strong>D</strong>ouble-precission <strong>GE</strong>neral <strong>M</strong>atrix <strong>M</strong>atrix multiplication:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">dgemm_</span><span class="w"> </span><span class="p">(</span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">transa</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">transb</span><span class="p">,</span><span class="w"> </span><span class="n">integer</span><span class="w"> </span><span class="o">*</span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">integer</span><span class="w"> </span><span class="o">*</span>
+<span class="w">           </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">integer</span><span class="w"> </span><span class="o">*</span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="n">doublereal</span><span class="w"> </span><span class="o">*</span><span class="n">alpha</span><span class="p">,</span><span class="w"> </span><span class="n">doublereal</span><span class="w"> </span><span class="o">*</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">integer</span><span class="w"> </span><span class="o">*</span><span class="n">lda</span><span class="p">,</span><span class="w"> </span>
+<span class="w">           </span><span class="n">doublereal</span><span class="w"> </span><span class="o">*</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="n">integer</span><span class="w"> </span><span class="o">*</span><span class="n">ldb</span><span class="p">,</span><span class="w"> </span><span class="n">doublereal</span><span class="w"> </span><span class="o">*</span><span class="n">beta</span><span class="p">,</span><span class="w"> </span><span class="n">doublereal</span><span class="w"> </span><span class="o">*</span><span class="n">c__</span><span class="p">,</span><span class="w"> </span>
+<span class="w">           </span><span class="n">integer</span><span class="w"> </span><span class="o">*</span><span class="n">ldc</span><span class="p">);</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="https://www.netlib.org/lapack/explore-html/d1/d54/group__double__blas__level3_gaeda3cbd99c8fb834a60a6412878226e1.html">Documentation</a></p>
+<p>Since function calls with many arguments are not very clear, we prefer to wrap the low-level Lapack call into a function based on our <code class="docutils literal notranslate"><span class="pre">MatrixView</span></code> classes. In Fortran/Lapack matrices are stored column-major. If a matrix is stored row-wise, we interpret it as a transpose operation:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// c = a*b</span>
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="n">ORDERING</span><span class="w"> </span><span class="n">OA</span><span class="p">,</span><span class="w"> </span><span class="n">ORDERING</span><span class="w"> </span><span class="n">OB</span><span class="o">&gt;</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">MultMatMatLapack</span><span class="w"> </span><span class="p">(</span><span class="n">MatrixView</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span><span class="w"> </span><span class="n">OA</span><span class="o">&gt;</span><span class="w"> </span><span class="n">a</span><span class="p">,</span>
+<span class="w">                       </span><span class="n">MatrixView</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span><span class="w"> </span><span class="n">OB</span><span class="o">&gt;</span><span class="w"> </span><span class="n">b</span><span class="p">,</span>
+<span class="w">                       </span><span class="n">MatrixView</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span><span class="w"> </span><span class="n">ColMajor</span><span class="o">&gt;</span><span class="w"> </span><span class="n">c</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="kt">char</span><span class="w"> </span><span class="n">transa</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">OA</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ColMajor</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="sc">&#39;N&#39;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="sc">&#39;T&#39;</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">char</span><span class="w"> </span><span class="n">transb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">OB</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">ColMajor</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="sc">&#39;N&#39;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="sc">&#39;T&#39;</span><span class="p">;</span><span class="w"> </span>
+<span class="w">  </span>
+<span class="w">  </span><span class="n">integer</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">c</span><span class="p">.</span><span class="n">Height</span><span class="p">();</span>
+<span class="w">  </span><span class="n">integer</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">c</span><span class="p">.</span><span class="n">Width</span><span class="p">();</span>
+<span class="w">  </span><span class="n">integer</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">Width</span><span class="p">();</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">alpha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">beta</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="n">integer</span><span class="w"> </span><span class="n">lda</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">Dist</span><span class="p">();</span>
+<span class="w">  </span><span class="n">integer</span><span class="w"> </span><span class="n">ldb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">Dist</span><span class="p">();</span>
+<span class="w">  </span><span class="n">integer</span><span class="w"> </span><span class="n">ldc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">c</span><span class="p">.</span><span class="n">Dist</span><span class="p">();</span>
+
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">errcode</span><span class="w"> </span><span class="o">=</span>
+<span class="w">    </span><span class="n">dgemm_</span><span class="w"> </span><span class="p">(</span><span class="o">&amp;</span><span class="n">transa</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">transb</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">alpha</span><span class="p">,</span><span class="w"> </span>
+<span class="w">            </span><span class="n">a</span><span class="p">.</span><span class="n">Data</span><span class="p">(),</span><span class="w"> </span><span class="o">&amp;</span><span class="n">lda</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">Data</span><span class="p">(),</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ldb</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">beta</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="p">.</span><span class="n">Data</span><span class="p">(),</span><span class="w"> </span><span class="o">&amp;</span><span class="n">ldc</span><span class="p">);</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">errcode</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">     </span><span class="k">throw</span><span class="w"> </span><span class="n">exception</span><span class="w"> </span><span class="p">(</span><span class="s">&quot;Lapack-dgemm error &quot;</span><span class="o">+</span><span class="n">to_string</span><span class="p">(</span><span class="n">errcode</span><span class="p">));</span>
+<span class="p">}</span>
+<span class="w">                       </span>
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="n">ORDERING</span><span class="w"> </span><span class="n">OA</span><span class="p">,</span><span class="w"> </span><span class="n">ORDERING</span><span class="w"> </span><span class="n">OB</span><span class="o">&gt;</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">MultMatMatLapack</span><span class="w"> </span><span class="p">(</span><span class="n">MatrixView</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span><span class="w"> </span><span class="n">OA</span><span class="o">&gt;</span><span class="w"> </span><span class="n">a</span><span class="p">,</span>
+<span class="w">                       </span><span class="n">MatrixView</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span><span class="w"> </span><span class="n">OB</span><span class="o">&gt;</span><span class="w"> </span><span class="n">b</span><span class="p">,</span>
+<span class="w">                       </span><span class="n">MatrixView</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span><span class="w"> </span><span class="n">RowMajor</span><span class="o">&gt;</span><span class="w"> </span><span class="n">c</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="n">MultMatMatLapack</span><span class="w"> </span><span class="p">(</span><span class="n">Trans</span><span class="p">(</span><span class="n">b</span><span class="p">),</span><span class="w"> </span><span class="n">Trans</span><span class="p">(</span><span class="n">a</span><span class="p">),</span><span class="w"> </span><span class="n">Trans</span><span class="p">(</span><span class="n">c</span><span class="p">));</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="c-libraries">
+<h2><span class="section-number">7.2. </span>C++ libraries<a class="headerlink" href="#c-libraries" title="Permalink to this heading">#</a></h2>
+<p>There are a couple of modern C++ linear algebra libraries:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://eigen.tuxfamily.org">eigen</a></p></li>
+<li><p><a class="reference external" href="https://bitbucket.org/blaze-lib/blaze">blaze</a></p></li>
+<li><p><a class="reference external" href="https://github.com/romeric/Fastor">Fastor</a></p></li>
+</ul>
+<p>In the core, most of them fall back to legacy Lapack for large matrices.</p>
+</section>
+<section id="exercise">
+<h2><span class="section-number">7.3. </span>Exercise:<a class="headerlink" href="#exercise" title="Permalink to this heading">#</a></h2>
+<ul>
+<li><p>Look up Lapack functions for</p>
+<ul class="simple">
+<li><p>LU decomposition (<code class="docutils literal notranslate"><span class="pre">dgetrf</span></code>, <code class="docutils literal notranslate"><span class="pre">dgetri</span></code>)</p></li>
+<li><p>QR decomposition using Householder reflections (<code class="docutils literal notranslate"><span class="pre">dgeqrf</span></code>, <code class="docutils literal notranslate"><span class="pre">dorgqr</span></code>)</p></li>
+<li><p>Eigenvalue calculation (<code class="docutils literal notranslate"><span class="pre">dgeev</span></code>)</p></li>
+</ul>
+<p>and write C++ wrapper functions for calling the Lapack functions.
+Then, wrap your C++ functions to Python and test them.</p>
+</li>
+<li><p>measure performance of Lapack matrix-matrix multiplication, and compare to your expression template matrix-matrix multiplication.</p></li>
+</ul>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -384,6 +507,22 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lapack">7.1. Lapack</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#c-libraries">7.2. C++ libraries</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise">7.3. Exercise:</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>
