@@ -321,10 +321,12 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#binding-c-classes-to-python">6.1. Binding C++ classes to Python:</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#set-get-functions">6.1.1. set/get functions:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setter-getter-functions">6.1.1. setter/getter functions:</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#we-can-now-load-the-python-module-bla-from-the-package-ascsoft">6.2. We can now load the python module bla from the package ASCsoft:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#importing-the-python-module">6.2. Importing the python module</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise">6.3. Exercise</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-the-python-package">6.4. Building the Python-package</a></li>
 </ul>
             </nav>
         </div>
@@ -391,8 +393,8 @@ python py_tests
 <li><p><code class="docutils literal notranslate"><span class="pre">py::init&lt;size_t&gt;()</span></code> is a special syntax for the constructor, in this case for the ctor with one size_t argument.</p></li>
 <li><p>the function <code class="docutils literal notranslate"><span class="pre">__len__</span></code> is called from the Python <code class="docutils literal notranslate"><span class="pre">len(v)</span></code> built in function</p></li>
 </ul>
-<section id="set-get-functions">
-<h3><span class="section-number">6.1.1. </span>set/get functions:<a class="headerlink" href="#set-get-functions" title="Permalink to this heading">#</a></h3>
+<section id="setter-getter-functions">
+<h3><span class="section-number">6.1.1. </span>setter/getter functions:<a class="headerlink" href="#setter-getter-functions" title="Permalink to this heading">#</a></h3>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">    </span><span class="p">.</span><span class="n">def</span><span class="p">(</span><span class="s">&quot;__setitem__&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">[](</span><span class="n">Vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">self</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">self</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span><span class="p">;</span><span class="w"> </span><span class="p">})</span>
 <span class="w">    </span><span class="p">.</span><span class="n">def</span><span class="p">(</span><span class="s">&quot;__getitem__&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">[](</span><span class="n">Vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">self</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">self</span><span class="p">(</span><span class="n">i</span><span class="p">);</span><span class="w"> </span><span class="p">})</span>
 
@@ -408,8 +410,9 @@ python py_tests
 <p>The bracket operators <code class="docutils literal notranslate"><span class="pre">v[i]</span> <span class="pre">=</span> <span class="pre">val</span></code> or <code class="docutils literal notranslate"><span class="pre">print</span> <span class="pre">(v[j])</span></code> call the <code class="docutils literal notranslate"><span class="pre">__setitem__</span></code> and <code class="docutils literal notranslate"><span class="pre">__getitem__</span></code> methods with an <code class="docutils literal notranslate"><span class="pre">size_t</span></code> argument. The Python slice operator <code class="docutils literal notranslate"><span class="pre">v[3:7]</span> <span class="pre">=</span> <span class="pre">0</span></code> calls the <code class="docutils literal notranslate"><span class="pre">__setitem__</span></code> method with an <code class="docutils literal notranslate"><span class="pre">py::slice</span></code> argument.</p>
 </section>
 </section>
-<section id="we-can-now-load-the-python-module-bla-from-the-package-ascsoft">
-<h2><span class="section-number">6.2. </span>We can now load the python module bla from the package ASCsoft:<a class="headerlink" href="#we-can-now-load-the-python-module-bla-from-the-package-ascsoft" title="Permalink to this heading">#</a></h2>
+<section id="importing-the-python-module">
+<h2><span class="section-number">6.2. </span>Importing the python module<a class="headerlink" href="#importing-the-python-module" title="Permalink to this heading">#</a></h2>
+<p>We can now import the python module bla from the package ASCsoft. Either in the plane <em>.py</em> Python file, or into jupyter notebooks:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">ASCsoft.bla</span> <span class="kn">import</span> <span class="o">*</span>
@@ -446,6 +449,27 @@ python py_tests
 </div>
 </div>
 </div>
+</section>
+<section id="exercise">
+<h2><span class="section-number">6.3. </span>Exercise<a class="headerlink" href="#exercise" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Wrap your <code class="docutils literal notranslate"><span class="pre">Matrix&lt;double,RowMajor&gt;</span></code> to Python. Add getter/setter functions and operators.</p></li>
+<li><p>Pickling is the standard Python serialization (file io, parallel communication). Add pickling support to your classes. Use <code class="docutils literal notranslate"><span class="pre">py::bytes</span></code> to store the data.</p></li>
+<li><p>Numpy is Python standard for data exchange in scientific computing. Try to convert your Python <code class="docutils literal notranslate"><span class="pre">Vector</span></code>/<code class="docutils literal notranslate"><span class="pre">Matrix</span></code> to a numpy array using <code class="docutils literal notranslate"><span class="pre">np.asarray(v)</span></code>. How does it work ?  How efficient ? Add a <a class="reference external" href="https://pybind11.readthedocs.io/en/stable/advanced/pycpp/numpy.html?highlight=buffer#buffer-protocol">Buffer protocol</a>.</p></li>
+</ul>
+</section>
+<section id="building-the-python-package">
+<h2><span class="section-number">6.4. </span>Building the Python-package<a class="headerlink" href="#building-the-python-package" title="Permalink to this heading">#</a></h2>
+<p>You found two new files <em><a class="reference external" href="http://setup.py">setup.py</a></em> and <em>pyproject.toml</em>. They are responsible for building and installing a Python package. If we call</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pip install .
+</pre></div>
+</div>
+<p>the setup function from the file <em><a class="reference external" href="http://setup.py">setup.py</a></em> get called. It first triggers cmake, which installs everything in the directory <em>ASCsoft</em>. cmake knows nothing about the anatomy of a Python package. Here, <a class="reference external" href="https://scikit-build.readthedocs.io/en/latest/skbuild.html">scikit-build</a> steps in …</p>
+<p>When everything is uploaded properly to github, everyone can build and install our library as a Python package by running pip install with the github url:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pip install git+https://github.com/TUWien-ASC/ASC-bla.git@pybind
+</pre></div>
+</div>
+<p>some links: <a class="reference external" href="https://github.com/MichaelKim0407/tutorial-pip-package">pip-tutorial</a></p>
 </section>
 </section>
 
@@ -517,10 +541,12 @@ python py_tests
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#binding-c-classes-to-python">6.1. Binding C++ classes to Python:</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#set-get-functions">6.1.1. set/get functions:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setter-getter-functions">6.1.1. setter/getter functions:</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#we-can-now-load-the-python-module-bla-from-the-package-ascsoft">6.2. We can now load the python module bla from the package ASCsoft:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#importing-the-python-module">6.2. Importing the python module</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise">6.3. Exercise</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-the-python-package">6.4. Building the Python-package</a></li>
 </ul>
   </nav></div>
 
