@@ -16,14 +16,14 @@ public:
   Vector (size_t size) 
     : size_(size), data_(new T[size]) { ; }
 
-  Vector (const Vector & v)
+  Vector (const Vector & v)  // copy ctor
     : Vector(v.Size())
   {
     *this = v;
   }
 
-  Vector (Vector && v)
-    : size_{0}, data_(nullptr)
+  Vector (Vector && v)    // move ctor
+    : size_(0), data_(nullptr)
   {
     std::swap(size_, v.size_);
     std::swap(data_, v.data_);
@@ -51,7 +51,7 @@ public:
 };
 ```
 
-* We define a class template `Vector`. The type of the vector elements is given by template argument `T`. For example, one can define a vector of double precision entries as `Vector<double>`.
+* We define a class template `Vector`. The type of the vector elements is given by the template argument `T`. For example, one can define a vector with 10 double precision entries as `Vector<double> v(10)`.
 
 * A Vector object can be created by one of its constructors, and is destroyed by the destructor.
 

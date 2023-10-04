@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
 
   
-  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -38,8 +38,9 @@
     <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
+  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
 
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -61,6 +62,8 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'basiclinalg/bla-git';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -76,6 +79,15 @@ const thebe_selector_output = ".output, .cell_output"
   
   
   <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
@@ -282,10 +294,10 @@ const thebe_selector_output = ".output, .cell_output"
 
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
   </button>
 `);
 </script>
@@ -293,7 +305,7 @@ document.write(`
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
 </script>
@@ -338,16 +350,16 @@ document.write(`
 <p><a class="reference external" href="https://github.com">GitHub</a> is a platform and cloud-based service for software development and version control using Git.</p>
 <p>Prerequisites:</p>
 <ul class="simple">
-<li><p>install a C++ environment on your computer (e.g. Visual Studio Code)</p></li>
-<li><p>install git (available within vs-code as …)</p></li>
-<li><p>install cmake (available within vs-code as …)</p></li>
+<li><p>install a C++ environment on your computer (e.g. <a class="reference external" href="https://code.visualstudio.com">Visual Studio Code</a>)</p></li>
+<li><p>install git (available within vs-code as <em>CMake Tools</em>)</p></li>
+<li><p>install cmake (available within vs-code as <em>Git Extension Pack</em>)</p></li>
 </ul>
 <p>look for project draft
 <a class="reference external" href="https://github.com/TUWien-ASC/ASC-bla">ASC-bla</a></p>
 <p>and git-clone it. Either</p>
 <ul class="simple">
-<li><p>use vscode …</p></li>
-<li><p>git clone <copy git link></p></li>
+<li><p>use vscode ‘source control -&gt; Clone Repository’</p></li>
+<li><p>git clone &lt;copy git link&gt;</p></li>
 <li><p>on Windows: …</p></li>
 </ul>
 <p>Now we configure and build the project using cmake.
@@ -359,25 +371,34 @@ cmake ..
 make
 </pre></div>
 </div>
-<p>You should now be able to run the executable.</p>
+<p>You should have produced an executable ‘test_vector’, try it out.</p>
 <section id="extend-asc-bla-in-team-work">
 <h2><span class="section-number">2.1. </span>Extend ASC-bla in team-work<a class="headerlink" href="#extend-asc-bla-in-team-work" title="Permalink to this heading">#</a></h2>
 <p>You will now add more functionality to ASC-bla. You want to do it in team-work.
-Form teams by 2-4 students. Go back to github. One of the team will <em>fork</em> ASC-bla (name it as you like),
+Form teams by 2-4 students. Go back to github, and register. One of the team will <em>fork</em> ASC-bla (name it as you like),
 and invites colleagues to the project.</p>
 <p>Repeat the steps from before: Clone, configure, build, run</p>
-<p>Homework:</p>
+<p>Exercise:</p>
 <ul class="simple">
-<li><p>Extend the library by a <strong>Matrix</strong> class, and provide the following operations:</p>
+<li><p>Extend the library by a <code class="docutils literal notranslate"><span class="pre">Matrix</span></code> class and provide the following operations:</p>
 <ul>
-<li><p>Matrix-Vector product</p></li>
+<li><p>Matrix-vector product</p></li>
+<li><p>Matrix-matrix product</p></li>
 <li><p>Transpose matrix function</p></li>
 <li><p>Some tests for your classes</p></li>
 </ul>
 </li>
 </ul>
+<p>Allow to choose between row-major and column-major storage:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>enum ORDERING { ColMajor, RowMajor };
+template &lt;typename T, ORDERING ORD&gt;
+class Matrix {
+...
+}
+</pre></div>
+</div>
 <p>Commit and push your changes to your github project using either vs-code functionality, or command line instructions as</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>git add matrix.cc matrix.h
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>git add tests/test_matrix.cc src/matrix.h
 git commit -m &quot;added matrix class&quot;
 git push
 </pre></div>
@@ -388,6 +409,19 @@ git merge
 </pre></div>
 </div>
 <p>the contributions. Experiment with changing the same code regions.</p>
+<ul>
+<li><p>Add more advanced features:</p>
+<ul>
+<li><p>Inverse matrix: <p>
+Form matrix <span class="math notranslate nohighlight">\(M = (A \; I)\)</span>, and perform row manipulations to obtain <span class="math notranslate nohighlight">\(\widetilde M = (I \; A^{-1})\)</span>.</p></li>
+<li><p>Allow to add <code class="docutils literal notranslate"><span class="pre">Vector&lt;double&gt;</span></code> to a <code class="docutils literal notranslate"><span class="pre">Vector&lt;std::complex&lt;double&gt;&gt;</span></code></p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>typedef decltype(std::declval&lt;TA&gt;()+std::declval&lt;TB&gt;()) TRES;
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+</ul>
 </section>
 </section>
 
@@ -416,11 +450,10 @@ git merge
 
               
               
-                <footer class="bd-footer-article">
-                  
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="bla.html"
@@ -440,10 +473,7 @@ git merge
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
@@ -506,8 +536,8 @@ By J. Schöberl
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
 
   <footer class="bd-footer">
   </footer>
