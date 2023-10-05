@@ -9,7 +9,11 @@ Many scientific challenges require non-trivial software solutions, which have to
 
 In this class we learn the development of scientific software in a *learning by doing* approach.
 
-We have chosen two typical application areas: Basic Linear Algebra, i.e. computing with vectors and matrices, and numerical solution of partial differential equations. 
+We have chosen three typical application areas: Basic Linear Algebra, i.e. computing with vectors and matrices, solution of ordinary differential equations,
+and numerical solution of partial differential equations. 
+
+We think finding a proper abstraction level of the mathematical concepts, and creating types in the sense of C++ classes is of utmost importance. Then complex algorithms can be written down in a readable and maintainable way. 
+
 
 Many thanks go to [Matthias Hochsteger](https://www.linkedin.com/in/matthias-hochsteger-316213196) and [Christopher Lackner](https://www.linkedin.com/in/christopher-lackner-2ab075191) for their technical help, and to [Edoardo Bonetti](https://www.asc.tuwien.ac.at/?id=scicomp/people) for careful checking.
 

@@ -179,13 +179,17 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="bla-libs.html">7. Overview of libraries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bla-performance.html">8. Performance</a></li>
 </ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">ODEs</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../ODEs/ODEs.html">9. Solving ordinary differential equations</a></li>
+</ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">PDEs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">9. Partial differential equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-Poisson.html">10. Poisson Equation and the 5-point stencil</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-iterative.html">11. Iterative Solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-waves.html">12. Wave equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-flows.html">13. Navier-Stokes Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">10. Partial differential equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-Poisson.html">11. Poisson Equation and the 5-point stencil</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-iterative.html">12. Iterative Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-waves.html">13. Wave equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-flows.html">14. Navier-Stokes Equation</a></li>
 </ul>
 
     </div>
@@ -351,8 +355,8 @@ document.write(`
 <p>Prerequisites:</p>
 <ul class="simple">
 <li><p>install a C++ environment on your computer (e.g. <a class="reference external" href="https://code.visualstudio.com">Visual Studio Code</a>)</p></li>
-<li><p>install git (available within vs-code as <em>CMake Tools</em>)</p></li>
-<li><p>install cmake (available within vs-code as <em>Git Extension Pack</em>)</p></li>
+<li><p>install git (available within vs-code as <em>Git Extension Pack</em>)</p></li>
+<li><p>install cmake (available within vs-code as <em>CMake Tools</em>)</p></li>
 </ul>
 <p>look for project draft
 <a class="reference external" href="https://github.com/TUWien-ASC/ASC-bla">ASC-bla</a></p>
@@ -397,12 +401,13 @@ class Matrix {
 }
 </pre></div>
 </div>
-<p>Commit and push your changes to your github project using either vs-code functionality, or command line instructions as</p>
+<p>push your changes to your github project using either vs-code functionality, or command line instructions as</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>git add tests/test_matrix.cc src/matrix.h
 git commit -m &quot;added matrix class&quot;
 git push
 </pre></div>
 </div>
+<p>The first command <code class="docutils literal notranslate"><span class="pre">add</span></code> <em>stages</em> your files you want to commit to your local version of the repository. With <code class="docutils literal notranslate"><span class="pre">commit</span></code> your local changes are taken over. Finally, with <code class="docutils literal notranslate"><span class="pre">push</span></code> you upload your local commits to the original git repo.</p>
 <p>The other team-member can</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>git fetch
 git merge 

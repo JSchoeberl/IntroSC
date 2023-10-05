@@ -176,13 +176,17 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="basiclinalg/bla-libs.html">7. Overview of libraries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="basiclinalg/bla-performance.html">8. Performance</a></li>
 </ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">ODEs</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="ODEs/ODEs.html">9. Solving ordinary differential equations</a></li>
+</ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">PDEs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="PDEs/PDEs.html">9. Partial differential equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="PDEs/PDEs-Poisson.html">10. Poisson Equation and the 5-point stencil</a></li>
-<li class="toctree-l1"><a class="reference internal" href="PDEs/PDEs-iterative.html">11. Iterative Solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="PDEs/PDEs-waves.html">12. Wave equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="PDEs/PDEs-flows.html">13. Navier-Stokes Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PDEs/PDEs.html">10. Partial differential equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PDEs/PDEs-Poisson.html">11. Poisson Equation and the 5-point stencil</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PDEs/PDEs-iterative.html">12. Iterative Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PDEs/PDEs-waves.html">13. Wave equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PDEs/PDEs-flows.html">14. Navier-Stokes Equation</a></li>
 </ul>
 
     </div>
@@ -337,7 +341,9 @@ document.write(`
 <p>TU Wien, <a class="reference external" href="https://www.asc.tuwien.ac.at">Institute of Analysis and Scientific Computing</a></p>
 <p>Many scientific challenges require non-trivial software solutions, which have to be tackeled by researchers with diverse skills.</p>
 <p>In this class we learn the development of scientific software in a <em>learning by doing</em> approach.</p>
-<p>We have chosen two typical application areas: Basic Linear Algebra, i.e. computing with vectors and matrices, and numerical solution of partial differential equations.</p>
+<p>We have chosen three typical application areas: Basic Linear Algebra, i.e. computing with vectors and matrices, solution of ordinary differential equations,
+and numerical solution of partial differential equations.</p>
+<p>We think finding a proper abstraction level of the mathematical concepts, and creating types in the sense of C++ classes is of utmost importance. Then complex algorithms can be written down in a readable and maintainable way.</p>
 <p>Many thanks go to <a class="reference external" href="https://www.linkedin.com/in/matthias-hochsteger-316213196">Matthias Hochsteger</a> and <a class="reference external" href="https://www.linkedin.com/in/christopher-lackner-2ab075191">Christopher Lackner</a> for their technical help, and to <a class="reference external" href="https://www.asc.tuwien.ac.at/?id=scicomp/people">Edoardo Bonetti</a> for careful checking.</p>
 <p>This lecture is designed for students in applied mathematics in an early stage.
 It is given in this form the first time in winter term 23/24.
@@ -358,13 +364,19 @@ Many section are still in draft version, and will be cleaned as the class procee
 </ul>
 </div>
 <div class="toctree-wrapper compound">
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">ODEs</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="ODEs/ODEs.html">9. Solving ordinary differential equations</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">PDEs</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="PDEs/PDEs.html">9. Partial differential equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="PDEs/PDEs-Poisson.html">10. Poisson Equation and the 5-point stencil</a></li>
-<li class="toctree-l1"><a class="reference internal" href="PDEs/PDEs-iterative.html">11. Iterative Solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="PDEs/PDEs-waves.html">12. Wave equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="PDEs/PDEs-flows.html">13. Navier-Stokes Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PDEs/PDEs.html">10. Partial differential equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PDEs/PDEs-Poisson.html">11. Poisson Equation and the 5-point stencil</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PDEs/PDEs-iterative.html">12. Iterative Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PDEs/PDEs-waves.html">13. Wave equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="PDEs/PDEs-flows.html">14. Navier-Stokes Equation</a></li>
 </ul>
 </div>
 </section>

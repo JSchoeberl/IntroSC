@@ -17,7 +17,7 @@ Now, and after changing contents in the file `index.rst` run
     make html
 
 
-in `conf.py` you can select the theme, for example:
+In the configuration file `conf.py` you can select the theme, for example:
 
     html_theme = 'sphinx_rtd_theme'
 
@@ -28,6 +28,7 @@ On your dash-board you can see your (public!) github projects.
 
 Import your bla-project, and give a unique name for the documentation.
 
+Put the 'docs passing' batch into your github-readme file.
 
 
 
