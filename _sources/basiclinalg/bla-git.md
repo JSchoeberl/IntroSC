@@ -6,7 +6,7 @@
 
 
 Prerequisites:
-* install a C++ environment on your computer (e.g. [Visual Studio Code](https://code.visualstudio.com))
+* install a C++ environment on your computer (e.g. (mingw or msvc) and [Visual Studio Code](https://code.visualstudio.com))
 * install git (available within vs-code as *Git Extension Pack*)
 * install cmake (available within vs-code as *CMake Tools*)
 
