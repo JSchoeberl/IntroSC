@@ -6,9 +6,9 @@
 
 
 Prerequisites:
-* install a C++ environment on your computer (e.g. [Visual Studio Code](https://code.visualstudio.com))
-* install git (available within vs-code as *CMake Tools*)
-* install cmake (available within vs-code as *Git Extension Pack*)
+* install a C++ environment on your computer (e.g. (mingw or msvc) and [Visual Studio Code](https://code.visualstudio.com))
+* install git (available within vs-code as *Git Extension Pack*)
+* install cmake (available within vs-code as *CMake Tools*)
 
 look for project draft 
 [ASC-bla](https://github.com/TUWien-ASC/ASC-bla)
@@ -59,12 +59,14 @@ Allow to choose between row-major and column-major storage:
     }
     
 
-Commit and push your changes to your github project using either vs-code functionality, or command line instructions as
+push your changes to your github project using either vs-code functionality, or command line instructions as
 
     git add tests/test_matrix.cc src/matrix.h
     git commit -m "added matrix class"
     git push
  
+The first command `add` *stages* your files you want to commit to your local version of the repository. With `commit` your local changes are taken over. Finally, with `push` you upload your local commits to the original git repo.
+
 
 The other team-member can 
 

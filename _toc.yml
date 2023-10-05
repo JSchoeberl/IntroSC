@@ -15,7 +15,12 @@ parts:
     - file: basiclinalg/bla-python2.ipynb
     - file: basiclinalg/bla-libs.md
     - file: basiclinalg/bla-performance.md
-    
+
+  - caption: ODEs
+    numbered: True  
+    chapters:
+    - file: ODEs/ODEs
+
   - caption: PDEs
     numbered: True  
     chapters:
