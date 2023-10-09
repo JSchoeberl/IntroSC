@@ -175,9 +175,9 @@ class VectorView {
 
 But can the compiler really generate good code from all of this nested functions and expression objects ? Yes ! It is important that the compiler can inline all the functions, sees the whole flow of data, and optimizes everything as a single function.
 
-To verify what the compiler generates, we can have a look into the generated assembly code. There is a online tool [Compiler Explorer](https://godbolt.org/z/qePEhvaov). You copy in the source code, and it immediately displays the generated assembly code. It allows to choose between a lot of compilers, versions and provided flags.
+To verify what the compiler generates, we can have a look into the generated assembly code. There is an online tool [Compiler Explorer](https://godbolt.org/z/qePEhvaov). You copy in the source code, and it immediately displays the generated assembly code. It allows to choose between a lot of compilers, versions and provided flags.
 
-If you scroll down within the left window you find two functions `MyFunc`, and `MyFunc2`. One uses expresion templates, the other one hand-written C-code. In the right window you see the generated assemply code. You can identify a loop (with compare `cmp` and new-equal branching `jne`. You find one addition `addsd` and one multiplication `mulsd` within the loop. You see that the two generated codes are identic, there is no overhead coming from the expression templates.
+If you scroll down within the left window you find two functions `MyFunc`, and `MyFunc2`. One uses expresion templates, the other one hand-written C-code. In the right window you see the generated assemply code. You can identify a loop (with compare `cmp` and not-equal branching `jne`. You find one addition `addsd` and one multiplication `mulsd` within the loop. You see that the two generated codes are identic, there is no overhead coming from the expression templates.
 
 
 
