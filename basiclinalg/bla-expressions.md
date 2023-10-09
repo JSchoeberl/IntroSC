@@ -34,12 +34,12 @@ One also refers to *lazy evaluation*, since the evaluation happens later, just w
 The ASC-bla library implements such expression templates for vectors. Git-clone from
 [branch *expr*](https://github.com/TUWien-ASC/ASC-bla/tree/expr).
 
-Here we have the base class template `Expr` for all vector and matrix expressions,
-the `SumExpr`, and the `operator+` for creating such a SumExpr.
+Here we have the base class template `VecExpr` for all vector expressions,
+the `SumVecExpr`, and the `operator+` for creating such a SumVecExpr.
 
 ```cpp
 template <typename T>
-  class Expr
+  class VecExpr
   {
   public:
     auto View() const { return static_cast<const T&> (*this); }
@@ -48,36 +48,130 @@ template <typename T>
   };
 
 template <typename TA, typename TB>
-  class SumExpr : public Expr<SumExpr<TA,TB>>
+  class SumVecExpr : public VecExpr<SumVecExpr<TA,TB>>
   {
     TA a_;
     TB b_;
   public:
-    SumExpr (TA a, TB b) : a_(a), b_(b) { }
-    auto View () { return SumExpr(a_, b_); }
+    SumVecExpr (TA a, TB b) : a_(a), b_(b) { }
+    auto View () { return SumVecExpr(a_, b_); }
 
     auto operator() (size_t i) const { return a_(i)+b_(i); }
     size_t Size() const { return a_.Size(); }      
   };
 
 template <typename TA, typename TB>
-  auto operator+ (const Expr<TA> & a, const Expr<TB> & b)
+  auto operator+ (const VecExpr<TA> & a, const VecExpr<TB> & b)
 {
-  return SumExpr(a.View(), b.View());
+  return SumVecExpr(a.View(), b.View());
 }
 ```
 
-The fancy trick is that `SumExpr` derives from the base class `Expr`, and gives itself as the template argument to the base. So, we can statically up-cast the base to the derived class.
+The fancy trick is that `SumVecExpr` derives from the base class `VecExpr`, and gives itself as the template argument to the base. So, we can statically up-cast the base to the derived class.
 This idiom is known as
 [curiously recurring template pattern (CRTP)](https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern) or 
 [Barton–Nackman trick](https://en.wikipedia.org/wiki/Barton–Nackman_trick#:~:text=The%20idiom%20is%20characterized%20by,recurring%20template%20pattern%20(CRTP).&text=The%20Barton–Nackman%20trick%2C%20then,to%20deal%20with%20such%20ambiguities).
 In the breaking work by Todd Veldhuizen [Expression Templates](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=ca2f8a9b7407de039957a358f995265ec8b769a9) the expression templates paradigm for vector operations was introduced. However, back in 1995, it was too much for compiler technology.
 
 
-If we call the call operator `operator()(size_t)` of an `Expr<T>` object, it upcasts to `T`, and calls the call operator there. In this example the `operator()` of a `SumExpr` calls the `operator()` of both of its members.
+If we call the call operator `operator()(size_t)` of an `VecExpr<T>` object, it upcasts to `T`, and calls the call operator there. In this example the `operator()` of a `SumVecExpr` calls the `operator()` of both of its members.
+
+How can this `operator+` be applied to a `Vector` ? Do we have to define call combinations of `operator+([Vector|VecExpr], [Vector|VecExpr])` ? We can avoid it by letting `Vector` derive from `VecExpr`. However, we don't want to copy the vector into the `SumVecExpr`. We could do it by using references - or, alternatively, we introduce a **view** of a vector, a `VectorView`.
+
+### VectorView
+
+Consider the following class hierarchy:
+
+```cpp
+class VecExpr;
+
+template <typename T>
+class VectorView : public VecExpr<VectorView<T>>
+{
+protected:
+  size_t size_;
+  T * data_;
+public:
+  VectorView (size_t size, T * data)
+    : size_(size), data_(data) { }
+  VectorView (const Vec
+  ~VectorView() { }
+  T & operator()(size_t i) { return data[i]; }
+};
+
+template <typename T>
+class Vector : public VectorView<T>
+{
+ public:
+   Vector (size_t size)
+     : VectorView (size, new T[size]) { }
+   ~Vector() { delete [] data_; }
+};
+
+```
+
+The `VectorView` is a slim class, which can be easily copied using the default copy constructor just copying size and the data pointer. Thus, a `VectorView` can be used as a call-by-value function argument (rather than a reference). All memory allocation/freeing happens in the derived class `Vector`.
 
 
+A `VectorView` allows also to access a range of a vector:
+```cpp
+class VectorView {
+  ...
+  VectorView Range(size_t first, size_t next)
+    { return VectorView(next-first, data+fisrt); }
+}
+```
+With this we can, for example zero elements  with indices $10 \leq i < 20$ via `vec.Range(10,20) = 0`.
 
+A generalization of a `VectorView` is to allow vectors whose value don't have to lie consecutatively in memory. For that we provide the `dist` member variable:
+```cpp
+class VectorView {
+  size_t size_;
+  size_t dist_;
+  T * data_;
+  ... 
+  T & operator()(size_t i) { return data[i*dist_]; }  
+}
+```
+
+Ok, this is more general - but the index calculation comes with some price, which we do not want to pay if we do not need it. As a solution we define the `dist_` variable from a template type, which is set to `std::integral_constant<1>` as a default. The compiler can easily optimize out the multiplication with a constant 1:
+
+```cpp
+template <typename T, typename TDIST=std::integral_constant<1>>
+class VectorView {
+  size_t size_;
+  TDIST dist_;
+  T * data_;
+  ... 
+  T & operator()(size_t i) { return data[i*dist_]; }  
+}
+```
+
+### Excercise
+
+  * Implement a `MatrixView` class
+
+    ```cpp
+    template <typename T, template ORDERING>
+    class MatrixView {
+      size_t height, width, dist;
+      T * data_;
+    }
+    ```
+    Index calculation is `i*dist+j` in the row-major case, and `i+j*dist` in the col-major case.
+
+  * Introduce an expression-template hierarchy for matrices, including
+    - Matrix + Matrix -> MatExpr
+    - Matrix * Matrix -> MatExpr
+    - Matrix * Vector -> VecExpr
+
+
+  * Implement `matrix.Row(i)` and `matrix.Col(j)` methods returning a `VectorView` of individual rows and columns.
+
+  * Implement a `Transpose(matrix)` function resulting in a `MatrixView` of opposite ordering
+  
+   
+### How good is it ? 
 
 But can the compiler really generate good code from all of this nested functions and expression objects ? Yes ! It is important that the compiler can inline all the functions, sees the whole flow of data, and optimizes everything as a single function.
 
