@@ -110,7 +110,7 @@ class Vector : public VectorView<T>
 
 ```
 
-The `VectorView` is a slim class, which can be easily copied using the default copy constructor just copying size and the data pointer. Thus, a `VectorView` can be used as a call-by-value function argument (rather than a reference). All memory allocation/deallocation happens in the derived class `Vector`.
+The `VectorView` is a slim class, which can be easily copied using the default copy constructor just copying size and the data pointer. Thus, a `VectorView` can be used as a call-by-value function argument (rather than a reference). All memory allocation/freeing happens in the derived class `Vector`.
 
 
 A `VectorView` allows also to access a range of a vector:
@@ -168,7 +168,7 @@ class VectorView {
 
   * Implement `matrix.Row(i)` and `matrix.Col(j)` methods returning a `VectorView` of individual rows and columns.
 
-  * Implement a `Transpose(matrix)` function resulting in a `MatrixView`
+  * Implement a `Transpose(matrix)` function resulting in a `MatrixView` of opposite ordering
   
    
 ### How good is it ? 
@@ -177,5 +177,7 @@ But can the compiler really generate good code from all of this nested functions
 
 To verify what the compiler generates, we can have a look into the generated assembly code. There is a online tool [Compiler Explorer](https://godbolt.org/z/qePEhvaov). You copy in the source code, and it immediately displays the generated assembly code. It allows to choose between a lot of compilers, versions and provided flags.
 
-What we see is ....
+If you scroll down within the left window you find two functions `MyFunc`, and `MyFunc2`. One uses expresion templates, the other one hand-written C-code. In the right window you see the generated assemply code. You can identify a loop (with compare `cmp` and new-equal branching `jne`. You find one addition `addsd` and one multiplication `mulsd` within the loop. You see that the two generated codes are identic, there is no overhead coming from the expression templates.
+
+
 

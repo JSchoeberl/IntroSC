@@ -439,7 +439,7 @@ In the breaking work by Todd Veldhuizen <a class="reference external" href="http
 <span class="p">};</span>
 </pre></div>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">VectorView</span></code> is a slim class, which can be easily copied using the default copy constructor just copying size and the data pointer. Thus, a <code class="docutils literal notranslate"><span class="pre">VectorView</span></code> can be used as a call-by-value function argument (rather than a reference). All memory allocation/deallocation happens in the derived class <code class="docutils literal notranslate"><span class="pre">Vector</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">VectorView</span></code> is a slim class, which can be easily copied using the default copy constructor just copying size and the data pointer. Thus, a <code class="docutils literal notranslate"><span class="pre">VectorView</span></code> can be used as a call-by-value function argument (rather than a reference). All memory allocation/freeing happens in the derived class <code class="docutils literal notranslate"><span class="pre">Vector</span></code>.</p>
 <p>A <code class="docutils literal notranslate"><span class="pre">VectorView</span></code> allows also to access a range of a vector:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">VectorView</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="p">...</span>
@@ -492,14 +492,14 @@ In the breaking work by Todd Veldhuizen <a class="reference external" href="http
 </ul>
 </li>
 <li><p>Implement <code class="docutils literal notranslate"><span class="pre">matrix.Row(i)</span></code> and <code class="docutils literal notranslate"><span class="pre">matrix.Col(j)</span></code> methods returning a <code class="docutils literal notranslate"><span class="pre">VectorView</span></code> of individual rows and columns.</p></li>
-<li><p>Implement a <code class="docutils literal notranslate"><span class="pre">Transpose(matrix)</span></code> function resulting in a <code class="docutils literal notranslate"><span class="pre">MatrixView</span></code></p></li>
+<li><p>Implement a <code class="docutils literal notranslate"><span class="pre">Transpose(matrix)</span></code> function resulting in a <code class="docutils literal notranslate"><span class="pre">MatrixView</span></code> of opposite ordering</p></li>
 </ul>
 </section>
 <section id="how-good-is-it">
 <h2><span class="section-number">5.3. </span>How good is it ?<a class="headerlink" href="#how-good-is-it" title="Permalink to this heading">#</a></h2>
 <p>But can the compiler really generate good code from all of this nested functions and expression objects ? Yes ! It is important that the compiler can inline all the functions, sees the whole flow of data, and optimizes everything as a single function.</p>
 <p>To verify what the compiler generates, we can have a look into the generated assembly code. There is a online tool <a class="reference external" href="https://godbolt.org/z/qePEhvaov">Compiler Explorer</a>. You copy in the source code, and it immediately displays the generated assembly code. It allows to choose between a lot of compilers, versions and provided flags.</p>
-<p>What we see is ….</p>
+<p>If you scroll down within the left window you find two functions <code class="docutils literal notranslate"><span class="pre">MyFunc</span></code>, and <code class="docutils literal notranslate"><span class="pre">MyFunc2</span></code>. One uses expresion templates, the other one hand-written C-code. In the right window you see the generated assemply code. You can identify a loop (with compare <code class="docutils literal notranslate"><span class="pre">cmp</span></code> and new-equal branching <code class="docutils literal notranslate"><span class="pre">jne</span></code>. You find one addition <code class="docutils literal notranslate"><span class="pre">addsd</span></code> and one multiplication <code class="docutils literal notranslate"><span class="pre">mulsd</span></code> within the loop. You see that the two generated codes are identic, there is no overhead coming from the expression templates.</p>
 </section>
 </section>
 
