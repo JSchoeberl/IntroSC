@@ -62,6 +62,8 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'basiclinalg/bla-expressions';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -177,13 +179,17 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="bla-libs.html">7. Overview of libraries</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bla-performance.html">8. Performance</a></li>
 </ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">ODEs</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../ODEs/ODEs.html">9. Solving ordinary differential equations</a></li>
+</ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">PDEs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">9. Partial differential equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-Poisson.html">10. Poisson Equation and the 5-point stencil</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-iterative.html">11. Iterative Solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-waves.html">12. Wave equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-flows.html">13. Navier-Stokes Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">10. Partial differential equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-Poisson.html">11. Poisson Equation and the 5-point stencil</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-iterative.html">12. Iterative Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-waves.html">13. Wave equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-flows.html">14. Navier-Stokes Equation</a></li>
 </ul>
 
     </div>
@@ -307,7 +313,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -323,6 +331,16 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vectorview">5.1. VectorView</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#excercise">5.2. Excercise</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-good-is-it">5.3. How good is it ?</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -354,10 +372,10 @@ document.write(`
 One also refers to <em>lazy evaluation</em>, since the evaluation happens later, just when the result is written to the destination vector.</p>
 <p>The ASC-bla library implements such expression templates for vectors. Git-clone from
 <a class="reference external" href="https://github.com/TUWien-ASC/ASC-bla/tree/expr">branch <em>expr</em></a>.</p>
-<p>Here we have the base class template <code class="docutils literal notranslate"><span class="pre">Expr</span></code> for all vector and matrix expressions,
-the <code class="docutils literal notranslate"><span class="pre">SumExpr</span></code>, and the <code class="docutils literal notranslate"><span class="pre">operator+</span></code> for creating such a SumExpr.</p>
+<p>Here we have the base class template <code class="docutils literal notranslate"><span class="pre">VecExpr</span></code> for all vector expressions,
+the <code class="docutils literal notranslate"><span class="pre">SumVecExpr</span></code>, and the <code class="docutils literal notranslate"><span class="pre">operator+</span></code> for creating such a SumVecExpr.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
-<span class="w">  </span><span class="k">class</span><span class="w"> </span><span class="nc">Expr</span>
+<span class="w">  </span><span class="k">class</span><span class="w"> </span><span class="nc">VecExpr</span>
 <span class="w">  </span><span class="p">{</span>
 <span class="w">  </span><span class="k">public</span><span class="o">:</span>
 <span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">View</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="n">T</span><span class="o">&amp;&gt;</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
@@ -366,34 +384,123 @@ the <code class="docutils literal notranslate"><span class="pre">SumExpr</span><
 <span class="w">  </span><span class="p">};</span>
 
 <span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">TA</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">TB</span><span class="o">&gt;</span>
-<span class="w">  </span><span class="k">class</span><span class="w"> </span><span class="nc">SumExpr</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">Expr</span><span class="o">&lt;</span><span class="n">SumExpr</span><span class="o">&lt;</span><span class="n">TA</span><span class="p">,</span><span class="n">TB</span><span class="o">&gt;&gt;</span>
+<span class="w">  </span><span class="k">class</span><span class="w"> </span><span class="nc">SumVecExpr</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">VecExpr</span><span class="o">&lt;</span><span class="n">SumVecExpr</span><span class="o">&lt;</span><span class="n">TA</span><span class="p">,</span><span class="n">TB</span><span class="o">&gt;&gt;</span>
 <span class="w">  </span><span class="p">{</span>
 <span class="w">    </span><span class="n">TA</span><span class="w"> </span><span class="n">a_</span><span class="p">;</span>
 <span class="w">    </span><span class="n">TB</span><span class="w"> </span><span class="n">b_</span><span class="p">;</span>
 <span class="w">  </span><span class="k">public</span><span class="o">:</span>
-<span class="w">    </span><span class="n">SumExpr</span><span class="w"> </span><span class="p">(</span><span class="n">TA</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">TB</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">a_</span><span class="p">(</span><span class="n">a</span><span class="p">),</span><span class="w"> </span><span class="n">b_</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
-<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">View</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">SumExpr</span><span class="p">(</span><span class="n">a_</span><span class="p">,</span><span class="w"> </span><span class="n">b_</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="n">SumVecExpr</span><span class="w"> </span><span class="p">(</span><span class="n">TA</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">TB</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">a_</span><span class="p">(</span><span class="n">a</span><span class="p">),</span><span class="w"> </span><span class="n">b_</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">View</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">SumVecExpr</span><span class="p">(</span><span class="n">a_</span><span class="p">,</span><span class="w"> </span><span class="n">b_</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
 
 <span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="k">operator</span><span class="p">()</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">a_</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="n">b_</span><span class="p">(</span><span class="n">i</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
 <span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">Size</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">a_</span><span class="p">.</span><span class="n">Size</span><span class="p">();</span><span class="w"> </span><span class="p">}</span><span class="w">      </span>
 <span class="w">  </span><span class="p">};</span>
 
 <span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">TA</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">TB</span><span class="o">&gt;</span>
-<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">operator</span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Expr</span><span class="o">&lt;</span><span class="n">TA</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Expr</span><span class="o">&lt;</span><span class="n">TB</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">b</span><span class="p">)</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="k">operator</span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">VecExpr</span><span class="o">&lt;</span><span class="n">TA</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">VecExpr</span><span class="o">&lt;</span><span class="n">TB</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">b</span><span class="p">)</span>
 <span class="p">{</span>
-<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">SumExpr</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">View</span><span class="p">(),</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">View</span><span class="p">());</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">SumVecExpr</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">View</span><span class="p">(),</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">View</span><span class="p">());</span>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>The fancy trick is that <code class="docutils literal notranslate"><span class="pre">SumExpr</span></code> derives from the base class <code class="docutils literal notranslate"><span class="pre">Expr</span></code>, and gives itself as the template argument to the base. So, we can statically up-cast the base to the derived class.
+<p>The fancy trick is that <code class="docutils literal notranslate"><span class="pre">SumVecExpr</span></code> derives from the base class <code class="docutils literal notranslate"><span class="pre">VecExpr</span></code>, and gives itself as the template argument to the base. So, we can statically up-cast the base to the derived class.
 This idiom is known as
 <a class="reference external" href="https://en.wikipedia.org/wiki/Curiously_recurring_template_pattern">curiously recurring template pattern (CRTP)</a> or
 <a class="reference external" href="https://en.wikipedia.org/wiki/Barton%E2%80%93Nackman_trick#:~:text=The%20idiom%20is%20characterized%20by,recurring%20template%20pattern%20(CRTP).&amp;text=The%20Barton%E2%80%93Nackman%20trick%2C%20then,to%20deal%20with%20such%20ambiguities">Barton–Nackman trick</a>.
 In the breaking work by Todd Veldhuizen <a class="reference external" href="https://citeseerx.ist.psu.edu/document?repid=rep1&amp;type=pdf&amp;doi=ca2f8a9b7407de039957a358f995265ec8b769a9">Expression Templates</a> the expression templates paradigm for vector operations was introduced. However, back in 1995, it was too much for compiler technology.</p>
-<p>If we call the call operator <code class="docutils literal notranslate"><span class="pre">operator()(size_t)</span></code> of an <code class="docutils literal notranslate"><span class="pre">Expr&lt;T&gt;</span></code> object, it upcasts to <code class="docutils literal notranslate"><span class="pre">T</span></code>, and calls the call operator there. In this example the <code class="docutils literal notranslate"><span class="pre">operator()</span></code> of a <code class="docutils literal notranslate"><span class="pre">SumExpr</span></code> calls the <code class="docutils literal notranslate"><span class="pre">operator()</span></code> of both of its members.</p>
+<p>If we call the call operator <code class="docutils literal notranslate"><span class="pre">operator()(size_t)</span></code> of an <code class="docutils literal notranslate"><span class="pre">VecExpr&lt;T&gt;</span></code> object, it upcasts to <code class="docutils literal notranslate"><span class="pre">T</span></code>, and calls the call operator there. In this example the <code class="docutils literal notranslate"><span class="pre">operator()</span></code> of a <code class="docutils literal notranslate"><span class="pre">SumVecExpr</span></code> calls the <code class="docutils literal notranslate"><span class="pre">operator()</span></code> of both of its members.</p>
+<p>How can this <code class="docutils literal notranslate"><span class="pre">operator+</span></code> be applied to a <code class="docutils literal notranslate"><span class="pre">Vector</span></code> ? Do we have to define call combinations of <code class="docutils literal notranslate"><span class="pre">operator+([Vector|VecExpr],</span> <span class="pre">[Vector|VecExpr])</span></code> ? We can avoid it by letting <code class="docutils literal notranslate"><span class="pre">Vector</span></code> derive from <code class="docutils literal notranslate"><span class="pre">VecExpr</span></code>. However, we don’t want to copy the vector into the <code class="docutils literal notranslate"><span class="pre">SumVecExpr</span></code>. We could do it by using references - or, alternatively, we introduce a <strong>view</strong> of a vector, a <code class="docutils literal notranslate"><span class="pre">VectorView</span></code>.</p>
+<section id="vectorview">
+<h2><span class="section-number">5.1. </span>VectorView<a class="headerlink" href="#vectorview" title="Permalink to this heading">#</a></h2>
+<p>Consider the following class hierarchy:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">VecExpr</span><span class="p">;</span>
+
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">VectorView</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">VecExpr</span><span class="o">&lt;</span><span class="n">VectorView</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&gt;</span>
+<span class="p">{</span>
+<span class="k">protected</span><span class="o">:</span>
+<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size_</span><span class="p">;</span>
+<span class="w">  </span><span class="n">T</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">data_</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="n">VectorView</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">data</span><span class="p">)</span>
+<span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">size_</span><span class="p">(</span><span class="n">size</span><span class="p">),</span><span class="w"> </span><span class="n">data_</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="n">VectorView</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Vec</span>
+<span class="w">  </span><span class="o">~</span><span class="n">VectorView</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="n">T</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="p">()(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="w"> </span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Vector</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">VectorView</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span>
+<span class="p">{</span>
+<span class="w"> </span><span class="k">public</span><span class="o">:</span>
+<span class="w">   </span><span class="n">Vector</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span><span class="p">)</span>
+<span class="w">     </span><span class="o">:</span><span class="w"> </span><span class="n">VectorView</span><span class="w"> </span><span class="p">(</span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">T</span><span class="p">[</span><span class="n">size</span><span class="p">])</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
+<span class="w">   </span><span class="o">~</span><span class="n">Vector</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">delete</span><span class="w"> </span><span class="p">[]</span><span class="w"> </span><span class="n">data_</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">VectorView</span></code> is a slim class, which can be easily copied using the default copy constructor just copying size and the data pointer. Thus, a <code class="docutils literal notranslate"><span class="pre">VectorView</span></code> can be used as a call-by-value function argument (rather than a reference). All memory allocation/deallocation happens in the derived class <code class="docutils literal notranslate"><span class="pre">Vector</span></code>.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">VectorView</span></code> allows also to access a range of a vector:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">VectorView</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="w">  </span><span class="n">VectorView</span><span class="w"> </span><span class="n">Range</span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">first</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">next</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">VectorView</span><span class="p">(</span><span class="n">next</span><span class="o">-</span><span class="n">first</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="o">+</span><span class="n">fisrt</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>With this we can, for example zero elements  with indices <span class="math notranslate nohighlight">\(10 \leq i &lt; 20\)</span> via <code class="docutils literal notranslate"><span class="pre">vec.Range(10,20)</span> <span class="pre">=</span> <span class="pre">0</span></code>.</p>
+<p>A generalization of a <code class="docutils literal notranslate"><span class="pre">VectorView</span></code> is to allow vectors whose value don’t have to lie consecutatively in memory. For that we provide the <code class="docutils literal notranslate"><span class="pre">dist</span></code> member variable:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">VectorView</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size_</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">dist_</span><span class="p">;</span>
+<span class="w">  </span><span class="n">T</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">data_</span><span class="p">;</span>
+<span class="w">  </span><span class="p">...</span><span class="w"> </span>
+<span class="w">  </span><span class="n">T</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="p">()(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="n">dist_</span><span class="p">];</span><span class="w"> </span><span class="p">}</span><span class="w">  </span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Ok, this is more general - but the index calculation comes with some price, which we do not want to pay if we do not need it. As a solution we define the <code class="docutils literal notranslate"><span class="pre">dist_</span></code> variable from a template type, which is set to <code class="docutils literal notranslate"><span class="pre">std::integral_constant&lt;1&gt;</span></code> as a default. The compiler can easily optimize out the multiplication with a constant 1:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">TDIST</span><span class="o">=</span><span class="n">std</span><span class="o">::</span><span class="n">integral_constant</span><span class="o">&lt;</span><span class="mi">1</span><span class="o">&gt;&gt;</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">VectorView</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size_</span><span class="p">;</span>
+<span class="w">  </span><span class="n">TDIST</span><span class="w"> </span><span class="n">dist_</span><span class="p">;</span>
+<span class="w">  </span><span class="n">T</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">data_</span><span class="p">;</span>
+<span class="w">  </span><span class="p">...</span><span class="w"> </span>
+<span class="w">  </span><span class="n">T</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="p">()(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="n">dist_</span><span class="p">];</span><span class="w"> </span><span class="p">}</span><span class="w">  </span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="excercise">
+<h2><span class="section-number">5.2. </span>Excercise<a class="headerlink" href="#excercise" title="Permalink to this heading">#</a></h2>
+<ul>
+<li><p>Implement a <code class="docutils literal notranslate"><span class="pre">MatrixView</span></code> class</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="k">template</span><span class="w"> </span><span class="n">ORDERING</span><span class="o">&gt;</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MatrixView</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">height</span><span class="p">,</span><span class="w"> </span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="n">dist</span><span class="p">;</span>
+<span class="w">  </span><span class="n">T</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">data_</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Index calculation is <code class="docutils literal notranslate"><span class="pre">i*dist+j</span></code> in the row-major case, and <code class="docutils literal notranslate"><span class="pre">i+j*dist</span></code> in the col-major case.</p>
+</li>
+<li><p>Introduce an expression-template hierarchy for matrices, including</p>
+<ul class="simple">
+<li><p>Matrix + Matrix -&gt; MatExpr</p></li>
+<li><p>Matrix * Matrix -&gt; MatExpr</p></li>
+<li><p>Matrix * Vector -&gt; VecExpr</p></li>
+</ul>
+</li>
+<li><p>Implement <code class="docutils literal notranslate"><span class="pre">matrix.Row(i)</span></code> and <code class="docutils literal notranslate"><span class="pre">matrix.Col(j)</span></code> methods returning a <code class="docutils literal notranslate"><span class="pre">VectorView</span></code> of individual rows and columns.</p></li>
+<li><p>Implement a <code class="docutils literal notranslate"><span class="pre">Transpose(matrix)</span></code> function resulting in a <code class="docutils literal notranslate"><span class="pre">MatrixView</span></code></p></li>
+</ul>
+</section>
+<section id="how-good-is-it">
+<h2><span class="section-number">5.3. </span>How good is it ?<a class="headerlink" href="#how-good-is-it" title="Permalink to this heading">#</a></h2>
 <p>But can the compiler really generate good code from all of this nested functions and expression objects ? Yes ! It is important that the compiler can inline all the functions, sees the whole flow of data, and optimizes everything as a single function.</p>
 <p>To verify what the compiler generates, we can have a look into the generated assembly code. There is a online tool <a class="reference external" href="https://godbolt.org/z/qePEhvaov">Compiler Explorer</a>. You copy in the source code, and it immediately displays the generated assembly code. It allows to choose between a lot of compilers, versions and provided flags.</p>
 <p>What we see is ….</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -450,6 +557,22 @@ In the breaking work by Todd Veldhuizen <a class="reference external" href="http
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vectorview">5.1. VectorView</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#excercise">5.2. Excercise</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-good-is-it">5.3. How good is it ?</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

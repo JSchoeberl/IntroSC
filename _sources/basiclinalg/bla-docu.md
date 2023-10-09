@@ -22,7 +22,7 @@ In the configuration file `conf.py` you can select the theme, for example:
     html_theme = 'sphinx_rtd_theme'
 
 
-To publish your documentation online register at [readthedocs.org](readthedocs.org)
+To publish your documentation online register at [readthedocs.org](https://readthedocs.org)
 with your github account.
 On your dash-board you can see your (public!) github projects.
 
