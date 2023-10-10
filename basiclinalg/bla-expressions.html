@@ -409,11 +409,12 @@ This idiom is known as
 <a class="reference external" href="https://en.wikipedia.org/wiki/Barton%E2%80%93Nackman_trick#:~:text=The%20idiom%20is%20characterized%20by,recurring%20template%20pattern%20(CRTP).&amp;text=The%20Barton%E2%80%93Nackman%20trick%2C%20then,to%20deal%20with%20such%20ambiguities">Barton–Nackman trick</a>.
 In the breaking work by Todd Veldhuizen <a class="reference external" href="https://citeseerx.ist.psu.edu/document?repid=rep1&amp;type=pdf&amp;doi=ca2f8a9b7407de039957a358f995265ec8b769a9">Expression Templates</a> the expression templates paradigm for vector operations was introduced. However, back in 1995, it was too much for compiler technology.</p>
 <p>If we call the call operator <code class="docutils literal notranslate"><span class="pre">operator()(size_t)</span></code> of an <code class="docutils literal notranslate"><span class="pre">VecExpr&lt;T&gt;</span></code> object, it upcasts to <code class="docutils literal notranslate"><span class="pre">T</span></code>, and calls the call operator there. In this example the <code class="docutils literal notranslate"><span class="pre">operator()</span></code> of a <code class="docutils literal notranslate"><span class="pre">SumVecExpr</span></code> calls the <code class="docutils literal notranslate"><span class="pre">operator()</span></code> of both of its members.</p>
-<p>How can this <code class="docutils literal notranslate"><span class="pre">operator+</span></code> be applied to a <code class="docutils literal notranslate"><span class="pre">Vector</span></code> ? Do we have to define call combinations of <code class="docutils literal notranslate"><span class="pre">operator+([Vector|VecExpr],</span> <span class="pre">[Vector|VecExpr])</span></code> ? We can avoid it by letting <code class="docutils literal notranslate"><span class="pre">Vector</span></code> derive from <code class="docutils literal notranslate"><span class="pre">VecExpr</span></code>. However, we don’t want to copy the vector into the <code class="docutils literal notranslate"><span class="pre">SumVecExpr</span></code>. We could do it by using references - or, alternatively, we introduce a <strong>view</strong> of a vector, a <code class="docutils literal notranslate"><span class="pre">VectorView</span></code>.</p>
+<p>How can this <code class="docutils literal notranslate"><span class="pre">operator+</span></code> be applied to <code class="docutils literal notranslate"><span class="pre">Vector</span></code>s ? Do we have to define all combinations of <code class="docutils literal notranslate"><span class="pre">operator+([Vector|VecExpr],</span> <span class="pre">[Vector|VecExpr])</span></code> ? We can avoid it by letting <code class="docutils literal notranslate"><span class="pre">Vector</span></code> derive from <code class="docutils literal notranslate"><span class="pre">VecExpr</span></code>. However, we don’t want to copy the vector into the <code class="docutils literal notranslate"><span class="pre">SumVecExpr</span></code>. We could do it by using references - or, alternatively, we introduce a <strong>view</strong> of a vector, a <code class="docutils literal notranslate"><span class="pre">VectorView</span></code>.</p>
 <section id="vectorview">
 <h2><span class="section-number">5.1. </span>VectorView<a class="headerlink" href="#vectorview" title="Permalink to this heading">#</a></h2>
 <p>Consider the following class hierarchy:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">VecExpr</span><span class="p">;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">VecExpr</span><span class="p">;</span>
 
 <span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">VectorView</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">VecExpr</span><span class="o">&lt;</span><span class="n">VectorView</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&gt;</span>
@@ -424,9 +425,8 @@ In the breaking work by Todd Veldhuizen <a class="reference external" href="http
 <span class="k">public</span><span class="o">:</span>
 <span class="w">  </span><span class="n">VectorView</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">data</span><span class="p">)</span>
 <span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">size_</span><span class="p">(</span><span class="n">size</span><span class="p">),</span><span class="w"> </span><span class="n">data_</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
-<span class="w">  </span><span class="n">VectorView</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Vec</span>
-<span class="w">  </span><span class="o">~</span><span class="n">VectorView</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
-<span class="w">  </span><span class="n">T</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="p">()(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="w"> </span><span class="p">}</span>
+
+<span class="n">T</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="p">()(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="w"> </span><span class="p">}</span>
 <span class="p">};</span>
 
 <span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
@@ -448,8 +448,8 @@ In the breaking work by Todd Veldhuizen <a class="reference external" href="http
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>With this we can, for example zero elements  with indices <span class="math notranslate nohighlight">\(10 \leq i &lt; 20\)</span> via <code class="docutils literal notranslate"><span class="pre">vec.Range(10,20)</span> <span class="pre">=</span> <span class="pre">0</span></code>.</p>
-<p>A generalization of a <code class="docutils literal notranslate"><span class="pre">VectorView</span></code> is to allow vectors whose value don’t have to lie consecutatively in memory. For that we provide the <code class="docutils literal notranslate"><span class="pre">dist</span></code> member variable:</p>
+<p>With this we can, for example, zero elements with indices in semi-open interval <span class="math notranslate nohighlight">\([10,15)\)</span> via <code class="docutils literal notranslate"><span class="pre">vec.Range(10,15)</span> <span class="pre">=</span> <span class="pre">0</span></code>.</p>
+<p>A generalization of a <code class="docutils literal notranslate"><span class="pre">VectorView</span></code> allows vectors whose value don’t have to lie consecutively in memory. For that we provide the <code class="docutils literal notranslate"><span class="pre">dist</span></code> member variable:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">VectorView</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">size_</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">dist_</span><span class="p">;</span>
@@ -477,27 +477,29 @@ In the breaking work by Todd Veldhuizen <a class="reference external" href="http
 <li><p>Implement a <code class="docutils literal notranslate"><span class="pre">MatrixView</span></code> class</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="k">template</span><span class="w"> </span><span class="n">ORDERING</span><span class="o">&gt;</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">MatrixView</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">height</span><span class="p">,</span><span class="w"> </span><span class="n">width</span><span class="p">,</span><span class="w"> </span><span class="n">dist</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">height_</span><span class="p">,</span><span class="w"> </span><span class="n">width_</span><span class="p">,</span><span class="w"> </span><span class="n">dist_</span><span class="p">;</span>
 <span class="w">  </span><span class="n">T</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">data_</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
 <p>Index calculation is <code class="docutils literal notranslate"><span class="pre">i*dist+j</span></code> in the row-major case, and <code class="docutils literal notranslate"><span class="pre">i+j*dist</span></code> in the col-major case.</p>
 </li>
-<li><p>Introduce an expression-template hierarchy for matrices, including</p>
+<li><p>Introduce expression templates for matrices, including</p>
 <ul class="simple">
-<li><p>Matrix + Matrix -&gt; MatExpr</p></li>
-<li><p>Matrix * Matrix -&gt; MatExpr</p></li>
-<li><p>Matrix * Vector -&gt; VecExpr</p></li>
+<li><p>MatExpr + MatExpr -&gt; MatExpr</p></li>
+<li><p>MatExpr * MatExpr -&gt; MatExpr</p></li>
+<li><p>MatExpr * VecExpr -&gt; VecExpr</p></li>
 </ul>
 </li>
 <li><p>Implement <code class="docutils literal notranslate"><span class="pre">matrix.Row(i)</span></code> and <code class="docutils literal notranslate"><span class="pre">matrix.Col(j)</span></code> methods returning a <code class="docutils literal notranslate"><span class="pre">VectorView</span></code> of individual rows and columns.</p></li>
+<li><p>Implement <code class="docutils literal notranslate"><span class="pre">matrix.Rows(first,next)</span></code> and <code class="docutils literal notranslate"><span class="pre">matrix.Cols(first,next)</span></code> methods returning a <code class="docutils literal notranslate"><span class="pre">MatrixView</span></code> of a range of rows/cols.</p></li>
 <li><p>Implement a <code class="docutils literal notranslate"><span class="pre">Transpose(matrix)</span></code> function resulting in a <code class="docutils literal notranslate"><span class="pre">MatrixView</span></code> of opposite ordering</p></li>
+<li><p>Simplify the <code class="docutils literal notranslate"><span class="pre">Inverse</span></code> function using these new features</p></li>
 </ul>
 </section>
 <section id="how-good-is-it">
 <h2><span class="section-number">5.3. </span>How good is it ?<a class="headerlink" href="#how-good-is-it" title="Permalink to this heading">#</a></h2>
-<p>But can the compiler really generate good code from all of this nested functions and expression objects ? Yes ! It is important that the compiler can inline all the functions, sees the whole flow of data, and optimizes everything as a single function.</p>
+<p>But can the compiler really generate good code from all of these nested functions and expression objects ? Yes ! It is important that the compiler can inline all the functions, sees the whole flow of data, and optimizes everything as a single function.</p>
 <p>To verify what the compiler generates, we can have a look into the generated assembly code. There is an online tool <a class="reference external" href="https://godbolt.org/z/qePEhvaov">Compiler Explorer</a>. You copy in the source code, and it immediately displays the generated assembly code. It allows to choose between a lot of compilers, versions and provided flags.</p>
 <p>If you scroll down within the left window you find two functions <code class="docutils literal notranslate"><span class="pre">MyFunc</span></code>, and <code class="docutils literal notranslate"><span class="pre">MyFunc2</span></code>. One uses expresion templates, the other one hand-written C-code. In the right window you see the generated assemply code. You can identify a loop (with compare <code class="docutils literal notranslate"><span class="pre">cmp</span></code> and not-equal branching <code class="docutils literal notranslate"><span class="pre">jne</span></code>. You find one addition <code class="docutils literal notranslate"><span class="pre">addsd</span></code> and one multiplication <code class="docutils literal notranslate"><span class="pre">mulsd</span></code> within the loop. You see that the two generated codes are identic, there is no overhead coming from the expression templates.</p>
 </section>

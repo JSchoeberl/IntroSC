@@ -76,13 +76,14 @@ In the breaking work by Todd Veldhuizen [Expression Templates](https://citeseerx
 
 If we call the call operator `operator()(size_t)` of an `VecExpr<T>` object, it upcasts to `T`, and calls the call operator there. In this example the `operator()` of a `SumVecExpr` calls the `operator()` of both of its members.
 
-How can this `operator+` be applied to a `Vector` ? Do we have to define call combinations of `operator+([Vector|VecExpr], [Vector|VecExpr])` ? We can avoid it by letting `Vector` derive from `VecExpr`. However, we don't want to copy the vector into the `SumVecExpr`. We could do it by using references - or, alternatively, we introduce a **view** of a vector, a `VectorView`.
+How can this `operator+` be applied to `Vector`s ? Do we have to define all combinations of `operator+([Vector|VecExpr], [Vector|VecExpr])` ? We can avoid it by letting `Vector` derive from `VecExpr`. However, we don't want to copy the vector into the `SumVecExpr`. We could do it by using references - or, alternatively, we introduce a **view** of a vector, a `VectorView`.
 
 ### VectorView
 
 Consider the following class hierarchy:
 
 ```cpp
+template <typename T>
 class VecExpr;
 
 template <typename T>
@@ -94,9 +95,8 @@ protected:
 public:
   VectorView (size_t size, T * data)
     : size_(size), data_(data) { }
-  VectorView (const Vec
-  ~VectorView() { }
-  T & operator()(size_t i) { return data[i]; }
+
+T & operator()(size_t i) { return data[i]; }
 };
 
 template <typename T>
@@ -121,9 +121,9 @@ class VectorView {
     { return VectorView(next-first, data+fisrt); }
 }
 ```
-With this we can, for example zero elements  with indices $10 \leq i < 20$ via `vec.Range(10,20) = 0`.
+With this we can, for example, zero elements with indices in semi-open interval $[10,15)$ via `vec.Range(10,15) = 0`.
 
-A generalization of a `VectorView` is to allow vectors whose value don't have to lie consecutatively in memory. For that we provide the `dist` member variable:
+A generalization of a `VectorView` allows vectors whose value don't have to lie consecutively in memory. For that we provide the `dist` member variable:
 ```cpp
 class VectorView {
   size_t size_;
@@ -154,26 +154,30 @@ class VectorView {
     ```cpp
     template <typename T, template ORDERING>
     class MatrixView {
-      size_t height, width, dist;
+      size_t height_, width_, dist_;
       T * data_;
     }
     ```
     Index calculation is `i*dist+j` in the row-major case, and `i+j*dist` in the col-major case.
 
-  * Introduce an expression-template hierarchy for matrices, including
-    - Matrix + Matrix -> MatExpr
-    - Matrix * Matrix -> MatExpr
-    - Matrix * Vector -> VecExpr
+  * Introduce expression templates for matrices, including
+    - MatExpr + MatExpr -> MatExpr
+    - MatExpr * MatExpr -> MatExpr
+    - MatExpr * VecExpr -> VecExpr
 
 
   * Implement `matrix.Row(i)` and `matrix.Col(j)` methods returning a `VectorView` of individual rows and columns.
 
+  * Implement `matrix.Rows(first,next)` and `matrix.Cols(first,next)` methods returning a `MatrixView` of a range of rows/cols.
+
   * Implement a `Transpose(matrix)` function resulting in a `MatrixView` of opposite ordering
   
-   
+  * Simplify the `Inverse` function using these new features
+  
+
 ### How good is it ? 
 
-But can the compiler really generate good code from all of this nested functions and expression objects ? Yes ! It is important that the compiler can inline all the functions, sees the whole flow of data, and optimizes everything as a single function.
+But can the compiler really generate good code from all of these nested functions and expression objects ? Yes ! It is important that the compiler can inline all the functions, sees the whole flow of data, and optimizes everything as a single function.
 
 To verify what the compiler generates, we can have a look into the generated assembly code. There is an online tool [Compiler Explorer](https://godbolt.org/z/qePEhvaov). You copy in the source code, and it immediately displays the generated assembly code. It allows to choose between a lot of compilers, versions and provided flags.
 
