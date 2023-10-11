@@ -82,4 +82,5 @@ Coding styles: it is a good recommendation to follow a coherent programming styl
 
 We try to follow the [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html).
 
-
+Some recommendations from experts
+[https://isocpp.org/wiki/faq/coding-standards#coding-std-wars](https://isocpp.org/wiki/faq/coding-standards#coding-std-wars)
