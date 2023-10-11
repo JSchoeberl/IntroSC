@@ -3,14 +3,13 @@
 Think of a code like
 
 
-
 ```cpp
 z = x + 3*y;
 ```
 
 where `x,y,z` are vectors. What happens ? First, the `operator* (double, Vector)` is called, it generates a temporary vector for 3*y, and then the `operator+ (Vector, Vector)` is called to compute a new vector for the sum. Finally, the later vector is copied into the memory of `z`.
 
-Writing an old-style C function 
+Writing an old-style C code
 ```cpp
 for (size_t i = 0; i < z.Size(); i++)
   z(i) = x(i) + 3*y(i);
@@ -31,7 +30,7 @@ One also refers to *lazy evaluation*, since the evaluation happens later, just w
 
 
 
-The ASC-bla library implements such expression templates for vectors. Git-clone from
+The ASC-bla library implements such expression templates for vectors, in the
 [branch *expr*](https://github.com/TUWien-ASC/ASC-bla/tree/expr).
 
 Here we have the base class template `VecExpr` for all vector expressions,
@@ -42,9 +41,9 @@ template <typename T>
   class VecExpr
   {
   public:
-    auto View() const { return static_cast<const T&> (*this); }
-    size_t Size() const { return View().Size(); }
-    auto operator() (size_t i) const { return View()(i); }
+    auto Upcast() const { return static_cast<const T&> (*this); }
+    size_t Size() const { return Upcast().Size(); }
+    auto operator() (size_t i) const { return Upcast()(i); }
   };
 
 template <typename TA, typename TB>
@@ -54,7 +53,6 @@ template <typename TA, typename TB>
     TB b_;
   public:
     SumVecExpr (TA a, TB b) : a_(a), b_(b) { }
-    auto View () { return SumVecExpr(a_, b_); }
 
     auto operator() (size_t i) const { return a_(i)+b_(i); }
     size_t Size() const { return a_.Size(); }      
@@ -63,7 +61,7 @@ template <typename TA, typename TB>
 template <typename TA, typename TB>
   auto operator+ (const VecExpr<TA> & a, const VecExpr<TB> & b)
 {
-  return SumVecExpr(a.View(), b.View());
+  return SumVecExpr(a.Upcast(), b.Upcast());
 }
 ```
 
@@ -118,7 +116,7 @@ A `VectorView` allows also to access a range of a vector:
 class VectorView {
   ...
   VectorView Range(size_t first, size_t next)
-    { return VectorView(next-first, data+fisrt); }
+    { return VectorView(next-first, data+first); }
 }
 ```
 With this we can, for example, zero elements with indices in semi-open interval $[10,15)$ via `vec.Range(10,15) = 0`.
@@ -134,7 +132,7 @@ class VectorView {
 }
 ```
 
-Ok, this is more general - but the index calculation comes with some price, which we do not want to pay if we do not need it. As a solution we define the `dist_` variable from a template type, which is set to `std::integral_constant<1>` as a default. The compiler can easily optimize out the multiplication with a constant 1:
+Ok, this is more general - but the index calculation comes with some price, which we do not want to pay if we do not need it. As a solution we define the `dist_` variable of a template type, which is set to `std::integral_constant<1>` as a default. The compiler can easily optimize out the multiplication with a constant 1:
 
 ```cpp
 template <typename T, typename TDIST=std::integral_constant<1>>
@@ -148,6 +146,8 @@ class VectorView {
 ```
 
 ### Excercise
+
+  * Merge the expr - branch from TUWien-ASC/ASC-bla into your main branch [instructions](inst_merge.md)
 
   * Implement a `MatrixView` class
 
