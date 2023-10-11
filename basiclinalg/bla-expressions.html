@@ -338,7 +338,8 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vectorview">5.1. VectorView</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#excercise">5.2. Excercise</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-good-is-it">5.3. How good is it ?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pitfalls">5.3. Pitfalls</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-good-is-it">5.4. How good is it ?</a></li>
 </ul>
             </nav>
         </div>
@@ -483,6 +484,7 @@ In the breaking work by Todd Veldhuizen <a class="reference external" href="http
 </pre></div>
 </div>
 <p>Index calculation is <code class="docutils literal notranslate"><span class="pre">i*dist+j</span></code> in the row-major case, and <code class="docutils literal notranslate"><span class="pre">i+j*dist</span></code> in the col-major case.</p>
+<p>Let your <code class="docutils literal notranslate"><span class="pre">Matrix</span></code> class derive vom <code class="docutils literal notranslate"><span class="pre">MatrixView</span></code>. Initialize the <code class="docutils literal notranslate"><span class="pre">dist</span></code> variable either with the width, or the height of the matrix, depending on row or column-major storage.</p>
 </li>
 <li><p>Introduce expression templates for matrices, including</p>
 <ul class="simple">
@@ -497,8 +499,21 @@ In the breaking work by Todd Veldhuizen <a class="reference external" href="http
 <li><p>Simplify the <code class="docutils literal notranslate"><span class="pre">Inverse</span></code> function using these new features</p></li>
 </ul>
 </section>
+<section id="pitfalls">
+<h2><span class="section-number">5.3. </span>Pitfalls<a class="headerlink" href="#pitfalls" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>What happens with the statement <code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">=</span> <span class="pre">A*B</span></code>, where A and B are two matrices ?</p></li>
+<li><p>what happens here ?</p></li>
+</ul>
+<div class="highlight-code notranslate"><div class="highlight"><pre><span></span>auto Func() {
+  Matrix a(10,10);
+  return a.Row(3); 
+}
+</pre></div>
+</div>
+</section>
 <section id="how-good-is-it">
-<h2><span class="section-number">5.3. </span>How good is it ?<a class="headerlink" href="#how-good-is-it" title="Permalink to this heading">#</a></h2>
+<h2><span class="section-number">5.4. </span>How good is it ?<a class="headerlink" href="#how-good-is-it" title="Permalink to this heading">#</a></h2>
 <p>But can the compiler really generate good code from all of these nested functions and expression objects ? Yes ! It is important that the compiler can inline all the functions, sees the whole flow of data, and optimizes everything as a single function.</p>
 <p>To verify what the compiler generates, we can have a look into the generated assembly code. There is an online tool <a class="reference external" href="https://godbolt.org/z/qePEhvaov">Compiler Explorer</a>. You copy in the source code, and it immediately displays the generated assembly code. It allows to choose between a lot of compilers, versions and provided flags.</p>
 <p>If you scroll down within the left window you find two functions <code class="docutils literal notranslate"><span class="pre">MyFunc</span></code>, and <code class="docutils literal notranslate"><span class="pre">MyFunc2</span></code>. One uses expresion templates, the other one hand-written C-code. In the right window you see the generated assemply code. You can identify a loop (with compare <code class="docutils literal notranslate"><span class="pre">cmp</span></code> and not-equal branching <code class="docutils literal notranslate"><span class="pre">jne</span></code>. You find one addition <code class="docutils literal notranslate"><span class="pre">addsd</span></code> and one multiplication <code class="docutils literal notranslate"><span class="pre">mulsd</span></code> within the loop. You see that the two generated codes are identic, there is no overhead coming from the expression templates.</p>
@@ -570,7 +585,8 @@ In the breaking work by Todd Veldhuizen <a class="reference external" href="http
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vectorview">5.1. VectorView</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#excercise">5.2. Excercise</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-good-is-it">5.3. How good is it ?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pitfalls">5.3. Pitfalls</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-good-is-it">5.4. How good is it ?</a></li>
 </ul>
   </nav></div>
 

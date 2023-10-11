@@ -160,6 +160,8 @@ class VectorView {
     ```
     Index calculation is `i*dist+j` in the row-major case, and `i+j*dist` in the col-major case.
 
+    Let your `Matrix` class derive vom `MatrixView`. Initialize the `dist` variable either with the width, or the height of the matrix, depending on row or column-major storage.
+
   * Introduce expression templates for matrices, including
     - MatExpr + MatExpr -> MatExpr
     - MatExpr * MatExpr -> MatExpr
@@ -174,7 +176,20 @@ class VectorView {
   
   * Simplify the `Inverse` function using these new features
   
+### Pitfalls
 
+
+  * What happens with the statement `A = A*B`, where A and B are two matrices ?
+
+  * what happens here ? 
+  ```code
+  auto Func() {
+    Matrix a(10,10);
+    return a.Row(3); 
+  }
+  ```
+
+    
 ### How good is it ? 
 
 But can the compiler really generate good code from all of these nested functions and expression objects ? Yes ! It is important that the compiler can inline all the functions, sees the whole flow of data, and optimizes everything as a single function.
