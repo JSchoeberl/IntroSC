@@ -505,11 +505,8 @@ The Python slice operator <code class="docutils literal notranslate"><span class
 <span class="w">    </span><span class="p">},</span>
 <span class="w">    </span><span class="p">[](</span><span class="n">py</span><span class="o">::</span><span class="n">tuple</span><span class="w"> </span><span class="n">t</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">// __setstate__</span>
 <span class="w">    </span><span class="n">Vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">v</span><span class="p">(</span><span class="n">t</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">cast</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="o">&gt;</span><span class="p">());</span>
-<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">mem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">cast</span><span class="o">&lt;</span><span class="n">py</span><span class="o">::</span><span class="n">bytes</span><span class="o">&gt;</span><span class="p">();</span>
-<span class="w">    </span><span class="kt">char</span><span class="o">*</span><span class="w"> </span><span class="n">buffer</span><span class="p">;</span>
-<span class="w">    </span><span class="n">py</span><span class="o">::</span><span class="kt">ssize_t</span><span class="w"> </span><span class="n">size</span><span class="p">;</span>
-<span class="w">    </span><span class="n">PYBIND11_BYTES_AS_STRING_AND_SIZE</span><span class="p">(</span><span class="n">mem</span><span class="p">.</span><span class="n">ptr</span><span class="p">(),</span><span class="w"> </span><span class="o">&amp;</span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">size</span><span class="p">);</span>
-<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">memcpy</span><span class="p">((</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">v</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="w"> </span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
+<span class="w">    </span><span class="n">py</span><span class="o">::</span><span class="n">bytes</span><span class="w"> </span><span class="n">mem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">t</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">cast</span><span class="o">&lt;</span><span class="n">py</span><span class="o">::</span><span class="n">bytes</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">memcpy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">v</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="w"> </span><span class="n">PYBIND11_BYTES_AS_STRING</span><span class="p">(</span><span class="n">mem</span><span class="p">.</span><span class="n">ptr</span><span class="p">()),</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">Size</span><span class="p">()</span><span class="o">*</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">double</span><span class="p">));</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">v</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}))</span>
 </pre></div>
@@ -539,7 +536,7 @@ A more advanced version of pickling uses <a class="reference external" href="htt
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[2, &#39;hello&#39;, &lt;ASCsoft.bla.Vector object at 0x103cd09f0&gt;]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[2, &#39;hello&#39;, &lt;ASCsoft.bla.Vector object at 0x1045652b0&gt;]
 7, 7, 7
 </pre></div>
 </div>
