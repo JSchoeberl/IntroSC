@@ -360,7 +360,7 @@ document.write(`
 <h1><span class="section-number">6. </span>Python bindings<a class="headerlink" href="#python-bindings" title="Permalink to this heading">#</a></h1>
 <p>C++ and Python are are strong combination: With C++ we can program for maximal performance, with Python we can work with objects in a very convenient way. Both share a similar object oriented paradigm.</p>
 <p>Python bindings allow to use C++ functions and classes from Python.</p>
-<p>A very popular library for wrapping C++ objects to Python is
+<p>A popular library for wrapping C++ objects to Python is
 <a class="reference external" href="https://pybind11.readthedocs.io/en/stable/">pybind11</a>.</p>
 <p>Now you have to install <a class="reference external" href="https://www.python.org">Python</a>. Choose a recent version (at least Python 3.8 should be ok). Using conda is also fine, you have to replace <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code> by <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">-c</span> <span class="pre">conda-forge</span></code> in the following. On MacOS use <code class="docutils literal notranslate"><span class="pre">pip3</span></code> instead of <code class="docutils literal notranslate"><span class="pre">pip</span></code>.</p>
 <p>Install pybind11 as a Python package:</p>
@@ -382,7 +382,7 @@ cd py_tests
 python3 test_vector.py
 </pre></div>
 </div>
-<p>The command <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">.</span></code> reads information from the files <em><a class="reference external" href="http://setup.py">setup.py</a></em> and <em>pyproject.toml</em>, and calls <em>cmake</em> to build the project. The <em>cmake</em>-file <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> needed some update to find the Python installation, and the pybind11 - directories.</p>
+<p>The command <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">.</span></code> reads information from the files <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> and <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>, and calls <em>cmake</em> to build the project. The <em>cmake</em>-file <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> needed some update to find the Python installation, and the pybind11 - directories.</p>
 <p>The Python file <em>test_vector.py</em> uses features of our <code class="docutils literal notranslate"><span class="pre">Vector</span></code> Python-class.</p>
 <p>If this works, merge the pybind branch into the main branch of your repo.</p>
 <section id="binding-c-classes-to-python">
@@ -538,7 +538,7 @@ A more advanced version of pickling uses <a class="reference external" href="htt
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[2, &#39;hello&#39;, &lt;ASCsoft.bla.Vector object at 0x10443cab0&gt;]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[2, &#39;hello&#39;, &lt;ASCsoft.bla.Vector object at 0x10818e330&gt;]
 7, 7, 7
 </pre></div>
 </div>
@@ -547,15 +547,27 @@ A more advanced version of pickling uses <a class="reference external" href="htt
 </section>
 <section id="exercise">
 <h2><span class="section-number">6.4. </span>Exercise<a class="headerlink" href="#exercise" title="Permalink to this heading">#</a></h2>
-<ul class="simple">
-<li><p>Wrap your <code class="docutils literal notranslate"><span class="pre">Matrix&lt;double,RowMajor&gt;</span></code> to Python. Add getter/setter functions and operators. Add a property <code class="docutils literal notranslate"><span class="pre">shape</span></code>.</p></li>
+<ul>
+<li><p>Wrap your <code class="docutils literal notranslate"><span class="pre">Matrix&lt;double,RowMajor&gt;</span></code> to Python. Add getter/setter functions and operators. Add a property <code class="docutils literal notranslate"><span class="pre">shape</span></code>.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="p">.</span><span class="n">def</span><span class="p">(</span><span class="s">&quot;__getitem__&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="p">[](</span><span class="n">Matrix</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span><span class="w"> </span><span class="n">RowMajor</span><span class="o">&gt;</span><span class="w"> </span><span class="n">self</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">ind</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">           </span><span class="k">return</span><span class="w"> </span><span class="n">self</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">(</span><span class="n">ind</span><span class="p">),</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">(</span><span class="n">ind</span><span class="p">));</span>
+<span class="w">      </span><span class="p">})</span>
+<span class="p">.</span><span class="n">def_property_readonly</span><span class="p">(</span><span class="s">&quot;shape&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="p">[](</span><span class="k">const</span><span class="w"> </span><span class="n">Matrix</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span><span class="w"> </span><span class="n">RowMajor</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">           </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="p">(</span><span class="n">self</span><span class="p">.</span><span class="n">Height</span><span class="p">(),</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">Width</span><span class="p">());</span>
+<span class="w">      </span><span class="p">})</span>
+</pre></div>
+</div>
+</li>
+<li><p>Measure timings for Matrix-Matrix multiplicaton called from Python (width=height=n, with n=10, n=100, n=1000). Split times into actual C++ computations, and overhead due to Python wrapping.</p></li>
 <li><p>Numpy is Python standard for data exchange in scientific computing. Try to convert your Python <code class="docutils literal notranslate"><span class="pre">Vector</span></code>/<code class="docutils literal notranslate"><span class="pre">Matrix</span></code> to a numpy array using <code class="docutils literal notranslate"><span class="pre">np.asarray(v)</span></code>. How does it work ?  How efficient ?</p></li>
 <li><p>For efficiency add a <a class="reference external" href="https://pybind11.readthedocs.io/en/stable/advanced/pycpp/numpy.html?highlight=buffer#buffer-protocol">Buffer protocol</a>. This is also the recommended technique for pickling.</p></li>
 </ul>
 </section>
 <section id="building-the-python-package">
 <h2><span class="section-number">6.5. </span>Building the Python-package<a class="headerlink" href="#building-the-python-package" title="Permalink to this heading">#</a></h2>
-<p>You found two new files <em><a class="reference external" href="http://setup.py">setup.py</a></em> and <em>pyproject.toml</em>. They are responsible for building and installing a Python package. If we call</p>
+<p>You found two new files <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> and <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>. They are responsible for building and installing a Python package. If we call</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pip install .
 </pre></div>
 </div>
