@@ -1,4 +1,4 @@
-## Expression templates
+# Expression templates
 
 Think of a code like
 
@@ -182,7 +182,7 @@ class VectorView {
   * What happens with the statement `A = A*B`, where A and B are two matrices ?
 
   * what happens here ? 
-  ```code
+  ```cpp
   auto Func() {
     Matrix a(10,10);
     return a.Row(3); 
