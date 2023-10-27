@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>11. Solving ordinary differential equations &#8212; Introduction to Scientific Computing</title>
+    <title>Performance &#8212; Introduction to Scientific Computing</title>
   
   
   
@@ -62,11 +62,9 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'ODEs/ODEs';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'performance/bla-performance';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="12. Partial differential equations" href="../PDEs/PDEs.html" />
-    <link rel="prev" title="10. Pipelining" href="../performance/pipelining.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -178,13 +176,13 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Performance</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../performance/overview.html">8. Performance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../performance/vectorization.html">9. Vectorization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../performance/pipelining.html">10. Pipelining</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">8. Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vectorization.html">9. Vectorization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipelining.html">10. Pipelining</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">ODEs</span></p>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">11. Solving ordinary differential equations</a></li>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../ODEs/ODEs.html">11. Solving ordinary differential equations</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">PDEs</span></p>
 <ul class="nav bd-sidenav">
@@ -247,7 +245,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="../_sources/ODEs/ODEs.md" target="_blank"
+      <li><a href="../_sources/performance/bla-performance.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -327,7 +325,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Solving ordinary differential equations</h1>
+    <h1>Performance</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -341,15 +339,8 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="solving-ordinary-differential-equations">
-<h1><span class="section-number">11. </span>Solving ordinary differential equations<a class="headerlink" href="#solving-ordinary-differential-equations" title="Permalink to this heading">#</a></h1>
-<p>We are developing a library for solving nonlinear ordinary differential lequaitons. First we build an abstraction of nonlinear functions, and implement solvers for nonlinear equations. On this basis we can simply define time-stepping algorithms. We apply it to multi-body systems. OpenGL visualiztion is provided based on the python interface to threejs.</p>
-<ul class="simple">
-<li><p>Solving non-linear equations</p></li>
-<li><p>Explicit and implicit time-stepping methods</p></li>
-<li><p>Connecting masses with springs</p></li>
-<li><p>Introducing constraints</p></li>
-</ul>
+  <section class="tex2jax_ignore mathjax_ignore" id="performance">
+<h1>Performance<a class="headerlink" href="#performance" title="Permalink to this heading">#</a></h1>
 </section>
 
     <script type="text/x-thebe-config">
@@ -365,7 +356,7 @@ document.write(`
         },
         kernelOptions: {
             name: "python3",
-            path: "./ODEs"
+            path: "./performance"
         },
         predefinedOutput: true
     }
@@ -382,24 +373,6 @@ document.write(`
                 <footer class="prev-next-footer">
                   <!-- Previous / next buttons -->
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="../performance/pipelining.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">10. </span>Pipelining</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="../PDEs/PDEs.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">12. </span>Partial differential equations</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div>
                 </footer>
               
