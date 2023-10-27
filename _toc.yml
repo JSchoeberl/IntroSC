@@ -14,7 +14,14 @@ parts:
     - file: basiclinalg/bla-expressions.md
     - file: basiclinalg/bla-python2.ipynb
     - file: basiclinalg/bla-lapack.ipynb
-    - file: basiclinalg/bla-performance.md
+
+  - caption: Performance
+    numbered: True  
+    chapters:
+    - file: performance/overview.md    
+    - file: performance/vectorization.md
+    - file: performance/pipelining.md
+
 
   - caption: ODEs
     numbered: True  
