@@ -3,8 +3,8 @@
 Look at the documentation of the `_mm256_fmadd_pd` (fused-multiply-add) intrinsic:
 [docu](https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#text=256_fmadd_pd&avxnewtechs=FMA&ig_expand=3101,3101).
 It tells us that the instruction has a latency of 4 clock-cycles, but there is a throughput (CPI=clocks per instruction)
-of 0.5. This means that we can start two of these instruction in every clock cycle, but we have to wait 4 clock cycles after
-a result is available. 
+of 0.5. This means that we can start two of these instruction in every clock cycle, but we have to wait 4 clock cycles until
+the result is available. 
 
 A typical algorithm suffering from latency is computing an inner product:
 
@@ -22,7 +22,7 @@ A vector-vector addition like
 for (size_t i = 0; i < n; i++)
    x[i] += alpha * y[i];
 ```
-does not suffer from the dependeny chain. The next operation does not depend on the result of the previous one.
+does not suffer from the dependeny chain. The next operation does not depend on the result of the previous one. Here, operation reordering of modern CPUs come into play: Storing the result $x[i]$ has to wait until the computation is ready, however the upcoming operations from the next iteration can be executed in the meanwhile.
 
 
 A possible optimization for overcoming the dependency chain is unrolling and reordering summation:
