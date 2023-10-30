@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>10. Pipelining &#8212; Introduction to Scientific Computing</title>
+    <title>9. Pipelining &#8212; Introduction to Scientific Computing</title>
   
   
   
@@ -67,8 +67,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'performance/pipelining';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="11. Solving ordinary differential equations" href="../ODEs/ODEs.html" />
-    <link rel="prev" title="9. Vectorization" href="vectorization.html" />
+    <link rel="next" title="10. Solving ordinary differential equations" href="../ODEs/ODEs.html" />
+    <link rel="prev" title="8. Vectorization" href="vectorization.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -180,21 +180,20 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Performance</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="overview.html">8. Performance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vectorization.html">9. Vectorization</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">10. Pipelining</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vectorization.html">8. Vectorization</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">9. Pipelining</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">ODEs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../ODEs/ODEs.html">11. Solving ordinary differential equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ODEs/ODEs.html">10. Solving ordinary differential equations</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">PDEs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">12. Partial differential equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-Poisson.html">13. Poisson Equation and the 5-point stencil</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-iterative.html">14. Iterative Solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-waves.html">15. Wave equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-flows.html">16. Navier-Stokes Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">11. Partial differential equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-Poisson.html">12. Poisson Equation and the 5-point stencil</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-iterative.html">13. Iterative Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-waves.html">14. Wave equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-flows.html">15. Navier-Stokes Equation</a></li>
 </ul>
 
     </div>
@@ -344,7 +343,7 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section id="pipelining">
-<h1><span class="section-number">10. </span>Pipelining<a class="headerlink" href="#pipelining" title="Permalink to this heading">#</a></h1>
+<h1><span class="section-number">9. </span>Pipelining<a class="headerlink" href="#pipelining" title="Permalink to this heading">#</a></h1>
 <p>Look at the documentation of the <code class="docutils literal notranslate"><span class="pre">_mm256_fmadd_pd</span></code> (fused-multiply-add) intrinsic:
 <a class="reference external" href="https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#text=256_fmadd_pd&amp;avxnewtechs=FMA&amp;ig_expand=3101,3101">docu</a>.
 It tells us that the instruction has a latency of 4 clock-cycles, but there is a throughput (CPI=clocks per instruction)
@@ -465,7 +464,7 @@ We measure run-time, and computes GFlop-rate, i.e. billion fma-instructions per 
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">9. </span>Vectorization</p>
+        <p class="prev-next-title"><span class="section-number">8. </span>Vectorization</p>
       </div>
     </a>
     <a class="right-next"
@@ -473,7 +472,7 @@ We measure run-time, and computes GFlop-rate, i.e. billion fma-instructions per 
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">11. </span>Solving ordinary differential equations</p>
+        <p class="prev-next-title"><span class="section-number">10. </span>Solving ordinary differential equations</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

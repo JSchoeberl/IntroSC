@@ -1,4 +1,4 @@
-# Performance
+ju# Overview
 
 We learn how to unleash the full power of our computers. This include
 
@@ -8,7 +8,7 @@ We learn how to unleash the full power of our computers. This include
 - **Parallelization**: most CPUs have several physical cores. Write multi-threaded code to split work to multiple cores
 
 
-Fork and clone github repo [AHS-HPC](https://github.com/TUWien-ASC/ASC-HPC.git).
+Fork and clone github repo [ASC-HPC](https://github.com/TUWien-ASC/ASC-HPC.git).
 
 This repository contains another github project as a submodule,
 which you have to initialize using
