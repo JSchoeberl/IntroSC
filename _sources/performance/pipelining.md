@@ -22,7 +22,7 @@ A vector-vector addition like
 for (size_t i = 0; i < n; i++)
    x[i] += alpha * y[i];
 ```
-does not suffer from the dependeny chain. The next operation does not depend on the result of the previous one. Here, operation reordering of modern CPUs come into play: Storing the result $x[i]$ has to wait until the computation is ready, however the upcoming operations from the next iteration can be executed in the meanwhile.
+does not suffer from the dependeny chain. The next operation does not depend on the result of the previous one. Here, operation reordering of modern CPUs comes into play: Storing the result $x[i]$ has to wait until the computation is ready, however the upcoming operations from the next iteration can be started and executed in the meanwhile.
 
 
 A possible optimization for overcoming the dependency chain is unrolling and reordering summation:
@@ -37,19 +37,19 @@ for (size_t i = 0; i+2 <= n; i+=2) {
 sum = sum0+sum1;
 ```
 We are performing two independent fma - operations per loop, but have to pay the latency only once.
-With eight summation variables the full latency bottleneck could be overcome.
+With eight accumulators the full latency bottleneck could be overcome.
 
 
 However, not only arithmetic operations have a cost, also getting data in and out of the CPU counts.
-Modern Intel CPUs can perform per clock cycle at most 4 operations out of
+Modern Intel CPUs can perform up to four operations per clock cycle, roughly out of:
 
 * two simd256 arithmetic operations 
 * two simd256 loads and one simd256 store
 * four integer operations
-* one branch operations
+* one branch operation
 
-A great source of information are the [manuals by Agner Fog](https://www.agner.org/optimize/#manuals).
-Have a look into manual 3. The microarchitecture of Intel, AMD and VIA CPUs: An optimization guide for assembly programmers and compiler makers, Chapter 11: Intel Skylake pipeline.
+A great source of information are the [optimization manuals by Agner Fog](https://www.agner.org/optimize/#manuals).
+Have a look into manual 3: *The microarchitecture of Intel, AMD and VIA CPUs: An optimization guide for assembly programmers and compiler makers*, Chapter 11: Intel Skylake pipeline.
 
 
 
@@ -92,10 +92,11 @@ for (size_t i = 0; i < wa; i++) {
 ```
 
 **Excersicse:**
-* Try the examples in the file *demos/simd_timings.cc$ containing such loops.
-We measure run-time, and computes GFlop-rate, i.e. billion fma-instructions per second.
-* Experiment with different block sizes for simultaneous vector updates. What are your best GFlop-rates ?  
-* Look at assembly code, find the inner loops of your functions (enter 'make help' and then 'make demos/simd_timings.s').
-* Include the SIMD-classes into your BLA project. Implement a matrix-matrix multiplication using the best loops from simd_timings.cc.
+* Try the examples in the file *demos/simd_timings.cc* containing such loops.
+We measure run-time, and compute GFlop-rate, i.e. billion fma-instructions per second.
+* Experiment with different block sizes for simultaneous vector updates. What are your best GFlop-rates you can achieve ?  
+* Look at assembly code, find the inner loops of your functions (enter *make help* and then *make demos/simd_timings.s*).
+* Include the SIMD-classes into your BLA project. Implement a matrix-matrix multiplication using the best loops you found
+from simd_timings.cc.
 
 

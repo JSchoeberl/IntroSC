@@ -1,4 +1,4 @@
-ju# Overview
+# Overview
 
 We learn how to unleash the full power of our computers. This include
 

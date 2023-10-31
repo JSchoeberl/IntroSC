@@ -23,6 +23,9 @@ vmovapd ymmword ptr [rip + c], ymm0
 The first instruction loads four doubles from variable `a` into the 256-bit register `ymm0`, the second one (`vaddpd`) adds four doubles from variable `b` to register `ymm0`, and the third one stores the result to variable `c`.
 The compiler knows what kind of instructions are supported by the CPU.
 
+`ymm` are CPU registers of width 256 bits, they can hold four `double`s (double precision floating point numbers), or eight `float`s (single precision floating point numbers). These 256bit registers are available in CPUs supporting the [AVX extension](https://en.wikipedia.org/wiki/Advanced_Vector_Extensions).
+The older `xmm` registers can hold two doubles, and `zmm` registers can even hold 8 doubles, they are available on server CPUs, and only within a few consumer CPUs.
+
 Now, try this similar function (copy into compiler explorer):
 ```cpp
 void Sum4(double *a, double *b, double *c) {
@@ -48,9 +51,9 @@ void Sum4(double *a, double *b, double *c) {
 On Intel (and compatible) CPUs we include the the *immintrin.h* header. This provides the data-type `__mm256d` for a vector of four doubles (which are 256bits). The intrinsic function `_mm256_loadu_pd` loads such a 4-vector starting from the address given by a double pointer. The intrinsic function `_mm256_add_pd` adds two 4-vectors, and finally ` _mm256_storeu_pd` stores the 4-vector in memory, starting at the address given by a double pointer. Try this code in compiler explorer !
 
 
-Available intrinsics are found here
+Available intrinsics are found in the
 [Intel Intrinsics Guide](https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html).
-Lookup the documentation!
+Lookup the documentation of the functions used above!
 
 These intrinsics are supported by all major compilers (gcc, clang, msvc, icc, ...), however with slightly different behaviour. For example, gcc has arithmetic operations for type `__m256d` predefined, in msvc the intrinsic function must be called.
 
@@ -100,12 +103,12 @@ and documentation for the intrinsics can be found [here](https://arm-software.gi
 
 You find examples in the file *demos/demo_simd.cc*.
 The SIMD-template is designed such that you can use it for arbitrary (in some range) size.
-If it is a native size for your CPU, it will directly use the intrinsic vector. If it is larger, the SIMD-type is split into smaller SIMDs.
+If it is a native size for your CPU, it will directly use the vector register. If it is larger, the SIMD-type is split into smaller SIMDs.
 
 
 Creation of SIMD - vector variables:
-* Either from simd-size scalar variables
-* one variable which will be broadcasted to the vector
+* Either from simd-size scalar values
+* one value which will be broadcasted to the vector
 * a pointer from where simd-size values are loaded
 
 ```cpp
@@ -159,7 +162,7 @@ A mask can also be used to load or store only a subset of vector components.
 c.Store(&mem[0], mask);
 ```
 
-Such a mask is very useful to treat the left-over of a long vector operations. Let's copy
+Such a mask is useful to treat the left-over of a long vector operations. Let's copy
 vector x to vector y. The bulk of the vector is processed using SIMD<4> instructions.
 For the $n\%4$ elements at the end one could start a scalar loop, or use masking:
 ```cpp
@@ -173,7 +176,8 @@ SIMD<double,4>(px+i, mask).Store(py+i, mask);
 ### Horizontal operations, shuffling
 
 SIMD - operations work very well when data is aligned properly. Sometimes one has to move data
-around the individual components, what is less fun (and less efficient). For example summing all entries of a
+around the individual components, what is less fun (and less efficient). An example is summing
+all entries of a
 simd-vector, called horizontal sum. This functions forms the horizontal sums of two given vectors:
 ```cpp
 SIMD<double,2> HSum (SIMD<double,4> sd1, SIMD<double,4> sd2) {

@@ -67,7 +67,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'basiclinalg/bla-lapack';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="8. Performance" href="../performance/overview.html" />
+    <link rel="next" title="8. Overview" href="../performance/overview.html" />
     <link rel="prev" title="6. Python bindings" href="bla-python2.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -180,7 +180,7 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Performance</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../performance/overview.html">8. Performance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance/overview.html">8. Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../performance/vectorization.html">9. Vectorization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../performance/pipelining.html">10. Pipelining</a></li>
 </ul>
@@ -538,13 +538,13 @@ Actually, we are computing the factorization <span class="math notranslate nohig
 <span class="p">};</span>
 </pre></div>
 </div>
-<p>Copy matrix <code class="docutils literal notranslate"><span class="pre">A</span></code> by copy-ctor before overwritten by <code class="docutils literal notranslate"><span class="pre">LU</span></code> factors:</p>
+<p>The class <code class="docutils literal notranslate"><span class="pre">LapackLU</span></code> can be used as follows: Copy matrix <code class="docutils literal notranslate"><span class="pre">A</span></code> by copy-ctor before overwritten by <code class="docutils literal notranslate"><span class="pre">LU</span></code> factors:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">Matrix</span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">A</span><span class="p">;</span>
 <span class="n">Matrix</span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">invA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LapackLU</span><span class="p">(</span><span class="n">A</span><span class="p">).</span><span class="n">Inverse</span><span class="p">();</span><span class="w">   </span>
 </pre></div>
 </div>
-<p>use memory of matrix <code class="docutils literal notranslate"><span class="pre">A2</span></code> for <code class="docutils literal notranslate"><span class="pre">LU</span></code> factors, <code class="docutils literal notranslate"><span class="pre">A2</span></code> has shape <span class="math notranslate nohighlight">\((0,0)\)</span> after calling <code class="docutils literal notranslate"><span class="pre">LapackLU</span></code>:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// or reuse A</span>
+<p>Reuse memory of matrix <code class="docutils literal notranslate"><span class="pre">A2</span></code> for <code class="docutils literal notranslate"><span class="pre">LU</span></code> factors, <code class="docutils literal notranslate"><span class="pre">A2</span></code> has shape <span class="math notranslate nohighlight">\((0,0)\)</span> after calling <code class="docutils literal notranslate"><span class="pre">LapackLU</span></code>:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// or reuse A2</span>
 <span class="n">Matrix</span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">A2</span>
 <span class="n">Matrix</span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">invA2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LapackLU</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">A2</span><span class="p">)).</span><span class="n">Inverse</span><span class="p">();</span><span class="w">  </span><span class="c1">// reuse</span>
 </pre></div>
@@ -555,9 +555,9 @@ Actually, we are computing the factorization <span class="math notranslate nohig
 <ul class="simple">
 <li><p>adjust matrix-matrix multiplication function to your matrix class.
 Measure performance of Lapack matrix-matrix multiplication, and compare to your expression template matrix-matrix multiplication. Compare GFlop - rates, i.e. <span class="math notranslate nohighlight">\(10^9\)</span> mult-add operations per second, for various matrix sizes <span class="math notranslate nohighlight">\(10 \times 10\)</span>, <span class="math notranslate nohighlight">\(100 \times 100\)</span>, <span class="math notranslate nohighlight">\(1000 \times 1000\)</span>.</p></li>
-<li><p>Complete the <code class="docutils literal notranslate"><span class="pre">LapackLU</span></code> class. Look up documentation for functions<code class="docutils literal notranslate"><span class="pre">dgetrf</span></code>, <code class="docutils literal notranslate"><span class="pre">dgetri</span></code>.</p></li>
+<li><p>Complete the <code class="docutils literal notranslate"><span class="pre">LapackLU</span></code> class. Look up documentation for functions<code class="docutils literal notranslate"><span class="pre">dgetrf</span></code>, <code class="docutils literal notranslate"><span class="pre">dgetrs</span></code>, <code class="docutils literal notranslate"><span class="pre">dgetri</span></code>.</p></li>
 </ul>
-<p>Pick some functions of your choice. Write C++ wrappers similar to <code class="docutils literal notranslate"><span class="pre">LapackLU</span></code>,</p>
+<p>Pick some functions of your choice. Write C++ wrappers similar to <code class="docutils literal notranslate"><span class="pre">LapackLU</span></code> for the following matrix operations:</p>
 <ul class="simple">
 <li><p>QR decomposition using Householder reflections (<code class="docutils literal notranslate"><span class="pre">dgeqrf</span></code>, <code class="docutils literal notranslate"><span class="pre">dorgqr</span></code>):
 $<span class="math notranslate nohighlight">\(
@@ -565,7 +565,7 @@ A = QR
 \)</span><span class="math notranslate nohighlight">\(
 with \)</span>Q<span class="math notranslate nohighlight">\( orthogonal, and \)</span>R<span class="math notranslate nohighlight">\( upper triangular. By storing \)</span>Q<span class="math notranslate nohighlight">\( as product of Householder reflections, \)</span>Q<span class="math notranslate nohighlight">\( and \)</span>R<span class="math notranslate nohighlight">\( together fit into the memory of \)</span>A$.</p></li>
 <li><p>Eigenvalues and eigenvectors of a symmetric matrix (<code class="docutils literal notranslate"><span class="pre">dsyev</span></code>).</p></li>
-<li><p>Eigenvalues and eigenvector calculation (<code class="docutils literal notranslate"><span class="pre">dgeev</span></code>) of a general matrix. Even if the matrix is real, eigenvalues/eigenvectors are in general complex.</p></li>
+<li><p>Eigenvalues and eigenvector calculation (<code class="docutils literal notranslate"><span class="pre">dgeev</span></code>) of a general matrix. Even if the matrix is real, eigenvalues/eigenvectors are complex, in general.</p></li>
 <li><p>SVD decomposition of a matrix (<code class="docutils literal notranslate"><span class="pre">dgesvd</span></code>):
 $<span class="math notranslate nohighlight">\(
 A = U \Sigma V^T
@@ -629,7 +629,7 @@ with \)</span>U<span class="math notranslate nohighlight">\( and \)</span>V<span
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">8. </span>Performance</p>
+        <p class="prev-next-title"><span class="section-number">8. </span>Overview</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
