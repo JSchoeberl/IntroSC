@@ -7,3 +7,5 @@ We are developing a library for solving nonlinear ordinary differential lequaito
 - Connecting masses with springs
 - Introducing constraints
 
+
+Some [spoiler to WIP](https://github.com/JSchoeberl/ASC-ODE)
