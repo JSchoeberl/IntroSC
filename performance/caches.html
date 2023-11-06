@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>12. Caches &#8212; Introduction to Scientific Computing</title>
+    <title>Caches &#8212; Introduction to Scientific Computing</title>
   
   
   
@@ -67,8 +67,6 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'performance/caches';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="13. Solving ordinary differential equations" href="../ODEs/ODEs.html" />
-    <link rel="prev" title="11. Caches" href="caches1.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -179,24 +177,23 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../basiclinalg/bla-lapack.html">7. Interfacing Lapack</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Performance</span></p>
-<ul class="current nav bd-sidenav">
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">8. Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vectorization.html">9. Vectorization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pipelining.html">10. Pipelining</a></li>
 <li class="toctree-l1"><a class="reference internal" href="caches1.html">11. Caches</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">12. Caches</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">ODEs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../ODEs/ODEs.html">13. Solving ordinary differential equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ODEs/ODEs.html">12. Solving ordinary differential equations</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">PDEs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">14. Partial differential equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-Poisson.html">15. Poisson Equation and the 5-point stencil</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-iterative.html">16. Iterative Solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-waves.html">17. Wave equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-flows.html">18. Navier-Stokes Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">13. Partial differential equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-Poisson.html">14. Poisson Equation and the 5-point stencil</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-iterative.html">15. Iterative Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-waves.html">16. Wave equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-flows.html">17. Navier-Stokes Equation</a></li>
 </ul>
 
     </div>
@@ -343,8 +340,8 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#measure-memory-bandwidth">12.1. Measure memory bandwidth</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimized-matrix-matrix-multiplication">12.2. Optimized matrix-matrix multiplication</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#measure-memory-bandwidth">Measure memory bandwidth</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimized-matrix-matrix-multiplication">Optimized matrix-matrix multiplication</a></li>
 </ul>
             </nav>
         </div>
@@ -357,14 +354,14 @@ document.write(`
                 <article class="bd-article" role="main">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="caches">
-<h1><span class="section-number">12. </span>Caches<a class="headerlink" href="#caches" title="Permalink to this heading">#</a></h1>
+<h1>Caches<a class="headerlink" href="#caches" title="Permalink to this heading">#</a></h1>
 <p>the principle idea is …</p>
 <section id="measure-memory-bandwidth">
-<h2><span class="section-number">12.1. </span>Measure memory bandwidth<a class="headerlink" href="#measure-memory-bandwidth" title="Permalink to this heading">#</a></h2>
+<h2>Measure memory bandwidth<a class="headerlink" href="#measure-memory-bandwidth" title="Permalink to this heading">#</a></h2>
 <p>We run the following tests on vectors:</p>
 </section>
 <section id="optimized-matrix-matrix-multiplication">
-<h2><span class="section-number">12.2. </span>Optimized matrix-matrix multiplication<a class="headerlink" href="#optimized-matrix-matrix-multiplication" title="Permalink to this heading">#</a></h2>
+<h2>Optimized matrix-matrix multiplication<a class="headerlink" href="#optimized-matrix-matrix-multiplication" title="Permalink to this heading">#</a></h2>
 <p>Paper by K. Goto and R. van de Geijn: <a class="reference external" href="https://www.cs.utexas.edu/users/flame/pubs/GotoTOMS_final.pdf">Anatomy of High-Performance Matrix Multiplication</a>, which describes a core idea of OpenBLAS (which evolved from GotoBLAS).</p>
 <p>In the previous section we have studied the inner-most loops to get optimal floating point performance for multiplying matrices of shape like <span class="math notranslate nohighlight">\(4 \times k\)</span> matrix with a <span class="math notranslate nohighlight">\(k \times 12\)</span>. However, if we use this kernel repeatedly, we see a drop-down of performance for matrices of larger sizes (like <span class="math notranslate nohighlight">\(1000\times 1000\)</span>).</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">AddMatMat</span><span class="w"> </span><span class="p">(</span><span class="n">MatrixView</span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">A</span><span class="p">,</span><span class="w"> </span><span class="n">MatrixView</span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">B</span><span class="p">,</span><span class="w"> </span><span class="n">MatrixView</span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">C</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -418,24 +415,6 @@ document.write(`
                 <footer class="prev-next-footer">
                   <!-- Previous / next buttons -->
 <div class="prev-next-area">
-    <a class="left-prev"
-       href="caches1.html"
-       title="previous page">
-      <i class="fa-solid fa-angle-left"></i>
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">11. </span>Caches</p>
-      </div>
-    </a>
-    <a class="right-next"
-       href="../ODEs/ODEs.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">13. </span>Solving ordinary differential equations</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
-    </a>
 </div>
                 </footer>
               
@@ -451,8 +430,8 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#measure-memory-bandwidth">12.1. Measure memory bandwidth</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimized-matrix-matrix-multiplication">12.2. Optimized matrix-matrix multiplication</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#measure-memory-bandwidth">Measure memory bandwidth</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimized-matrix-matrix-multiplication">Optimized matrix-matrix multiplication</a></li>
 </ul>
   </nav></div>
 
