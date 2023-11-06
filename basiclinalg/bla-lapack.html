@@ -62,8 +62,6 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'basiclinalg/bla-lapack';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -183,18 +181,19 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../performance/overview.html">8. Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../performance/vectorization.html">9. Vectorization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../performance/pipelining.html">10. Pipelining</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance/caches.html">11. Caches</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">ODEs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../ODEs/ODEs.html">11. Solving ordinary differential equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ODEs/ODEs.html">12. Solving ordinary differential equations</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">PDEs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">12. Partial differential equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-Poisson.html">13. Poisson Equation and the 5-point stencil</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-iterative.html">14. Iterative Solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-waves.html">15. Wave equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-flows.html">16. Navier-Stokes Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">13. Partial differential equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-Poisson.html">14. Poisson Equation and the 5-point stencil</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-iterative.html">15. Iterative Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-waves.html">16. Wave equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-flows.html">17. Navier-Stokes Equation</a></li>
 </ul>
 
     </div>
@@ -359,7 +358,7 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="interfacing-lapack">
+  <section id="interfacing-lapack">
 <h1><span class="section-number">7. </span>Interfacing Lapack<a class="headerlink" href="#interfacing-lapack" title="Permalink to this heading">#</a></h1>
 <p><a class="reference external" href="https://netlib.org/lapack/">Lapack</a> is the standard linear algebra library. It contains matrix operations, factorizations, linear systems, eigen-system calculation, and more. It is a quasi standard, highly optimized implementations are available for all major computer systems.</p>
 <p>Some implementations are:</p>
@@ -402,7 +401,7 @@ target_link_libraries (test_lapack PUBLIC ${LAPACK_LIBRARIES})
 </div>
 <section id="the-blas-functions">
 <h2><span class="section-number">7.1. </span>The BLAS - functions<a class="headerlink" href="#the-blas-functions" title="Permalink to this heading">#</a></h2>
-<p>Lapack contains basic functions for efficiently computing linar algebra operations (called <strong>B</strong>asic <strong>L</strong>inera <strong>A</strong>lebra <strong>S</strong>ubprograms BLAS). One refers to BLAS1, BLAS2, and BLAS3 operations according to computational complexity <span class="math notranslate nohighlight">\(O(n)\)</span>, <span class="math notranslate nohighlight">\(O(n^2)\)</span>, or <span class="math notranslate nohighlight">\(O(n^3)\)</span>. Vector addition and inner products are BLAS1, matrix-vector products or outer products of vectors are BLAS2, and matrix-matrix multiplication belong to BLAS3.</p>
+<p>Lapack contains basic functions for efficiently computing linar algebra operations (called <strong>B</strong>asic <strong>L</strong>inera <strong>A</strong>lebra <strong>S</strong>ubprograms BLAS). One refers to BLAS1, BLAS2, and BLAS3 operations according to computational complexity $O(n)$, $O(n^2)$, or $O(n^3)$. Vector addition and inner products are BLAS1, matrix-vector products or outer products of vectors are BLAS2, and matrix-matrix multiplication belong to BLAS3.</p>
 <section id="the-gemm-functions">
 <h3><span class="section-number">7.1.1. </span>The GEMM functions<a class="headerlink" href="#the-gemm-functions" title="Permalink to this heading">#</a></h3>
 <p>With origin in Fortran-times, all functions have a short name from abbreviations, like
@@ -418,7 +417,7 @@ target_link_libraries (test_lapack PUBLIC ${LAPACK_LIBRARIES})
 The functions are well documented, and google easily finds them, like
 <a class="reference external" href="https://www.netlib.org/lapack/explore-html/d1/d54/group__double__blas__level3_gaeda3cbd99c8fb834a60a6412878226e1.html">documentation dgemm</a></p>
 <p>Since function calls with many arguments are not very clear, we prefer to wrap the low-level Lapack call into a function based on our <code class="docutils literal notranslate"><span class="pre">MatrixView</span></code> classes. The matrices are provided by a pointer to the first element, and the leading distance (what is exactly our <code class="docutils literal notranslate"><span class="pre">dist</span></code> variable).
-In Fortran/Lapack matrices are stored column-major. The <code class="docutils literal notranslate"><span class="pre">dgemm</span></code> function allows to specify whether the matrices <span class="math notranslate nohighlight">\(A\)</span> or <span class="math notranslate nohighlight">\(B\)</span> are transposed. If we have a row-major matrix, we set the transpose argument to ‘T’ (and otherwise ‘N’ for not):</p>
+In Fortran/Lapack matrices are stored column-major. The <code class="docutils literal notranslate"><span class="pre">dgemm</span></code> function allows to specify whether the matrices $A$ or $B$ are transposed. If we have a row-major matrix, we set the transpose argument to ‘T’ (and otherwise ‘N’ for not):</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// c = a*b</span>
 <span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="n">ORDERING</span><span class="w"> </span><span class="n">OA</span><span class="p">,</span><span class="w"> </span><span class="n">ORDERING</span><span class="w"> </span><span class="n">OB</span><span class="o">&gt;</span>
 <span class="kt">void</span><span class="w"> </span><span class="n">MultMatMatLapack</span><span class="w"> </span><span class="p">(</span><span class="n">MatrixView</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span><span class="w"> </span><span class="n">OA</span><span class="o">&gt;</span><span class="w"> </span><span class="n">a</span><span class="p">,</span>
@@ -447,11 +446,10 @@ In Fortran/Lapack matrices are stored column-major. The <code class="docutils li
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Only matrices <span class="math notranslate nohighlight">\(A\)</span> and <span class="math notranslate nohighlight">\(B\)</span> can be marked as transpose, not the result matrix <span class="math notranslate nohighlight">\(C\)</span>. If we want a row-major result, we use</p>
-<div class="math notranslate nohighlight">
-\[
-C = A B \; \Leftrightarrow \; C^T = B^T A^T,
-\]</div>
+<p>Only matrices $A$ and $B$ can be marked as transpose, not the result matrix $C$. If we want a row-major result, we use</p>
+<p>$$
+C = A B ; \Leftrightarrow ; C^T = B^T A^T,
+$$</p>
 <p>and transpose all three matrices. Since <code class="docutils literal notranslate"><span class="pre">Trans</span></code> does not do actual computations (it only gives a different view on the memory), this additional wrapper has zero costs:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="n">ORDERING</span><span class="w"> </span><span class="n">OA</span><span class="p">,</span><span class="w"> </span><span class="n">ORDERING</span><span class="w"> </span><span class="n">OB</span><span class="o">&gt;</span>
 <span class="kt">void</span><span class="w"> </span><span class="n">MultMatMatLapack</span><span class="w"> </span><span class="p">(</span><span class="n">MatrixView</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span><span class="w"> </span><span class="n">OA</span><span class="o">&gt;</span><span class="w"> </span><span class="n">a</span><span class="p">,</span>
@@ -466,16 +464,15 @@ C = A B \; \Leftrightarrow \; C^T = B^T A^T,
 </section>
 <section id="lu-decomposition">
 <h2><span class="section-number">7.2. </span>LU-decomposition<a class="headerlink" href="#lu-decomposition" title="Permalink to this heading">#</a></h2>
-<p>Lapack can compute an LU-decomposition of a matrix <span class="math notranslate nohighlight">\(A\)</span>, what means a factorization of <span class="math notranslate nohighlight">\(A\)</span> of the form</p>
-<div class="math notranslate nohighlight">
-\[
+<p>Lapack can compute an LU-decomposition of a matrix $A$, what means a factorization of $A$ of the form</p>
+<p>$$
 A = P L U,
-\]</div>
-<p>where <span class="math notranslate nohighlight">\(P\)</span> is a permutation matrix, <span class="math notranslate nohighlight">\(L\)</span> a lower triangular matrix with unit diagonal elements, and <span class="math notranslate nohighlight">\(U\)</span> a upper triangular matrix. This is an <span class="math notranslate nohighlight">\(O(n^3)\)</span> algorithm.</p>
-<p>Having such a factorization, the solution of a linear system <span class="math notranslate nohighlight">\(A x = b\)</span> can be performed via forward/backward substitution in <span class="math notranslate nohighlight">\(O(n^2)\)</span> operations. An <span class="math notranslate nohighlight">\(LU\)</span>-factorization is usually also the first step for computing the inverse <span class="math notranslate nohighlight">\(A^{-1}\)</span>.</p>
-<p>Lapack is very careful with memory usage. When computing the <span class="math notranslate nohighlight">\(LU\)</span> factorization, the original matrix <span class="math notranslate nohighlight">\(A\)</span> is overwritten with the <span class="math notranslate nohighlight">\(L\)</span> and <span class="math notranslate nohighlight">\(U\)</span> factors. The permutation matrix <span class="math notranslate nohighlight">\(P\)</span> is stored as an index vector.</p>
+$$</p>
+<p>where $P$ is a permutation matrix, $L$ a lower triangular matrix with unit diagonal elements, and $U$ a upper triangular matrix. This is an $O(n^3)$ algorithm.</p>
+<p>Having such a factorization, the solution of a linear system $A x = b$ can be performed via forward/backward substitution in $O(n^2)$ operations. An $LU$-factorization is usually also the first step for computing the inverse $A^{-1}$.</p>
+<p>Lapack is very careful with memory usage. When computing the $LU$ factorization, the original matrix $A$ is overwritten with the $L$ and $U$ factors. The permutation matrix $P$ is stored as an index vector.</p>
 <p>A C++ - wrapper for the Lapack LU - factorization may look like this. The LU-Factorization is initialized by a matrix, which will be used to hold the LU-factors. Then we can use it to solve a linear system, and also to compute the inverse. The <code class="docutils literal notranslate"><span class="pre">Inverse</span></code> function overwrites the factorization by the inverse matrix, and returns this matrix by move-semantics. The <code class="docutils literal notranslate"><span class="pre">LapackLU</span></code> object will be destroyed.
-Actually, we are computing the factorization <span class="math notranslate nohighlight">\(A = PLU\)</span> iff <span class="math notranslate nohighlight">\(A\)</span> is stored col-major. If <span class="math notranslate nohighlight">\(A\)</span> is stored row-major, we are computing <span class="math notranslate nohighlight">\(A^T = PLU\)</span>, i.e. <span class="math notranslate nohighlight">\(A = U^TL^TP^T\)</span>.</p>
+Actually, we are computing the factorization $A = PLU$ iff $A$ is stored col-major. If $A$ is stored row-major, we are computing $A^T = PLU$, i.e. $A = U^TL^TP^T$.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="n">ORDERING</span><span class="w"> </span><span class="n">ORD</span><span class="o">&gt;</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">LapackLU</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">Matrix</span><span class="w"> </span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span><span class="w"> </span><span class="n">ORD</span><span class="o">&gt;</span><span class="w"> </span><span class="n">a</span><span class="p">;</span>
@@ -543,7 +540,7 @@ Actually, we are computing the factorization <span class="math notranslate nohig
 <span class="n">Matrix</span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">invA</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LapackLU</span><span class="p">(</span><span class="n">A</span><span class="p">).</span><span class="n">Inverse</span><span class="p">();</span><span class="w">   </span>
 </pre></div>
 </div>
-<p>Reuse memory of matrix <code class="docutils literal notranslate"><span class="pre">A2</span></code> for <code class="docutils literal notranslate"><span class="pre">LU</span></code> factors, <code class="docutils literal notranslate"><span class="pre">A2</span></code> has shape <span class="math notranslate nohighlight">\((0,0)\)</span> after calling <code class="docutils literal notranslate"><span class="pre">LapackLU</span></code>:</p>
+<p>Reuse memory of matrix <code class="docutils literal notranslate"><span class="pre">A2</span></code> for <code class="docutils literal notranslate"><span class="pre">LU</span></code> factors, <code class="docutils literal notranslate"><span class="pre">A2</span></code> has shape $(0,0)$ after calling <code class="docutils literal notranslate"><span class="pre">LapackLU</span></code>:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// or reuse A2</span>
 <span class="n">Matrix</span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">A2</span>
 <span class="n">Matrix</span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">invA2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LapackLU</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">A2</span><span class="p">)).</span><span class="n">Inverse</span><span class="p">();</span><span class="w">  </span><span class="c1">// reuse</span>
@@ -554,23 +551,23 @@ Actually, we are computing the factorization <span class="math notranslate nohig
 <h2><span class="section-number">7.3. </span>Exercise:<a class="headerlink" href="#exercise" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p>adjust matrix-matrix multiplication function to your matrix class.
-Measure performance of Lapack matrix-matrix multiplication, and compare to your expression template matrix-matrix multiplication. Compare GFlop - rates, i.e. <span class="math notranslate nohighlight">\(10^9\)</span> mult-add operations per second, for various matrix sizes <span class="math notranslate nohighlight">\(10 \times 10\)</span>, <span class="math notranslate nohighlight">\(100 \times 100\)</span>, <span class="math notranslate nohighlight">\(1000 \times 1000\)</span>.</p></li>
+Measure performance of Lapack matrix-matrix multiplication, and compare to your expression template matrix-matrix multiplication. Compare GFlop - rates, i.e. $10^9$ mult-add operations per second, for various matrix sizes $10 \times 10$, $100 \times 100$, $1000 \times 1000$.</p></li>
 <li><p>Complete the <code class="docutils literal notranslate"><span class="pre">LapackLU</span></code> class. Look up documentation for functions<code class="docutils literal notranslate"><span class="pre">dgetrf</span></code>, <code class="docutils literal notranslate"><span class="pre">dgetrs</span></code>, <code class="docutils literal notranslate"><span class="pre">dgetri</span></code>.</p></li>
 </ul>
 <p>Pick some functions of your choice. Write C++ wrappers similar to <code class="docutils literal notranslate"><span class="pre">LapackLU</span></code> for the following matrix operations:</p>
 <ul class="simple">
 <li><p>QR decomposition using Householder reflections (<code class="docutils literal notranslate"><span class="pre">dgeqrf</span></code>, <code class="docutils literal notranslate"><span class="pre">dorgqr</span></code>):
-$<span class="math notranslate nohighlight">\(
-A = QR 
-\)</span><span class="math notranslate nohighlight">\(
-with \)</span>Q<span class="math notranslate nohighlight">\( orthogonal, and \)</span>R<span class="math notranslate nohighlight">\( upper triangular. By storing \)</span>Q<span class="math notranslate nohighlight">\( as product of Householder reflections, \)</span>Q<span class="math notranslate nohighlight">\( and \)</span>R<span class="math notranslate nohighlight">\( together fit into the memory of \)</span>A$.</p></li>
+$$
+A = QR
+$$
+with $Q$ orthogonal, and $R$ upper triangular. By storing $Q$ as product of Householder reflections, $Q$ and $R$ together fit into the memory of $A$.</p></li>
 <li><p>Eigenvalues and eigenvectors of a symmetric matrix (<code class="docutils literal notranslate"><span class="pre">dsyev</span></code>).</p></li>
 <li><p>Eigenvalues and eigenvector calculation (<code class="docutils literal notranslate"><span class="pre">dgeev</span></code>) of a general matrix. Even if the matrix is real, eigenvalues/eigenvectors are complex, in general.</p></li>
 <li><p>SVD decomposition of a matrix (<code class="docutils literal notranslate"><span class="pre">dgesvd</span></code>):
-$<span class="math notranslate nohighlight">\(
+$$
 A = U \Sigma V^T
-\)</span><span class="math notranslate nohighlight">\(
-with \)</span>U<span class="math notranslate nohighlight">\( and \)</span>V<span class="math notranslate nohighlight">\( orthogonal, and \)</span>\Sigma$ a (rectangular) diagonal matrix.</p></li>
+$$
+with $U$ and $V$ orthogonal, and $\Sigma$ a (rectangular) diagonal matrix.</p></li>
 </ul>
 </section>
 <section id="c-libraries">
