@@ -62,6 +62,8 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'performance/vectorization';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -181,19 +183,20 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="overview.html">8. Overview</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">9. Vectorization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pipelining.html">10. Pipelining</a></li>
-<li class="toctree-l1"><a class="reference internal" href="caches.html">11. Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="caches1.html">11. Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="caches.html">12. Caches</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">ODEs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../ODEs/ODEs.html">12. Solving ordinary differential equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ODEs/ODEs.html">13. Solving ordinary differential equations</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">PDEs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">13. Partial differential equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-Poisson.html">14. Poisson Equation and the 5-point stencil</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-iterative.html">15. Iterative Solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-waves.html">16. Wave equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-flows.html">17. Navier-Stokes Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">14. Partial differential equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-Poisson.html">15. Poisson Equation and the 5-point stencil</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-iterative.html">16. Iterative Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-waves.html">17. Wave equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-flows.html">18. Navier-Stokes Equation</a></li>
 </ul>
 
     </div>
@@ -355,7 +358,7 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section id="vectorization">
+  <section class="tex2jax_ignore mathjax_ignore" id="vectorization">
 <h1><span class="section-number">9. </span>Vectorization<a class="headerlink" href="#vectorization" title="Permalink to this heading">#</a></h1>
 <p>This function adds four doubles:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">double</span><span class="w"> </span><span class="n">a</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span><span class="w"> </span><span class="n">b</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span><span class="w"> </span><span class="n">c</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
@@ -494,7 +497,7 @@ but can be added easily following the same pattern):</p>
 </div>
 <p>Such a mask is useful to treat the left-over of a long vector operations. Let’s copy
 vector x to vector y. The bulk of the vector is processed using SIMD&lt;4&gt; instructions.
-For the $n%4$ elements at the end one could start a scalar loop, or use masking:</p>
+For the <span class="math notranslate nohighlight">\(n\%4\)</span> elements at the end one could start a scalar loop, or use masking:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">+</span><span class="mi">4</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span>
 <span class="w">   </span><span class="n">SIMD</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">px</span><span class="o">+</span><span class="n">i</span><span class="p">).</span><span class="n">Store</span><span class="p">(</span><span class="n">py</span><span class="o">+</span><span class="n">i</span><span class="p">);</span>
@@ -516,7 +519,7 @@ simd-vector, called horizontal sum. This functions forms the horizontal sums of 
 </pre></div>
 </div>
 <p>Lookup the documentation of the used intrinsics.</p>
-<p><strong>Excercise:</strong> Implement a $4\times4$ - Transpose operations: The 4 input SIMD-vectors <code class="docutils literal notranslate"><span class="pre">ai</span></code> contain the rows of a $4\times4$-matrix. The output vectors <code class="docutils literal notranslate"><span class="pre">bi</span></code> should have the rows of the transpose matrix:</p>
+<p><strong>Excercise:</strong> Implement a <span class="math notranslate nohighlight">\(4\times4\)</span> - Transpose operations: The 4 input SIMD-vectors <code class="docutils literal notranslate"><span class="pre">ai</span></code> contain the rows of a <span class="math notranslate nohighlight">\(4\times4\)</span>-matrix. The output vectors <code class="docutils literal notranslate"><span class="pre">bi</span></code> should have the rows of the transpose matrix:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="n">Transpose</span> <span class="p">(</span><span class="n">SIMD</span><span class="o">&lt;</span><span class="n">double</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;</span> <span class="n">a0</span><span class="p">,</span> <span class="n">SIMD</span><span class="o">&lt;</span><span class="n">double</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;</span> <span class="n">a1</span><span class="p">,</span> <span class="n">SIMD</span><span class="o">&lt;</span><span class="n">double</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;</span> <span class="n">a2</span><span class="p">,</span> <span class="n">SIMD</span><span class="o">&lt;</span><span class="n">double</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;</span> <span class="n">a3</span><span class="p">,</span>
                 <span class="n">SIMD</span><span class="o">&lt;</span><span class="n">double</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">b0</span><span class="p">,</span> <span class="n">SIMD</span><span class="o">&lt;</span><span class="n">double</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">b1</span><span class="p">,</span> <span class="n">SIMD</span><span class="o">&lt;</span><span class="n">double</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">b2</span><span class="p">,</span> <span class="n">SIMD</span><span class="o">&lt;</span><span class="n">double</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">b3</span><span class="p">);</span>
 </pre></div>

@@ -62,6 +62,8 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'basiclinalg/bla-python2';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -181,19 +183,20 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../performance/overview.html">8. Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../performance/vectorization.html">9. Vectorization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../performance/pipelining.html">10. Pipelining</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../performance/caches.html">11. Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance/caches1.html">11. Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance/caches.html">12. Caches</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">ODEs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../ODEs/ODEs.html">12. Solving ordinary differential equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ODEs/ODEs.html">13. Solving ordinary differential equations</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">PDEs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">13. Partial differential equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-Poisson.html">14. Poisson Equation and the 5-point stencil</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-iterative.html">15. Iterative Solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-waves.html">16. Wave equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-flows.html">17. Navier-Stokes Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">14. Partial differential equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-Poisson.html">15. Poisson Equation and the 5-point stencil</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-iterative.html">16. Iterative Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-waves.html">17. Wave equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-flows.html">18. Navier-Stokes Equation</a></li>
 </ul>
 
     </div>
@@ -341,7 +344,7 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#binding-c-classes-to-python">6.1. Binding C++ classes to Python:</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#some-more-operators-vector-vector-vector-scalar-scalar-vector">6.1.1. some more operators: vector+vector, vector$<em>$scalar, scalar$</em>$vector</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#some-more-operators-vector-vector-vector-scalar-scalar-vector">6.1.1. some more operators: vector+vector, vector<span class="math notranslate nohighlight">\(*\)</span>scalar, scalar<span class="math notranslate nohighlight">\(*\)</span>vector</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setter-getter-functions">6.1.2. setter/getter functions:</a></li>
 </ul>
 </li>
@@ -360,7 +363,7 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section id="python-bindings">
+  <section class="tex2jax_ignore mathjax_ignore" id="python-bindings">
 <h1><span class="section-number">6. </span>Python bindings<a class="headerlink" href="#python-bindings" title="Permalink to this heading">#</a></h1>
 <p>C++ and Python are are strong combination: With C++ we can program for maximal performance, with Python we can work with objects in a very convenient way. Both share a similar object oriented paradigm.</p>
 <p>Python bindings allow to use C++ functions and classes from Python.</p>
@@ -427,7 +430,7 @@ All code for wrapping the classes and functions happens in <em>src/bind_bla.cpp<
 <li><p>the function <code class="docutils literal notranslate"><span class="pre">__str__</span></code> is called to convert the object to a string, it is used from the <code class="docutils literal notranslate"><span class="pre">print(vec)</span></code> function</p></li>
 </ul>
 <section id="some-more-operators-vector-vector-vector-scalar-scalar-vector">
-<h3><span class="section-number">6.1.1. </span>some more operators: vector+vector, vector$<em>$scalar, scalar$</em>$vector<a class="headerlink" href="#some-more-operators-vector-vector-vector-scalar-scalar-vector" title="Permalink to this heading">#</a></h3>
+<h3><span class="section-number">6.1.1. </span>some more operators: vector+vector, vector<span class="math notranslate nohighlight">\(*\)</span>scalar, scalar<span class="math notranslate nohighlight">\(*\)</span>vector<a class="headerlink" href="#some-more-operators-vector-vector-vector-scalar-scalar-vector" title="Permalink to this heading">#</a></h3>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="p">.</span><span class="n">def</span><span class="p">(</span><span class="s">&quot;__add__&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">[](</span><span class="n">Vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">self</span><span class="p">,</span><span class="w"> </span><span class="n">Vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span>
 <span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">Vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="o">+</span><span class="n">other</span><span class="p">);</span><span class="w"> </span><span class="p">})</span>
 <span class="p">.</span><span class="n">def</span><span class="p">(</span><span class="s">&quot;__mul__&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">[](</span><span class="n">Vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">self</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">scal</span><span class="p">)</span>
@@ -569,7 +572,7 @@ A more advanced version of pickling uses <a class="reference external" href="htt
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pip install .
 </pre></div>
 </div>
-<p>the setup function from the file <em>setup.py</em> get called. It first triggers cmake, which installs everything in the directory <em>ASCsoft</em>. cmake knows nothing about the anatomy of a Python package. Here, <a class="reference external" href="https://scikit-build.readthedocs.io/en/latest/skbuild.html">scikit-build</a> steps in.</p>
+<p>the setup function from the file <em><a class="reference external" href="http://setup.py">setup.py</a></em> get called. It first triggers cmake, which installs everything in the directory <em>ASCsoft</em>. cmake knows nothing about the anatomy of a Python package. Here, <a class="reference external" href="https://scikit-build.readthedocs.io/en/latest/skbuild.html">scikit-build</a> steps in.</p>
 <p>When everything is uploaded properly to github, everyone can build and install our library as a Python package by running pip install with the github url:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pip install git+https://github.com/TUWien-ASC/ASC-bla.git@pybind
 </pre></div>
@@ -646,7 +649,7 @@ A more advanced version of pickling uses <a class="reference external" href="htt
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#binding-c-classes-to-python">6.1. Binding C++ classes to Python:</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#some-more-operators-vector-vector-vector-scalar-scalar-vector">6.1.1. some more operators: vector+vector, vector$<em>$scalar, scalar$</em>$vector</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#some-more-operators-vector-vector-vector-scalar-scalar-vector">6.1.1. some more operators: vector+vector, vector<span class="math notranslate nohighlight">\(*\)</span>scalar, scalar<span class="math notranslate nohighlight">\(*\)</span>vector</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setter-getter-functions">6.1.2. setter/getter functions:</a></li>
 </ul>
 </li>
