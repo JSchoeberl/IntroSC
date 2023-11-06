@@ -357,17 +357,17 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="caches">
 <h1><span class="section-number">11. </span>Caches<a class="headerlink" href="#caches" title="Permalink to this heading">#</a></h1>
-<p>Large and fast memory is expensive. This, computers have typically
+<p>Large and fast memory is expensive. Thus, computers have typically
 different kind of memory: The main memory is large and relatively
 slow, and there is small but fast cache memory. Whenever data is
-loaded from main memory, it is also stored in cache memory. If the
+loaded from (or stored to) main memory, it is also stored in cache memory. If the
 data is reused soon again, it can be quickly fetched from cache
 memory. When the cache is full, data not used for the longest time is removed.
-Actually, there are several layers of cache: level-1 is the smallest and fastest, level-2 larger and slower,
+Actually, there are several layers of cache: level-1 is the smallest and fastest, level-2 is larger and slower,
 and for some computer architectures there is also level-3.</p>
 <p>According to Agner Fog, Intel Skylake processors have (Manual 3, Section 11.12):</p>
 <ul class="simple">
-<li><p>32 kB level 1 data cache per core</p></li>
+<li><p>32 kB level 1 data cache, per core</p></li>
 <li><p>256 kB - 1 MB level 2 cache, per core</p></li>
 <li><p>3 - 24 MB level 3 cache, shared among cores</p></li>
 </ul>
@@ -375,18 +375,28 @@ and for some computer architectures there is also level-3.</p>
 <ul class="simple">
 <li><p>128 kB level 1 data cache per performance core</p></li>
 <li><p>12 MB level 2 cache shared among the 4 performance cores</p></li>
-<li><p>66 GB/sec bandwidth from memory</p></li>
+<li><p>66 GB/sec bandwidth from main memory</p></li>
 </ul>
 <section id="measure-memory-bandwidth">
 <h2><span class="section-number">11.1. </span>Measure memory bandwidth<a class="headerlink" href="#measure-memory-bandwidth" title="Permalink to this heading">#</a></h2>
-<p>We measure speed of memory by the <em>timing_mem.cc</em> benchmark. We are summing up entries of a long vector,
-using enough accumulators for hiding compute latency. We measure how many <code class="docutils literal notranslate"><span class="pre">GB</span></code> per second we can load,
-for certain vector lengthes. We start the program once to measure for one core, and then we start the same program
-4 times in parallel to measure the shared bandwith among the 4 cores. The results are here:</p>
+<p>We measure speed of reading from memory by the <em>timing_mem.cc</em> benchmark. We are summing up entries of a long vector,
+using enough accumulators for hiding compute latency. We measure how many <code class="docutils literal notranslate"><span class="pre">GB</span></code> per second we can load, depending on the vector lengthes. We start the program once to measure for one core, and then we start the same program
+4 times in parallel to measure the shared bandwith among the 4 processor cores. The results are here:</p>
 <a class="reference internal image-reference" href="../_images/bandwidth.png"><img alt="../_images/bandwidth.png" class="align-center" src="../_images/bandwidth.png" style="width: 500px;" /></a>
-<p>We see a high bandwidth of about <span class="math notranslate nohighlight">\(150 GB/s\)</span>, what is close to peak compute performance of about <span class="math notranslate nohighlight">\(20 GFlop/s\)</span> (we have a load to compute ration of 1:1, due to the looping overhead we reach only about <span class="math notranslate nohighlight">\(80\%\)</span> of peak performance). We see clearly a drop by roughly a
-factor of two around <span class="math notranslate nohighlight">\(100 kB\)</span>, what matches with <span class="math notranslate nohighlight">\(128 kB\)</span> level-1 cache. Since we see the same drop for the single-threaded, and the parallel runs, we confirm that level-1 cache is <span class="math notranslate nohighlight">\(128 kB\)</span> per core. Then we see another drop at about <span class="math notranslate nohighlight">\(10 MB\)</span> for the single thread case, and about <span class="math notranslate nohighlight">\(3MB\)</span> for the parallel case, which confirms the <span class="math notranslate nohighlight">\(12 MB\)</span> level-2 cache shared among cores. We measure about <span class="math notranslate nohighlight">\(60 GB/s\)</span> bandwidth from main memory for the single-thread case, which drops to one fourth if we run the tests in parallel.</p>
-<p>That’s it - we cannot do more for vector operations, and neither for matrix-vector products. If the matrix does not fit into cache, it has to be reloaded from main memory for every product. However, for matrix-matrix products there is potential for obtaining peak performance also for larger matrices.</p>
+<p>We see a high bandwidth of about <span class="math notranslate nohighlight">\(150 GB/s\)</span>, what is close to peak
+compute performance of about <span class="math notranslate nohighlight">\(20 GFlop/s\)</span> (we have a load to compute
+ration of 1:1, due to the looping overhead we reach only about <span class="math notranslate nohighlight">\(80\%\)</span>
+of peak performance). We see clearly a drop by roughly a factor of two
+around <span class="math notranslate nohighlight">\(100 kB\)</span>, what matches with <span class="math notranslate nohighlight">\(128 kB\)</span> level-1 cache. Vectors up
+to this size stay in level-1 cache.  Since we see the same drop for
+the single-threaded, and the parallel runs, we can confirm that
+level-1 cache is <span class="math notranslate nohighlight">\(128 kB\)</span> per core.  Then we see another drop at about
+<span class="math notranslate nohighlight">\(10 MB\)</span> for the single thread case, and about <span class="math notranslate nohighlight">\(3MB\)</span> for the parallel
+case, which confirms the <span class="math notranslate nohighlight">\(12 MB\)</span> level-2 cache shared among cores. We
+measure about <span class="math notranslate nohighlight">\(60 GB/s\)</span> bandwidth from main memory for the
+single-thread case, which drops to one fourth if we run the tests in
+parallel.</p>
+<p>That’s it - we cannot do more for vector operations, and neither for matrix-vector products. If the matrix does not fit into cache, it has to be reloaded from main memory for every product. However, for matrix-matrix products there is potential for obtaining peak performance also for large matrices.</p>
 </section>
 <section id="cache-optimized-matrix-matrix-multiplication">
 <h2><span class="section-number">11.2. </span>Cache-optimized matrix-matrix multiplication<a class="headerlink" href="#cache-optimized-matrix-matrix-multiplication" title="Permalink to this heading">#</a></h2>
@@ -394,11 +404,12 @@ factor of two around <span class="math notranslate nohighlight">\(100 kB\)</span
 <p>In the previous section we have studied the inner-most loops to get optimal floating point performance for multiplying matrices of shapes like <span class="math notranslate nohighlight">\(4 \times k\)</span> and <span class="math notranslate nohighlight">\(k \times 12\)</span>. However, if we use this kernel repeatedly, we see a drop-down of performance for matrices of larger sizes (like <span class="math notranslate nohighlight">\(1000\times 1000\)</span>).</p>
 <p>To overcome this problem, we follow the paper above, and split the matrix multiplication into two levels.
 We assume all matrices are stored <code class="docutils literal notranslate"><span class="pre">ColMajor</span></code>. We decompose the <span class="math notranslate nohighlight">\(A\)</span> matrix into blocks which fit well into
-level-2 cache, something like <span class="math notranslate nohighlight">\(100 \times 100\)</span>. Since our micro-kernels use blocks which could be multiples of the SIMD-size, and also multiples of <span class="math notranslate nohighlight">\(3\)</span>, a block-size of <span class="math notranslate nohighlight">\(96 \times 96\)</span> might be a good choice.</p>
+level-2 cache, something like <span class="math notranslate nohighlight">\(100 \times 100\)</span>, what corresponds to <span class="math notranslate nohighlight">\(80 kB\)</span>. Since our micro-kernels use blocks which could be multiples of the SIMD-size, and also multiples of <span class="math notranslate nohighlight">\(3\)</span>, a block-size of <span class="math notranslate nohighlight">\(96 \times 96\)</span> might be a good choice to
+avoid unnecessary leftover.</p>
 <p>We loop over the blocks <span class="math notranslate nohighlight">\(A_{IJ}\)</span> of <span class="math notranslate nohighlight">\(A\)</span>, copy the block into local memory, update the corresponding rows <span class="math notranslate nohighlight">\(I\)</span>
-of the result matrix <span class="math notranslate nohighlight">\(C\)</span> by multiplyging <span class="math notranslate nohighlight">\(A_{IJ}\)</span> by the rows <span class="math notranslate nohighlight">\(J\)</span> of factor <span class="math notranslate nohighlight">\(B\)</span>:</p>
+of the result matrix <span class="math notranslate nohighlight">\(C\)</span> by multiplyging <span class="math notranslate nohighlight">\(A_{IJ}\)</span> with the rows <span class="math notranslate nohighlight">\(J\)</span> of factor <span class="math notranslate nohighlight">\(B\)</span>:</p>
 <a class="reference internal image-reference" href="../_images/matmat1.png"><img alt="../_images/matmat1.png" class="align-center" src="../_images/matmat1.png" style="width: 500px;" /></a>
-<p>To access rows and cols of matrices the <code class="docutils literal notranslate"><span class="pre">MatrixView</span></code> object is useful:</p>
+<p>To access rows and cols of matrices, the <code class="docutils literal notranslate"><span class="pre">MatrixView</span></code> object is useful:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">AddMatMat</span><span class="w"> </span><span class="p">(</span><span class="n">MatrixView</span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">A</span><span class="p">,</span><span class="w"> </span><span class="n">MatrixView</span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">B</span><span class="p">,</span><span class="w"> </span><span class="n">MatrixView</span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">C</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">BH</span><span class="o">=</span><span class="mi">96</span><span class="p">;</span>
 <span class="w">  </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">BW</span><span class="o">=</span><span class="mi">96</span><span class="p">;</span>
@@ -425,7 +436,8 @@ the time needed for copying can be neglected if the width of <code class="docuti
 
 <span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">+</span><span class="n">W</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">C</span><span class="p">.</span><span class="n">Width</span><span class="p">();</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">W</span><span class="p">)</span><span class="w"> </span>
 <span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">+</span><span class="n">H</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">C</span><span class="p">.</span><span class="n">Height</span><span class="p">();</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">H</span><span class="p">)</span>
-<span class="w">      </span><span class="n">AddMatMatKernel</span><span class="o">&lt;</span><span class="n">H</span><span class="p">,</span><span class="n">W</span><span class="o">&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">A</span><span class="p">.</span><span class="n">Width</span><span class="p">(),</span><span class="w"> </span><span class="o">&amp;</span><span class="n">A</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="w"> </span><span class="o">&amp;</span><span class="n">B</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">j</span><span class="p">),</span><span class="w"> </span><span class="o">&amp;</span><span class="n">C</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">));</span>
+<span class="w">      </span><span class="n">AddMatMatKernel</span><span class="o">&lt;</span><span class="n">H</span><span class="p">,</span><span class="n">W</span><span class="o">&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">A</span><span class="p">.</span><span class="n">Width</span><span class="p">(),</span><span class="w"> </span><span class="o">&amp;</span><span class="n">A</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="n">Dist</span><span class="p">(),</span>
+<span class="w">                           </span><span class="o">&amp;</span><span class="n">B</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">j</span><span class="p">),</span><span class="w"> </span><span class="n">B</span><span class="p">.</span><span class="n">dist</span><span class="p">(),</span><span class="w"> </span><span class="o">&amp;</span><span class="n">C</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">),</span><span class="w"> </span><span class="n">C</span><span class="p">.</span><span class="n">Dist</span><span class="p">());</span>
 <span class="w">  </span><span class="c1">// leftover rows and cols</span>
 <span class="p">}</span>
 </pre></div>
@@ -434,7 +446,7 @@ the time needed for copying can be neglected if the width of <code class="docuti
 <ul class="simple">
 <li><p>The entries of a slim block from <span class="math notranslate nohighlight">\(B\)</span> are loaded from main memory. They are reused frequently in every iteration
 over the height of <span class="math notranslate nohighlight">\(C\)</span>, and will stay in level-1 cache. Since every <span class="math notranslate nohighlight">\(B\)</span> entry is used in <span class="math notranslate nohighlight">\(C.Height() \approx 96\)</span> multiplications, the time for loading from memory is small in comparison to floating point operations.</p></li>
-<li><p>All entries of the <span class="math notranslate nohighlight">\(A\)</span> block are reused after the <span class="math notranslate nohighlight">\(A\)</span> block is completed. Only a slim block from <span class="math notranslate nohighlight">\(B\)</span> is used in the meanwhile. So, the whole <span class="math notranslate nohighlight">\(A\)</span> block stays in the level-2 cache.</p></li>
+<li><p>All entries of the <span class="math notranslate nohighlight">\(A\)</span> block are reused after the <span class="math notranslate nohighlight">\(A\)</span> block is used completely. Only a slim block from <span class="math notranslate nohighlight">\(B\)</span> is loaded in the meanwhile. So, the whole <span class="math notranslate nohighlight">\(A\)</span> block stays in the level-2 cache.</p></li>
 </ul>
 </section>
 </section>
