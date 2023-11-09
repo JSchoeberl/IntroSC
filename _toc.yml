@@ -21,6 +21,7 @@ parts:
     - file: performance/overview.md    
     - file: performance/vectorization.md
     - file: performance/pipelining.md
+    - file: performance/caches1.md
 
 
   - caption: ODEs
