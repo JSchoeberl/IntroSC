@@ -597,7 +597,7 @@ Measure performance of Lapack matrix-matrix multiplication, and compare to your 
 <span class="kt">double</span><span class="w"> </span><span class="n">time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">duration</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="p">(</span><span class="n">end</span><span class="o">-</span><span class="n">start</span><span class="p">).</span><span class="n">count</span><span class="p">();</span>
 <span class="w">        </span>
 <span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;n = &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;, time = &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">time</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; s, GFlops = &quot;</span><span class="w"> </span>
-<span class="w">     </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="o">*</span><span class="n">runs</span><span class="p">)</span><span class="o">/</span><span class="n">time</span><span class="o">*</span><span class="mf">1e-9</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
+<span class="w">     </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="p">(</span><span class="n">flops</span><span class="o">*</span><span class="n">runs</span><span class="p">)</span><span class="o">/</span><span class="n">time</span><span class="o">*</span><span class="mf">1e-9</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
 </pre></div>
 </div>
 <ul class="simple">
@@ -606,17 +606,11 @@ Measure performance of Lapack matrix-matrix multiplication, and compare to your 
 <p>Pick some functions of your choice. Write C++ wrappers similar to <code class="docutils literal notranslate"><span class="pre">LapackLU</span></code> for the following matrix operations:</p>
 <ul class="simple">
 <li><p>QR decomposition using Householder reflections (<code class="docutils literal notranslate"><span class="pre">dgeqrf</span></code>, <code class="docutils literal notranslate"><span class="pre">dorgqr</span></code>):
-$<span class="math notranslate nohighlight">\(
-A = QR 
-\)</span><span class="math notranslate nohighlight">\(
-with \)</span>Q<span class="math notranslate nohighlight">\( orthogonal, and \)</span>R<span class="math notranslate nohighlight">\( upper triangular. By storing \)</span>Q<span class="math notranslate nohighlight">\( as product of Householder reflections, \)</span>Q<span class="math notranslate nohighlight">\( and \)</span>R<span class="math notranslate nohighlight">\( together fit into the memory of \)</span>A$.</p></li>
+<span class="math notranslate nohighlight">\(A = QR\)</span> with <span class="math notranslate nohighlight">\(Q\)</span> orthogonal, and <span class="math notranslate nohighlight">\(R\)</span> upper triangular. By storing <span class="math notranslate nohighlight">\(Q\)</span> as product of Householder reflections, <span class="math notranslate nohighlight">\(Q\)</span> and <span class="math notranslate nohighlight">\(R\)</span> together fit into the memory of <span class="math notranslate nohighlight">\(A\)</span>.</p></li>
 <li><p>Eigenvalues and eigenvectors of a real-valued symmetric matrix (<code class="docutils literal notranslate"><span class="pre">dsyev</span></code>).</p></li>
 <li><p>Eigenvalues and eigenvector calculation (<code class="docutils literal notranslate"><span class="pre">dgeev</span></code>) of a real-valued general matrix. Even if the matrix is real, eigenvalues/eigenvectors are complex, in general.</p></li>
-<li><p>SVD decomposition of a matrix (<code class="docutils literal notranslate"><span class="pre">dgesvd</span></code>):
-$<span class="math notranslate nohighlight">\(
-A = U \Sigma V^T
-\)</span><span class="math notranslate nohighlight">\(
-with \)</span>U<span class="math notranslate nohighlight">\( and \)</span>V<span class="math notranslate nohighlight">\( orthogonal, and \)</span>\Sigma$ a (rectangular) diagonal matrix.</p></li>
+<li><p>SVD decomposition of a matrix (<code class="docutils literal notranslate"><span class="pre">dgesvd</span></code>): <span class="math notranslate nohighlight">\(A = U \Sigma V^T\)</span>
+with <span class="math notranslate nohighlight">\(U\)</span> and <span class="math notranslate nohighlight">\(V\)</span> orthogonal, and <span class="math notranslate nohighlight">\(\Sigma\)</span> a (rectangular) diagonal matrix.</p></li>
 </ul>
 </section>
 <section id="c-libraries">
