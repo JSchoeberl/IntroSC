@@ -55,7 +55,7 @@ That's it - we cannot do more for vector operations, and neither for matrix-vect
 
 ## Cache-optimized matrix-matrix multiplication
 
-Paper by K. Goto and R. van de Geijn: [Anatomy of High-Performance Matrix Multiplication](https://www.cs.utexas.edu/users/flame/pubs/GotoTOMS_final.pdf), which describes the core idea of matrix multiplication in OpenBLAS, which evolved from GotoBLAS.
+Paper by K. Goto and R. van de Geijn: [Anatomy of High-Performance Matrix Multiplication](https://www.cs.utexas.edu/users/flame/pubs/GotoTOMS_final.pdf), which describes the core idea of matrix multiplication in OpenBLAS, which evolved from GotoBLAS, a recent paper is [GEMMFIP](https://arxiv.org/pdf/2302.08417.pdf).
 
 
 In the previous section we have studied the inner-most loops to get optimal floating point performance for multiplying matrices of shapes like $4 \times k$ and $k \times 12$. However, if we use this kernel repeatedly, we see a drop-down of performance for matrices of larger sizes (like $1000\times 1000$). 
