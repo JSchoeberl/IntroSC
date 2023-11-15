@@ -406,6 +406,8 @@ by hand. For that, compiler provide vector data types, and so called <strong>int
 <a class="reference external" href="https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html">Intel Intrinsics Guide</a>.
 Lookup the documentation of the functions used above!</p>
 <p>These intrinsics are supported by all major compilers (gcc, clang, msvc, icc, …), however with slightly different behaviour. For example, gcc has arithmetic operations for type <code class="docutils literal notranslate"><span class="pre">__m256d</span></code> predefined, in msvc the intrinsic function must be called.</p>
+<p>Vectorization is like</p>
+<a class="reference internal image-reference" href="../_images/skilift.jpg"><img alt="../_images/skilift.jpg" class="align-center" src="../_images/skilift.jpg" style="width: 40%;" /></a>
 <section id="the-simd-class">
 <h2><span class="section-number">9.1. </span>The SIMD - class<a class="headerlink" href="#the-simd-class" title="Permalink to this heading">#</a></h2>
 <p>We do not recommend to write large code using intrinsics, but wrap vector data types and intrinsic functions into high-level C++ classes. This is done in the <em>simd_xxx.h</em> header files. For example, the 4 double vector type <code class="docutils literal notranslate"><span class="pre">__m256d</span></code> is wrapped into the template class <code class="docutils literal notranslate"><span class="pre">SIMD&lt;double,4&gt;</span></code>, in file <em>simd_avx.h</em>. SIMD is short for <strong>S</strong>ingle <strong>I</strong>nstruction <strong>M</strong>ultiple <strong>D</strong>ata</p>
@@ -518,12 +520,19 @@ simd-vector, called horizontal sum. This functions forms the horizontal sums of 
 </pre></div>
 </div>
 <p>Lookup the documentation of the used intrinsics.</p>
-<p><strong>Excercise:</strong> Implement a <span class="math notranslate nohighlight">\(4\times4\)</span> - Transpose operations: The 4 input SIMD-vectors <code class="docutils literal notranslate"><span class="pre">ai</span></code> contain the rows of a <span class="math notranslate nohighlight">\(4\times4\)</span>-matrix. The output vectors <code class="docutils literal notranslate"><span class="pre">bi</span></code> should have the rows of the transpose matrix:</p>
+<p><strong>Exercise:</strong></p>
+<ul class="simple">
+<li><p>Implement missing arithmetic operations for the SIMD template class</p></li>
+<li><p>(Intel CPUs only) Implement <code class="docutils literal notranslate"><span class="pre">SIMD&lt;T,2&gt;</span></code> classes similar to the 4-wide SIMDs. Use intrinsics to construct/split the <code class="docutils literal notranslate"><span class="pre">SIMD&lt;T,4&gt;</span></code> from/to <code class="docutils literal notranslate"><span class="pre">SIMD&lt;T,2&gt;</span></code> types.</p></li>
+<li><p>(ARM CPUs only) Implement missing comparison operators</p></li>
+<li><p>Implement a <span class="math notranslate nohighlight">\(4\times4\)</span> - Transpose operations: The 4 input SIMD-vectors <code class="docutils literal notranslate"><span class="pre">ai</span></code> contain the rows of a <span class="math notranslate nohighlight">\(4\times4\)</span>-matrix. The output vectors <code class="docutils literal notranslate"><span class="pre">bi</span></code> should have the rows of the transpose matrix:</p></li>
+</ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">void</span> <span class="n">Transpose</span> <span class="p">(</span><span class="n">SIMD</span><span class="o">&lt;</span><span class="n">double</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;</span> <span class="n">a0</span><span class="p">,</span> <span class="n">SIMD</span><span class="o">&lt;</span><span class="n">double</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;</span> <span class="n">a1</span><span class="p">,</span> <span class="n">SIMD</span><span class="o">&lt;</span><span class="n">double</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;</span> <span class="n">a2</span><span class="p">,</span> <span class="n">SIMD</span><span class="o">&lt;</span><span class="n">double</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;</span> <span class="n">a3</span><span class="p">,</span>
                 <span class="n">SIMD</span><span class="o">&lt;</span><span class="n">double</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">b0</span><span class="p">,</span> <span class="n">SIMD</span><span class="o">&lt;</span><span class="n">double</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">b1</span><span class="p">,</span> <span class="n">SIMD</span><span class="o">&lt;</span><span class="n">double</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">b2</span><span class="p">,</span> <span class="n">SIMD</span><span class="o">&lt;</span><span class="n">double</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;</span> <span class="o">&amp;</span><span class="n">b3</span><span class="p">);</span>
 </pre></div>
 </div>
-<p>Useful functions are <code class="docutils literal notranslate"><span class="pre">_mm256_unpacklo_pd</span></code> and <code class="docutils literal notranslate"><span class="pre">_mm256_unpackhi_pd</span></code>.</p>
+<p>Useful functions are <code class="docutils literal notranslate"><span class="pre">_mm256_unpacklo_pd</span></code>, <code class="docutils literal notranslate"><span class="pre">_mm256_unpackhi_pd</span></code>,
+<code class="docutils literal notranslate"><span class="pre">_mm256_insertf128_pd</span></code>, and <code class="docutils literal notranslate"><span class="pre">_mm256_extractf128_pd</span></code>.</p>
 </section>
 </section>
 

@@ -344,10 +344,12 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="overview">
 <h1><span class="section-number">8. </span>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">#</a></h1>
-<p>We learn how to unleash the full power of our computers. This include</p>
+<p>We learn how to unleash the full power of our computers. This includes</p>
 <ul class="simple">
-<li><p><strong>Vectorization</strong>: single instructions can operate with multiple data, for example perform four double precision multiplications simulteneously</p></li>
-<li><p><strong>Pipelining</strong>: several vector-instructions can be started per clock cycle, but it takes several cycles to complete. Start new work befor old work is ready</p></li>
+<li><p><strong>Vectorization</strong>: single instructions can operate on multiple data, for example perform four double precision multiplications simulteneously</p></li>
+<li><p><strong>Pipelining</strong>: several vector-instructions can be started per clock
+cycle, but it takes several cycles to complete. Start new work befor
+results of old work are ready</p></li>
 <li><p><strong>Caches</strong>: getting data from main memory is expensive. Caches keep recently used data in fast but small cache memory.</p></li>
 <li><p><strong>Parallelization</strong>: most CPUs have several physical cores. Write multi-threaded code to split work to multiple cores</p></li>
 </ul>
