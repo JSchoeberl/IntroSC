@@ -1,0 +1,800 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>12. Parallelization &#8212; Introduction to Scientific Computing</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
+  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'performance/parallelization';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="13. Solving ordinary differential equations" href="../ODEs/ODEs.html" />
+    <link rel="prev" title="11. Caches" href="caches1.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/ASC_Logo_transparent_300ppi_RGB.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/ASC_Logo_transparent_300ppi_RGB.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Introduction to Scientific Computing
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Basic Linear Algebra</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../basiclinalg/bla.html">1. Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basiclinalg/bla-git.html">2. Clone a project from github</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basiclinalg/bla-refreshCpp.html">3. Refresh your C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basiclinalg/bla-docu.html">4. Creating documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basiclinalg/bla-expressions.html">5. Expression templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basiclinalg/bla-python2.html">6. Python bindings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basiclinalg/bla-lapack.html">7. Interfacing Lapack</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Performance</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">8. Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vectorization.html">9. Vectorization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipelining.html">10. Pipelining</a></li>
+<li class="toctree-l1"><a class="reference internal" href="caches1.html">11. Caches</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">12. Parallelization</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">ODEs</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../ODEs/ODEs.html">13. Solving ordinary differential equations</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">PDEs</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">14. Partial differential equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-Poisson.html">15. Poisson Equation and the 5-point stencil</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-iterative.html">16. Iterative Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-waves.html">17. Wave equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-flows.html">18. Navier-Stokes Equation</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/performance/parallelization.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Parallelization</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-our-own-task-manager">12.1. Using our own task manager</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#trace-profiling-with-vite">12.2. Trace profiling with <em>vite</em></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#c-types-for-parallel-computing">12.3. C++ types for parallel computing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation-of-the-task-scheduler">12.4. Implementation of the task scheduler</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lock-free-algorithms-based-on-cas">12.5. Lock free algorithms based on CAS</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="parallelization">
+<h1><span class="section-number">12. </span>Parallelization<a class="headerlink" href="#parallelization" title="Permalink to this heading">#</a></h1>
+<p>In a sequential program one CPU executes one instruction after the
+other. To speed up computations, one can combine several CPUs in a
+parallel program. Here, CPU means a compute unit, what is typically
+one core within a microprocessor.</p>
+<p>There are many possibilities to arange the hardware:</p>
+<ul class="simple">
+<li><p>Shared memory parallelization: All CPUs have access to the same
+memory. Data structures are automatically shared between
+them. Nowadays, most Laptops and PCs have microprocessors with several
+cores. It is relatively easy to write shared memory parallel
+programs. However, it is expensive to build shared memory parallel
+systems with many (say 20 or more) CPUs.</p></li>
+<li><p>Distributed memory parallelization: Every CPU has its own memory,
+CPUs are conncected with a network.  For communication, one has to
+send explicitely data between the CPUs.  The standard library for this is <a class="reference external" href="https://en.wikipedia.org/wiki/Message_Passing_Interface">MPI-message passing interface</a>.
+The world’s most powerful parallel computers are listed in the <a class="reference external" href="https://www.top500.org">Top
+500 list</a>, Austria’s largest parallel
+computers belong to the family of <a class="reference external" href="https://vsc.ac.at//home">VSC - Vienna Scientific
+Cluster</a> systems.</p></li>
+<li><p>Accelerators: Are specialized compute unites for heavy (for example
+linear algebra) computations. While in typical CPUs most transistors
+are dedicated to program workflow, in so called GPUs (graphics processing units)
+most parts of the chip are used for computing. Nowadays most popular are
+<a class="reference external" href="https://developer.nvidia.com/about-cuda">CUDA</a> systems, which are
+programmed using a few extensions to C/C++.</p></li>
+</ul>
+<p>In this lecture we discuss only shared memory programming.
+Well established  environments are <a class="reference external" href="https://www.openmp.org">OpenMP</a> and
+<a class="reference external" href="https://www.intel.com/content/www/us/en/developer/tools/oneapi/onetbb.html#gs.13vebz">Intel TBB</a>.
+<a class="reference external" href="https://taskflow.github.io">Taskflow</a> is a light-weight open source solution.
+However, with new features in modern C++, a do-it-yourself approach is also possible.</p>
+<section id="using-our-own-task-manager">
+<h2><span class="section-number">12.1. </span>Using our own task manager<a class="headerlink" href="#using-our-own-task-manager" title="Permalink to this heading">#</a></h2>
+<p>We build a simple task scheduler on top of a <a class="reference external" href="https://github.com/cameron314/concurrentqueue">concurrent queue available as open source</a>.
+It is implemented within the ASC-HPC package in src/taskmanager.[h|cc], and demos are in
+demos/demo_tasks.cc.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">StartWorkers</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+<span class="w">  </span>
+<span class="n">RunParallel</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="p">[]</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">size</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;I am task &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; out of &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
+<span class="p">});</span>
+
+<span class="n">StopWorkers</span><span class="p">();</span>
+</pre></div>
+</div>
+<p>With <code class="docutils literal notranslate"><span class="pre">StartWorkers</span></code> and <code class="docutils literal notranslate"><span class="pre">StopWorkers</span></code> we start and stop additional threads. These new threads support the main thread executing tasks, so in total we have 4 threads in this example.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">RunParallel</span></code> function triggers the execution of tasks. The task is given by a function object,
+for example implemented as lambda-function (as in our example). We specify how many tasks we create.
+In this example the function will be called with arguments <span class="math notranslate nohighlight">\((i, size)\)</span> = <span class="math notranslate nohighlight">\((0,10), \ldots, (9,10)\)</span>. The <code class="docutils literal notranslate"><span class="pre">RunParallel</span></code> function returns when all of its tasks are completed.</p>
+<p>We can create tasks also recursively, a task can create more tasks:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">RunParallel</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="p">[]</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">RunParallel</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">s2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">stringstream</span><span class="w"> </span><span class="n">str</span><span class="p">;</span>
+<span class="w">        </span><span class="n">str</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;nested, i,j = &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;,&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">;</span>
+<span class="w">        </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">str</span><span class="p">.</span><span class="n">str</span><span class="p">();</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>A possible use-case is to split a matrix-matrix multiplication into tasks.
+Task <span class="math notranslate nohighlight">\(i\)</span> computes rows <span class="math notranslate nohighlight">\([\frac{i \, n}{size}, \frac{(i+1)\, n}{size})\)</span>.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1000</span><span class="p">;</span>
+<span class="n">Matrix</span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">a</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">n</span><span class="p">),</span><span class="w"> </span><span class="n">b</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">n</span><span class="p">),</span><span class="w"> </span><span class="n">c</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">n</span><span class="p">);</span>
+<span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+
+<span class="n">RunParallel</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="o">&amp;</span><span class="n">c</span><span class="p">]</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">size</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">first</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">size</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">((</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">size</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">c</span><span class="p">.</span><span class="n">Rows</span><span class="p">(</span><span class="n">first</span><span class="p">,</span><span class="w"> </span><span class="n">next</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">Rows</span><span class="p">(</span><span class="n">first</span><span class="p">,</span><span class="w"> </span><span class="n">next</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">b</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+</pre></div>
+</div>
+<p>Variables from outside are passed to the lambda-function within brackets <code class="docutils literal notranslate"><span class="pre">[n,</span> <span class="pre">&amp;a]</span></code>, either by value, or by reference. That’s called the closure of
+the lambda function.</p>
+</section>
+<section id="trace-profiling-with-vite">
+<h2><span class="section-number">12.2. </span>Trace profiling with <em>vite</em><a class="headerlink" href="#trace-profiling-with-vite" title="Permalink to this heading">#</a></h2>
+<p>The ASC-HPC package comes with high precision timers, which are
+recording start and stop events. These events are later dumped into a
+trace-file, which can be visualized with the open source
+<a class="reference external" href="https://solverstack.gitlabpages.inria.fr/vite/">Vite Trace Explorer</a>.
+Horizontally we have time (values are given in milliseconds). We have 4 rows corresponding to 4 threads. The colored rectangles correspond to tasks, executed by some thread,
+within some interval in time:</p>
+<a class="reference internal image-reference" href="../_images/vitetrace.png"><img alt="../_images/vitetrace.png" class="align-center" src="../_images/vitetrace.png" style="width: 80%;" /></a>
+<p>Vite can be installed on Linux by the package manager, compiled vite executables for Windows and MacOS are available from <a class="reference external" href="https://www.asc.tuwien.ac.at/~mhochsteger/files/vite/">https://www.asc.tuwien.ac.at/~mhochsteger/files/vite/</a>.</p>
+</section>
+<section id="c-types-for-parallel-computing">
+<h2><span class="section-number">12.3. </span>C++ types for parallel computing<a class="headerlink" href="#c-types-for-parallel-computing" title="Permalink to this heading">#</a></h2>
+<p>Try the following (always between StartWorkers/StopWorkers):</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="n">cnt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="n">RunParallel</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="o">&amp;</span><span class="n">cnt</span><span class="p">]</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">size</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">cnt</span><span class="o">++</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+<span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;cnt = &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">cnt</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>I get varying output, something similar to <code class="docutils literal notranslate"><span class="pre">cnt</span> <span class="pre">=</span> <span class="pre">962</span></code>. What goes wrong ?
+Thread A reads the value of <code class="docutils literal notranslate"><span class="pre">cnt</span></code>, increments it, and stores the value back to memory.
+If thread B reads cnt between load and store of thread A, and stores after thread A is storing,
+it overwrites A’s result, one count is lost. If the result depends unpredictable on the progress
+of the different threads we generated a so called <em>race condition</em>.</p>
+<p>The solution is to make <code class="docutils literal notranslate"><span class="pre">load-increment-store</span></code> an atomic operation, what is provided in modern C++
+by the <code class="docutils literal notranslate"><span class="pre">std::atomic</span></code> class template:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">cnt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="n">RunParallel</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="o">&amp;</span><span class="n">cnt</span><span class="p">]</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">size</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">cnt</span><span class="o">++</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+<span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;cnt = &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">cnt</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Now the output is always 1000, as in a sequential program. Simple
+atomic operations are provided by the hardware. An atomic add is an
+assembly instruction, it performs the <code class="docutils literal notranslate"><span class="pre">load-increment-store</span></code>
+operations by one instruction, the memory location is locked until the
+whole operations is complete.  This is called an <strong>atomic add</strong>
+operation. The amazing potential of atomic variables is explained in
+two amazing talks by Herb Sutter <a class="reference external" href="https://www.youtube.com/watch?v=A8eCGOqgvH4">atmoic&lt;&gt;
+Weapons</a>.</p>
+<p>In our first example, the output gets screwed up. One thread starts printing, and an other continues, in
+unpredictable manner. A solution is to use <code class="docutils literal notranslate"><span class="pre">lock</span></code>s:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="w"> </span><span class="n">mut</span><span class="p">;</span>
+<span class="n">RunParallel</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="o">&amp;</span><span class="n">mut</span><span class="p">]</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">size</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">lock_guard</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">mutex</span><span class="o">&gt;</span><span class="w"> </span><span class="n">lock</span><span class="p">(</span><span class="n">mut</span><span class="p">);</span><span class="w">    </span>
+<span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;I am task &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; out of &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>In the constructor, a lock claims ownership of a mutex. If one thread got it, all other threads have
+to wait until ownership is released. This is done in the destructor of the lock.</p>
+<p>An alternative to the atomic add would be a regular add, protected by locking a mutex.</p>
+<p><strong>Excercise:</strong> Discuss how you could implement such a lock yourself.</p>
+</section>
+<section id="implementation-of-the-task-scheduler">
+<h2><span class="section-number">12.4. </span>Implementation of the task scheduler<a class="headerlink" href="#implementation-of-the-task-scheduler" title="Permalink to this heading">#</a></h2>
+<p>Having a parallel queue available, it is easy to write a task scheduler on top of it.
+A task is defined by a function (a <code class="docutils literal notranslate"><span class="pre">std::function</span></code> object), and the instance
+of the function it is (<code class="docutils literal notranslate"><span class="pre">nr</span></code> out of <code class="docutils literal notranslate"><span class="pre">size</span></code>). The atomic counter <code class="docutils literal notranslate"><span class="pre">cnt</span></code> counts the completions of tasks
+within one job. When we call <code class="docutils literal notranslate"><span class="pre">RunParallel</span> <span class="pre">(num,</span> <span class="pre">...)</span></code>, num instances of tasks are put into
+the parallel queue:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Task</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">nr</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">;</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">nr</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">size</span><span class="p">)</span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">pfunc</span><span class="p">;</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">cnt</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">moodycamel</span><span class="o">::</span><span class="n">ConcurrentQueue</span><span class="o">&lt;</span><span class="n">Task</span><span class="o">&gt;</span><span class="w"> </span><span class="n">queue</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>The creation of worker threads is done like this. With <code class="docutils literal notranslate"><span class="pre">std::thread</span></code>
+we create a new thread running in parallel to the calling thread. If
+more CPUs are available, the new thread is picked up by another CPU.
+If no additional CPU is available, one CPU has to switch between
+multiple threads, what is expensive. The new thread enters an endless
+loop, which is quit when the <code class="docutils literal notranslate"><span class="pre">stop</span></code> flag is set.  In the loop we check
+if the queue holds some work to do. If so, we remove it from the
+queue, and call the function of the task, with arguments specified by
+the task. On return, we increment the completion counter.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">bool</span><span class="o">&gt;</span><span class="w"> </span><span class="n">stop</span><span class="p">{</span><span class="nb">false</span><span class="p">};</span>
+<span class="w">  </span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">StartWorkers</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">num</span><span class="p">)</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="n">stop</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">num</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<span class="w">       </span><span class="p">{</span>
+<span class="w">          </span><span class="n">threads</span><span class="p">.</span><span class="n">push_back</span><span class="w"> </span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kr">thread</span><span class="p">([]()</span>
+<span class="w">           </span><span class="p">{</span>
+<span class="w">              </span><span class="k">while</span><span class="p">(</span><span class="nb">true</span><span class="p">)</span>
+<span class="w">                </span><span class="p">{</span>
+<span class="w">                   </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">stop</span><span class="p">)</span><span class="w"> </span><span class="k">break</span><span class="p">;</span>
+
+<span class="w">                   </span><span class="n">Task</span><span class="w"> </span><span class="n">task</span><span class="p">;</span>
+<span class="w">                   </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">queue</span><span class="p">.</span><span class="n">try_dequeue</span><span class="p">(</span><span class="n">task</span><span class="p">))</span><span class="w"> </span>
+<span class="w">                       </span><span class="k">continue</span><span class="p">;</span><span class="w"> </span>
+<span class="w">                </span>
+<span class="w">                   </span><span class="p">(</span><span class="o">*</span><span class="n">task</span><span class="p">.</span><span class="n">pfunc</span><span class="p">)(</span><span class="n">task</span><span class="p">.</span><span class="n">nr</span><span class="p">,</span><span class="w"> </span><span class="n">task</span><span class="p">.</span><span class="n">size</span><span class="p">);</span>
+<span class="w">                   </span><span class="p">(</span><span class="o">*</span><span class="n">task</span><span class="p">.</span><span class="n">cnt</span><span class="p">)</span><span class="o">++</span><span class="p">;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">           </span><span class="p">}));</span>
+<span class="w">       </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+</pre></div>
+</div>
+<p>When calling <code class="docutils literal notranslate"><span class="pre">RunParallel</span></code>, we create tasks objects, and feed them into the queue.
+The creating thread works on tasks stored in the queue as well. It returns as soon as the completion counter
+<code class="docutils literal notranslate"><span class="pre">cnt</span></code> reaches the number of created tasks.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">RunParallel</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">num</span><span class="p">,</span>
+<span class="w">                  </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">nr</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">size</span><span class="p">)</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">func</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">cnt</span><span class="p">{</span><span class="mi">0</span><span class="p">};</span>
+
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">num</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="n">Task</span><span class="w"> </span><span class="n">task</span><span class="p">;</span>
+<span class="w">      </span><span class="n">task</span><span class="p">.</span><span class="n">nr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<span class="w">      </span><span class="n">task</span><span class="p">.</span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">num</span><span class="p">;</span>
+<span class="w">      </span><span class="n">task</span><span class="p">.</span><span class="n">pfunc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">func</span><span class="p">;</span>
+<span class="w">      </span><span class="n">task</span><span class="p">.</span><span class="n">cnt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">cnt</span><span class="p">;</span>
+<span class="w">      </span><span class="n">queue</span><span class="p">.</span><span class="n">enqueue</span><span class="p">(</span><span class="n">task</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">cnt</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">num</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="n">Task</span><span class="w"> </span><span class="n">task</span><span class="p">;</span>
+<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">queue</span><span class="p">.</span><span class="n">try_dequeue</span><span class="p">(</span><span class="n">task</span><span class="p">))</span><span class="w"> </span>
+<span class="w">        </span><span class="k">continue</span><span class="p">;</span><span class="w"> </span>
+<span class="w">        </span>
+<span class="w">      </span><span class="p">(</span><span class="o">*</span><span class="n">task</span><span class="p">.</span><span class="n">pfunc</span><span class="p">)(</span><span class="n">task</span><span class="p">.</span><span class="n">nr</span><span class="p">,</span><span class="w"> </span><span class="n">task</span><span class="p">.</span><span class="n">size</span><span class="p">);</span>
+<span class="w">      </span><span class="p">(</span><span class="o">*</span><span class="n">task</span><span class="p">.</span><span class="n">cnt</span><span class="p">)</span><span class="o">++</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="lock-free-algorithms-based-on-cas">
+<h2><span class="section-number">12.5. </span>Lock free algorithms based on CAS<a class="headerlink" href="#lock-free-algorithms-based-on-cas" title="Permalink to this heading">#</a></h2>
+<p>It is easy to implement data structures like linked lists in a sequential program.
+Here we give the code for a list which allows to push and pop data at the same end (called a stack):</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Node</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">data</span><span class="p">;</span><span class="w">      </span><span class="c1">// whatever we put into the list</span>
+<span class="w">    </span><span class="n">Node</span><span class="o">*</span><span class="w"> </span><span class="n">next</span><span class="p">;</span><span class="w">    </span><span class="c1">// next node</span>
+<span class="p">};</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">List</span>
+<span class="p">{</span>
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">Node</span><span class="o">*</span><span class="w"> </span><span class="n">head</span><span class="p">;</span>
+
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="n">List</span><span class="p">()</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">head</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">add</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span><span class="w"> </span><span class="n">node</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="n">node</span><span class="o">-&gt;</span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">head</span><span class="p">;</span>
+<span class="w">      </span><span class="n">head</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">node</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">Node</span><span class="o">*</span><span class="w"> </span><span class="n">try_get</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="n">Node</span><span class="o">*</span><span class="w"> </span><span class="n">currenthead</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">head</span><span class="p">;</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">head</span><span class="p">)</span>
+<span class="w">        </span><span class="n">head</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">head</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">;</span>
+<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="n">currenthead</span><span class="p">;</span><span class="w">         </span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>Now, let’s assume we have several parallel threads which push to and
+pop from the same list.  Assume thread A and thread B call the <code class="docutils literal notranslate"><span class="pre">add</span></code>
+function approximately at the same time. Both read the current value
+of <code class="docutils literal notranslate"><span class="pre">head</span></code>, and assign it as <code class="docutils literal notranslate"><span class="pre">next</span></code> to the new element. Then thread A
+sets the head to its newly inserted node, and then thread B does
+the same. As a result, A’s new node is lost.  A possible solution is
+to put a lock into the <code class="docutils literal notranslate"><span class="pre">add</span></code> and <code class="docutils literal notranslate"><span class="pre">try_get</span></code> functions. Then only one
+thread at a time can modify the list. When it releases the lock, the
+list is in a well-defined state.</p>
+<p>However, locks have some price.
+If many threads access the list, most of them might end up waiting for the lock.
+The worst case is when some thread claims the lock,
+and this thread gets scheduled away by the operating system (for several milliseconds).
+All other thraeds waiting to enter the lock-protected region are blocked.</p>
+<p>The goal is to rewrite the
+two instructions modifying the list as a single atomic operation. This
+can be done with an atomic <code class="docutils literal notranslate"><span class="pre">compare</span> <span class="pre">and</span> <span class="pre">swap</span> <span class="pre">(CAS)</span></code> operation, which is
+provided as member function of the C++ <code class="docutils literal notranslate"><span class="pre">atomic</span></code> type:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">bool</span><span class="w"> </span><span class="n">atomic</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">compare_exchange_strong</span><span class="w"> </span><span class="p">(</span><span class="n">T</span><span class="o">&amp;</span><span class="w"> </span><span class="n">expected</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">desired</span><span class="p">);</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>If the value of the atomic value is equal to <code class="docutils literal notranslate"><span class="pre">expected</span></code>, the atomic variable is replace by <code class="docutils literal notranslate"><span class="pre">desired</span></code>, and the function returns true.</p></li>
+<li><p>otherwise, <code class="docutils literal notranslate"><span class="pre">expected</span></code> is replace by the value of the atomic.</p></li>
+</ul>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Node</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">data</span><span class="p">;</span><span class="w">                  </span><span class="c1">// whatever we put into the list</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">*&gt;</span><span class="w"> </span><span class="n">next</span><span class="p">;</span><span class="w">   </span><span class="c1">// next node</span>
+<span class="p">};</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">List</span>
+<span class="p">{</span>
+<span class="k">private</span><span class="o">:</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">atomic</span><span class="o">&lt;</span><span class="n">Node</span><span class="o">*&gt;</span><span class="w"> </span><span class="n">head</span><span class="p">;</span>
+
+<span class="k">public</span><span class="o">:</span>
+<span class="w">    </span><span class="n">List</span><span class="p">()</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">head</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">add</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span><span class="w"> </span><span class="n">node</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Node</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">currenthead</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">head</span><span class="p">;</span>
+<span class="w">        </span><span class="k">do</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">node</span><span class="o">-&gt;</span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">currenthead</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">head</span><span class="p">.</span><span class="n">compare_exchange_strong</span><span class="p">(</span><span class="n">currenthead</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">));</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">Node</span><span class="o">*</span><span class="w"> </span><span class="n">try_get</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Node</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">currenthead</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">head</span><span class="p">;</span>
+<span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">currenthead</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">head</span><span class="p">.</span><span class="n">compare_exchange_strong</span><span class="p">(</span><span class="n">currenthead</span><span class="p">,</span><span class="w"> </span><span class="n">currenthead</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">))</span>
+<span class="w">           </span><span class="k">continue</span><span class="p">;</span>
+
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">head</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>However, there is an issue known as ABA problem. The problem as well
+as two smart solutions are described here: <a class="reference external" href="https://moodycamel.com/blog/2014/solving-the-aba-problem-for-lock-free-free-lists">lock-free
+list</a>.
+The author, Cameron Desrochers, is the developer of the concurrent
+queue we are using.</p>
+<p><strong>Exercises:</strong></p>
+<ul class="simple">
+<li><p>Implement a lock (similar to <code class="docutils literal notranslate"><span class="pre">std::lock_guard</span></code>) using the CAS - operation.</p></li>
+<li><p>Use RunParallel to parallelize your Matrix-Matrix multiplication. How well does is scale ?  For what number of threads, and for which sizes of the matrix ? Use vite-tracer for your experiments</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./performance"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="caches1.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><span class="section-number">11. </span>Caches</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../ODEs/ODEs.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">13. </span>Solving ordinary differential equations</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-our-own-task-manager">12.1. Using our own task manager</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#trace-profiling-with-vite">12.2. Trace profiling with <em>vite</em></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#c-types-for-parallel-computing">12.3. C++ types for parallel computing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation-of-the-task-scheduler">12.4. Implementation of the task scheduler</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lock-free-algorithms-based-on-cas">12.5. Lock free algorithms based on CAS</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By J. Schöberl
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

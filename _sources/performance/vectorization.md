@@ -60,7 +60,7 @@ These intrinsics are supported by all major compilers (gcc, clang, msvc, icc, ..
 
 Vectorization is like
 ```{image} skilift.jpg
-:width: 40%
+:width: 70%
 :align: center
 ```
 

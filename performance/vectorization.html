@@ -184,18 +184,19 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">9. Vectorization</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pipelining.html">10. Pipelining</a></li>
 <li class="toctree-l1"><a class="reference internal" href="caches1.html">11. Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parallelization.html">12. Parallelization</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">ODEs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../ODEs/ODEs.html">12. Solving ordinary differential equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ODEs/ODEs.html">13. Solving ordinary differential equations</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">PDEs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">13. Partial differential equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-Poisson.html">14. Poisson Equation and the 5-point stencil</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-iterative.html">15. Iterative Solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-waves.html">16. Wave equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-flows.html">17. Navier-Stokes Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">14. Partial differential equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-Poisson.html">15. Poisson Equation and the 5-point stencil</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-iterative.html">16. Iterative Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-waves.html">17. Wave equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-flows.html">18. Navier-Stokes Equation</a></li>
 </ul>
 
     </div>
@@ -407,7 +408,7 @@ by hand. For that, compiler provide vector data types, and so called <strong>int
 Lookup the documentation of the functions used above!</p>
 <p>These intrinsics are supported by all major compilers (gcc, clang, msvc, icc, …), however with slightly different behaviour. For example, gcc has arithmetic operations for type <code class="docutils literal notranslate"><span class="pre">__m256d</span></code> predefined, in msvc the intrinsic function must be called.</p>
 <p>Vectorization is like</p>
-<a class="reference internal image-reference" href="../_images/skilift.jpg"><img alt="../_images/skilift.jpg" class="align-center" src="../_images/skilift.jpg" style="width: 40%;" /></a>
+<a class="reference internal image-reference" href="../_images/skilift.jpg"><img alt="../_images/skilift.jpg" class="align-center" src="../_images/skilift.jpg" style="width: 70%;" /></a>
 <section id="the-simd-class">
 <h2><span class="section-number">9.1. </span>The SIMD - class<a class="headerlink" href="#the-simd-class" title="Permalink to this heading">#</a></h2>
 <p>We do not recommend to write large code using intrinsics, but wrap vector data types and intrinsic functions into high-level C++ classes. This is done in the <em>simd_xxx.h</em> header files. For example, the 4 double vector type <code class="docutils literal notranslate"><span class="pre">__m256d</span></code> is wrapped into the template class <code class="docutils literal notranslate"><span class="pre">SIMD&lt;double,4&gt;</span></code>, in file <em>simd_avx.h</em>. SIMD is short for <strong>S</strong>ingle <strong>I</strong>nstruction <strong>M</strong>ultiple <strong>D</strong>ata</p>
