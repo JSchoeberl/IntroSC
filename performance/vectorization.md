@@ -58,6 +58,13 @@ Lookup the documentation of the functions used above!
 These intrinsics are supported by all major compilers (gcc, clang, msvc, icc, ...), however with slightly different behaviour. For example, gcc has arithmetic operations for type `__m256d` predefined, in msvc the intrinsic function must be called.
 
 
+Vectorization is like
+```{image} skilift.jpg
+:width: 70%
+:align: center
+```
+
+
 ### The SIMD - class
 
 We do not recommend to write large code using intrinsics, but wrap vector data types and intrinsic functions into high-level C++ classes. This is done in the *simd_xxx.h* header files. For example, the 4 double vector type `__m256d` is wrapped into the template class `SIMD<double,4>`, in file *simd_avx.h*. SIMD is short for **S**ingle **I**nstruction **M**ultiple **D**ata
@@ -187,12 +194,21 @@ SIMD<double,2> HSum (SIMD<double,4> sd1, SIMD<double,4> sd2) {
 ```
 Lookup the documentation of the used intrinsics.
 
-**Excercise:** Implement a $4\times4$ - Transpose operations: The 4 input SIMD-vectors `ai` contain the rows of a $4\times4$-matrix. The output vectors `bi` should have the rows of the transpose matrix:
+**Exercise:**
+
+* Implement missing arithmetic operations for the SIMD template class
+
+* (Intel CPUs only) Implement `SIMD<T,2>` classes similar to the 4-wide SIMDs. Use intrinsics to construct/split the `SIMD<T,4>` from/to `SIMD<T,2>` types.
+
+* (ARM CPUs only) Implement missing comparison operators
+
+* Implement a $4\times4$ - Transpose operations: The 4 input SIMD-vectors `ai` contain the rows of a $4\times4$-matrix. The output vectors `bi` should have the rows of the transpose matrix:
 ```
 void Transpose (SIMD<double,4> a0, SIMD<double,4> a1, SIMD<double,4> a2, SIMD<double,4> a3,
                 SIMD<double,4> &b0, SIMD<double,4> &b1, SIMD<double,4> &b2, SIMD<double,4> &b3);
 ```
-Useful functions are `_mm256_unpacklo_pd` and `_mm256_unpackhi_pd`.
+Useful functions are `_mm256_unpacklo_pd`, `_mm256_unpackhi_pd`,
+`_mm256_insertf128_pd`, and `_mm256_extractf128_pd`.
 
 
 

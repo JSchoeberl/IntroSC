@@ -29,11 +29,14 @@ A possible optimization for overcoming the dependency chain is unrolling and reo
 ```cpp
 double sum0 = 0;
 double sum1 = 0;
-for (size_t i = 0; i+2 <= n; i+=2) {
+size_t i = 0;
+for ( ; i+2 <= n; i+=2) {
    sum0 += x[i] * y[i];
    sum1 += x[i+1] * y[i+1];
 }
 // take care of the leftover
+if (i < n)
+   sum0 += x[i]*y[i]
 sum = sum0+sum1;
 ```
 We are performing two independent fma - operations per loop, but have to pay the latency only once.
