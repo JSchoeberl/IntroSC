@@ -22,12 +22,16 @@ parts:
     - file: performance/vectorization.md
     - file: performance/pipelining.md
     - file: performance/caches1.md
+    - file: performance/parallelization.md
 
 
   - caption: ODEs
     numbered: True  
     chapters:
     - file: ODEs/ODEs
+    - file: ODEs/theory
+    - file: ODEs/firstmethods
+    - file: ODEs/RungeKutta
 
   - caption: PDEs
     numbered: True  
