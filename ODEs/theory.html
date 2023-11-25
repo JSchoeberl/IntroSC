@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>18. Partial differential equations &#8212; Introduction to Scientific Computing</title>
+    <title>14. A little bit of theory &#8212; Introduction to Scientific Computing</title>
   
   
   
@@ -62,11 +62,13 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'PDEs/PDEs';</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'ODEs/theory';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="19. Poisson Equation and the 5-point stencil" href="PDEs-Poisson.html" />
-    <link rel="prev" title="17. Runge-Kutta methods" href="../ODEs/RungeKutta.html" />
+    <link rel="next" title="15. Some simple methods" href="firstmethods.html" />
+    <link rel="prev" title="13. Solving ordinary differential equations" href="ODEs.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -185,20 +187,19 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../performance/parallelization.html">12. Parallelization</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">ODEs</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../ODEs/ODEs.html">13. Solving ordinary differential equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ODEs/theory.html">14. A little bit of theory</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ODEs/firstmethods.html">15. Some simple time-stepping methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ODEs/implementation.html">16. Implementation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ODEs/RungeKutta.html">17. Runge-Kutta methods</a></li>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="ODEs.html">13. Solving ordinary differential equations</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">14. A little bit of theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="firstmethods.html">15. Some simple methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RungeKutta.html">16. Runge-Kutta methods</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">PDEs</span></p>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">18. Partial differential equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="PDEs-Poisson.html">19. Poisson Equation and the 5-point stencil</a></li>
-<li class="toctree-l1"><a class="reference internal" href="PDEs-iterative.html">20. Iterative Solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="PDEs-waves.html">21. Wave equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="PDEs-flows.html">22. Navier-Stokes Equation</a></li>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">17. Partial differential equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-Poisson.html">18. Poisson Equation and the 5-point stencil</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-iterative.html">19. Iterative Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-waves.html">20. Wave equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-flows.html">21. Navier-Stokes Equation</a></li>
 </ul>
 
     </div>
@@ -253,7 +254,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="../_sources/PDEs/PDEs.md" target="_blank"
+      <li><a href="../_sources/ODEs/theory.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -322,7 +323,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -333,11 +336,22 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Partial differential equations</h1>
+    <h1>A little bit of theory</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#some-examples">14.1. Some examples:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#some-theorems">14.2. Some Theorems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#autonomous-odes">14.3. Autonomous ODEs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#an-equivalent-integral-equation">14.4. An equivalent integral equation</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -347,14 +361,106 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="partial-differential-equations">
-<h1><span class="section-number">18. </span>Partial differential equations<a class="headerlink" href="#partial-differential-equations" title="Permalink to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="a-little-bit-of-theory">
+<h1><span class="section-number">14. </span>A little bit of theory<a class="headerlink" href="#a-little-bit-of-theory" title="Permalink to this heading">#</a></h1>
+<p>An ordinary differential equation (ODE) is given by</p>
+<div class="math notranslate nohighlight">
+\[
+y^\prime (t) = f(t,y(t)) \qquad \forall \, t \in (t_0, T)
+\]</div>
+<p>together with the initial condition</p>
+<div class="math notranslate nohighlight">
+\[
+y(t_0) = y_0,
+\]</div>
+<p>where</p>
 <ul class="simple">
-<li><p>Poisson Equation and the 5-point stencil</p></li>
-<li><p>Iterative Solvers</p></li>
-<li><p>Wave equation</p></li>
-<li><p>Navier Stokes Equation</p></li>
+<li><p><span class="math notranslate nohighlight">\(f : [t_0, T] \times {\mathbb R}^n \rightarrow {\mathbb R}^n\)</span> is the given <strong>right hand side</strong></p></li>
+<li><p><span class="math notranslate nohighlight">\(y : [t_t, T] \rightarrow {\mathbb R}^n\)</span> is the unknown function, called <strong>state</strong></p></li>
+<li><p><span class="math notranslate nohighlight">\(t \in [t_0, T]\)</span> is called <strong>time</strong></p></li>
+<li><p><span class="math notranslate nohighlight">\(y_0 \in {\mathbb R}^n\)</span> is the <strong>initial value</strong></p></li>
 </ul>
+<section id="some-examples">
+<h2><span class="section-number">14.1. </span>Some examples:<a class="headerlink" href="#some-examples" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(n = 1\)</span>, <span class="math notranslate nohighlight">\(f(t,y) = a y\)</span>:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[
+y^\prime(t) = a y, \quad y(0) = y_0
+\]</div>
+<p>This ode has the solution <span class="math notranslate nohighlight">\(y(t) = y_0 e^{a t}\)</span>. If <span class="math notranslate nohighlight">\(a &gt; 0\)</span>, the solution is exponentiall increasing,
+for <span class="math notranslate nohighlight">\(a &lt; 0\)</span>, it is exponentially decreasing.</p>
+<ul class="simple">
+<li><p>Consider <span class="math notranslate nohighlight">\(y^{\prime \prime}(t) = -\omega^2 y(t)\)</span> with <span class="math notranslate nohighlight">\(y(0) = y_0\)</span>, <span class="math notranslate nohighlight">\(y^\prime(0) = y_{0p}\)</span>. This is a second order
+ODE, which can be reduced to a first oder system with the definition <span class="math notranslate nohighlight">\(y_1 := y\)</span> and <span class="math notranslate nohighlight">\(y_2 := y^\prime\)</span>:</p></li>
+</ul>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\left( \begin{array}{c} y_1 \\ y_2 \end{array} \right)^\prime =
+\left( \begin{array}{c} y_2 \\ -\omega^2 y_1 \end{array} \right) 
+\quad \text{with i.c.} \quad
+\left( \begin{array}{c} y_1 \\ y_2 \end{array} \right)(0) =
+\left( \begin{array}{c} y_0 \\ y_{0p} \end{array} \right) 
+\end{split}\]</div>
+<p>Its solution is <span class="math notranslate nohighlight">\(y(t) = y_0 \cos( \omega t ) + \frac{y_{0p}}{\omega} \sin (\omega t)\)</span>.</p>
+</section>
+<section id="some-theorems">
+<h2><span class="section-number">14.2. </span>Some Theorems<a class="headerlink" href="#some-theorems" title="Permalink to this heading">#</a></h2>
+<p><strong>Theorem: Picard Lindelöf</strong></p>
+<p>Assume the right hand side satisfies a Liptschitz condition in the second argument</p>
+<div class="math notranslate nohighlight">
+\[
+\| f(t, y) - f(t, z) \| \leq L \, \| y - z \| \qquad \forall \, t \in [t_0, T], \, \forall \, y,z \in {\mathbb R}^n.
+\]</div>
+<p>Then there exisits a unique solution of the ODE.</p>
+<p><strong>Theorem: Stability with respect to initial conditions</strong></p>
+<p>Consider two ODEs differing only in the initial values:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+y^\prime(t) = f(t, y(t)), \quad y(t_0) = y_0 \\
+\end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+z^\prime(t) = f(t, z(t)), &amp; &amp; \quad z(t_0) = z_0 \\
+\end{split}\]</div>
+<p>Then there holds:</p>
+<div class="math notranslate nohighlight">
+\[
+\| y(t) - z(t) \| \leq e^{L (t-t_0)} \| y_0 - z_0 \|
+\]</div>
+<p>This means that an error in the initial condition may be propagated with exponential groth with constant <span class="math notranslate nohighlight">\(L\)</span>.</p>
+<p><strong>Theorem: One-sided Lipschitz condition</strong></p>
+<p>Assume there holds</p>
+<div class="math notranslate nohighlight">
+\[
+\left&lt; f(t,y)-f(t,z), y-z \right&gt; \leq \alpha \| y - z \|_2^2
+\]</div>
+<p>with some <span class="math notranslate nohighlight">\(\alpha \in {\mathbb R}\)</span>. Then the stability estimate can be improved to</p>
+<div class="math notranslate nohighlight">
+\[
+\| y(t) - z(t) \|_2 \leq e^{\alpha (t-t_0)} \| y_0 - z_0 \|_2
+\]</div>
+<p>This is an essential improvement of the first example above when <span class="math notranslate nohighlight">\(a &lt; 0\)</span>. The second example satisfies the one-sided Lipschitz condition with <span class="math notranslate nohighlight">\(\alpha = 0\)</span>.</p>
+</section>
+<section id="autonomous-odes">
+<h2><span class="section-number">14.3. </span>Autonomous ODEs<a class="headerlink" href="#autonomous-odes" title="Permalink to this heading">#</a></h2>
+<p>An ODE is called autonomous iff the right hand side does not depend explicitely on <span class="math notranslate nohighlight">\(t\)</span>, i.e.
+<span class="math notranslate nohighlight">\(y^\prime(t) = f(y(t))\)</span>. Then the time axis can be shifted arbitrarely.</p>
+<p>An non-autonomous ODE in <span class="math notranslate nohighlight">\({\mathbb R}^n\)</span> can be transformed to an autonomous one in
+<span class="math notranslate nohighlight">\({\mathbb R}^{n+1}\)</span> by letting <span class="math notranslate nohighlight">\(y_{n+1}(t) := t\)</span> be another unknown state variable, which satisfies
+the ODE <span class="math notranslate nohighlight">\(y_{n+t}^\prime = 1\)</span> and i.c. <span class="math notranslate nohighlight">\(y_{n+1}(t_0) = t_0\)</span>.</p>
+</section>
+<section id="an-equivalent-integral-equation">
+<h2><span class="section-number">14.4. </span>An equivalent integral equation<a class="headerlink" href="#an-equivalent-integral-equation" title="Permalink to this heading">#</a></h2>
+<p>A smooth solution of the ODE satisfies the follong integral (IE) equation, and vice versa:</p>
+<div class="math notranslate nohighlight">
+\[
+y(t) = y_0 + \int_{t_0}^t f(s, y(s)) ds \qquad \forall \, t \in [t_0, T]
+\]</div>
+<p>We call the ODE and the IE formally equivalent. The IE may have a solution which is not differentiable,
+and thus not a solution of the ODE (e.g. if <span class="math notranslate nohighlight">\(f\)</span> jumps in <span class="math notranslate nohighlight">\(\overline t\)</span>, then <span class="math notranslate nohighlight">\(y\)</span> has a kink, and is not differentiable.</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -370,7 +476,7 @@ document.write(`
         },
         kernelOptions: {
             name: "python3",
-            path: "./PDEs"
+            path: "./ODEs"
         },
         predefinedOutput: true
     }
@@ -388,20 +494,20 @@ document.write(`
                   <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../ODEs/RungeKutta.html"
+       href="ODEs.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">17. </span>Runge-Kutta methods</p>
+        <p class="prev-next-title"><span class="section-number">13. </span>Solving ordinary differential equations</p>
       </div>
     </a>
     <a class="right-next"
-       href="PDEs-Poisson.html"
+       href="firstmethods.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">19. </span>Poisson Equation and the 5-point stencil</p>
+        <p class="prev-next-title"><span class="section-number">15. </span>Some simple methods</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -411,6 +517,23 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#some-examples">14.1. Some examples:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#some-theorems">14.2. Some Theorems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#autonomous-odes">14.3. Autonomous ODEs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#an-equivalent-integral-equation">14.4. An equivalent integral equation</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

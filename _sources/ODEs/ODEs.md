@@ -8,4 +8,8 @@ We are developing a library for solving nonlinear ordinary differential lequaito
 - Introducing constraints
 
 
-Some [spoiler to WIP](https://github.com/JSchoeberl/ASC-ODE)
+
+Fork and clone github repo [ASC-HPC](https://github.com/TUWien-ASC/ASC-ODE.git).
+
+Add your bla-repo as an external sub-module.
+

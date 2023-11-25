@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>2. Clone a project from github &#8212; Introduction to Scientific Computing</title>
+    <title>17. Runge-Kutta methods &#8212; Introduction to Scientific Computing</title>
   
   
   
@@ -64,11 +64,11 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'basiclinalg/bla-git';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'ODEs/RungeKutta';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="3. Refresh your C++" href="bla-refreshCpp.html" />
-    <link rel="prev" title="1. Overview" href="bla.html" />
+    <link rel="next" title="18. Partial differential equations" href="../PDEs/PDEs.html" />
+    <link rel="prev" title="16. Implementation" href="implementation.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -169,14 +169,14 @@ const thebe_selector_output = ".output, .cell_output"
             </li>
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Basic Linear Algebra</span></p>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="bla.html">1. Overview</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">2. Clone a project from github</a></li>
-<li class="toctree-l1"><a class="reference internal" href="bla-refreshCpp.html">3. Refresh your C++</a></li>
-<li class="toctree-l1"><a class="reference internal" href="bla-docu.html">4. Creating documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="bla-expressions.html">5. Expression templates</a></li>
-<li class="toctree-l1"><a class="reference internal" href="bla-python2.html">6. Python bindings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="bla-lapack.html">7. Interfacing Lapack</a></li>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../basiclinalg/bla.html">1. Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basiclinalg/bla-git.html">2. Clone a project from github</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basiclinalg/bla-refreshCpp.html">3. Refresh your C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basiclinalg/bla-docu.html">4. Creating documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basiclinalg/bla-expressions.html">5. Expression templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basiclinalg/bla-python2.html">6. Python bindings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basiclinalg/bla-lapack.html">7. Interfacing Lapack</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Performance</span></p>
 <ul class="nav bd-sidenav">
@@ -187,19 +187,20 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="../performance/parallelization.html">12. Parallelization</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">ODEs</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../ODEs/ODEs.html">13. Solving ordinary differential equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ODEs/theory.html">14. A little theory</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ODEs/firstmethods.html">15. Some simple methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ODEs/RungeKutta.html">16. Runge-Kutta methods</a></li>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="ODEs.html">13. Solving ordinary differential equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory.html">14. A little bit of theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="firstmethods.html">15. Some simple time-stepping methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementation.html">16. Implementation</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">17. Runge-Kutta methods</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">PDEs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">17. Partial differential equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-Poisson.html">18. Poisson Equation and the 5-point stencil</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-iterative.html">19. Iterative Solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-waves.html">20. Wave equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-flows.html">21. Navier-Stokes Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">18. Partial differential equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-Poisson.html">19. Poisson Equation and the 5-point stencil</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-iterative.html">20. Iterative Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-waves.html">21. Wave equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-flows.html">22. Navier-Stokes Equation</a></li>
 </ul>
 
     </div>
@@ -254,7 +255,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="../_sources/basiclinalg/bla-git.md" target="_blank"
+      <li><a href="../_sources/ODEs/RungeKutta.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -336,7 +337,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Clone a project from github</h1>
+    <h1>Runge-Kutta methods</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -346,7 +347,11 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extend-asc-bla-in-team-work">2.1. Extend ASC-bla in team-work</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#explicit-rk-methods">17.1. Explicit RK methods</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implicit-runge-kutta-methods">17.2. Implicit Runge Kutta methods</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#runge-kutta-methods-of-arbitrary-order">17.2.1. Runge-Kutta methods of arbitrary order</a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -358,85 +363,139 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-  <section id="clone-a-project-from-github">
-<h1><span class="section-number">2. </span>Clone a project from github<a class="headerlink" href="#clone-a-project-from-github" title="Permalink to this heading">#</a></h1>
-<p><a class="reference external" href="https://git-scm.com">Git</a> is a popular version control system. It is free and open source.</p>
-<p><a class="reference external" href="https://github.com">GitHub</a> is a platform and cloud-based service for software development and version control using Git.</p>
-<p>Prerequisites:</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="runge-kutta-methods">
+<h1><span class="section-number">17. </span>Runge-Kutta methods<a class="headerlink" href="#runge-kutta-methods" title="Permalink to this heading">#</a></h1>
+<p>The goal of Runge-Kutta methods is to obtain higher accuarcy by
+using a more accurate integration rule:</p>
+<div class="math notranslate nohighlight">
+\[
+y_{i+1} = y_i + h \sum_{j=1}^s b_j f(t_i+c_j h, y_i^j)
+\]</div>
+<p>where</p>
 <ul class="simple">
-<li><p>install a C++ environment on your computer (e.g. (mingw or msvc) and <a class="reference external" href="https://code.visualstudio.com">Visual Studio Code</a>)</p></li>
-<li><p>install git (available within vs-code as <em>Git Extension Pack</em>)</p></li>
-<li><p>install cmake (available within vs-code as <em>CMake Tools</em>)</p></li>
+<li><p><span class="math notranslate nohighlight">\(s\)</span> is called the number of stages</p></li>
+<li><p><span class="math notranslate nohighlight">\(c_j, b_j\)</span> are points and weights of the quadrature rule</p></li>
 </ul>
-<p>look for project draft
-<a class="reference external" href="https://github.com/TUWien-ASC/ASC-bla">ASC-bla</a></p>
-<p>and git-clone it. Either</p>
+<div class="math notranslate nohighlight">
+\[
+\int_0^1 f(t) dt \approx \sum_{j=1}^s b_j f(c_j)
+\]</div>
 <ul class="simple">
-<li><p>use vscode ‘source control -&gt; Clone Repository’</p></li>
-<li><p>git clone &lt;copy git link&gt;</p></li>
-<li><p>on Windows: …</p></li>
+<li><p><span class="math notranslate nohighlight">\(y_i^j\)</span> are approximations to <span class="math notranslate nohighlight">\(y(t_i + c_j h)\)</span>, which are also unknown</p></li>
 </ul>
-<p>Now we configure and build the project using cmake.
-You find a file ‘CMakeLists.txt’ describing the build structure for the project.</p>
-<p>Again, <em>vscode</em> is doing the work for you. If you use a terminal, go to the ASC-bla directory and run:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mkdir build
-cd build
-cmake ..
-make
-</pre></div>
-</div>
-<p>You should have produced an executable ‘test_vector’, try it out.</p>
-<section id="extend-asc-bla-in-team-work">
-<h2><span class="section-number">2.1. </span>Extend ASC-bla in team-work<a class="headerlink" href="#extend-asc-bla-in-team-work" title="Permalink to this heading">#</a></h2>
-<p>You will now add more functionality to ASC-bla. You want to do it in team-work.
-Form teams by 2-4 students. Go back to github, and register. One of the team will <em>fork</em> ASC-bla (name it as you like),
-and invites colleagues to the project.</p>
-<p>Repeat the steps from before: Clone, configure, build, run</p>
-<p>Exercise:</p>
+<p>The exact values at the stage-points are</p>
+<div class="math notranslate nohighlight">
+\[
+y(t_i+c_j h) = y(t_i) + \int_{t_i}^{t_i+c_j h} f(t, y(t)) dt
+\]</div>
+<p>Again, we use numerical integration to define the numerical stage values (skipping the index <span class="math notranslate nohighlight">\(i\)</span>):</p>
+<div class="math notranslate nohighlight">
+\[
+y^j = y_i + h \sum_{k=1}^s  a_{jk} f(t_i+c_k h, y^k) \qquad 1 \leq j \leq s
+\]</div>
+<p>We use the same integration points as above, however the weigths are adjusted
+to the smaller interval such that</p>
+<div class="math notranslate nohighlight">
+\[
+\int_0^{c_j} f(t) dt \approx \sum_{k=1}^s a_{jk} f(c_k) \qquad 1 \leq j \leq s
+\]</div>
+<p>A particular RK method is completely defined by providing the <span class="math notranslate nohighlight">\(a\)</span>, <span class="math notranslate nohighlight">\(b\)</span>, and <span class="math notranslate nohighlight">\(c\)</span> coefficients,
+which are usually given in the so called <strong>Butcher tableau</strong>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{array}{c|ccc}
+c_1 &amp; a_{11} &amp; \dots &amp; a_{1s} \\
+\vdots &amp; \vdots &amp; &amp; \vdots \\
+c_s &amp; a_{s1} &amp; \dots &amp; a_{ss} \\
+\hline
+ &amp; b_1 &amp; \dots &amp; b_s
+\end{array}
+\end{split}\]</div>
+<section id="explicit-rk-methods">
+<h2><span class="section-number">17.1. </span>Explicit RK methods<a class="headerlink" href="#explicit-rk-methods" title="Permalink to this heading">#</a></h2>
+<p>Explicit RK methods can be seen as extension of the explicit Euler method.
+The <span class="math notranslate nohighlight">\(a_{jk}\)</span> coefficients form a strictly lower triangular matrix.</p>
+<p>Examples are</p>
 <ul class="simple">
-<li><p>Extend the library by a <code class="docutils literal notranslate"><span class="pre">Matrix</span></code> class and provide the following operations:</p>
-<ul>
-<li><p>Matrix-vector product</p></li>
-<li><p>Matrix-matrix product</p></li>
-<li><p>Transpose matrix function</p></li>
-<li><p>Some tests for your classes</p></li>
+<li><p>the <span class="math notranslate nohighlight">\(RK_2\)</span> - method, aka the explicit mid-point rule</p></li>
 </ul>
-</li>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{array}{c|cc}
+0 &amp; 0 &amp; 0 \\
+\frac{1}{2} &amp; \frac{1}{2} &amp; 0 \\
+\hline
+ &amp; 0 &amp; \frac{1}{2}
+\end{array}
+\end{split}\]</div>
+<ul class="simple">
+<li><p>the <span class="math notranslate nohighlight">\(RK_4\)</span> - method, aka THE classical Runge Kutta method</p></li>
 </ul>
-<p>Allow to choose between row-major and column-major storage:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>enum ORDERING { ColMajor, RowMajor };
-template &lt;typename T, ORDERING ORD&gt;
-class Matrix {
-...
-}
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{array}{c|cccc}
+0 &amp;   \\
+\frac{1}{2} &amp; \frac{1}{2}  \\
+\frac{1}{2} &amp; 0 &amp; \frac{1}{2} \\
+1 &amp; 0 &amp; 0 &amp; 1 \\
+\hline
+ &amp; \frac{1}{6} &amp; \frac{1}{3} &amp; \frac{1}{3} &amp; \frac{1}{6}
+\end{array}
+\end{split}\]</div>
+</section>
+<section id="implicit-runge-kutta-methods">
+<h2><span class="section-number">17.2. </span>Implicit Runge Kutta methods<a class="headerlink" href="#implicit-runge-kutta-methods" title="Permalink to this heading">#</a></h2>
+<p>Gauss-Legendre 2 method:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{array}{c|cccc}
+\frac{1}{2} - \frac{\sqrt{3}}{6} &amp;  \frac{1}{4} &amp; \frac{1}{4} - \frac{\sqrt{3}}{6} \\
+\frac{1}{2} + \frac{\sqrt{3}}{6} &amp; \frac{1}{4} + \frac{\sqrt{3}}{6}  &amp; \frac{1}{4} \\
+\hline
+ &amp; \frac{1}{2} &amp; \frac{1}{2}
+\end{array}
+\end{split}\]</div>
+<p>Radau IIA method</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{array}{c|cc}
+\frac{1}{3} &amp; \frac{5}{12} &amp; \frac{-1}{12} \\
+1 &amp; \frac{3}{4} &amp; \frac{1}{4} \\
+\hline
+  &amp; \frac{3}{4} &amp; \frac{1}{4} \\
+\end{array}
+\end{split}\]</div>
+<p><strong>Exercise</strong>: Implement a Runge-Kutta time-stepper for arbitrary Butcher tableaus.</p>
+<p>Implement a class like</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ButcherFunction</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">NonlinearFunction</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">Matrix</span><span class="w"> </span><span class="n">a</span><span class="p">;</span><span class="w">  </span><span class="c1">// a-coef of Butcher tableau</span>
+<span class="w">  </span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">NonlinearFunction</span><span class="o">&gt;</span><span class="w"> </span><span class="n">func</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="n">Evaluate</span><span class="w"> </span><span class="p">(</span><span class="n">VectorView</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">VectorView</span><span class="w"> </span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">s</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">func</span><span class="o">-&gt;</span><span class="n">Evaluate</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">Range</span><span class="p">(</span><span class="n">j</span><span class="o">*</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">n</span><span class="p">),</span><span class="w"> </span><span class="n">tmp</span><span class="p">);</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">s</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="o">++</span><span class="p">)</span>
+<span class="w">            </span><span class="n">f</span><span class="p">.</span><span class="n">Range</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">a</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">tmp</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
 </pre></div>
 </div>
-<p>push your changes to your github project using either vs-code functionality, or command line instructions as</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>git add tests/test_matrix.cc src/matrix.h
-git commit -m &quot;added matrix class&quot;
-git push
-</pre></div>
-</div>
-<p>The first command <code class="docutils literal notranslate"><span class="pre">add</span></code> <em>stages</em> your files you want to commit to your local version of the repository. With <code class="docutils literal notranslate"><span class="pre">commit</span></code> your local changes are taken over. Finally, with <code class="docutils literal notranslate"><span class="pre">push</span></code> you upload your local commits to the original git repo.</p>
-<p>The other team-member can</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>git fetch
-git merge 
-</pre></div>
-</div>
-<p>the contributions. Experiment with changing the same code regions.</p>
-<ul>
-<li><p>Add more advanced features:</p>
-<ul>
-<li><p>Inverse matrix: <p>
-Form matrix <span class="math notranslate nohighlight">\(M = (A \; I)\)</span>, and perform row manipulations to obtain <span class="math notranslate nohighlight">\(\widetilde M = (I \; A^{-1})\)</span>.</p></li>
-<li><p>Allow to add <code class="docutils literal notranslate"><span class="pre">Vector&lt;double&gt;</span></code> to a <code class="docutils literal notranslate"><span class="pre">Vector&lt;std::complex&lt;double&gt;&gt;</span></code></p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>typedef decltype(std::declval&lt;TA&gt;()+std::declval&lt;TB&gt;()) TRES;
-</pre></div>
-</div>
-</li>
-</ul>
-</li>
-</ul>
+<p>Setup the equation, and solve it using <code class="docutils literal notranslate"><span class="pre">NewtonSolver</span></code>.</p>
+<section id="runge-kutta-methods-of-arbitrary-order">
+<h3><span class="section-number">17.2.1. </span>Runge-Kutta methods of arbitrary order<a class="headerlink" href="#runge-kutta-methods-of-arbitrary-order" title="Permalink to this heading">#</a></h3>
+<p>Step 1: Start from an Gaussian numerical integration rule to define <span class="math notranslate nohighlight">\(c\)</span> and <span class="math notranslate nohighlight">\(b\)</span> coefficients.
+Take care to scale to the  interval <span class="math notranslate nohighlight">\([0,1]\)</span>.</p>
+<p>A ready to use function can be taken from
+<a class="reference external" href="https://numerical.recipes/book.html">Numerical recipes, section 4.6</a></p>
+<p>Step 2: Find coefficients of the matrix <span class="math notranslate nohighlight">\(a\)</span>. Each row should provide an integraton rule
+on <span class="math notranslate nohighlight">\([0, c_j]\)</span>, being exact for polynomials up to order <span class="math notranslate nohighlight">\(s-1\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+\sum_{k=1}^s c_k a_{jk} x^{j-1} = \int_0^{c+j} x^{j-1} \, dx \qquad 1 \leq j \leq s
+\]</div>
+<p>This gives <span class="math notranslate nohighlight">\(s\)</span> conditions for each row. Setup linear systems of equations, and solve them.</p>
+</section>
 </section>
 </section>
 
@@ -453,7 +512,7 @@ Form matrix <span class="math notranslate nohighlight">\(M = (A \; I)\)</span>, 
         },
         kernelOptions: {
             name: "python3",
-            path: "./basiclinalg"
+            path: "./ODEs"
         },
         predefinedOutput: true
     }
@@ -471,20 +530,20 @@ Form matrix <span class="math notranslate nohighlight">\(M = (A \; I)\)</span>, 
                   <!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="bla.html"
+       href="implementation.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">1. </span>Overview</p>
+        <p class="prev-next-title"><span class="section-number">16. </span>Implementation</p>
       </div>
     </a>
     <a class="right-next"
-       href="bla-refreshCpp.html"
+       href="../PDEs/PDEs.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">3. </span>Refresh your C++</p>
+        <p class="prev-next-title"><span class="section-number">18. </span>Partial differential equations</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -503,7 +562,11 @@ Form matrix <span class="math notranslate nohighlight">\(M = (A \; I)\)</span>, 
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extend-asc-bla-in-team-work">2.1. Extend ASC-bla in team-work</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#explicit-rk-methods">17.1. Explicit RK methods</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implicit-runge-kutta-methods">17.2. Implicit Runge Kutta methods</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#runge-kutta-methods-of-arbitrary-order">17.2.1. Runge-Kutta methods of arbitrary order</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 
