@@ -364,7 +364,7 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="some-simple-time-stepping-methods">
 <h1><span class="section-number">15. </span>Some simple time-stepping methods<a class="headerlink" href="#some-simple-time-stepping-methods" title="Permalink to this heading">#</a></h1>
-<p>The goal is to find an approximative solution to the ODE</p>
+<p>The goal is to find an approximate solution to the ODE</p>
 <div class="math notranslate nohighlight">
 \[
 y^\prime(t) = f(t, y(t)) \; \; \forall \, t \in (t_0, T), \quad y(t_0) = y_0
@@ -379,7 +379,7 @@ t_0 &lt; t_1 &lt; \ldots &lt; t_n = T,
 <span class="math notranslate nohighlight">\(t_i := t_0 + ih\)</span>.</p>
 <section id="explicit-euler-method">
 <h2><span class="section-number">15.1. </span>Explicit Euler method<a class="headerlink" href="#explicit-euler-method" title="Permalink to this heading">#</a></h2>
-<p>We compute a discrete approximative solution</p>
+<p>We compute a discrete approximate solution</p>
 <div class="math notranslate nohighlight">
 \[
 y_i \approx y(t_i) \qquad \forall \, i \in { 0, \ldots , n}
@@ -418,20 +418,20 @@ now seen as an approximation to <span class="math notranslate nohighlight">\(y^\
 y_{i+1} = y_i + h f(t_{i+1}, y_{i+1}) \qquad 0 \leq i &lt; n
 \]</div>
 <p>Now, the new step <span class="math notranslate nohighlight">\(y_{i+1}\)</span> shows up also in the right-hand side. We cannot simply
-evaulate a formula, but have to solve a system of equation. If the right hand side <span class="math notranslate nohighlight">\(f(t,y)\)</span>
+evaulate a formula, but have to solve a system of equations. If the right hand side <span class="math notranslate nohighlight">\(f(t,y)\)</span>
 depends non-linear on the the state <span class="math notranslate nohighlight">\(y\)</span>, one has to solve a non-linear system. Typically,
 this is done using Newton’s method.</p>
 </section>
 <section id="crank-nicolson-method">
 <h2><span class="section-number">15.3. </span>Crank-Nicolson method<a class="headerlink" href="#crank-nicolson-method" title="Permalink to this heading">#</a></h2>
 <p>Interpreting the difference quotient as an approximation to the derivative in
-in the mid-point <span class="math notranslate nohighlight">\(\frac{t_{i}+t_{i+1}}{2}\)</span>, we end up in the Crank-Nicolson method</p>
+the mid-point <span class="math notranslate nohighlight">\(\frac{t_{i}+t_{i+1}}{2}\)</span>, we end up with the Crank-Nicolson method</p>
 <div class="math notranslate nohighlight">
 \[
-y_{i+1} = y_i + \frac{h}{2} \big( f(t_i, y_i) + f(t_{i+1}, y_{i+1}) \big) \qquad 0 \leq i &lt; n
+y_{i+1} = y_i + \frac{h}{2} \big( f(t_i, y_i) + f(t_{i+1}, y_{i+1}) \big) \qquad 0 \leq i &lt; n.
 \]</div>
 <p>Like the implicit Euler method, it is an implicit method as well. Numerical analysis proves that
-this method provides a higher order of convergence.</p>
+this method provides a better rate of convergence.</p>
 </section>
 <section id="derivation-from-the-integral-equation">
 <h2><span class="section-number">15.4. </span>Derivation from the integral equation<a class="headerlink" href="#derivation-from-the-integral-equation" title="Permalink to this heading">#</a></h2>
@@ -440,7 +440,7 @@ this method provides a higher order of convergence.</p>
 \[
 y^\prime(t) = f(t, y(t)) \qquad y(t_i) = y_i
 \]</div>
-<p>on the time interval <span class="math notranslate nohighlight">\([t_i, t_{i+1}]\)</span>. We rewrite it as integral equation</p>
+<p>on the time interval <span class="math notranslate nohighlight">\([t_i, t_{i+1}]\)</span>. We rewrite it as an integral equation</p>
 <div class="math notranslate nohighlight">
 \[
 y(t) = y_i + \int_{t_i}^t f(s, y(s)) \, ds \qquad \forall \, t \in [t_i, t_{i+1}]

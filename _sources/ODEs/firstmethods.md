@@ -1,6 +1,6 @@
 # Some simple time-stepping methods
 
-The goal is to find an approximative solution to the ODE
+The goal is to find an approximate solution to the ODE
 
 $$
 y^\prime(t) = f(t, y(t)) \; \; \forall \, t \in (t_0, T), \quad y(t_0) = y_0
@@ -19,7 +19,7 @@ $t_i := t_0 + ih$.
 
 ## Explicit Euler method
 
-We compute a discrete approximative solution 
+We compute a discrete approximate solution 
 
 $$
 y_i \approx y(t_i) \qquad \forall \, i \in { 0, \ldots , n}
@@ -65,21 +65,21 @@ y_{i+1} = y_i + h f(t_{i+1}, y_{i+1}) \qquad 0 \leq i < n
 $$
 
 Now, the new step $y_{i+1}$ shows up also in the right-hand side. We cannot simply
-evaulate a formula, but have to solve a system of equation. If the right hand side $f(t,y)$
+evaulate a formula, but have to solve a system of equations. If the right hand side $f(t,y)$
 depends non-linear on the the state $y$, one has to solve a non-linear system. Typically,
 this is done using Newton's method.
 
 ## Crank-Nicolson method
 
 Interpreting the difference quotient as an approximation to the derivative in
-in the mid-point $\frac{t_{i}+t_{i+1}}{2}$, we end up in the Crank-Nicolson method
+the mid-point $\frac{t_{i}+t_{i+1}}{2}$, we end up with the Crank-Nicolson method
 
 $$
-y_{i+1} = y_i + \frac{h}{2} \big( f(t_i, y_i) + f(t_{i+1}, y_{i+1}) \big) \qquad 0 \leq i < n
+y_{i+1} = y_i + \frac{h}{2} \big( f(t_i, y_i) + f(t_{i+1}, y_{i+1}) \big) \qquad 0 \leq i < n.
 $$
 
 Like the implicit Euler method, it is an implicit method as well. Numerical analysis proves that
-this method provides a higher order of convergence.
+this method provides a better rate of convergence.
 
 
 ## Derivation from the integral equation
@@ -90,7 +90,7 @@ $$
 y^\prime(t) = f(t, y(t)) \qquad y(t_i) = y_i
 $$
 
-on the time interval $[t_i, t_{i+1}]$. We rewrite it as integral equation
+on the time interval $[t_i, t_{i+1}]$. We rewrite it as an integral equation
 
 $$
 y(t) = y_i + \int_{t_i}^t f(s, y(s)) \, ds \qquad \forall \, t \in [t_i, t_{i+1}]

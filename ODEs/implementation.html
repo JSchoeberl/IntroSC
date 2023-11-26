@@ -388,11 +388,11 @@ derivative at a given point:</p>
 The <code class="docutils literal notranslate"><span class="pre">Evaluate</span></code> and <code class="docutils literal notranslate"><span class="pre">EvaluateDeriv</span></code> take vector- and matrix-views, such that we can
 take sub-vectors and sub-matrices when calling the evaluations.</p>
 <p>We build expression trees, similar as the expression templates for vectors and matrices.
-But now we don’t use virtual inheritance instead of the Barton Neckman trick (i.e. dynamic
-polymorphism instead of static polymorphism). This is more expensive, but it allows to
+But now we use virtual inheritance instead of the Barton Neckman trick (i.e. dynamic
+polymorphism instead of static polymorphism). This is more expensive to create, but it allows to
 pass <code class="docutils literal notranslate"><span class="pre">NonlinearFunction</span></code> objects between C++ functions.</p>
-<p>A <code class="docutils literal notranslate"><span class="pre">SumFunction</span></code> implements the sum <span class="math notranslate nohighlight">\(f_A = f_B\)</span>. The two childs are provided by pointers.
-Shared pointers allow simple life-time managment:</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">SumFunction</span></code> implements the sum <span class="math notranslate nohighlight">\(f_A+f_B\)</span>. The two childs are provided by pointers.
+Shared pointers allow simple life-time management:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SumFunction</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">NonlinearFunction</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">NonlinearFunction</span><span class="o">&gt;</span><span class="w"> </span><span class="n">fa</span><span class="p">,</span><span class="w"> </span><span class="n">fb</span><span class="p">;</span>
 <span class="k">public</span><span class="o">:</span>
