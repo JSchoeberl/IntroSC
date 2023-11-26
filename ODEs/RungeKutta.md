@@ -89,6 +89,8 @@ $$
 
 ## Implicit Runge Kutta methods
 
+Methods of optimal accuracy are obtained based on Gaussian quadrature:
+
 Gauss-Legendre 2 method:
 
 $$
@@ -101,7 +103,10 @@ $$
 $$
 
 
-Radau IIA method
+If not all time-scales are resolved, then $c_s = 1$ leads to better stability.
+the other points are chosen for optimal accuracy.
+
+Two-point Radau IIA method:
 
 $$
 \begin{array}{c|cc}
@@ -118,7 +123,7 @@ $$
 Implement a class like 
 ```cpp
 class ButcherFunction : public NonlinearFunction {
-  Matrix a;  // a-coef of Butcher tableau
+  Matrix a;  // a-coefs of Butcher tableau
   shared_ptr<NonlinearFunction> func;
 public:
   virtual Evaluate (VectorView x, VectorView f) {
@@ -130,7 +135,7 @@ public:
   }
 }
 ```
-Setup the equation, and solve it using `NewtonSolver`.
+Setup the Runge-Kutta equation, and solve it using `NewtonSolver`.
 
 
 ### Runge-Kutta methods of arbitrary order
