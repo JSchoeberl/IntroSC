@@ -445,6 +445,7 @@ The <span class="math notranslate nohighlight">\(a_{jk}\)</span> coefficients fo
 </section>
 <section id="implicit-runge-kutta-methods">
 <h2><span class="section-number">17.2. </span>Implicit Runge Kutta methods<a class="headerlink" href="#implicit-runge-kutta-methods" title="Permalink to this heading">#</a></h2>
+<p>Methods of optimal accuracy are obtained based on Gaussian quadrature:</p>
 <p>Gauss-Legendre 2 method:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
@@ -455,7 +456,9 @@ The <span class="math notranslate nohighlight">\(a_{jk}\)</span> coefficients fo
  &amp; \frac{1}{2} &amp; \frac{1}{2}
 \end{array}
 \end{split}\]</div>
-<p>Radau IIA method</p>
+<p>If not all time-scales are resolved, then <span class="math notranslate nohighlight">\(c_s = 1\)</span> leads to better stability.
+the other points are chosen for optimal accuracy.</p>
+<p>Two-point Radau IIA method:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{array}{c|cc}
@@ -468,7 +471,7 @@ The <span class="math notranslate nohighlight">\(a_{jk}\)</span> coefficients fo
 <p><strong>Exercise</strong>: Implement a Runge-Kutta time-stepper for arbitrary Butcher tableaus.</p>
 <p>Implement a class like</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ButcherFunction</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">NonlinearFunction</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="n">Matrix</span><span class="w"> </span><span class="n">a</span><span class="p">;</span><span class="w">  </span><span class="c1">// a-coef of Butcher tableau</span>
+<span class="w">  </span><span class="n">Matrix</span><span class="w"> </span><span class="n">a</span><span class="p">;</span><span class="w">  </span><span class="c1">// a-coefs of Butcher tableau</span>
 <span class="w">  </span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">NonlinearFunction</span><span class="o">&gt;</span><span class="w"> </span><span class="n">func</span><span class="p">;</span>
 <span class="k">public</span><span class="o">:</span>
 <span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="n">Evaluate</span><span class="w"> </span><span class="p">(</span><span class="n">VectorView</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">VectorView</span><span class="w"> </span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -481,7 +484,7 @@ The <span class="math notranslate nohighlight">\(a_{jk}\)</span> coefficients fo
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Setup the equation, and solve it using <code class="docutils literal notranslate"><span class="pre">NewtonSolver</span></code>.</p>
+<p>Setup the Runge-Kutta equation, and solve it using <code class="docutils literal notranslate"><span class="pre">NewtonSolver</span></code>.</p>
 <section id="runge-kutta-methods-of-arbitrary-order">
 <h3><span class="section-number">17.2.1. </span>Runge-Kutta methods of arbitrary order<a class="headerlink" href="#runge-kutta-methods-of-arbitrary-order" title="Permalink to this heading">#</a></h3>
 <p>Step 1: Start from an Gaussian numerical integration rule to define <span class="math notranslate nohighlight">\(c\)</span> and <span class="math notranslate nohighlight">\(b\)</span> coefficients.
