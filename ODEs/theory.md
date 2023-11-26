@@ -13,7 +13,7 @@ $$
 
 where
 * $f : [t_0, T] \times {\mathbb R}^n \rightarrow {\mathbb R}^n$ is the given **right hand side**
-* $y : [t_t, T] \rightarrow {\mathbb R}^n$ is the unknown function, called **state**
+* $y : [t_0, T] \rightarrow {\mathbb R}^n$ is the unknown function, called **state**
 * $t \in [t_0, T]$ is called **time**
 * $y_0 \in {\mathbb R}^n$ is the **initial value**
 
@@ -23,22 +23,22 @@ where
 * $n = 1$, $f(t,y) = a y$:
 
 $$
-y^\prime(t) = a y, \quad y(0) = y_0
+y^\prime(t) = a y, \quad y(t_0) = y_0
 $$
 
-This ode has the solution $y(t) = y_0 e^{a t}$. If $a > 0$, the solution is exponentiall increasing,
+This ode has the solution $y(t) = y_0 e^{a (t-t_0)}$. If $a > 0$, the solution is exponentiall increasing,
 for $a < 0$, it is exponentially decreasing.
 
 
 * Consider $y^{\prime \prime}(t) = -\omega^2 y(t)$ with $y(0) = y_0$, $y^\prime(0) = y_{0p}$. This is a second order
-ODE, which can be reduced to a first oder system with the definition $y_1 := y$ and $y_2 := y^\prime$:
+ODE, which can be reduced to a first oder system with the definition $y_1 := y$ and $y_2 := y^\prime/\omega$:
 
 $$
 \left( \begin{array}{c} y_1 \\ y_2 \end{array} \right)^\prime =
-\left( \begin{array}{c} y_2 \\ -\omega^2 y_1 \end{array} \right) 
+\left( \begin{array}{c} \omega y_2 \\ -\omega y_1 \end{array} \right) 
 \quad \text{with i.c.} \quad
 \left( \begin{array}{c} y_1 \\ y_2 \end{array} \right)(0) =
-\left( \begin{array}{c} y_0 \\ y_{0p} \end{array} \right) 
+\left( \begin{array}{c} y_0 \\ y_{0p}/\omega \end{array} \right) 
 $$
 
 Its solution is $y(t) = y_0 \cos( \omega t ) + \frac{y_{0p}}{\omega} \sin (\omega t)$.
@@ -90,7 +90,7 @@ $$
 \| y(t) - z(t) \|_2 \leq e^{\alpha (t-t_0)} \| y_0 - z_0 \|_2
 $$
 
-This is an essential improvement of the first example above when $a < 0$. The second example satisfies the one-sided Lipschitz condition with $\alpha = 0$.
+This is an essential improvement for the first example above when $a < 0$. The second example satisfies the one-sided Lipschitz condition with $\alpha = 0$.
 
 
 
@@ -105,12 +105,12 @@ the ODE $y_{n+t}^\prime = 1$ and i.c. $y_{n+1}(t_0) = t_0$.
 
 ## An equivalent integral equation
 
-A smooth solution of the ODE satisfies the follong integral (IE) equation, and vice versa:
+A smooth solution of the ODE satisfies the following integral (IE) equation, and vice versa:
 
 $$
 y(t) = y_0 + \int_{t_0}^t f(s, y(s)) ds \qquad \forall \, t \in [t_0, T]
 $$
 
 We call the ODE and the IE formally equivalent. The IE may have a solution which is not differentiable,
-and thus not a solution of the ODE (e.g. if $f$ jumps in $\overline t$, then $y$ has a kink, and is not differentiable.
+and thus not a solution of the ODE (e.g. if $f$ jumps in some $\overline t$, then $y$ has a kink, and is not differentiable).
 

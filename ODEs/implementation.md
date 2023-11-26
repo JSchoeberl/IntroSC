@@ -28,12 +28,12 @@ The `Evaluate` and `EvaluateDeriv` take vector- and matrix-views, such that we c
 take sub-vectors and sub-matrices when calling the evaluations.
 
 We build expression trees, similar as the expression templates for vectors and matrices.
-But now we don't use virtual inheritance instead of the Barton Neckman trick (i.e. dynamic
-polymorphism instead of static polymorphism). This is more expensive, but it allows to
+But now we use virtual inheritance instead of the Barton Neckman trick (i.e. dynamic
+polymorphism instead of static polymorphism). This is more expensive to create, but it allows to
 pass `NonlinearFunction` objects between C++ functions.
 
-A `SumFunction` implements the sum $f_A = f_B$. The two childs are provided by pointers.
-Shared pointers allow simple life-time managment:
+A `SumFunction` implements the sum $f_A+f_B$. The two childs are provided by pointers.
+Shared pointers allow simple life-time management:
 
 ```cpp
 class SumFunction : public NonlinearFunction {
@@ -120,7 +120,7 @@ void NewtonSolver (shared_ptr<NonlinearFunction> func, VectorView<double> x,
 
 ```
 
-## Coding the Emplicit Euler method
+## Coding the Implicit Euler method
 
 In every time-step we have to solve for the new value $y^{n+1}$:
 
