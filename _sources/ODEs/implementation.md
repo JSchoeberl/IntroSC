@@ -134,7 +134,7 @@ which has been brought into autonomous form.
 We use our function algebra to build this composed function, and throw it into the Newton solver.
 If we make the time-step not too large, the value $y^n$ of the old time-step is a good starting value.
 
-To express that the independent varible is $y^{n+1}$, we create an `IdenticFunction`. The old
+To express that the independent varible is $y^{n+1}$, we create an `IdentityFunction`. The old
 value is considered as a constant, i.e. a `ConstantFunction`. The right hand side function is
 given by the user. Then the implicit Euler method is coded up like that:
 
@@ -145,7 +145,7 @@ void SolveODE_IE(double tend, int steps,
 {
   double dt = tend/steps;
   auto yold = make_shared<ConstantFunction>(y);
-  auto ynew = make_shared<IdenticFunction>(y.Size());
+  auto ynew = make_shared<IdentityFunction>(y.Size());
   auto equ = ynew - yold - dt * rhs;
 
   double t = 0;
@@ -159,3 +159,85 @@ void SolveODE_IE(double tend, int steps,
 }
 ```
 
+## Using the time-stepping method
+
+A mass attached to a spring is described by the ODE
+
+$$
+m y^{\prime \prime}(t) = -k y(t)
+$$
+
+where $m$ is mass, $k$ is the stiffness of the spring, and $y(t)$ is the
+displacement of the mass. The equation is Newton's law
+
+> force = mass $\times$ acceleration 
+
+We replace the second-order equation with a first order system. For mathematical simplicity we set $k = m = 1$.
+Then we can define the right-hand-side as a `NonlinearFunction`. The derivative is needed for the Newton solver:
+
+```cpp
+class MassSpring : public NonlinearFunction
+{
+  size_t DimX() const override { return 2; }
+  size_t DimF() const override { return 2; }
+  
+  void Evaluate (VectorView<double> x, VectorView<double> f) const override
+  {
+    f(0) = x(1);
+    f(1) = -x(0);
+  }
+  
+  void EvaluateDeriv (VectorView<double> x, MatrixView<double> df) const override
+  {
+    df = 0.0;
+    df(0,1) = 1;
+    df(1,0) = -1;
+  }
+};
+```
+
+Finally, We start the time-stepper with the time interval, number of steps, initial values,
+right-hand-side function, and a call-back function called at the end of every time-step:
+```cpp
+double tend = 4*M_PI;
+int steps = 100;
+Vector<> y { 1, 0 };
+auto rhs = make_shared<MassSpring>();
+
+SolveODE_IE(tend, steps, y, rhs,
+            [](double t, VectorView<double> y) { cout << t << "  " << y(0) << " " << y(1) << endl; });
+```
+
+
+## Excercises
+
+* Implement an explicit Euler time-stepper, and the Crank-Nicolson method.
+
+* Compare the results for these methods, and various time-steps. Plot the solution function. What do you observe ?
+
+* Model an electric network by an ODE. Bring it to autonomous form.
+Solve the ODE numerically for various parameters with the three methods, and various time-steps.
+
+[todo: drawing: Voltage source on series of R and C]
+
+Voltage source: $U_0(t) = \cos(100 \pi t)$, $R = C = 1$ or $R = 100, C = 10^{-6}$.
+
+Ohm's law for a resistor $R$:
+
+$$
+U = R I
+$$
+
+Equation for a capacitor $C$:
+
+$$
+I = C \frac{dU }{dt}
+$$
+
+Together:
+
+$$
+U(t) + R C \frac{dU}{dt}(t) = U_0(t)
+$$
+
+Use initial condition for voltage at capacitor $U(t_0) = 0$.

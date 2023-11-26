@@ -349,6 +349,8 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementing-a-newton-solver">16.1. Implementing a Newton solver</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#coding-the-implicit-euler-method">16.2. Coding the Implicit Euler method</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-time-stepping-method">16.3. Using the time-stepping method</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#excercises">16.4. Excercises</a></li>
 </ul>
             </nav>
         </div>
@@ -483,7 +485,7 @@ y^{n+1} - y^n - h f(y^{n+1}) = 0
 which has been brought into autonomous form.</p>
 <p>We use our function algebra to build this composed function, and throw it into the Newton solver.
 If we make the time-step not too large, the value <span class="math notranslate nohighlight">\(y^n\)</span> of the old time-step is a good starting value.</p>
-<p>To express that the independent varible is <span class="math notranslate nohighlight">\(y^{n+1}\)</span>, we create an <code class="docutils literal notranslate"><span class="pre">IdenticFunction</span></code>. The old
+<p>To express that the independent varible is <span class="math notranslate nohighlight">\(y^{n+1}\)</span>, we create an <code class="docutils literal notranslate"><span class="pre">IdentityFunction</span></code>. The old
 value is considered as a constant, i.e. a <code class="docutils literal notranslate"><span class="pre">ConstantFunction</span></code>. The right hand side function is
 given by the user. Then the implicit Euler method is coded up like that:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">SolveODE_IE</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">tend</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">steps</span><span class="p">,</span>
@@ -492,7 +494,7 @@ given by the user. Then the implicit Euler method is coded up like that:</p>
 <span class="p">{</span>
 <span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">dt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tend</span><span class="o">/</span><span class="n">steps</span><span class="p">;</span>
 <span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">yold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">ConstantFunction</span><span class="o">&gt;</span><span class="p">(</span><span class="n">y</span><span class="p">);</span>
-<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">ynew</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">IdenticFunction</span><span class="o">&gt;</span><span class="p">(</span><span class="n">y</span><span class="p">.</span><span class="n">Size</span><span class="p">());</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">ynew</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">IdentityFunction</span><span class="o">&gt;</span><span class="p">(</span><span class="n">y</span><span class="p">.</span><span class="n">Size</span><span class="p">());</span>
 <span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">equ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ynew</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">yold</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">dt</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">rhs</span><span class="p">;</span>
 
 <span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
@@ -506,6 +508,79 @@ given by the user. Then the implicit Euler method is coded up like that:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
+</section>
+<section id="using-the-time-stepping-method">
+<h2><span class="section-number">16.3. </span>Using the time-stepping method<a class="headerlink" href="#using-the-time-stepping-method" title="Permalink to this heading">#</a></h2>
+<p>A mass attached to a spring is described by the ODE</p>
+<div class="math notranslate nohighlight">
+\[
+m y^{\prime \prime}(t) = -k y(t)
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(m\)</span> is mass, <span class="math notranslate nohighlight">\(k\)</span> is the stiffness of the spring, and <span class="math notranslate nohighlight">\(y(t)\)</span> is the
+displacement of the mass. The equation is Newton’s law</p>
+<blockquote>
+<div><p>force = mass <span class="math notranslate nohighlight">\(\times\)</span> acceleration</p>
+</div></blockquote>
+<p>We replace the second-order equation with a first order system. For mathematical simplicity we set <span class="math notranslate nohighlight">\(k = m = 1\)</span>.
+Then we can define the right-hand-side as a <code class="docutils literal notranslate"><span class="pre">NonlinearFunction</span></code>. The derivative is needed for the Newton solver:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MassSpring</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">NonlinearFunction</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="nf">DimX</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="nf">DimF</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">Evaluate</span><span class="w"> </span><span class="p">(</span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="n">f</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">    </span><span class="n">f</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">x</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">EvaluateDeriv</span><span class="w"> </span><span class="p">(</span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">MatrixView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">df</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="n">df</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">df</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="n">df</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>Finally, We start the time-stepper with the time interval, number of steps, initial values,
+right-hand-side function, and a call-back function called at the end of every time-step:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">double</span><span class="w"> </span><span class="n">tend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="o">*</span><span class="n">M_PI</span><span class="p">;</span>
+<span class="kt">int</span><span class="w"> </span><span class="n">steps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span>
+<span class="n">Vector</span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">};</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">rhs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">MassSpring</span><span class="o">&gt;</span><span class="p">();</span>
+
+<span class="n">SolveODE_IE</span><span class="p">(</span><span class="n">tend</span><span class="p">,</span><span class="w"> </span><span class="n">steps</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">rhs</span><span class="p">,</span>
+<span class="w">            </span><span class="p">[](</span><span class="kt">double</span><span class="w"> </span><span class="n">t</span><span class="p">,</span><span class="w"> </span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;  &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">y</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">y</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
+</pre></div>
+</div>
+</section>
+<section id="excercises">
+<h2><span class="section-number">16.4. </span>Excercises<a class="headerlink" href="#excercises" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Implement an explicit Euler time-stepper, and the Crank-Nicolson method.</p></li>
+<li><p>Compare the results for these methods, and various time-steps. Plot the solution function. What do you observe ?</p></li>
+<li><p>Model an electric network by an ODE. Bring it to autonomous form.
+Solve the ODE numerically for various parameters with the three methods, and various time-steps.</p></li>
+</ul>
+<p>[todo: drawing: Voltage source on series of R and C]</p>
+<p>Voltage source: <span class="math notranslate nohighlight">\(U_0(t) = \cos(100 \pi t)\)</span>, <span class="math notranslate nohighlight">\(R = C = 1\)</span> or <span class="math notranslate nohighlight">\(R = 100, C = 10^{-6}\)</span>.</p>
+<p>Ohm’s law for a resistor <span class="math notranslate nohighlight">\(R\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+U = R I
+\]</div>
+<p>Equation for a capacitor <span class="math notranslate nohighlight">\(C\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+I = C \frac{dU }{dt}
+\]</div>
+<p>Together:</p>
+<div class="math notranslate nohighlight">
+\[
+U(t) + R C \frac{dU}{dt}(t) = U_0(t)
+\]</div>
+<p>Use initial condition for voltage at capacitor <span class="math notranslate nohighlight">\(U(t_0) = 0\)</span>.</p>
 </section>
 </section>
 
@@ -574,6 +649,8 @@ given by the user. Then the implicit Euler method is coded up like that:</p>
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementing-a-newton-solver">16.1. Implementing a Newton solver</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#coding-the-implicit-euler-method">16.2. Coding the Implicit Euler method</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-time-stepping-method">16.3. Using the time-stepping method</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#excercises">16.4. Excercises</a></li>
 </ul>
   </nav></div>
 
