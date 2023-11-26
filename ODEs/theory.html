@@ -67,7 +67,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'ODEs/theory';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="15. Some simple methods" href="firstmethods.html" />
+    <link rel="next" title="15. Some simple time-stepping methods" href="firstmethods.html" />
     <link rel="prev" title="13. Solving ordinary differential equations" href="ODEs.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -190,16 +190,17 @@ const thebe_selector_output = ".output, .cell_output"
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="ODEs.html">13. Solving ordinary differential equations</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">14. A little bit of theory</a></li>
-<li class="toctree-l1"><a class="reference internal" href="firstmethods.html">15. Some simple methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="RungeKutta.html">16. Runge-Kutta methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="firstmethods.html">15. Some simple time-stepping methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementation.html">16. Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RungeKutta.html">17. Runge-Kutta methods</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">PDEs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">17. Partial differential equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-Poisson.html">18. Poisson Equation and the 5-point stencil</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-iterative.html">19. Iterative Solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-waves.html">20. Wave equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-flows.html">21. Navier-Stokes Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">18. Partial differential equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-Poisson.html">19. Poisson Equation and the 5-point stencil</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-iterative.html">20. Iterative Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-waves.html">21. Wave equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-flows.html">22. Navier-Stokes Equation</a></li>
 </ul>
 
     </div>
@@ -376,7 +377,7 @@ y(t_0) = y_0,
 <p>where</p>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(f : [t_0, T] \times {\mathbb R}^n \rightarrow {\mathbb R}^n\)</span> is the given <strong>right hand side</strong></p></li>
-<li><p><span class="math notranslate nohighlight">\(y : [t_t, T] \rightarrow {\mathbb R}^n\)</span> is the unknown function, called <strong>state</strong></p></li>
+<li><p><span class="math notranslate nohighlight">\(y : [t_0, T] \rightarrow {\mathbb R}^n\)</span> is the unknown function, called <strong>state</strong></p></li>
 <li><p><span class="math notranslate nohighlight">\(t \in [t_0, T]\)</span> is called <strong>time</strong></p></li>
 <li><p><span class="math notranslate nohighlight">\(y_0 \in {\mathbb R}^n\)</span> is the <strong>initial value</strong></p></li>
 </ul>
@@ -387,21 +388,21 @@ y(t_0) = y_0,
 </ul>
 <div class="math notranslate nohighlight">
 \[
-y^\prime(t) = a y, \quad y(0) = y_0
+y^\prime(t) = a y, \quad y(t_0) = y_0
 \]</div>
-<p>This ode has the solution <span class="math notranslate nohighlight">\(y(t) = y_0 e^{a t}\)</span>. If <span class="math notranslate nohighlight">\(a &gt; 0\)</span>, the solution is exponentiall increasing,
+<p>This ode has the solution <span class="math notranslate nohighlight">\(y(t) = y_0 e^{a (t-t_0)}\)</span>. If <span class="math notranslate nohighlight">\(a &gt; 0\)</span>, the solution is exponentiall increasing,
 for <span class="math notranslate nohighlight">\(a &lt; 0\)</span>, it is exponentially decreasing.</p>
 <ul class="simple">
 <li><p>Consider <span class="math notranslate nohighlight">\(y^{\prime \prime}(t) = -\omega^2 y(t)\)</span> with <span class="math notranslate nohighlight">\(y(0) = y_0\)</span>, <span class="math notranslate nohighlight">\(y^\prime(0) = y_{0p}\)</span>. This is a second order
-ODE, which can be reduced to a first oder system with the definition <span class="math notranslate nohighlight">\(y_1 := y\)</span> and <span class="math notranslate nohighlight">\(y_2 := y^\prime\)</span>:</p></li>
+ODE, which can be reduced to a first oder system with the definition <span class="math notranslate nohighlight">\(y_1 := y\)</span> and <span class="math notranslate nohighlight">\(y_2 := y^\prime/\omega\)</span>:</p></li>
 </ul>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \left( \begin{array}{c} y_1 \\ y_2 \end{array} \right)^\prime =
-\left( \begin{array}{c} y_2 \\ -\omega^2 y_1 \end{array} \right) 
+\left( \begin{array}{c} \omega y_2 \\ -\omega y_1 \end{array} \right) 
 \quad \text{with i.c.} \quad
 \left( \begin{array}{c} y_1 \\ y_2 \end{array} \right)(0) =
-\left( \begin{array}{c} y_0 \\ y_{0p} \end{array} \right) 
+\left( \begin{array}{c} y_0 \\ y_{0p}/\omega \end{array} \right) 
 \end{split}\]</div>
 <p>Its solution is <span class="math notranslate nohighlight">\(y(t) = y_0 \cos( \omega t ) + \frac{y_{0p}}{\omega} \sin (\omega t)\)</span>.</p>
 </section>
@@ -441,7 +442,7 @@ z^\prime(t) = f(t, z(t)), &amp; &amp; \quad z(t_0) = z_0 \\
 \[
 \| y(t) - z(t) \|_2 \leq e^{\alpha (t-t_0)} \| y_0 - z_0 \|_2
 \]</div>
-<p>This is an essential improvement of the first example above when <span class="math notranslate nohighlight">\(a &lt; 0\)</span>. The second example satisfies the one-sided Lipschitz condition with <span class="math notranslate nohighlight">\(\alpha = 0\)</span>.</p>
+<p>This is an essential improvement for the first example above when <span class="math notranslate nohighlight">\(a &lt; 0\)</span>. The second example satisfies the one-sided Lipschitz condition with <span class="math notranslate nohighlight">\(\alpha = 0\)</span>.</p>
 </section>
 <section id="autonomous-odes">
 <h2><span class="section-number">14.3. </span>Autonomous ODEs<a class="headerlink" href="#autonomous-odes" title="Permalink to this heading">#</a></h2>
@@ -453,13 +454,13 @@ the ODE <span class="math notranslate nohighlight">\(y_{n+t}^\prime = 1\)</span>
 </section>
 <section id="an-equivalent-integral-equation">
 <h2><span class="section-number">14.4. </span>An equivalent integral equation<a class="headerlink" href="#an-equivalent-integral-equation" title="Permalink to this heading">#</a></h2>
-<p>A smooth solution of the ODE satisfies the follong integral (IE) equation, and vice versa:</p>
+<p>A smooth solution of the ODE satisfies the following integral (IE) equation, and vice versa:</p>
 <div class="math notranslate nohighlight">
 \[
 y(t) = y_0 + \int_{t_0}^t f(s, y(s)) ds \qquad \forall \, t \in [t_0, T]
 \]</div>
 <p>We call the ODE and the IE formally equivalent. The IE may have a solution which is not differentiable,
-and thus not a solution of the ODE (e.g. if <span class="math notranslate nohighlight">\(f\)</span> jumps in <span class="math notranslate nohighlight">\(\overline t\)</span>, then <span class="math notranslate nohighlight">\(y\)</span> has a kink, and is not differentiable.</p>
+and thus not a solution of the ODE (e.g. if <span class="math notranslate nohighlight">\(f\)</span> jumps in some <span class="math notranslate nohighlight">\(\overline t\)</span>, then <span class="math notranslate nohighlight">\(y\)</span> has a kink, and is not differentiable).</p>
 </section>
 </section>
 
@@ -507,7 +508,7 @@ and thus not a solution of the ODE (e.g. if <span class="math notranslate nohigh
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">15. </span>Some simple methods</p>
+        <p class="prev-next-title"><span class="section-number">15. </span>Some simple time-stepping methods</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

@@ -14,7 +14,7 @@ $$
 t_0 < t_1 < \ldots < t_n = T,
 $$
 
-usually we choose $n \in {\mathbb N}$, and define $h := \frac{T-t_0}{n}$, and
+usually we choose $n \in {\mathbb N}$, define $h := \frac{T-t_0}{n}$, and
 $t_i := t_0 + ih$.
 
 ## Explicit Euler method
