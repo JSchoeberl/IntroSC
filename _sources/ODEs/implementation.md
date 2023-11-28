@@ -218,7 +218,11 @@ SolveODE_IE(tend, steps, y, rhs,
 * Model an electric network by an ODE. Bring it to autonomous form.
 Solve the ODE numerically for various parameters with the three methods, and various time-steps.
 
-[todo: drawing: Voltage source on series of R and C]
+```{image} pictures/RC.png
+:width: 200px
+:align: center
+```
+
 
 Voltage source: $U_0(t) = \cos(100 \pi t)$, $R = C = 1$ or $R = 100, C = 10^{-6}$.
 
