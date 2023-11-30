@@ -5,7 +5,7 @@ We implement a function algebra, which allows us to write expressions like
   func = Id + 3 * Compose (f, g);
 ```
 where `f` and `g` are functions, and `Id` is the identic function. Then
-the composed function `func` shall be able to provide the function value and the
+the composed function `func` shall be able to compute the function value and the
 derivative at a given point:
 ```cpp
   Matrix jacobi(func->DimF(), func->DimX());
@@ -88,7 +88,7 @@ x^{n+1} = x^n - f^\prime(x^n)^{-1} f(x^n)
 $$
 
 If the Jacobi-matrix at the solution $x^\ast$ is regular, and the initial guess $x^0$ is sufficiently close to $x^\ast$,
-Newton's method converges quadratic:
+Newton's method converges quadratically:
 
 $$
 \| x^{n+1} - x^\ast \| \leq c \, \| x^n - x^\ast \|^2
@@ -168,7 +168,7 @@ m y^{\prime \prime}(t) = -k y(t)
 $$
 
 where $m$ is mass, $k$ is the stiffness of the spring, and $y(t)$ is the
-displacement of the mass. The equation is Newton's law
+displacement of the mass. The equation comes from Newton's law
 
 > force = mass $\times$ acceleration 
 
@@ -207,13 +207,14 @@ auto rhs = make_shared<MassSpring>();
 SolveODE_IE(tend, steps, y, rhs,
             [](double t, VectorView<double> y) { cout << t << "  " << y(0) << " " << y(1) << endl; });
 ```
+This example is provided in `demos/test_ode.cc`.
 
 
 ## Excercises
 
 * Implement an explicit Euler time-stepper, and the Crank-Nicolson method.
 
-* Compare the results for these methods, and various time-steps. Plot the solution function. What do you observe ?
+* Compare the results of the mass-spring system for these methods, and various time-steps. Plot the solution function. What do you observe ?
 
 * Model an electric network by an ODE. Bring it to autonomous form.
 Solve the ODE numerically for various parameters with the three methods, and various time-steps.
@@ -224,24 +225,33 @@ Solve the ODE numerically for various parameters with the three methods, and var
 ```
 
 
-Voltage source: $U_0(t) = \cos(100 \pi t)$, $R = C = 1$ or $R = 100, C = 10^{-6}$.
+Voltage source $U_0(t) = \cos(100 \pi t)$, $R = C = 1$ or $R = 100, C = 10^{-6}$.
 
-Ohm's law for a resistor $R$:
+Ohm's law for a resistor $R$ with resistivity $R$:
 
 $$
 U = R I
 $$
 
-Equation for a capacitor $C$:
+Equation for a capacitor $C$ with capacity $C$:
 
 $$
 I = C \frac{dU }{dt}
 $$
 
+Kirchhoff's laws:
+* Currents in a node sum up to zero.
+  Thus we have a constant current along the loop.
+* Voltages around a loop sum up to zero. This gives:
+
+  $$
+  U_0 = U_R + U_C
+  $$
+
 Together:
 
 $$
-U(t) + R C \frac{dU}{dt}(t) = U_0(t)
+U_C(t) + R C \frac{dU_C}{dt}(t) = U_0(t)
 $$
 
-Use initial condition for voltage at capacitor $U(t_0) = 0$.
+Use initial condition for voltage at capacitor $U_C(t_0) = 0$, for $t_0=0$.

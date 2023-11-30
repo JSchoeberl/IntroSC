@@ -369,7 +369,7 @@ document.write(`
 </pre></div>
 </div>
 <p>where <code class="docutils literal notranslate"><span class="pre">f</span></code> and <code class="docutils literal notranslate"><span class="pre">g</span></code> are functions, and <code class="docutils literal notranslate"><span class="pre">Id</span></code> is the identic function. Then
-the composed function <code class="docutils literal notranslate"><span class="pre">func</span></code> shall be able to provide the function value and the
+the composed function <code class="docutils literal notranslate"><span class="pre">func</span></code> shall be able to compute the function value and the
 derivative at a given point:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">Matrix</span><span class="w"> </span><span class="nf">jacobi</span><span class="p">(</span><span class="n">func</span><span class="o">-&gt;</span><span class="n">DimF</span><span class="p">(),</span><span class="w"> </span><span class="n">func</span><span class="o">-&gt;</span><span class="n">DimX</span><span class="p">());</span>
 <span class="w">  </span><span class="n">func</span><span class="o">-&gt;</span><span class="n">EvaluateDeriv</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">jacobi</span><span class="p">);</span>
@@ -444,7 +444,7 @@ f(x) = 0
 x^{n+1} = x^n - f^\prime(x^n)^{-1} f(x^n)
 \]</div>
 <p>If the Jacobi-matrix at the solution <span class="math notranslate nohighlight">\(x^\ast\)</span> is regular, and the initial guess <span class="math notranslate nohighlight">\(x^0\)</span> is sufficiently close to <span class="math notranslate nohighlight">\(x^\ast\)</span>,
-Newton’s method converges quadratic:</p>
+Newton’s method converges quadratically:</p>
 <div class="math notranslate nohighlight">
 \[
 \| x^{n+1} - x^\ast \| \leq c \, \| x^n - x^\ast \|^2
@@ -517,7 +517,7 @@ given by the user. Then the implicit Euler method is coded up like that:</p>
 m y^{\prime \prime}(t) = -k y(t)
 \]</div>
 <p>where <span class="math notranslate nohighlight">\(m\)</span> is mass, <span class="math notranslate nohighlight">\(k\)</span> is the stiffness of the spring, and <span class="math notranslate nohighlight">\(y(t)\)</span> is the
-displacement of the mass. The equation is Newton’s law</p>
+displacement of the mass. The equation comes from Newton’s law</p>
 <blockquote>
 <div><p>force = mass <span class="math notranslate nohighlight">\(\times\)</span> acceleration</p>
 </div></blockquote>
@@ -554,33 +554,45 @@ right-hand-side function, and a call-back function called at the end of every ti
 <span class="w">            </span><span class="p">[](</span><span class="kt">double</span><span class="w"> </span><span class="n">t</span><span class="p">,</span><span class="w"> </span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;  &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">y</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">y</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
 </pre></div>
 </div>
+<p>This example is provided in <code class="docutils literal notranslate"><span class="pre">demos/test_ode.cc</span></code>.</p>
 </section>
 <section id="excercises">
 <h2><span class="section-number">16.4. </span>Excercises<a class="headerlink" href="#excercises" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p>Implement an explicit Euler time-stepper, and the Crank-Nicolson method.</p></li>
-<li><p>Compare the results for these methods, and various time-steps. Plot the solution function. What do you observe ?</p></li>
+<li><p>Compare the results of the mass-spring system for these methods, and various time-steps. Plot the solution function. What do you observe ?</p></li>
 <li><p>Model an electric network by an ODE. Bring it to autonomous form.
 Solve the ODE numerically for various parameters with the three methods, and various time-steps.</p></li>
 </ul>
 <a class="reference internal image-reference" href="../_images/RC.png"><img alt="../_images/RC.png" class="align-center" src="../_images/RC.png" style="width: 200px;" /></a>
-<p>Voltage source: <span class="math notranslate nohighlight">\(U_0(t) = \cos(100 \pi t)\)</span>, <span class="math notranslate nohighlight">\(R = C = 1\)</span> or <span class="math notranslate nohighlight">\(R = 100, C = 10^{-6}\)</span>.</p>
-<p>Ohm’s law for a resistor <span class="math notranslate nohighlight">\(R\)</span>:</p>
+<p>Voltage source <span class="math notranslate nohighlight">\(U_0(t) = \cos(100 \pi t)\)</span>, <span class="math notranslate nohighlight">\(R = C = 1\)</span> or <span class="math notranslate nohighlight">\(R = 100, C = 10^{-6}\)</span>.</p>
+<p>Ohm’s law for a resistor <span class="math notranslate nohighlight">\(R\)</span> with resistivity <span class="math notranslate nohighlight">\(R\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[
 U = R I
 \]</div>
-<p>Equation for a capacitor <span class="math notranslate nohighlight">\(C\)</span>:</p>
+<p>Equation for a capacitor <span class="math notranslate nohighlight">\(C\)</span> with capacity <span class="math notranslate nohighlight">\(C\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[
 I = C \frac{dU }{dt}
 \]</div>
+<p>Kirchhoff’s laws:</p>
+<ul>
+<li><p>Currents in a node sum up to zero.
+Thus we have a constant current along the loop.</p></li>
+<li><p>Voltages around a loop sum up to zero. This gives:</p>
+<div class="math notranslate nohighlight">
+\[
+  U_0 = U_R + U_C
+  \]</div>
+</li>
+</ul>
 <p>Together:</p>
 <div class="math notranslate nohighlight">
 \[
-U(t) + R C \frac{dU}{dt}(t) = U_0(t)
+U_C(t) + R C \frac{dU_C}{dt}(t) = U_0(t)
 \]</div>
-<p>Use initial condition for voltage at capacitor <span class="math notranslate nohighlight">\(U(t_0) = 0\)</span>.</p>
+<p>Use initial condition for voltage at capacitor <span class="math notranslate nohighlight">\(U_C(t_0) = 0\)</span>, for <span class="math notranslate nohighlight">\(t_0=0\)</span>.</p>
 </section>
 </section>
 

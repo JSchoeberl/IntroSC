@@ -447,20 +447,21 @@ z^\prime(t) = f(t, z(t)), &amp; &amp; \quad z(t_0) = z_0 \\
 <section id="autonomous-odes">
 <h2><span class="section-number">14.3. </span>Autonomous ODEs<a class="headerlink" href="#autonomous-odes" title="Permalink to this heading">#</a></h2>
 <p>An ODE is called autonomous iff the right hand side does not depend explicitely on <span class="math notranslate nohighlight">\(t\)</span>, i.e.
-<span class="math notranslate nohighlight">\(y^\prime(t) = f(y(t))\)</span>. Then the time axis can be shifted arbitrarely.</p>
-<p>An non-autonomous ODE in <span class="math notranslate nohighlight">\({\mathbb R}^n\)</span> can be transformed to an autonomous one in
+<span class="math notranslate nohighlight">\(y^\prime(t) = f(y(t))\)</span>. Then the time axis can be shifted arbitrarily.</p>
+<p>A non-autonomous ODE in <span class="math notranslate nohighlight">\({\mathbb R}^n\)</span> can be transformed to an autonomous one in
 <span class="math notranslate nohighlight">\({\mathbb R}^{n+1}\)</span> by letting <span class="math notranslate nohighlight">\(y_{n+1}(t) := t\)</span> be another unknown state variable, which satisfies
-the ODE <span class="math notranslate nohighlight">\(y_{n+t}^\prime = 1\)</span> and i.c. <span class="math notranslate nohighlight">\(y_{n+1}(t_0) = t_0\)</span>.</p>
+the ODE <span class="math notranslate nohighlight">\(y_{n+1}^\prime = 1\)</span> and i.c. <span class="math notranslate nohighlight">\(y_{n+1}(t_0) = t_0\)</span>.</p>
 </section>
 <section id="an-equivalent-integral-equation">
 <h2><span class="section-number">14.4. </span>An equivalent integral equation<a class="headerlink" href="#an-equivalent-integral-equation" title="Permalink to this heading">#</a></h2>
-<p>A smooth solution of the ODE satisfies the following integral (IE) equation, and vice versa:</p>
+<p>A smooth solution of the ODE satisfies the following integral equation (IE), and vice versa:</p>
 <div class="math notranslate nohighlight">
 \[
 y(t) = y_0 + \int_{t_0}^t f(s, y(s)) ds \qquad \forall \, t \in [t_0, T]
 \]</div>
 <p>We call the ODE and the IE formally equivalent. The IE may have a solution which is not differentiable,
 and thus not a solution of the ODE (e.g. if <span class="math notranslate nohighlight">\(f\)</span> jumps in some <span class="math notranslate nohighlight">\(\overline t\)</span>, then <span class="math notranslate nohighlight">\(y\)</span> has a kink, and is not differentiable).</p>
+<p>The integral equation is the basis for analysis as well as designing numerical methods.</p>
 </section>
 </section>
 

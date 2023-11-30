@@ -377,13 +377,13 @@ t_0 &lt; t_1 &lt; \ldots &lt; t_n = T,
 \]</div>
 <p>usually we choose <span class="math notranslate nohighlight">\(n \in {\mathbb N}\)</span>, define <span class="math notranslate nohighlight">\(h := \frac{T-t_0}{n}\)</span>, and
 <span class="math notranslate nohighlight">\(t_i := t_0 + ih\)</span>.</p>
-<section id="explicit-euler-method">
-<h2><span class="section-number">15.1. </span>Explicit Euler method<a class="headerlink" href="#explicit-euler-method" title="Permalink to this heading">#</a></h2>
 <p>We compute a discrete approximate solution</p>
 <div class="math notranslate nohighlight">
 \[
 y_i \approx y(t_i) \qquad \forall \, i \in { 0, \ldots , n}
 \]</div>
+<section id="explicit-euler-method">
+<h2><span class="section-number">15.1. </span>Explicit Euler method<a class="headerlink" href="#explicit-euler-method" title="Permalink to this heading">#</a></h2>
 <p>The derivative <span class="math notranslate nohighlight">\(y^\prime\)</span> is approximated by the forward difference quotient</p>
 <div class="math notranslate nohighlight">
 \[
@@ -417,8 +417,8 @@ now seen as an approximation to <span class="math notranslate nohighlight">\(y^\
 \[
 y_{i+1} = y_i + h f(t_{i+1}, y_{i+1}) \qquad 0 \leq i &lt; n
 \]</div>
-<p>Now, the new step <span class="math notranslate nohighlight">\(y_{i+1}\)</span> shows up also in the right-hand side. We cannot simply
-evaulate a formula, but have to solve a system of equations. If the right hand side <span class="math notranslate nohighlight">\(f(t,y)\)</span>
+<p>Now, the new step <span class="math notranslate nohighlight">\(y_{i+1}\)</span> shows up also within the right-hand side. We cannot simply
+evaluate a formula, but have to solve a system of equations. If the right hand side <span class="math notranslate nohighlight">\(f(t,y)\)</span>
 depends non-linear on the the state <span class="math notranslate nohighlight">\(y\)</span>, one has to solve a non-linear system. Typically,
 this is done using Newton’s method.</p>
 </section>
@@ -479,7 +479,7 @@ y_{i+1} = y_i + \frac{h}{2} \big( f(t_i, y_i) +  f(t_{i+1}, y_{i+1})\big)
 \]</div>
 <p>We see that we have recovered the same three methods from numerical integration, as we
 had already motivated before from numerical differentiation.
-We will use more accurate integration rules to develop more accurate time-stepping methods.</p>
+We will use more accurate integration rules to develop more accurate time-stepping methods later.</p>
 </section>
 </section>
 
