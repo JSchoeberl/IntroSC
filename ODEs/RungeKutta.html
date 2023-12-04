@@ -545,6 +545,8 @@ such that the integration rules are (at least) exact for polynomials up to order
 <p>Then, find <span class="math notranslate nohighlight">\(c\)</span>-coefficients by solving for the roots of Legendre-polynomials, and transform to <span class="math notranslate nohighlight">\([0,1]\)</span>.
 A ready to use function can be taken from
 <a class="reference external" href="https://numerical.recipes/book.html">Numerical recipes, section 4.6</a></p>
+<p>Similar for the Radau IIA: Find roots of the <span class="math notranslate nohighlight">\(P^{(1,0)}\)</span> Jacobi-polynomial, transform to <span class="math notranslate nohighlight">\([0,1]\)</span>, and add <span class="math notranslate nohighlight">\(c_j=1\)</span>.
+This is done by function <code class="docutils literal notranslate"><span class="pre">gaujac</span></code> from Numerical recipes. The logarithmic-gamma function is lgamma in C++.</p>
 </section>
 </section>
 </section>

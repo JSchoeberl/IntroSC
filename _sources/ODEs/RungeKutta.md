@@ -213,7 +213,8 @@ Then, find $c$-coefficients by solving for the roots of Legendre-polynomials, an
 A ready to use function can be taken from 
 [Numerical recipes, section 4.6](https://numerical.recipes/book.html) 
 
-
+Similar for the Radau IIA: Find roots of the $P^{(1,0)}$ Jacobi-polynomial, transform to $[0,1]$, and add $c_j=1$.
+This is done by function `gaujac` from Numerical recipes. The logarithmic-gamma function is lgamma in C++.
 
 
 
