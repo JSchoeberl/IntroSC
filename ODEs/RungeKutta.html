@@ -348,8 +348,9 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#explicit-rk-methods">17.1. Explicit RK methods</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implicit-runge-kutta-methods">17.2. Implicit Runge Kutta methods</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#runge-kutta-methods-of-arbitrary-order">17.2.1. Runge-Kutta methods of arbitrary order</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implicit-runge-kutta-methods">17.2. Implicit Runge Kutta methods</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-implement-a-runge-kutta-time-stepper-for-arbitrary-butcher-tableaus">17.3. Exercise: Implement a Runge-Kutta time-stepper for arbitrary Butcher tableaus.</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#runge-kutta-methods-of-arbitrary-order">17.3.1. Runge-Kutta methods of arbitrary order</a></li>
 </ul>
 </li>
 </ul>
@@ -369,7 +370,7 @@ document.write(`
 using a more accurate integration rule:</p>
 <div class="math notranslate nohighlight">
 \[
-y_{i+1} = y_i + h \sum_{j=1}^s b_j f(t_i+c_j h, y_i^j)
+y_{i+1} = y_i + h \sum_{j=0}^{s-1} b_j f(t_i+c_j h, y_i^j)
 \]</div>
 <p>where</p>
 <ul class="simple">
@@ -378,7 +379,7 @@ y_{i+1} = y_i + h \sum_{j=1}^s b_j f(t_i+c_j h, y_i^j)
 </ul>
 <div class="math notranslate nohighlight">
 \[
-\int_0^1 f(t) dt \approx \sum_{j=1}^s b_j f(c_j)
+\int_0^1 f(t) dt \approx \sum_{j=0}^{s-1} b_j f(c_j)
 \]</div>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(y_i^j\)</span> are approximations to <span class="math notranslate nohighlight">\(y(t_i + c_j h)\)</span>, which are also unknown</p></li>
@@ -391,26 +392,36 @@ y(t_i+c_j h) = y(t_i) + \int_{t_i}^{t_i+c_j h} f(t, y(t)) dt
 <p>Again, we use numerical integration to define the numerical stage values (skipping the index <span class="math notranslate nohighlight">\(i\)</span>):</p>
 <div class="math notranslate nohighlight">
 \[
-y^j = y_i + h \sum_{k=1}^s  a_{jk} f(t_i+c_k h, y^k) \qquad 1 \leq j \leq s
+y^j = y_i + h \sum_{l=0}^{s-1}  a_{jl} f(t_i+c_l h, y^l) \qquad 0 \leq j &lt; s
 \]</div>
 <p>We use the same integration points as above, however the weigths are adjusted
 to the smaller interval such that</p>
 <div class="math notranslate nohighlight">
 \[
-\int_0^{c_j} f(t) dt \approx \sum_{k=1}^s a_{jk} f(c_k) \qquad 1 \leq j \leq s
+\int_0^{c_j} f(t) dt \approx \sum_{l=0}^{s-1} a_{jl} f(c_l) \qquad 0 \leq j &lt; s
 \]</div>
 <p>A particular RK method is completely defined by providing the <span class="math notranslate nohighlight">\(a\)</span>, <span class="math notranslate nohighlight">\(b\)</span>, and <span class="math notranslate nohighlight">\(c\)</span> coefficients,
 which are usually given in the so called <strong>Butcher tableau</strong>:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{array}{c|ccc}
-c_1 &amp; a_{11} &amp; \dots &amp; a_{1s} \\
+c_0 &amp; a_{0,0} &amp; \dots &amp; a_{0,s-1} \\
 \vdots &amp; \vdots &amp; &amp; \vdots \\
-c_s &amp; a_{s1} &amp; \dots &amp; a_{ss} \\
+c_{s-1} &amp; a_{s-1,0} &amp; \dots &amp; a_{s-1,s-1} \\
 \hline
- &amp; b_1 &amp; \dots &amp; b_s
+ &amp; b_0 &amp; \dots &amp; b_{s-1}
 \end{array}
 \end{split}\]</div>
+<p>Instead of having the <span class="math notranslate nohighlight">\(y^j\)</span> as unknonws, one often solves for <span class="math notranslate nohighlight">\(k\)</span>-values (<span class="math notranslate nohighlight">\(k\)</span> like slope):</p>
+<div class="math notranslate nohighlight">
+\[
+k^j = f(y_i + c_j h, y_i + h \sum_{l=0}^{s-1} a_{jl} k^l)
+\]</div>
+<p>and then</p>
+<div class="math notranslate nohighlight">
+\[
+y_{i+1} = y_i + h \sum_{l=0}^{s-1} b_l k^l
+\]</div>
 <section id="explicit-rk-methods">
 <h2><span class="section-number">17.1. </span>Explicit RK methods<a class="headerlink" href="#explicit-rk-methods" title="Permalink to this heading">#</a></h2>
 <p>Explicit RK methods can be seen as extension of the explicit Euler method.
@@ -428,6 +439,19 @@ The <span class="math notranslate nohighlight">\(a_{jk}\)</span> coefficients fo
  &amp; 0 &amp; \frac{1}{2}
 \end{array}
 \end{split}\]</div>
+<p>It is evaluated as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{array}{rcl}
+y^0 &amp; = &amp; y_i \\
+y^1 &amp; = &amp; y_i + \tfrac{h}{2} f(t_i, y^0)
+\end{array}
+\end{split}\]</div>
+<p>and then</p>
+<div class="math notranslate nohighlight">
+\[
+y_{i+1} = y_i + h f(t_i+\tfrac{h}{2}, y^1)
+\]</div>
 <ul class="simple">
 <li><p>the <span class="math notranslate nohighlight">\(RK_4\)</span> - method, aka THE classical Runge Kutta method</p></li>
 </ul>
@@ -442,6 +466,21 @@ The <span class="math notranslate nohighlight">\(a_{jk}\)</span> coefficients fo
  &amp; \frac{1}{6} &amp; \frac{1}{3} &amp; \frac{1}{3} &amp; \frac{1}{6}
 \end{array}
 \end{split}\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{array}{rcl}
+y^0  &amp; = &amp; y_i \\
+y^1  &amp; = &amp; y_i + \tfrac{h}{2} f(t_i, y^0) \\
+y^2  &amp; = &amp; y_i + \tfrac{h}{2} f(t_i+\tfrac{h}{2}, y^1) \\
+y^3  &amp; = &amp; y_i + h f(t_i+\tfrac{h}{2}, y^2) \\
+\end{array}
+\end{split}\]</div>
+<p>and then</p>
+<div class="math notranslate nohighlight">
+\[
+y_{i+1} = y_i + \frac{h}{6} \big(f(t_i, y^0) + 2 f(t_i+\tfrac{h}{2}, y^1)
++ 2 f(t_i+\tfrac{h}{2}, y^2) + 2 f(t_i+h, y^3) \big)
+\]</div>
 </section>
 <section id="implicit-runge-kutta-methods">
 <h2><span class="section-number">17.2. </span>Implicit Runge Kutta methods<a class="headerlink" href="#implicit-runge-kutta-methods" title="Permalink to this heading">#</a></h2>
@@ -457,7 +496,7 @@ The <span class="math notranslate nohighlight">\(a_{jk}\)</span> coefficients fo
 \end{array}
 \end{split}\]</div>
 <p>If not all time-scales are resolved, then <span class="math notranslate nohighlight">\(c_s = 1\)</span> leads to better stability.
-the other points are chosen for optimal accuracy.</p>
+The other points are chosen for optimal accuracy. These methods are called Radau IIA.</p>
 <p>Two-point Radau IIA method:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
@@ -468,36 +507,44 @@ the other points are chosen for optimal accuracy.</p>
   &amp; \frac{3}{4} &amp; \frac{1}{4} \\
 \end{array}
 \end{split}\]</div>
-<p><strong>Exercise</strong>: Implement a Runge-Kutta time-stepper for arbitrary Butcher tableaus.</p>
-<p>Implement a class like</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ButcherFunction</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">NonlinearFunction</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="n">Matrix</span><span class="w"> </span><span class="n">a</span><span class="p">;</span><span class="w">  </span><span class="c1">// a-coefs of Butcher tableau</span>
-<span class="w">  </span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">NonlinearFunction</span><span class="o">&gt;</span><span class="w"> </span><span class="n">func</span><span class="p">;</span>
-<span class="k">public</span><span class="o">:</span>
-<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="n">Evaluate</span><span class="w"> </span><span class="p">(</span><span class="n">VectorView</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">VectorView</span><span class="w"> </span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">;</span>
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">s</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">func</span><span class="o">-&gt;</span><span class="n">Evaluate</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">Range</span><span class="p">(</span><span class="n">j</span><span class="o">*</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">n</span><span class="p">),</span><span class="w"> </span><span class="n">tmp</span><span class="p">);</span>
-<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">s</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="o">++</span><span class="p">)</span>
-<span class="w">            </span><span class="n">f</span><span class="p">.</span><span class="n">Range</span><span class="p">(</span><span class="n">k</span><span class="o">*</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">a</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">tmp</span><span class="p">;</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<p>Setup the Runge-Kutta equation, and solve it using <code class="docutils literal notranslate"><span class="pre">NewtonSolver</span></code>.</p>
-<section id="runge-kutta-methods-of-arbitrary-order">
-<h3><span class="section-number">17.2.1. </span>Runge-Kutta methods of arbitrary order<a class="headerlink" href="#runge-kutta-methods-of-arbitrary-order" title="Permalink to this heading">#</a></h3>
-<p>Step 1: Start from an Gaussian numerical integration rule to define <span class="math notranslate nohighlight">\(c\)</span> and <span class="math notranslate nohighlight">\(b\)</span> coefficients.
-Take care to scale to the  interval <span class="math notranslate nohighlight">\([0,1]\)</span>.</p>
-<p>A ready to use function can be taken from
-<a class="reference external" href="https://numerical.recipes/book.html">Numerical recipes, section 4.6</a></p>
-<p>Step 2: Find coefficients of the matrix <span class="math notranslate nohighlight">\(a\)</span>. Each row should provide an integraton rule
-on <span class="math notranslate nohighlight">\([0, c_j]\)</span>, being exact for polynomials up to order <span class="math notranslate nohighlight">\(s-1\)</span>:</p>
+<p>Many examples can be found here: <a class="reference external" href="https://en.wikipedia.org/wiki/List_of_Runge%E2%80%93Kutta_methods">Butcher tableaus examples</a>.</p>
+</section>
+<section id="exercise-implement-a-runge-kutta-time-stepper-for-arbitrary-butcher-tableaus">
+<h2><span class="section-number">17.3. </span>Exercise: Implement a Runge-Kutta time-stepper for arbitrary Butcher tableaus.<a class="headerlink" href="#exercise-implement-a-runge-kutta-time-stepper-for-arbitrary-butcher-tableaus" title="Permalink to this heading">#</a></h2>
+<p>Solve the non-linear system of equation for <span class="math notranslate nohighlight">\(k \in {\mathbb R}^{sn}\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[
-\sum_{k=1}^s c_k a_{jk} x^{j-1} = \int_0^{c+j} x^{j-1} \, dx \qquad 1 \leq j \leq s
+k - \tilde f ( \tilde y_i  + h A \otimes k) = 0
 \]</div>
-<p>This gives <span class="math notranslate nohighlight">\(s\)</span> conditions for each row. Setup linear systems of equations, and solve them.</p>
+<p>Where</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(k = (k_0, \ldots k_{s-1})\)</span>, with <span class="math notranslate nohighlight">\(k_j \in {\mathbb R}^n\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\tilde y_i = (\underbrace{y_i, \ldots , y_i}_{s-{\text times}}) \in {\mathbb R}^{sn}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\tilde f : {\mathbb R}^{sn} \rightarrow {\mathbb R}^{sn} : (x_0, \ldots, x_{s_-1}) \mapsto (f(x_0), \ldots, f(x_{s-1}))\)</span></p></li>
+<li><p>for <span class="math notranslate nohighlight">\(A \in {\mathbb R}^{h \times w}\)</span> define
+<span class="math notranslate nohighlight">\(A \otimes :  {\mathbb R}^{wn} \rightarrow {\mathbb R}^{hn} : (x_0, \ldots, x_{w-1}) \mapsto (y_0, \ldots , y_{h-1})\)</span> such that <span class="math notranslate nohighlight">\(y_j = \sum_l a_{jl} x_l\)</span>.</p></li>
+</ul>
+<p>Derive two classes from <code class="docutils literal notranslate"><span class="pre">NonlinearFunction</span></code> for that (for example, named <code class="docutils literal notranslate"><span class="pre">BlockFunction</span></code> and <code class="docutils literal notranslate"><span class="pre">BlockMatVec</span></code>).</p>
+<p>Setup the Runge-Kutta equation, and solve it using <code class="docutils literal notranslate"><span class="pre">NewtonSolver</span></code>.</p>
+<section id="runge-kutta-methods-of-arbitrary-order">
+<h3><span class="section-number">17.3.1. </span>Runge-Kutta methods of arbitrary order<a class="headerlink" href="#runge-kutta-methods-of-arbitrary-order" title="Permalink to this heading">#</a></h3>
+<p>If we have fixed the integration points <span class="math notranslate nohighlight">\(c_j\)</span>, we can compute the <span class="math notranslate nohighlight">\(a_{jl}\)</span> and <span class="math notranslate nohighlight">\(b_j\)</span> coefficients
+such that the integration rules are (at least) exact for polynomials up to order <span class="math notranslate nohighlight">\(s-1\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+\sum_{l=0}^{s-1} b_{l} {c_l}^k = \int_0^1 x^k \, dx \qquad 0 \leq k &lt; s
+\]</div>
+<p>and</p>
+<div class="math notranslate nohighlight">
+\[
+\sum_{l=0}^{s-1} a_{jl} {c_l}^k = \int_0^{c_j} x^k \, dx \qquad 0 \leq j,k &lt; s
+\]</div>
+<p>Setup and solve linear equations for computing the <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> coefficients.</p>
+<p>Use the <span class="math notranslate nohighlight">\(c\)</span>-coefficients from Gauss-Legendre 2, and two-point Radau IIA, and check whether you recove the same <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> coefficients.</p>
+<p>Try <span class="math notranslate nohighlight">\(c\)</span>-coefficients from Gauss-Legendre 3, and three-point Radau II A (from the web-page above).</p>
+<p>Then, find <span class="math notranslate nohighlight">\(c\)</span>-coefficients by solving for the roots of Legendre-polynomials, and transform to <span class="math notranslate nohighlight">\([0,1]\)</span>.
+A ready to use function can be taken from
+<a class="reference external" href="https://numerical.recipes/book.html">Numerical recipes, section 4.6</a></p>
 </section>
 </section>
 </section>
@@ -566,8 +613,9 @@ on <span class="math notranslate nohighlight">\([0, c_j]\)</span>, being exact f
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#explicit-rk-methods">17.1. Explicit RK methods</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implicit-runge-kutta-methods">17.2. Implicit Runge Kutta methods</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#runge-kutta-methods-of-arbitrary-order">17.2.1. Runge-Kutta methods of arbitrary order</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implicit-runge-kutta-methods">17.2. Implicit Runge Kutta methods</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-implement-a-runge-kutta-time-stepper-for-arbitrary-butcher-tableaus">17.3. Exercise: Implement a Runge-Kutta time-stepper for arbitrary Butcher tableaus.</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#runge-kutta-methods-of-arbitrary-order">17.3.1. Runge-Kutta methods of arbitrary order</a></li>
 </ul>
 </li>
 </ul>
