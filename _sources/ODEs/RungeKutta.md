@@ -79,7 +79,7 @@ $$
 0 & 0 & 0 \\
 \frac{1}{2} & \frac{1}{2} & 0 \\
 \hline
- & 0 & \frac{1}{2}
+ & 0 & 1
 \end{array}
 $$
 
@@ -203,7 +203,7 @@ $$
 Setup and solve linear equations for computing the $a$ and $b$ coefficients.
 
 
-Use the $c$-coefficients from Gauss-Legendre 2, and two-point Radau IIA, and check whether you recove the same $a$ and $b$ coefficients.
+Use the $c$-coefficients from Gauss-Legendre 2, and two-point Radau IIA, and check whether you recover the same $a$ and $b$ coefficients.
 
 
 Try $c$-coefficients from Gauss-Legendre 3, and three-point Radau II A (from the web-page above).

@@ -436,7 +436,7 @@ The <span class="math notranslate nohighlight">\(a_{jk}\)</span> coefficients fo
 0 &amp; 0 &amp; 0 \\
 \frac{1}{2} &amp; \frac{1}{2} &amp; 0 \\
 \hline
- &amp; 0 &amp; \frac{1}{2}
+ &amp; 0 &amp; 1
 \end{array}
 \end{split}\]</div>
 <p>It is evaluated as</p>
@@ -540,7 +540,7 @@ such that the integration rules are (at least) exact for polynomials up to order
 \sum_{l=0}^{s-1} a_{jl} {c_l}^k = \int_0^{c_j} x^k \, dx \qquad 0 \leq j,k &lt; s
 \]</div>
 <p>Setup and solve linear equations for computing the <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> coefficients.</p>
-<p>Use the <span class="math notranslate nohighlight">\(c\)</span>-coefficients from Gauss-Legendre 2, and two-point Radau IIA, and check whether you recove the same <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> coefficients.</p>
+<p>Use the <span class="math notranslate nohighlight">\(c\)</span>-coefficients from Gauss-Legendre 2, and two-point Radau IIA, and check whether you recover the same <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> coefficients.</p>
 <p>Try <span class="math notranslate nohighlight">\(c\)</span>-coefficients from Gauss-Legendre 3, and three-point Radau II A (from the web-page above).</p>
 <p>Then, find <span class="math notranslate nohighlight">\(c\)</span>-coefficients by solving for the roots of Legendre-polynomials, and transform to <span class="math notranslate nohighlight">\([0,1]\)</span>.
 A ready to use function can be taken from
