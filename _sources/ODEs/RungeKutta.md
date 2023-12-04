@@ -127,7 +127,7 @@ and then
 
 $$
 y_{i+1} = y_i + \frac{h}{6} \big(f(t_i, y^0) + 2 f(t_i+\tfrac{h}{2}, y^1)
-+ 2 f(t_i+\tfrac{h}{2}, y^2) + 2 f(t_i+h, y^3) \big)
++ 2 f(t_i+\tfrac{h}{2}, y^2) + f(t_i+h, y^3) \big)
 $$
 
 
