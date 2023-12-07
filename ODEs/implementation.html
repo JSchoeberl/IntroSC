@@ -351,6 +351,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#coding-the-implicit-euler-method">16.2. Coding the Implicit Euler method</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-time-stepping-method">16.3. Using the time-stepping method</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#excercises">16.4. Excercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stability-function">16.5. Stability function</a></li>
 </ul>
             </nav>
         </div>
@@ -594,6 +595,64 @@ U_C(t) + R C \frac{dU_C}{dt}(t) = U_0(t)
 \]</div>
 <p>Use initial condition for voltage at capacitor <span class="math notranslate nohighlight">\(U_C(t_0) = 0\)</span>, for <span class="math notranslate nohighlight">\(t_0=0\)</span>.</p>
 </section>
+<section id="stability-function">
+<h2><span class="section-number">16.5. </span>Stability function<a class="headerlink" href="#stability-function" title="Permalink to this heading">#</a></h2>
+<p>An ODE <span class="math notranslate nohighlight">\(y^\prime(t) = A y(t)\)</span> with <span class="math notranslate nohighlight">\(A \in {\mathbb R}^n\)</span> diagonizable can be brought to <span class="math notranslate nohighlight">\(n\)</span> scalar ODEs</p>
+<div class="math notranslate nohighlight">
+\[
+y_i^\prime(t) = \lambda_i y_i(t),
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\lambda_i\)</span> are eigenvalues of <span class="math notranslate nohighlight">\(A\)</span>. If <span class="math notranslate nohighlight">\(\lambda_i\)</span> has negative (non-positive) real part, the solution
+is decaying (non-increasing). Skip index <span class="math notranslate nohighlight">\(i\)</span>.</p>
+<p>The explicit Euler method with time-step <span class="math notranslate nohighlight">\(h\)</span> leads to</p>
+<div class="math notranslate nohighlight">
+\[
+y_{i+1} = (1 + h \lambda) y_i,
+\]</div>
+<p>the implicit Euler method to</p>
+<div class="math notranslate nohighlight">
+\[
+y_{i+1} = \frac{1}{1-h \lambda} y_i,
+\]</div>
+<p>and the Crank-Nicolson to</p>
+<div class="math notranslate nohighlight">
+\[
+y_{i+1} = \frac{ 2 + h \lambda }  { 2 - h \lambda } y_i
+\]</div>
+<p>The stability function <span class="math notranslate nohighlight">\(g(\cdot)\)</span> of a method is defined such that</p>
+<div class="math notranslate nohighlight">
+\[
+y_{i+1} = g(h \lambda) y_i
+\]</div>
+<p>These are for the explicit Euler, the implicit Euler, and the Crank-Nicolson:</p>
+<div class="math notranslate nohighlight">
+\[
+g_{EE}(z) = 1+z \qquad g_{IE}(z) = \frac{1}{1-z}  \qquad g_{CN}(z) = \frac{2+z}{2-z}
+\]</div>
+<p>The domain of stability is</p>
+<div class="math notranslate nohighlight">
+\[
+S = \{ z : | g(z) | \leq 1 \}
+\]</div>
+<p>What is</p>
+<div class="math notranslate nohighlight">
+\[
+S_{EE} = \{ z : |z + 1| \leq 1 \}
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+S_{IE} = \{ z : | z - 1 | \geq 1 \}
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+S_{CN} = \{ z : {\text Re} (z) \leq 0 \}
+\]</div>
+<p>If Re<span class="math notranslate nohighlight">\((\lambda) \leq 0\)</span>, then <span class="math notranslate nohighlight">\(h \lambda\)</span> is always in the domain of stability of the implicit Euler,
+and of the Crank-Nicolson. This property of an method is called <span class="math notranslate nohighlight">\(A\)</span>-stability. The explicit Euler leads to
+(quickly) increasing numerical solutions if <span class="math notranslate nohighlight">\(h\)</span> is not small enough.</p>
+<p>If <span class="math notranslate nohighlight">\(\lim_{z \rightarrow -\infty} g(z) = 0\)</span>, quickly decaying solutions lead to quickly decaying
+numerical solutions. This is the case for the implicit Euler, but not for the Crank-Nicolson. This property is called <span class="math notranslate nohighlight">\(L\)</span>-stability. One observes (slowly decreasing) oscillations with the CR - method when <span class="math notranslate nohighlight">\(-h \lambda\)</span> is large.</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -663,6 +722,7 @@ U_C(t) + R C \frac{dU_C}{dt}(t) = U_0(t)
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#coding-the-implicit-euler-method">16.2. Coding the Implicit Euler method</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-time-stepping-method">16.3. Using the time-stepping method</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#excercises">16.4. Excercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stability-function">16.5. Stability function</a></li>
 </ul>
   </nav></div>
 

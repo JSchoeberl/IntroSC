@@ -255,3 +255,74 @@ U_C(t) + R C \frac{dU_C}{dt}(t) = U_0(t)
 $$
 
 Use initial condition for voltage at capacitor $U_C(t_0) = 0$, for $t_0=0$.
+
+
+
+## Stability function
+
+An ODE $y^\prime(t) = A y(t)$ with $A \in {\mathbb R}^n$ diagonizable can be brought to $n$ scalar ODEs
+
+$$
+y_i^\prime(t) = \lambda_i y_i(t),
+$$
+
+where $\lambda_i$ are eigenvalues of $A$. If $\lambda_i$ has negative (non-positive) real part, the solution
+is decaying (non-increasing). Skip index $i$.
+
+
+The explicit Euler method with time-step $h$ leads to
+
+$$
+y_{i+1} = (1 + h \lambda) y_i,
+$$
+
+the implicit Euler method to
+
+$$
+y_{i+1} = \frac{1}{1-h \lambda} y_i,
+$$
+
+and the Crank-Nicolson to
+
+$$
+y_{i+1} = \frac{ 2 + h \lambda }  { 2 - h \lambda } y_i
+$$
+
+The stability function $g(\cdot)$ of a method is defined such that
+
+$$
+y_{i+1} = g(h \lambda) y_i
+$$
+
+These are for the explicit Euler, the implicit Euler, and the Crank-Nicolson:
+
+$$
+g_{EE}(z) = 1+z \qquad g_{IE}(z) = \frac{1}{1-z}  \qquad g_{CN}(z) = \frac{2+z}{2-z}
+$$
+
+The domain of stability is
+
+$$
+S = \{ z : | g(z) | \leq 1 \}
+$$
+
+What is
+
+$$
+S_{EE} = \{ z : |z + 1| \leq 1 \}
+$$
+
+$$
+S_{IE} = \{ z : | z - 1 | \geq 1 \}
+$$
+
+$$
+S_{CN} = \{ z : {\text Re} (z) \leq 0 \}
+$$
+
+If Re$(\lambda) \leq 0$, then $h \lambda$ is always in the domain of stability of the implicit Euler,
+and of the Crank-Nicolson. This property of an method is called $A$-stability. The explicit Euler leads to
+(quickly) increasing numerical solutions if $h$ is not small enough.
+
+If $\lim_{z \rightarrow -\infty} g(z) = 0$, quickly decaying solutions lead to quickly decaying
+numerical solutions. This is the case for the implicit Euler, but not for the Crank-Nicolson. This property is called $L$-stability. One observes (slowly decreasing) oscillations with the CR - method when $-h \lambda$ is large.
