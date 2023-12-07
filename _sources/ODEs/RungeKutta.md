@@ -1,6 +1,6 @@
 # Runge-Kutta methods
 
-The goal of Runge-Kutta methods is to obtain higher accuarcy by
+The goal of Runge-Kutta methods is to obtain higher accuracy by
 using a more accurate integration rule:
 
 $$
