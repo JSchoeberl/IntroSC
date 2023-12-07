@@ -149,7 +149,7 @@ $$
 $$
 
 
-If not all time-scales are resolved, then $c_s = 1$ leads to better stability.
+If not all time-scales are resolved, then $c_s = 1$ leads to better stability (i.e. L-stability).
 The other points are chosen for optimal accuracy. These methods are called Radau IIA.
 
 Two-point Radau IIA method:
