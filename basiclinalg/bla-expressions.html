@@ -189,17 +189,19 @@ const thebe_selector_output = ".output, .cell_output"
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">ODEs</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../ODEs/ODEs.html">13. Solving ordinary differential equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ODEs/theory.html">14. A little theory</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ODEs/firstmethods.html">15. Some simple methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ODEs/RungeKutta.html">16. Runge-Kutta methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ODEs/theory.html">14. A little bit of theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ODEs/firstmethods.html">15. Some simple time-stepping methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ODEs/implementation.html">16. Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ODEs/RungeKutta.html">17. Runge-Kutta methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ODEs/mechanical.html">18. Mechanical Systems</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">PDEs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">17. Partial differential equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-Poisson.html">18. Poisson Equation and the 5-point stencil</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-iterative.html">19. Iterative Solvers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-waves.html">20. Wave equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-flows.html">21. Navier-Stokes Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">19. Partial differential equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-Poisson.html">20. Poisson Equation and the 5-point stencil</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-iterative.html">21. Iterative Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-waves.html">22. Wave equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs-flows.html">23. Navier-Stokes Equation</a></li>
 </ul>
 
     </div>
@@ -513,6 +515,7 @@ In the breaking work by Todd Veldhuizen <a class="reference external" href="http
 <h2><span class="section-number">5.3. </span>Pitfalls<a class="headerlink" href="#pitfalls" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p>What happens with the statement <code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">=</span> <span class="pre">A*B</span></code>, where A and B are two matrices ?</p></li>
+<li><p>What is computational complexity for <code class="docutils literal notranslate"><span class="pre">A</span> <span class="pre">=</span> <span class="pre">B*C*D</span></code>, when <code class="docutils literal notranslate"><span class="pre">A</span></code>, <code class="docutils literal notranslate"><span class="pre">B</span></code>, <code class="docutils literal notranslate"><span class="pre">C</span></code>, <code class="docutils literal notranslate"><span class="pre">D</span></code> are <span class="math notranslate nohighlight">\(n \times n\)</span> matrices ?</p></li>
 <li><p>what happens here ?</p></li>
 </ul>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">Func</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
