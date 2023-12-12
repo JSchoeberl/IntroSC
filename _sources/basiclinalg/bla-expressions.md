@@ -181,7 +181,7 @@ class VectorView {
 
   * What happens with the statement `A = A*B`, where A and B are two matrices ?
 
-  * What is computational complexity for `A = B*C*D`, when `A`, `B`, `C`, `D` are $n \times n$ matrices ? 
+  * What is the computational complexity for `A = B*C*D`, where `A`, `B`, `C`, `D` are $n \times n$ matrices ? 
 
   * what happens here ? 
   ```cpp
