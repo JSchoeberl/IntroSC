@@ -351,6 +351,11 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-newmark-method">18.1. The Newmark method</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generalized-alpha-method">18.2. Generalized-<span class="math notranslate nohighlight">\(\alpha\)</span> method</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#systems-with-constraints">18.3. Systems with constraints</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">18.4. Exercises</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#test-newmark-and-generalized-alpha-solvers">18.4.1. Test Newmark and Generalized-<span class="math notranslate nohighlight">\(\alpha\)</span> solvers</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mass-spring-system">18.4.2. Mass-spring system</a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -488,7 +493,8 @@ L(x, \lambda) = -U(x) + \left&lt; \lambda , g(x) \right&gt;,
 m_i \ddot x_i &amp; = &amp; \frac{\partial}{\partial x_i} L(x, \lambda) \\
  0 &amp; = &amp; \nabla_\lambda L(x, \lambda)
 \end{split}\]</div>
-<p>The physical meaning of the Lagrange parameter <span class="math notranslate nohighlight">\(\lambda\)</span> is the longitudinal force in the pendulum. This is an ordinary differential equation, with algebraic constraints,
+<p>The physical meaning of the Lagrange parameter <span class="math notranslate nohighlight">\(\lambda\)</span> is the longitudinal force in the pendulum (precisely: <span class="math notranslate nohighlight">\(\lambda \nabla_x g\)</span> is the force vector).
+This is an ordinary differential equation, with algebraic constraints,
 a so called differential-algebraic equation (DAE).</p>
 <p>One can diretly use the generalized-<span class="math notranslate nohighlight">\(\alpha\)</span> method for this DAE. The right hand side is the gradient of the Lagrange function, the mass matrix on the left hand side is extended by <span class="math notranslate nohighlight">\(0\)</span> for the Lagrange parameters:</p>
 <div class="math notranslate nohighlight">
@@ -503,6 +509,48 @@ a so called differential-algebraic equation (DAE).</p>
  \end{array} \right) =
  \nabla L (x, \lambda)
 \end{split}\]</div>
+</section>
+<section id="exercises">
+<h2><span class="section-number">18.4. </span>Exercises<a class="headerlink" href="#exercises" title="Permalink to this heading">#</a></h2>
+<section id="test-newmark-and-generalized-alpha-solvers">
+<h3><span class="section-number">18.4.1. </span>Test Newmark and Generalized-<span class="math notranslate nohighlight">\(\alpha\)</span> solvers<a class="headerlink" href="#test-newmark-and-generalized-alpha-solvers" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>compile and run the cods test_newmark and test_alpha. Plot the solution functions</p></li>
+<li><p>test the equation for the pendulum using the angle <span class="math notranslate nohighlight">\(\alpha\)</span></p></li>
+<li><p>implement a double pendulum as DAE</p></li>
+</ul>
+</section>
+<section id="mass-spring-system">
+<h3><span class="section-number">18.4.2. </span>Mass-spring system<a class="headerlink" href="#mass-spring-system" title="Permalink to this heading">#</a></h3>
+<p>For small system it is reasonable to implement directly the right-hand-side function.
+For larger mechanical system it is of advantage to build some data structures describing the system.
+See files <a class="reference external" href="https://github.com/JSchoeberl/ASC-ODE/tree/main/mass_spring">here</a>.
+The class <code class="docutils literal notranslate"><span class="pre">MassSpringSystem</span></code> has containers for lists of masses, fixations and spring connections.
+By Python-bindings one can setup such a system by adding these components.
+The <code class="docutils literal notranslate"><span class="pre">MSS_Functions</span></code> implements the right-hand-side function for the ODE based on the <code class="docutils literal notranslate"><span class="pre">MassSpringSystem</span></code> model.
+There is</p>
+<ul class="simple">
+<li><p>file <code class="docutils literal notranslate"><span class="pre">mass_spring.cc</span></code> for testing a system from C++</p></li>
+<li><p>file <code class="docutils literal notranslate"><span class="pre">test_mass_spring.py</span></code> for testing the system from Python</p></li>
+<li><p>Jupyter-notebook file <code class="docutils literal notranslate"><span class="pre">mass_spring.ipynb</span></code> for testing the system including 3D visualization</p></li>
+</ul>
+<p>Exercise:</p>
+<ul class="simple">
+<li><p>build and run the examples in the mass_spring directory</p></li>
+<li><p>add distance constraints to the MassSpring system. Enforce them using Lagrange multipliers, similar as in <code class="docutils literal notranslate"><span class="pre">test_alpha.cc</span></code>.</p></li>
+<li><p>the class <code class="docutils literal notranslate"><span class="pre">MSS_Function</span></code> implements the derivative using numerical differentiation. Implement the exact derivative.</p></li>
+<li><p>Experiment with different mechanical structures:</p>
+<ul>
+<li><p>Extend the double-pendulum to a chain</p></li>
+<li><p>Build more complex structures using beams (for example a crane), and simulate vibration</p></li>
+<li><p>Replace the springs of the double-pendulum by distance-constraints</p></li>
+<li><p>Build a spinning top (German: Kreisel). We know angular momentum keeps it spinning.
+Connect three masses by distance constraints modeling the spinning top.
+Start with velocities consistent to a rotating motion</p></li>
+</ul>
+</li>
+</ul>
+</section>
 </section>
 </section>
 
@@ -572,6 +620,11 @@ a so called differential-algebraic equation (DAE).</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-newmark-method">18.1. The Newmark method</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generalized-alpha-method">18.2. Generalized-<span class="math notranslate nohighlight">\(\alpha\)</span> method</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#systems-with-constraints">18.3. Systems with constraints</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">18.4. Exercises</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#test-newmark-and-generalized-alpha-solvers">18.4.1. Test Newmark and Generalized-<span class="math notranslate nohighlight">\(\alpha\)</span> solvers</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mass-spring-system">18.4.2. Mass-spring system</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 

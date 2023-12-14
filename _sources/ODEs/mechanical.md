@@ -151,7 +151,8 @@ m_i \ddot x_i & = & \frac{\partial}{\partial x_i} L(x, \lambda) \\
  0 & = & \nabla_\lambda L(x, \lambda)
 $$
 
-The physical meaning of the Lagrange parameter $\lambda$ is the longitudinal force in the pendulum. This is an ordinary differential equation, with algebraic constraints,
+The physical meaning of the Lagrange parameter $\lambda$ is the longitudinal force in the pendulum (precisely: $\lambda \nabla_x g$ is the force vector).
+This is an ordinary differential equation, with algebraic constraints,
 a so called differential-algebraic equation (DAE).
 
 One can diretly use the generalized-$\alpha$ method for this DAE. The right hand side is the gradient of the Lagrange function, the mass matrix on the left hand side is extended by $0$ for the Lagrange parameters:
@@ -167,6 +168,49 @@ $$
  \end{array} \right) =
  \nabla L (x, \lambda)
 $$
+
+
+
+## Exercises
+
+### Test Newmark and Generalized-$\alpha$ solvers
+
+- compile and run the cods test_newmark and test_alpha. Plot the solution functions
+
+- test the equation for the pendulum using the angle $\alpha$
+
+- implement a double pendulum as DAE
+
+
+### Mass-spring system
+
+For small system it is reasonable to implement directly the right-hand-side function.
+For larger mechanical system it is of advantage to build some data structures describing the system.
+See files [here](https://github.com/JSchoeberl/ASC-ODE/tree/main/mass_spring).
+The class `MassSpringSystem` has containers for lists of masses, fixations and spring connections.
+By Python-bindings one can setup such a system by adding these components.
+The `MSS_Functions` implements the right-hand-side function for the ODE based on the `MassSpringSystem` model.
+There is
+- file `mass_spring.cc` for testing a system from C++
+- file `test_mass_spring.py` for testing the system from Python
+- Jupyter-notebook file `mass_spring.ipynb` for testing the system including 3D visualization
+
+Exercise:
+- build and run the examples in the mass_spring directory
+- add distance constraints to the MassSpring system. Enforce them using Lagrange multipliers, similar as in `test_alpha.cc`.
+- the class `MSS_Function` implements the derivative using numerical differentiation. Implement the exact derivative.
+- Experiment with different mechanical structures:
+  * Extend the double-pendulum to a chain
+  * Build more complex structures using beams (for example a crane), and simulate vibration
+  * Replace the springs of the double-pendulum by distance-constraints
+  * Build a spinning top (German: Kreisel). We know angular momentum keeps it spinning.
+    Connect three masses by distance constraints modeling the spinning top.
+    Start with velocities consistent to a rotating motion
+
+
+
+
+
 
 
 
