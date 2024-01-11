@@ -17,14 +17,14 @@ $$
 usually we choose $n \in {\mathbb N}$, define $h := \frac{T-t_0}{n}$, and
 $t_i := t_0 + ih$.
 
-## Explicit Euler method
-
 We compute a discrete approximate solution 
 
 $$
 y_i \approx y(t_i) \qquad \forall \, i \in { 0, \ldots , n}
 $$
 
+
+## Explicit Euler method
 
 The derivative $y^\prime$ is approximated by the forward difference quotient
 
@@ -64,8 +64,8 @@ $$
 y_{i+1} = y_i + h f(t_{i+1}, y_{i+1}) \qquad 0 \leq i < n
 $$
 
-Now, the new step $y_{i+1}$ shows up also in the right-hand side. We cannot simply
-evaulate a formula, but have to solve a system of equations. If the right hand side $f(t,y)$
+Now, the new step $y_{i+1}$ shows up also within the right-hand side. We cannot simply
+evaluate a formula, but have to solve a system of equations. If the right hand side $f(t,y)$
 depends non-linear on the the state $y$, one has to solve a non-linear system. Typically,
 this is done using Newton's method.
 
@@ -136,6 +136,6 @@ $$
 
 We see that we have recovered the same three methods from numerical integration, as we
 had already motivated before from numerical differentiation.
-We will use more accurate integration rules to develop more accurate time-stepping methods.
+We will use more accurate integration rules to develop more accurate time-stepping methods later.
 
 

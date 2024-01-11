@@ -97,15 +97,15 @@ This is an essential improvement for the first example above when $a < 0$. The s
 ## Autonomous ODEs
 
 An ODE is called autonomous iff the right hand side does not depend explicitely on $t$, i.e.
-$y^\prime(t) = f(y(t))$. Then the time axis can be shifted arbitrarely.
+$y^\prime(t) = f(y(t))$. Then the time axis can be shifted arbitrarily.
 
-An non-autonomous ODE in ${\mathbb R}^n$ can be transformed to an autonomous one in
+A non-autonomous ODE in ${\mathbb R}^n$ can be transformed to an autonomous one in
 ${\mathbb R}^{n+1}$ by letting $y_{n+1}(t) := t$ be another unknown state variable, which satisfies
-the ODE $y_{n+t}^\prime = 1$ and i.c. $y_{n+1}(t_0) = t_0$.
+the ODE $y_{n+1}^\prime = 1$ and i.c. $y_{n+1}(t_0) = t_0$.
 
 ## An equivalent integral equation
 
-A smooth solution of the ODE satisfies the following integral (IE) equation, and vice versa:
+A smooth solution of the ODE satisfies the following integral equation (IE), and vice versa:
 
 $$
 y(t) = y_0 + \int_{t_0}^t f(s, y(s)) ds \qquad \forall \, t \in [t_0, T]
@@ -113,4 +113,6 @@ $$
 
 We call the ODE and the IE formally equivalent. The IE may have a solution which is not differentiable,
 and thus not a solution of the ODE (e.g. if $f$ jumps in some $\overline t$, then $y$ has a kink, and is not differentiable).
+
+The integral equation is the basis for analysis as well as designing numerical methods.
 

@@ -33,6 +33,7 @@ parts:
     - file: ODEs/firstmethods
     - file: ODEs/implementation
     - file: ODEs/RungeKutta
+    - file: ODEs/mechanical
 
   - caption: PDEs
     numbered: True  

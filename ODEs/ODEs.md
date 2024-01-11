@@ -9,7 +9,7 @@ We are developing a library for solving nonlinear ordinary differential equation
 
 
 
-Fork and clone github repo [ASC-HPC](https://github.com/TUWien-ASC/ASC-ODE.git).
+Fork and clone github repo [ASC-ODE](https://github.com/TUWien-ASC/ASC-ODE.git).
 
 Add your own bla-repo as an external sub-module, and adjust function calls if necessary.
 
