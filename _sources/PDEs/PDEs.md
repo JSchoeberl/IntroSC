@@ -46,7 +46,7 @@ If local installation does not work, there are alternatives:
 
   [https://ngsolve.github.io/jupyterlite_ngsolve/lab?path=poisson.ipynb](https://ngsolve.github.io/jupyterlite_ngsolve/lab?path=poisson.ipynb)
 
-  The first time it might take a few minutes to start.
+  The first time it might take a few minutes to start, and then again to import ngsolve.
   
 
 
