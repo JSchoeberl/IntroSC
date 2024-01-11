@@ -38,22 +38,15 @@ parts:
   - caption: PDEs
     numbered: True  
     chapters:
-    - file: PDEs/PDEs
-    - file: PDEs/PDEs-Poisson
-    - file: PDEs/PDEs-iterative
-    - file: PDEs/PDEs-waves
-    - file: PDEs/PDEs-flows            
+    - file: PDEs/PDEs.md
+    - file: PDEs/PoissonGleichung.ipynb
+    - file: PDEs/first_example.ipynb
+    - file: PDEs/boundary_conditions.ipynb
+    - file: PDEs/solvers.ipynb
+    - file: PDEs/elasticity3D.ipynb
 
 
 
 
 
-#  - file: basiclinalg/bla
-#  - file: basiclinalg/bla-git
-#  - file: basiclinalg/bla-explainCpp
-#  - file: PDEs/PDEs
 
-
-
-# - file: notebooks
-# - file: markdown-notebooks
