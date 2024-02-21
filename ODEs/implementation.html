@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="../" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>16. Implementation &#8212; Introduction to Scientific Computing</title>
   
@@ -19,49 +18,45 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
 
   
-  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
-  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/clipboard.min.js"></script>
-    <script src="../_static/copybutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script src="../_static/design-tabs.js"></script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
-const thebe_selector = ".thebe,.cell"
-const thebe_selector_input = "pre"
-const thebe_selector_output = ".output, .cell_output"
-</script>
-    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'ODEs/implementation';</script>
@@ -78,10 +73,9 @@ const thebe_selector_output = ".output, .cell_output"
 
   
   
-  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
   
   <div id="pst-scroll-pixel-helper"></div>
-
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>
@@ -122,11 +116,14 @@ const thebe_selector_output = ".output, .cell_output"
 </form></div>
   </div>
   
-    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
-    </nav>
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
   
+
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
+      
+      
       
       <div class="bd-sidebar-primary bd-sidebar">
         
@@ -141,9 +138,11 @@ const thebe_selector_output = ".output, .cell_output"
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
         <div class="sidebar-primary-item">
+
   
 
 <a class="navbar-brand logo" href="../intro.html">
+  
   
   
   
@@ -153,12 +152,23 @@ const thebe_selector_output = ".output, .cell_output"
       
     
     
-    <img src="../_static/ASC_Logo_transparent_300ppi_RGB.png" class="logo__image only-light" alt="Logo image"/>
-    <script>document.write(`<img src="../_static/ASC_Logo_transparent_300ppi_RGB.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+    <img src="../_static/ASC_Logo_transparent_300ppi_RGB.png" class="logo__image only-light" alt="Introduction to Scientific Computing - Home"/>
+    <script>document.write(`<img src="../_static/ASC_Logo_transparent_300ppi_RGB.png" class="logo__image only-dark" alt="Introduction to Scientific Computing - Home"/>`);</script>
   
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
@@ -207,13 +217,11 @@ const thebe_selector_output = ".output, .cell_output"
 
 <li class="toctree-l1"><a class="reference internal" href="../PDEs/waveequation.html">27. Wave Equation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../PDEs/Helmholtz.html">28. Helmholtz Equation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/stationaryTransport.html">29. Stationary Transport Equation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/instationaryTransport.html">30. Instationary Transport Equation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/NavierStokes.html">31. Navier Stokes Equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/Curvature.html">32. Computation of Curvature</a></li>
-
-
-
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/Eigenvalues.html">29. Eigenvalue problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/stationaryTransport.html">30. Stationary Transport Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/instationaryTransport.html">31. Instationary Transport Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/NavierStokes.html">32. Navier Stokes Equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/Curvature.html">33. Computation of Curvature</a></li>
 </ul>
 
     </div>
@@ -320,6 +328,7 @@ const thebe_selector_output = ".output, .cell_output"
 </button>
 
 
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -329,6 +338,7 @@ document.write(`
   </button>
 `);
 </script>
+
 
 <script>
 document.write(`
@@ -374,10 +384,10 @@ document.write(`
               
                 
 <div id="searchbox"></div>
-                <article class="bd-article" role="main">
+                <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="implementation">
-<h1><span class="section-number">16. </span>Implementation<a class="headerlink" href="#implementation" title="Permalink to this heading">#</a></h1>
+<h1><span class="section-number">16. </span>Implementation<a class="headerlink" href="#implementation" title="Link to this heading">#</a></h1>
 <p>We implement a function algebra, which allows us to write expressions like</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">func</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Id</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">Compose</span><span class="w"> </span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="n">g</span><span class="p">);</span>
 </pre></div>
@@ -446,7 +456,7 @@ represented as shared objectes:</p>
 </pre></div>
 </div>
 <section id="implementing-a-newton-solver">
-<h2><span class="section-number">16.1. </span>Implementing a Newton solver<a class="headerlink" href="#implementing-a-newton-solver" title="Permalink to this heading">#</a></h2>
+<h2><span class="section-number">16.1. </span>Implementing a Newton solver<a class="headerlink" href="#implementing-a-newton-solver" title="Link to this heading">#</a></h2>
 <p>Newton’s method for solving the non-linear equation</p>
 <div class="math notranslate nohighlight">
 \[
@@ -489,7 +499,7 @@ Newton’s method converges quadratically:</p>
 </div>
 </section>
 <section id="coding-the-implicit-euler-method">
-<h2><span class="section-number">16.2. </span>Coding the Implicit Euler method<a class="headerlink" href="#coding-the-implicit-euler-method" title="Permalink to this heading">#</a></h2>
+<h2><span class="section-number">16.2. </span>Coding the Implicit Euler method<a class="headerlink" href="#coding-the-implicit-euler-method" title="Link to this heading">#</a></h2>
 <p>In every time-step we have to solve for the new value <span class="math notranslate nohighlight">\(y^{n+1}\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[
@@ -524,7 +534,7 @@ given by the user. Then the implicit Euler method is coded up like that:</p>
 </div>
 </section>
 <section id="using-the-time-stepping-method">
-<h2><span class="section-number">16.3. </span>Using the time-stepping method<a class="headerlink" href="#using-the-time-stepping-method" title="Permalink to this heading">#</a></h2>
+<h2><span class="section-number">16.3. </span>Using the time-stepping method<a class="headerlink" href="#using-the-time-stepping-method" title="Link to this heading">#</a></h2>
 <p>A mass attached to a spring is described by the ODE</p>
 <div class="math notranslate nohighlight">
 \[
@@ -571,7 +581,7 @@ right-hand-side function, and a call-back function called at the end of every ti
 <p>This example is provided in <code class="docutils literal notranslate"><span class="pre">demos/test_ode.cc</span></code>.</p>
 </section>
 <section id="excercises">
-<h2><span class="section-number">16.4. </span>Excercises<a class="headerlink" href="#excercises" title="Permalink to this heading">#</a></h2>
+<h2><span class="section-number">16.4. </span>Excercises<a class="headerlink" href="#excercises" title="Link to this heading">#</a></h2>
 <ul class="simple">
 <li><p>Implement an explicit Euler time-stepper, and the Crank-Nicolson method.</p></li>
 <li><p>Compare the results of the mass-spring system for these methods, and various time-steps. Plot the solution function. What do you observe ?</p></li>
@@ -609,7 +619,7 @@ U_C(t) + R C \frac{dU_C}{dt}(t) = U_0(t)
 <p>Use initial condition for voltage at capacitor <span class="math notranslate nohighlight">\(U_C(t_0) = 0\)</span>, for <span class="math notranslate nohighlight">\(t_0=0\)</span>.</p>
 </section>
 <section id="stability-function">
-<h2><span class="section-number">16.5. </span>Stability function<a class="headerlink" href="#stability-function" title="Permalink to this heading">#</a></h2>
+<h2><span class="section-number">16.5. </span>Stability function<a class="headerlink" href="#stability-function" title="Link to this heading">#</a></h2>
 <p>An ODE <span class="math notranslate nohighlight">\(y^\prime(t) = A y(t)\)</span> with <span class="math notranslate nohighlight">\(A \in {\mathbb R}^n\)</span> diagonizable can be brought to <span class="math notranslate nohighlight">\(n\)</span> scalar ODEs</p>
 <div class="math notranslate nohighlight">
 \[
@@ -696,7 +706,7 @@ numerical solutions. This is the case for the implicit Euler, but not for the Cr
               
               
                 <footer class="prev-next-footer">
-                  <!-- Previous / next buttons -->
+                  
 <div class="prev-next-area">
     <a class="left-prev"
        href="firstmethods.html"
@@ -724,6 +734,7 @@ numerical solutions. This is the case for the implicit Euler, but not for the Cr
             
               
                 <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
 
   <div class="sidebar-secondary-item">
   <div class="page-toc tocsection onthispage">
@@ -757,6 +768,7 @@ By J. Schöberl
   
   <div class="footer-item">
     
+
   <p class="copyright">
     
       © Copyright 2023.
@@ -783,8 +795,8 @@ By J. Schöberl
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
 
   <footer class="bd-footer">
   </footer>
