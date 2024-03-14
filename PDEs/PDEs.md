@@ -41,10 +41,12 @@ If local installation does not work, there are alternatives:
 
 - run NGSolve online within jupyter-lite:
 
-  [![lite-badge](https://jupyterlite.rtfd.io/en/latest/_static/badge.svg)](https://ngsolve.github.io/jupyterlite_ngsolve/lab?path=poisson.ipynb)
+  [![lite-badge](https://jupyterlite.rtfd.io/en/latest/_static/badge.svg)](https://jschoeberl.github.io/IntroFEM-lite/lab?path=ringveranstaltung.ipynb)
 
+  [https://jschoeberl.github.io/IntroFEM-lite/lab?path=ringveranstaltung.ipynb](https://jschoeberl.github.io/IntroFEM-lite/lab?path=ringveranstaltung.ipynb)
 
-  [https://ngsolve.github.io/jupyterlite_ngsolve/lab?path=poisson.ipynb](https://ngsolve.github.io/jupyterlite_ngsolve/lab?path=poisson.ipynb)
+https://jschoeberl.github.io/IntroFEM-lite/
+
 
   The first time it might take a few minutes to start, and then again to import ngsolve.
   

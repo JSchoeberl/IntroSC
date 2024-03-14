@@ -51,6 +51,7 @@ parts:
     - file: PDEs/stationaryTransport.ipynb
     - file: PDEs/instationaryTransport.ipynb
     - file: PDEs/NavierStokes.ipynb
+    - file: PDEs/coil.ipynb    
     - file: PDEs/Curvature.ipynb
     
 
