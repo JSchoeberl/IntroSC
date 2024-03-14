@@ -28,6 +28,8 @@ Known issues are
 virtual environments, or add the flag `--break-system-packages` to the pip command, see [explanation](https://veronneau.org/python-311-pip-and-breaking-system-packages.html)
 
 
+
+
 If local installation does not work, there are alternatives:
 
 - login to a jupyter server from your browser:
@@ -41,12 +43,15 @@ If local installation does not work, there are alternatives:
 
 - run NGSolve online within jupyter-lite:
 
-  [![lite-badge](https://jupyterlite.rtfd.io/en/latest/_static/badge.svg)](https://ngsolve.github.io/jupyterlite_ngsolve/lab?path=poisson.ipynb)
+  [![lite-badge](https://jupyterlite.rtfd.io/en/latest/_static/badge.svg)](https://jschoeberl.github.io/IntroFEM-lite/lab?path=ringveranstaltung.ipynb)
 
+  [https://jschoeberl.github.io/IntroFEM-lite/lab?path=ringveranstaltung.ipynb](https://jschoeberl.github.io/IntroFEM-lite/lab?path=ringveranstaltung.ipynb)
 
-  [https://ngsolve.github.io/jupyterlite_ngsolve/lab?path=poisson.ipynb](https://ngsolve.github.io/jupyterlite_ngsolve/lab?path=poisson.ipynb)
+https://jschoeberl.github.io/IntroFEM-lite/
+
 
   The first time it might take a few minutes to start, and then again to import ngsolve.
   
 
+- Further reading: [https://jschoeberl.github.io/iFEM/intro.html](https://jschoeberl.github.io/iFEM/intro.html)
 
