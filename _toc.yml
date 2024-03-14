@@ -44,6 +44,15 @@ parts:
     - file: PDEs/boundary_conditions.ipynb
     - file: PDEs/solvers.ipynb
     - file: PDEs/elasticity3D.ipynb
+    - file: PDEs/heatequation.ipynb
+    - file: PDEs/waveequation.ipynb
+    - file: PDEs/Helmholtz.ipynb    
+    - file: PDEs/Eigenvalues.ipynb    
+    - file: PDEs/stationaryTransport.ipynb
+    - file: PDEs/instationaryTransport.ipynb
+    - file: PDEs/NavierStokes.ipynb
+    - file: PDEs/Curvature.ipynb
+    
 
 
 
