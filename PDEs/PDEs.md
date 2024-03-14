@@ -28,6 +28,8 @@ Known issues are
 virtual environments, or add the flag `--break-system-packages` to the pip command, see [explanation](https://veronneau.org/python-311-pip-and-breaking-system-packages.html)
 
 
+
+
 If local installation does not work, there are alternatives:
 
 - login to a jupyter server from your browser:
@@ -51,4 +53,5 @@ https://jschoeberl.github.io/IntroFEM-lite/
   The first time it might take a few minutes to start, and then again to import ngsolve.
   
 
+- Further reading: [https://jschoeberl.github.io/iFEM/intro.html](https://jschoeberl.github.io/iFEM/intro.html)
 
