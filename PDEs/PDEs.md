@@ -47,8 +47,6 @@ If local installation does not work, there are alternatives:
 
   [https://jschoeberl.github.io/IntroFEM-lite/lab?path=ringveranstaltung.ipynb](https://jschoeberl.github.io/IntroFEM-lite/lab?path=ringveranstaltung.ipynb)
 
-https://jschoeberl.github.io/IntroFEM-lite/
-
 
   The first time it might take a few minutes to start, and then again to import ngsolve.
   
