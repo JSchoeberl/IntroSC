@@ -1,6 +1,6 @@
 # Introduction to Scientific Computing
 
-[Joachim Schöberl](https://www.asc.tuwien.ac.at/~schoeberl)
+[Joachim Schöberl](https://www.asc.tuwien.ac.at/schoeberl)
 
 TU Wien, [Institute of Analysis and Scientific Computing](https://www.asc.tuwien.ac.at)
 

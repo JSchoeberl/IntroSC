@@ -1,0 +1,54 @@
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/jupyter_cache/executors/utils.py", line 58, in single_nb_execution
+    executenb(
+    ~~~~~~~~~^
+        nb,
+        ^^^
+    ...<4 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/nbclient/client.py", line 1319, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/jupyter_core/utils/__init__.py", line 165, in wrapped
+    return loop.run_until_complete(inner)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/base_events.py", line 720, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/nbclient/client.py", line 709, in async_execute
+    await self.async_execute_cell(
+        cell, index, execution_count=self.code_cells_executed + 1
+    )
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/nbclient/client.py", line 1062, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages/nbclient/client.py", line 918, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+from ngsolve.fem import RegularMultiPoleCF
+
+mp = SingularMultiPoleCF(20, kappa, Vec3D(0,0,0))
+mp.AddCharge (Vec3D(2,0,0), 3)
+
+regmp = RegularMultiPoleCF(40, kappa, Vec3D(5,0,0) )
+mp.Transform(regmp)
+
+Draw (mp, mesh, min=-0.1,max=0.1, animate_complex=True, order=5);
+Draw (regmp, mesh, min=-0.1,max=0.1, animate_complex=True, order=5);
+------------------
+
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mNgException[0m                               Traceback (most recent call last)
+Cell [0;32mIn[10], line 7[0m
+[1;32m      4[0m mp[38;5;241m.[39mAddCharge (Vec3D([38;5;241m2[39m,[38;5;241m0[39m,[38;5;241m0[39m), [38;5;241m3[39m)
+[1;32m      6[0m regmp [38;5;241m=[39m RegularMultiPoleCF([38;5;241m40[39m, kappa, Vec3D([38;5;241m5[39m,[38;5;241m0[39m,[38;5;241m0[39m) )
+[0;32m----> 7[0m [43mmp[49m[38;5;241;43m.[39;49m[43mTransform[49m[43m([49m[43mregmp[49m[43m)[49m
+[1;32m      9[0m Draw (mp, mesh, [38;5;28mmin[39m[38;5;241m=[39m[38;5;241m-[39m[38;5;241m0.1[39m,[38;5;28mmax[39m[38;5;241m=[39m[38;5;241m0.1[39m, animate_complex[38;5;241m=[39m[38;5;28;01mTrue[39;00m, order[38;5;241m=[39m[38;5;241m5[39m);
+[1;32m     10[0m Draw (regmp, mesh, [38;5;28mmin[39m[38;5;241m=[39m[38;5;241m-[39m[38;5;241m0.1[39m,[38;5;28mmax[39m[38;5;241m=[39m[38;5;241m0.1[39m, animate_complex[38;5;241m=[39m[38;5;28;01mTrue[39;00m, order[38;5;241m=[39m[38;5;241m5[39m);
+
+[0;31mNgException[0m: /Users/joachim/gitlab/ngsolve/basiclinalg/expr.hpp:313		: not the same, a=21, b=41
+
