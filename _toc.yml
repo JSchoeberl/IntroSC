@@ -39,13 +39,20 @@ parts:
     numbered: True  
     chapters:
     - file: PDEs/PDEs.md
-    - file: PDEs/PoissonGleichung.ipynb
-    - file: PDEs/first_example.ipynb
-    - file: PDEs/boundary_conditions.ipynb
-    - file: PDEs/solvers.ipynb
+    - file: PDEs/PoissonEquation.ipynb
+      sections:
+      - file: PDEs/Poisson/first_example.ipynb
+      - file: PDEs/Poisson/boundary_conditions.ipynb
+      - file: PDEs/Poisson/approximation.ipynb
+      - file: PDEs/Poisson/capacitor.ipynb
+      - file: PDEs/Poisson/solvers.ipynb
+    - file: PDEs/timedependent/timedependent.ipynb
+      sections:
+      - file: PDEs/timedependent/heatequation.ipynb
+      - file: PDEs/timedependent/heatequationmethods.ipynb      
+      - file: PDEs/timedependent/waveequation.ipynb
+      - file: PDEs/timedependent/verlet.ipynb            
     - file: PDEs/elasticity3D.ipynb
-    - file: PDEs/heatequation.ipynb
-    - file: PDEs/waveequation.ipynb
     - file: PDEs/Helmholtz.ipynb    
     - file: PDEs/Eigenvalues.ipynb    
     - file: PDEs/stationaryTransport.ipynb
@@ -54,6 +61,11 @@ parts:
     - file: PDEs/coil.ipynb    
     - file: PDEs/Curvature.ipynb
     
+  - caption: FMM
+    numbered: True  
+    chapters:
+    - file: fmm/intro_fmm.ipynb
+    - file: fmm/basisfunctions.ipynb
 
 
 
