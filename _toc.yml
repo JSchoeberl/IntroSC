@@ -41,7 +41,7 @@ parts:
     - file: PDEs/PDEs.md
     - file: PDEs/PoissonEquation.ipynb
       sections:
-      - file: PDEs/Poisson/first_example.ipynb
+      - file: PDEs/first_example.ipynb
       - file: PDEs/Poisson/boundary_conditions.ipynb
       - file: PDEs/Poisson/approximation.ipynb
       - file: PDEs/Poisson/capacitor.ipynb
@@ -52,7 +52,26 @@ parts:
       - file: PDEs/timedependent/heatequationmethods.ipynb      
       - file: PDEs/timedependent/waveequation.ipynb
       - file: PDEs/timedependent/verlet.ipynb            
-    - file: PDEs/elasticity3D.ipynb
+      - file: PDEs/timedependent/waveguide.ipynb
+    - file: PDEs/elasticity/intro.ipynb
+      sections:
+      - file: PDEs/elasticity/modeling.ipynb
+      - file: PDEs/elasticity/Newton.ipynb
+      - file: PDEs/elasticity/elasticity2D.ipynb
+      - file: PDEs/elasticity/elasticity3D.ipynb
+      - file: PDEs/elasticity/dynamics.ipynb
+      - file: PDEs/elasticity/forces_and_moments.ipynb
+      - file: PDEs/elasticity/metamaterial_thick.ipynb
+      - file: PDEs/elasticity/Exercises.ipynb      
+    - file: PDEs/CFD/NavierStokes.ipynb
+      sections:
+      - file: PDEs/CFD/Stokes.ipynb
+      - file: PDEs/CFD/Transport.ipynb
+      - file: PDEs/CFD/SchaeferTurek.ipynb
+      - file: PDEs/CFD/naca.ipynb
+      - file: PDEs/CFD/tesla.ipynb            
+
+
     - file: PDEs/Helmholtz.ipynb    
     - file: PDEs/Eigenvalues.ipynb    
     - file: PDEs/stationaryTransport.ipynb
