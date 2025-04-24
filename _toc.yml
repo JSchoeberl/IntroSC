@@ -70,14 +70,19 @@ parts:
       - file: PDEs/CFD/SchaeferTurek.ipynb
       - file: PDEs/CFD/naca.ipynb
       - file: PDEs/CFD/tesla.ipynb            
-
-
+    - file: PDEs/Maxwell/Maxwell.ipynb
+      sections:
+      - file: PDEs/Maxwell/magnetostatics.ipynb
+      - file: PDEs/Maxwell/coil-simple.ipynb
+      - file: PDEs/Maxwell/HCurl.ipynb
+      - file: PDEs/Maxwell/deRham.ipynb      
+      - file: PDEs/Maxwell/coil.ipynb
+      
     - file: PDEs/Helmholtz.ipynb    
     - file: PDEs/Eigenvalues.ipynb    
     - file: PDEs/stationaryTransport.ipynb
     - file: PDEs/instationaryTransport.ipynb
     - file: PDEs/NavierStokes.ipynb
-    - file: PDEs/coil.ipynb    
     - file: PDEs/Curvature.ipynb
     
   - caption: FMM
