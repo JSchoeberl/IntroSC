@@ -2,7 +2,7 @@
 
 We are developing a library for basic linear algebra operations. For this we
 are implementing classes for vectors and matrices in modern C++,
-make them available to Python for simple usability. 
+and make them available to Python for simple usability. 
 We are practicing software development in teams using git, and start with
 maintaining documentation from the beginning.
 
