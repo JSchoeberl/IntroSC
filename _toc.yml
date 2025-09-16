@@ -74,9 +74,11 @@ parts:
       sections:
       - file: PDEs/Maxwell/magnetostatics.ipynb
       - file: PDEs/Maxwell/coil-simple.ipynb
-      - file: PDEs/Maxwell/HCurl.ipynb
-      - file: PDEs/Maxwell/deRham.ipynb      
       - file: PDEs/Maxwell/coil.ipynb
+      - file: PDEs/Maxwell/exercises.ipynb
+      - file: PDEs/Maxwell/HCurl.ipynb
+      - file: PDEs/Maxwell/deRham.ipynb
+      - file: PDEs/Maxwell/checkrank.ipynb            
       
     - file: PDEs/Helmholtz.ipynb    
     - file: PDEs/Eigenvalues.ipynb    
@@ -90,6 +92,7 @@ parts:
     chapters:
     - file: fmm/intro_fmm.ipynb
     - file: fmm/basisfunctions.ipynb
+    - file: fmm/layerpotentials.ipynb
 
 
 
