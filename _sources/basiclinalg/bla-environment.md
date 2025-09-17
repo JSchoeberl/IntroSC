@@ -84,7 +84,7 @@ Allow to choose between row-major and column-major storage:
 
 push your changes to your github project using either vs-code functionality, or command line instructions as
 
-    git add tests/test_matrix.cc src/matrix.h
+    git add demos/demo_matrix.cpp src/matrix.hpp
     git commit -m "added matrix class"
     git push
  
@@ -100,10 +100,11 @@ the contributions. Experiment with changing the same code regions.
 
 
  * Add more advanced features:
-   - Inverse matrix: <p>
-     Form matrix $M = (A \; I)$, and perform row manipulations to obtain $\widetilde M = (I \; A^{-1})$.
-   - Allow to add `Vector<double>` to a `Vector<std::complex<double>>`
-
+   - Inverse matrix using the Gauss-Jordan algorithm: <p>
+     Form matrix $M = (A \; I)$, and perform row manipulations (like adding rows, swapping rows and scaling rows) to obtain $\widetilde M = (I \; A^{-1})$.
+   - Allow to add `Vector<double>` to a `Vector<std::complex<double>>` <p>
+     You can obtain the result-type via
+     
          typedef decltype(std::declval<TA>()+std::declval<TB>()) TRES;
 
 

@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -505,7 +505,7 @@ class Matrix {
 </pre></div>
 </div>
 <p>push your changes to your github project using either vs-code functionality, or command line instructions as</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>git add tests/test_matrix.cc src/matrix.h
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>git add demos/demo_matrix.cpp src/matrix.hpp
 git commit -m &quot;added matrix class&quot;
 git push
 </pre></div>
@@ -520,9 +520,10 @@ git merge
 <ul>
 <li><p>Add more advanced features:</p>
 <ul>
-<li><p>Inverse matrix: <p>
-Form matrix <span class="math notranslate nohighlight">\(M = (A \; I)\)</span>, and perform row manipulations to obtain <span class="math notranslate nohighlight">\(\widetilde M = (I \; A^{-1})\)</span>.</p></li>
-<li><p>Allow to add <code class="docutils literal notranslate"><span class="pre">Vector&lt;double&gt;</span></code> to a <code class="docutils literal notranslate"><span class="pre">Vector&lt;std::complex&lt;double&gt;&gt;</span></code></p>
+<li><p>Inverse matrix using the Gauss-Jordan algorithm: <p>
+Form matrix <span class="math notranslate nohighlight">\(M = (A \; I)\)</span>, and perform row manipulations (like adding rows, swapping rows and scaling rows) to obtain <span class="math notranslate nohighlight">\(\widetilde M = (I \; A^{-1})\)</span>.</p></li>
+<li><p>Allow to add <code class="docutils literal notranslate"><span class="pre">Vector&lt;double&gt;</span></code> to a <code class="docutils literal notranslate"><span class="pre">Vector&lt;std::complex&lt;double&gt;&gt;</span></code> <p>
+You can obtain the result-type via</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>typedef decltype(std::declval&lt;TA&gt;()+std::declval&lt;TB&gt;()) TRES;
 </pre></div>
 </div>

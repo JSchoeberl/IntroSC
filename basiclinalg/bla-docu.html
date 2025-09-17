@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -433,30 +433,24 @@ document.write(`
                   
   <section id="creating-documentation">
 <h1><span class="section-number">4. </span>Creating documentation<a class="headerlink" href="#creating-documentation" title="Link to this heading">#</a></h1>
-<p>We use <a class="reference external" href="https://docs.readthedocs.io">ReadTheDocs</a> based on <a class="reference external" href="https://www.sphinx-doc.org">Sphinx</a> for creating documentation.</p>
-<p>Install the python packages <em>sphinx</em> and the rtd-theme using</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pip install sphinx sphinx_rtd_theme
+<p>We are using <a class="reference external" href="https://jupyterbook.org/en/stable/intro.html">Jupyter Book</a> for creating user documentation.
+It requires some configuration files, the contents is provided by markdown (.md) and jupyter-notebooks (.ipynb) files.</p>
+<p>Install the python packages jupyter-book, and one more to work with github pages:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pip install -U jupyter-book ghp-import
 </pre></div>
 </div>
+<p>The ASC-bla project includes a little start for the documentation:</p>
 <p>Quick steps to setup the documentation are as follows. You don’t have to do it for the bla project, files are already there.</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mkdir docs
-cd docs
-sphinx-quickstart
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cd docs
+jupyter-book build .
 </pre></div>
 </div>
-<p>Now, and after changing contents in the file <code class="docutils literal notranslate"><span class="pre">index.rst</span></code> run</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>make html
+<p>This creates an html-documentation in <code class="docutils literal notranslate"><span class="pre">_build/html</span></code>, which you can now open in the browser.</p>
+<p>Adapt the ‘_config.yml’ and ‘_toc.yml’ files for your project.</p>
+<p>To publish the documentation within your own bla-project on github run</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>ghp-import -n -p -f _build/html
 </pre></div>
 </div>
-<p>In the configuration file <code class="docutils literal notranslate"><span class="pre">conf.py</span></code> you can select the theme, for example:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>html_theme = &#39;sphinx_rtd_theme&#39;
-</pre></div>
-</div>
-<p>To publish your documentation online register at <a class="reference external" href="https://readthedocs.org">readthedocs.org</a>
-with your github account.
-On your dash-board you can see your (public!) github projects.</p>
-<p>Import your bla-project, and give a unique name for the documentation.</p>
-<p>Put the ‘docs passing’ batch into your github-readme file.</p>
 </section>
 
     <script type="text/x-thebe-config">
