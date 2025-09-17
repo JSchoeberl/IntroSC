@@ -1,29 +1,52 @@
-## Clone a project from github
+## Setup your development environment
+
+
+We will develop software in C++ on our own computer, so we have to install developement tools first.
+
+
+1. [Visual Studio Code](https://code.visualstudio.com) is a popular extensible code editor available for Windows, Linux and macOS.
+Please download and install it.
+
+
+2. Next, we need a compiler. Consult [C/C++ for VS Code](https://code.visualstudio.com/docs/languages/cpp) to install the proper compiler for your system.
+
+
+3. [CMake](https://cmake.org) is a cross-platform software development tool for building applications, install it. Then, install the *CMake Tools* extension in VS Code.
+
+
+4. Install *GitLens* VS Code extension module
+
+
+
+### Clone a project from github
 
 [Git](https://git-scm.com) is a popular version control system. It is free and open source.
 
 [GitHub](https://github.com) is a platform and cloud-based service for software development and version control using Git.
 
 
-Prerequisites:
-* install a C++ environment on your computer (e.g. (mingw or msvc) and [Visual Studio Code](https://code.visualstudio.com))
-* install git (available within vs-code as *Git Extension Pack*)
-* install cmake (available within vs-code as *CMake Tools*)
-
-look for project draft 
+Look for the github repository
 [ASC-bla](https://github.com/TUWien-ASC/ASC-bla)
+and git-clone it.
 
-and git-clone it. Either
-* use vscode 'source control -> Clone Repository'
-* git clone \<copy git link\>
-* on Windows: ...
+```{image} gitclone.png
+:width: 75%
+:align: center
+```
+
+If everything is setup right, VS Code will first run CMake and then your compiler to build the project.
+
+
+
+If you prefer to use command line tools you enter 
+
+    git clone https://github.com/TUWien-ASC/ASC-bla.git
 
 
 Now we configure and build the project using cmake.
 You find a file 'CMakeLists.txt' describing the build structure for the project.
 
-Again, *vscode* is doing the work for you. If you use a terminal, go to the ASC-bla directory and run:
-
+    cd ASC-bla
     mkdir build
     cd build
     cmake ..

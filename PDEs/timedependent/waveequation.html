@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>17.3. Wave Equation &#8212; Introduction to Scientific Computing</title>
+    <title>21.3. Wave Equation &#8212; Introduction to Scientific Computing</title>
   
   
   
@@ -65,8 +65,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'PDEs/timedependent/waveequation';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="17.4. Verlet time-stepping and Mass-lumping" href="verlet.html" />
-    <link rel="prev" title="17.2. Various methods for the Heat Equation" href="heatequationmethods.html" />
+    <link rel="next" title="21.4. Verlet time-stepping and Mass-lumping" href="verlet.html" />
+    <link rel="prev" title="21.2. Various methods for the Heat Equation" href="heatequationmethods.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -187,78 +187,89 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Basic Linear Algebra</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../basiclinalg/bla.html">1. Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../basiclinalg/bla-refreshCpp.html">2. Refresh your C++</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../basiclinalg/bla-docu.html">3. Creating documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../basiclinalg/bla-expressions.html">4. Expression templates</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../basiclinalg/bla-python2.html">5. Python bindings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../basiclinalg/bla-lapack.html">6. Interfacing Lapack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basiclinalg/bla-environment.html">2. Development environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basiclinalg/bla-refreshCpp.html">3. Refresh your C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basiclinalg/bla-docu.html">4. Creating documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basiclinalg/bla-expressions.html">5. Expression templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basiclinalg/bla-python2.html">6. Python bindings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../basiclinalg/bla-lapack.html">7. Interfacing Lapack</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Performance</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../performance/overview.html">7. Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../performance/vectorization.html">8. Vectorization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../performance/pipelining.html">9. Pipelining</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../performance/caches1.html">10. Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../performance/overview.html">8. Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../performance/vectorization.html">9. Vectorization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../performance/pipelining.html">10. Pipelining</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../performance/caches1.html">11. Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../performance/parallelization.html">12. Parallelization</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">ODEs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../ODEs/ODEs.html">11. Solving ordinary differential equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../ODEs/theory.html">12. A little bit of theory</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../ODEs/firstmethods.html">13. Some simple time-stepping methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../ODEs/implementation.html">14. Implementation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../ODEs/RungeKutta.html">15. Runge-Kutta methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ODEs/ODEs.html">13. Solving ordinary differential equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ODEs/theory.html">14. A little bit of theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ODEs/firstmethods.html">15. Some simple time-stepping methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ODEs/implementation.html">16. Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ODEs/RungeKutta.html">17. Runge-Kutta methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ODEs/mechanical.html">18. Mechanical Systems</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">PDEs</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../PDEs.html">16. Partial differential equations</a></li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="timedependent.html">17. Time-dependent equations</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="heatequation.html">17.1. Heat Equation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="heatequationmethods.html">17.2. Various methods for the Heat Equation</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">17.3. Wave Equation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="verlet.html">17.4. Verlet time-stepping and Mass-lumping</a></li>
-<li class="toctree-l2"><a class="reference internal" href="waveguide.html">17.5. Waveguides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs.html">19. Partial differential equations</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../PoissonEquation.html">20. The Poisson Equation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../first_example.html">20.1. Solving the Poisson Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Poisson/boundary_conditions.html">20.2. Boundary Conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Poisson/approximation.html">20.3. Approximation of functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Poisson/capacitor.html">20.4. The electric field in a capacitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Poisson/solvers.html">20.5. Iterative Solvers</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../elasticity/intro.html">18. Elasticity</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../elasticity/modeling.html">18.1. Modeling Elasticity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../elasticity/Newton.html">18.2. Newton’s method</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../elasticity/elasticity2D.html">18.3. Solving nonlinear Elasticity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../elasticity/elasticity3D.html">18.4. 3D Solid Mechanics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../elasticity/dynamics.html">18.5. Elastodynamics with Newmark time-stepping</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../elasticity/forces_and_moments.html">18.6. Forces and Moments</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../elasticity/metamaterial_thick.html">18.7. Meta-material with negative <span class="math notranslate nohighlight">\(\nu\)</span></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../elasticity/Exercises.html">18.8. Exercises</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="timedependent.html">21. Time-dependent equations</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="heatequation.html">21.1. Heat Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="heatequationmethods.html">21.2. Various methods for the Heat Equation</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">21.3. Wave Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="verlet.html">21.4. Verlet time-stepping and Mass-lumping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="waveguide.html">21.5. Waveguides</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../CFD/NavierStokes.html">19. Navier Stokes Equations:</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../CFD/Stokes.html">19.1. Stokes Equation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../CFD/Transport.html">19.2. Instationary transport equation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../CFD/SchaeferTurek.html">19.3. Benchmark: Flow around a cylinder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../CFD/naca.html">19.4. NACA airfoil</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../CFD/tesla.html">19.5. Tesla Valve</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../elasticity/intro.html">22. Elasticity</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../elasticity/modeling.html">22.1. Modeling Elasticity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../elasticity/Newton.html">22.2. Newton’s method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../elasticity/elasticity2D.html">22.3. Solving nonlinear Elasticity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../elasticity/elasticity3D.html">22.4. 3D Solid Mechanics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../elasticity/dynamics.html">22.5. Elastodynamics with Newmark time-stepping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../elasticity/forces_and_moments.html">22.6. Forces and Moments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../elasticity/metamaterial_thick.html">22.7. Meta-material with negative <span class="math notranslate nohighlight">\(\nu\)</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../elasticity/Exercises.html">22.8. Exercises</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../Maxwell/Maxwell.html">20. Maxwell’s equations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../Maxwell/magnetostatics.html">20.1. Magnetostics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../Maxwell/coil-simple.html">20.2. A simple coil</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../Maxwell/coil.html">20.3. An advanced coil</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../Maxwell/exercises.html">20.4. Exercises</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../Maxwell/HCurl.html">20.5. The function space H(curl)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../Maxwell/deRham.html">20.6. The de Rham complex</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../CFD/NavierStokes.html">23. Navier Stokes Equations:</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../CFD/Stokes.html">23.1. Stokes Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../CFD/Transport.html">23.2. Instationary transport equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../CFD/SchaeferTurek.html">23.3. Benchmark: Flow around a cylinder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../CFD/naca.html">23.4. NACA airfoil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../CFD/tesla.html">23.5. Tesla Valve</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../Helmholtz.html">21. Helmholtz Equation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../Eigenvalues.html">22. Eigenvalue problems</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../stationaryTransport.html">23. Stationary Transport Equation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../instationaryTransport.html">24. Instationary Transport Equation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../NavierStokes.html">25. Navier Stokes Equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../Curvature.html">26. Computation of Curvature</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../Maxwell/Maxwell.html">24. Maxwell’s equations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../Maxwell/magnetostatics.html">24.1. Magnetostics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Maxwell/coil-simple.html">24.2. A simple coil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Maxwell/coil.html">24.3. An advanced coil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Maxwell/exercises.html">24.4. Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Maxwell/HCurl.html">24.5. The function space H(curl)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../Maxwell/deRham.html">24.6. The de Rham complex</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../Helmholtz.html">25. Helmholtz Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Eigenvalues.html">26. Eigenvalue problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../stationaryTransport.html">27. Stationary Transport Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../instationaryTransport.html">28. Instationary Transport Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../NavierStokes.html">29. Navier Stokes Equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Curvature.html">30. Computation of Curvature</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">FMM</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../fmm/intro_fmm.html">27. Fast Multipole Methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../fmm/basisfunctions.html">28. Multipole basis functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../fmm/layerpotentials.html">29. Layer potentials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../fmm/intro_fmm.html">31. Fast Multipole Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../fmm/basisfunctions.html">32. Multipole basis functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../fmm/layerpotentials.html">33. Layer potentials</a></li>
 </ul>
 
     </div>
@@ -422,8 +433,8 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#newmark-time-stepping-method">17.3.1. Newmark time-stepping method</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">17.3.2. Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#newmark-time-stepping-method">21.3.1. Newmark time-stepping method</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">21.3.2. Exercises</a></li>
 </ul>
             </nav>
         </div>
@@ -436,7 +447,7 @@ document.write(`
                 <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="wave-equation">
-<h1><span class="section-number">17.3. </span>Wave Equation<a class="headerlink" href="#wave-equation" title="Link to this heading">#</a></h1>
+<h1><span class="section-number">21.3. </span>Wave Equation<a class="headerlink" href="#wave-equation" title="Link to this heading">#</a></h1>
 <p>We consider the wave equation as typical example of second order hyperbolic equation. In contrast to the heat equation, we has a second order time derivative:</p>
 <div class="math notranslate nohighlight">
 \[
@@ -466,7 +477,7 @@ M \ddot u(t) + A u(t) = f(t) \qquad \forall \, t \in (0,T)
 u(0) = u_0 \qquad  \text{and} \qquad \dot u(0) = v_0
 \]</div>
 <section id="newmark-time-stepping-method">
-<h2><span class="section-number">17.3.1. </span>Newmark time-stepping method<a class="headerlink" href="#newmark-time-stepping-method" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">21.3.1. </span>Newmark time-stepping method<a class="headerlink" href="#newmark-time-stepping-method" title="Link to this heading">#</a></h2>
 <p>We reduce the second order ODE to a first order system. For this, we introduce the velocity function <span class="math notranslate nohighlight">\(v = \dot u\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
@@ -568,7 +579,7 @@ M \frac{v^j - v^{j-1}}{\tau} = \frac{f^j+f^{j-1} - A (u^{j-1}+\tfrac{\tau}{2}(v^
 </div>
 </section>
 <section id="exercises">
-<h2><span class="section-number">17.3.2. </span>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">21.3.2. </span>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
 <ul>
 <li><p>The total energy is the sum of kinetic and potential energy</p>
 <div class="math notranslate nohighlight">
@@ -629,7 +640,7 @@ M \frac{v^j - v^{j-1}}{\tau} = \frac{f^j+f^{j-1} - A (u^{j-1}+\tfrac{\tau}{2}(v^
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">17.2. </span>Various methods for the Heat Equation</p>
+        <p class="prev-next-title"><span class="section-number">21.2. </span>Various methods for the Heat Equation</p>
       </div>
     </a>
     <a class="right-next"
@@ -637,7 +648,7 @@ M \frac{v^j - v^{j-1}}{\tau} = \frac{f^j+f^{j-1} - A (u^{j-1}+\tfrac{\tau}{2}(v^
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">17.4. </span>Verlet time-stepping and Mass-lumping</p>
+        <p class="prev-next-title"><span class="section-number">21.4. </span>Verlet time-stepping and Mass-lumping</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -657,8 +668,8 @@ M \frac{v^j - v^{j-1}}{\tau} = \frac{f^j+f^{j-1} - A (u^{j-1}+\tfrac{\tau}{2}(v^
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#newmark-time-stepping-method">17.3.1. Newmark time-stepping method</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">17.3.2. Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#newmark-time-stepping-method">21.3.1. Newmark time-stepping method</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">21.3.2. Exercises</a></li>
 </ul>
   </nav></div>
 

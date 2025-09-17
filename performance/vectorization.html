@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>8. Vectorization &#8212; Introduction to Scientific Computing</title>
+    <title>9. Vectorization &#8212; Introduction to Scientific Computing</title>
   
   
   
@@ -62,8 +62,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'performance/vectorization';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="9. Pipelining" href="pipelining.html" />
-    <link rel="prev" title="7. Overview" href="overview.html" />
+    <link rel="next" title="10. Pipelining" href="pipelining.html" />
+    <link rel="prev" title="8. Overview" href="overview.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -184,78 +184,89 @@
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Basic Linear Algebra</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../basiclinalg/bla.html">1. Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../basiclinalg/bla-refreshCpp.html">2. Refresh your C++</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../basiclinalg/bla-docu.html">3. Creating documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../basiclinalg/bla-expressions.html">4. Expression templates</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../basiclinalg/bla-python2.html">5. Python bindings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../basiclinalg/bla-lapack.html">6. Interfacing Lapack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basiclinalg/bla-environment.html">2. Development environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basiclinalg/bla-refreshCpp.html">3. Refresh your C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basiclinalg/bla-docu.html">4. Creating documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basiclinalg/bla-expressions.html">5. Expression templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basiclinalg/bla-python2.html">6. Python bindings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basiclinalg/bla-lapack.html">7. Interfacing Lapack</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Performance</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="overview.html">7. Overview</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">8. Vectorization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pipelining.html">9. Pipelining</a></li>
-<li class="toctree-l1"><a class="reference internal" href="caches1.html">10. Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="overview.html">8. Overview</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">9. Vectorization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipelining.html">10. Pipelining</a></li>
+<li class="toctree-l1"><a class="reference internal" href="caches1.html">11. Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parallelization.html">12. Parallelization</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">ODEs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../ODEs/ODEs.html">11. Solving ordinary differential equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ODEs/theory.html">12. A little bit of theory</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ODEs/firstmethods.html">13. Some simple time-stepping methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ODEs/implementation.html">14. Implementation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ODEs/RungeKutta.html">15. Runge-Kutta methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ODEs/ODEs.html">13. Solving ordinary differential equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ODEs/theory.html">14. A little bit of theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ODEs/firstmethods.html">15. Some simple time-stepping methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ODEs/implementation.html">16. Implementation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ODEs/RungeKutta.html">17. Runge-Kutta methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ODEs/mechanical.html">18. Mechanical Systems</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">PDEs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">16. Partial differential equations</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../PDEs/timedependent/timedependent.html">17. Time-dependent equations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/timedependent/heatequation.html">17.1. Heat Equation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/timedependent/heatequationmethods.html">17.2. Various methods for the Heat Equation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/timedependent/waveequation.html">17.3. Wave Equation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/timedependent/verlet.html">17.4. Verlet time-stepping and Mass-lumping</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/timedependent/waveguide.html">17.5. Waveguides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">19. Partial differential equations</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../PDEs/PoissonEquation.html">20. The Poisson Equation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/first_example.html">20.1. Solving the Poisson Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Poisson/boundary_conditions.html">20.2. Boundary Conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Poisson/approximation.html">20.3. Approximation of functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Poisson/capacitor.html">20.4. The electric field in a capacitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Poisson/solvers.html">20.5. Iterative Solvers</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../PDEs/elasticity/intro.html">18. Elasticity</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/modeling.html">18.1. Modeling Elasticity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/Newton.html">18.2. Newton’s method</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/elasticity2D.html">18.3. Solving nonlinear Elasticity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/elasticity3D.html">18.4. 3D Solid Mechanics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/dynamics.html">18.5. Elastodynamics with Newmark time-stepping</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/forces_and_moments.html">18.6. Forces and Moments</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/metamaterial_thick.html">18.7. Meta-material with negative <span class="math notranslate nohighlight">\(\nu\)</span></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/Exercises.html">18.8. Exercises</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../PDEs/timedependent/timedependent.html">21. Time-dependent equations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/timedependent/heatequation.html">21.1. Heat Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/timedependent/heatequationmethods.html">21.2. Various methods for the Heat Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/timedependent/waveequation.html">21.3. Wave Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/timedependent/verlet.html">21.4. Verlet time-stepping and Mass-lumping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/timedependent/waveguide.html">21.5. Waveguides</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../PDEs/CFD/NavierStokes.html">19. Navier Stokes Equations:</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/CFD/Stokes.html">19.1. Stokes Equation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/CFD/Transport.html">19.2. Instationary transport equation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/CFD/SchaeferTurek.html">19.3. Benchmark: Flow around a cylinder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/CFD/naca.html">19.4. NACA airfoil</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/CFD/tesla.html">19.5. Tesla Valve</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../PDEs/elasticity/intro.html">22. Elasticity</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/modeling.html">22.1. Modeling Elasticity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/Newton.html">22.2. Newton’s method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/elasticity2D.html">22.3. Solving nonlinear Elasticity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/elasticity3D.html">22.4. 3D Solid Mechanics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/dynamics.html">22.5. Elastodynamics with Newmark time-stepping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/forces_and_moments.html">22.6. Forces and Moments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/metamaterial_thick.html">22.7. Meta-material with negative <span class="math notranslate nohighlight">\(\nu\)</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/Exercises.html">22.8. Exercises</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../PDEs/Maxwell/Maxwell.html">20. Maxwell’s equations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/magnetostatics.html">20.1. Magnetostics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/coil-simple.html">20.2. A simple coil</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/coil.html">20.3. An advanced coil</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/exercises.html">20.4. Exercises</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/HCurl.html">20.5. The function space H(curl)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/deRham.html">20.6. The de Rham complex</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../PDEs/CFD/NavierStokes.html">23. Navier Stokes Equations:</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/CFD/Stokes.html">23.1. Stokes Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/CFD/Transport.html">23.2. Instationary transport equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/CFD/SchaeferTurek.html">23.3. Benchmark: Flow around a cylinder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/CFD/naca.html">23.4. NACA airfoil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/CFD/tesla.html">23.5. Tesla Valve</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/Helmholtz.html">21. Helmholtz Equation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/Eigenvalues.html">22. Eigenvalue problems</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/stationaryTransport.html">23. Stationary Transport Equation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/instationaryTransport.html">24. Instationary Transport Equation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/NavierStokes.html">25. Navier Stokes Equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/Curvature.html">26. Computation of Curvature</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../PDEs/Maxwell/Maxwell.html">24. Maxwell’s equations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/magnetostatics.html">24.1. Magnetostics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/coil-simple.html">24.2. A simple coil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/coil.html">24.3. An advanced coil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/exercises.html">24.4. Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/HCurl.html">24.5. The function space H(curl)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/deRham.html">24.6. The de Rham complex</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/Helmholtz.html">25. Helmholtz Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/Eigenvalues.html">26. Eigenvalue problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/stationaryTransport.html">27. Stationary Transport Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/instationaryTransport.html">28. Instationary Transport Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/NavierStokes.html">29. Navier Stokes Equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/Curvature.html">30. Computation of Curvature</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">FMM</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../fmm/intro_fmm.html">27. Fast Multipole Methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../fmm/basisfunctions.html">28. Multipole basis functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../fmm/layerpotentials.html">29. Layer potentials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fmm/intro_fmm.html">31. Fast Multipole Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fmm/basisfunctions.html">32. Multipole basis functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fmm/layerpotentials.html">33. Layer potentials</a></li>
 </ul>
 
     </div>
@@ -419,10 +430,10 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-simd-class">8.1. The SIMD - class</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage-of-the-simd-class">8.2. Usage of the SIMD-class</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#masking-operations">8.3. Masking operations</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#horizontal-operations-shuffling">8.4. Horizontal operations, shuffling</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-simd-class">9.1. The SIMD - class</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage-of-the-simd-class">9.2. Usage of the SIMD-class</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#masking-operations">9.3. Masking operations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#horizontal-operations-shuffling">9.4. Horizontal operations, shuffling</a></li>
 </ul>
             </nav>
         </div>
@@ -435,7 +446,7 @@ document.write(`
                 <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="vectorization">
-<h1><span class="section-number">8. </span>Vectorization<a class="headerlink" href="#vectorization" title="Link to this heading">#</a></h1>
+<h1><span class="section-number">9. </span>Vectorization<a class="headerlink" href="#vectorization" title="Link to this heading">#</a></h1>
 <p>This function adds four doubles:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">double</span><span class="w"> </span><span class="n">a</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span><span class="w"> </span><span class="n">b</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span><span class="w"> </span><span class="n">c</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
 <span class="kt">void</span><span class="w"> </span><span class="nf">Sum4</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
@@ -484,10 +495,10 @@ by hand. For that, compiler provide vector data types, and so called <strong>int
 Lookup the documentation of the functions used above!</p>
 <p>These intrinsics are supported by all major compilers (gcc, clang, msvc, icc, …), however with slightly different behaviour. For example, gcc has arithmetic operations for type <code class="docutils literal notranslate"><span class="pre">__m256d</span></code> predefined, in msvc the intrinsic function must be called.</p>
 <p>Vectorization is like</p>
-<a class="reference internal image-reference" href="performance/skilift.jpg"><img alt="performance/skilift.jpg" class="align-center" src="performance/skilift.jpg" style="width: 70%;" />
+<a class="reference internal image-reference" href="../_images/skilift.jpg"><img alt="../_images/skilift.jpg" class="align-center" src="../_images/skilift.jpg" style="width: 70%;" />
 </a>
 <section id="the-simd-class">
-<h2><span class="section-number">8.1. </span>The SIMD - class<a class="headerlink" href="#the-simd-class" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">9.1. </span>The SIMD - class<a class="headerlink" href="#the-simd-class" title="Link to this heading">#</a></h2>
 <p>We do not recommend to write large code using intrinsics, but wrap vector data types and intrinsic functions into high-level C++ classes. This is done in the <em>simd_xxx.h</em> header files. For example, the 4 double vector type <code class="docutils literal notranslate"><span class="pre">__m256d</span></code> is wrapped into the template class <code class="docutils literal notranslate"><span class="pre">SIMD&lt;double,4&gt;</span></code>, in file <em>simd_avx.h</em>. SIMD is short for <strong>S</strong>ingle <strong>I</strong>nstruction <strong>M</strong>ultiple <strong>D</strong>ata</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SIMD</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
 <span class="w">   </span><span class="n">__m256d</span><span class="w"> </span><span class="n">val</span><span class="p">;</span>
@@ -519,7 +530,7 @@ Lookup the documentation of the functions used above!</p>
 and documentation for the intrinsics can be found <a class="reference external" href="https://arm-software.github.io/acle/neon_intrinsics/advsimd.html">here</a></p>
 </section>
 <section id="usage-of-the-simd-class">
-<h2><span class="section-number">8.2. </span>Usage of the SIMD-class<a class="headerlink" href="#usage-of-the-simd-class" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">9.2. </span>Usage of the SIMD-class<a class="headerlink" href="#usage-of-the-simd-class" title="Link to this heading">#</a></h2>
 <p>You find examples in the file <em>demos/demo_simd.cc</em>.
 The SIMD-template is designed such that you can use it for arbitrary (in some range) size.
 If it is a native size for your CPU, it will directly use the vector register. If it is larger, the SIMD-type is split into smaller SIMDs.</p>
@@ -552,7 +563,7 @@ but can be added easily following the same pattern):</p>
 </div>
 </section>
 <section id="masking-operations">
-<h2><span class="section-number">8.3. </span>Masking operations<a class="headerlink" href="#masking-operations" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">9.3. </span>Masking operations<a class="headerlink" href="#masking-operations" title="Link to this heading">#</a></h2>
 <p>We can generate boolean-SIMDs like this:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">SIMD</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="p">,</span><span class="mi">4</span><span class="o">&gt;</span><span class="w"> </span><span class="n">sequ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IndexSequence</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="o">&gt;</span><span class="p">();</span>
 <span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;sequ = &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">sequ</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
@@ -586,7 +597,7 @@ For the <span class="math notranslate nohighlight">\(n\%4\)</span> elements at t
 </div>
 </section>
 <section id="horizontal-operations-shuffling">
-<h2><span class="section-number">8.4. </span>Horizontal operations, shuffling<a class="headerlink" href="#horizontal-operations-shuffling" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">9.4. </span>Horizontal operations, shuffling<a class="headerlink" href="#horizontal-operations-shuffling" title="Link to this heading">#</a></h2>
 <p>SIMD - operations work very well when data is aligned properly. Sometimes one has to move data
 around the individual components, what is less fun (and less efficient). An example is summing
 all entries of a
@@ -650,7 +661,7 @@ simd-vector, called horizontal sum. This functions forms the horizontal sums of 
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">7. </span>Overview</p>
+        <p class="prev-next-title"><span class="section-number">8. </span>Overview</p>
       </div>
     </a>
     <a class="right-next"
@@ -658,7 +669,7 @@ simd-vector, called horizontal sum. This functions forms the horizontal sums of 
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">9. </span>Pipelining</p>
+        <p class="prev-next-title"><span class="section-number">10. </span>Pipelining</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -678,10 +689,10 @@ simd-vector, called horizontal sum. This functions forms the horizontal sums of 
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-simd-class">8.1. The SIMD - class</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage-of-the-simd-class">8.2. Usage of the SIMD-class</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#masking-operations">8.3. Masking operations</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#horizontal-operations-shuffling">8.4. Horizontal operations, shuffling</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-simd-class">9.1. The SIMD - class</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#usage-of-the-simd-class">9.2. Usage of the SIMD-class</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#masking-operations">9.3. Masking operations</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#horizontal-operations-shuffling">9.4. Horizontal operations, shuffling</a></li>
 </ul>
   </nav></div>
 
