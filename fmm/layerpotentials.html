@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -252,6 +252,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/exercises.html">24.4. Exercises</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/HCurl.html">24.5. The function space H(curl)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/deRham.html">24.6. The de Rham complex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/checkrank.html">24.7. Ranks of discrete operators</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="../PDEs/Helmholtz.html">25. Helmholtz Equation</a></li>
@@ -467,7 +468,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "6fc40ae2ea2e42a899883954b2e0a2f5"}</script><script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "902e987399a149ae8682b71d5c84f796"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "f309eced99ba4540b7904e4b166f5b8a"}</script><script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "a6763abc2d084333bafe4f6509bc32e1"}</script></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -515,7 +516,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "f5ccf35205ab4f248529a8e7ef36eb8d"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "b2148e0af79f44318bc74ee2548fa6fe"}</script></div>
 </div>
 <p>We see that the single layer potential is continuous across the surface <span class="math notranslate nohighlight">\(\Gamma\)</span>, but has a kink at <span class="math notranslate nohighlight">\(\Gamma\)</span>. This shows that the normal derivative is jumping (exactly by <span class="math notranslate nohighlight">\(\rho\)</span>).</p>
 <div class="cell docutils container">
@@ -532,7 +533,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "0cf9a146aa4548f78baaf0268b8c8c71"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "d962a07a6024474da6fd8ccbb130d0d4"}</script></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -541,7 +542,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "d99fa978f3784553a1bf063fa865ef65"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "f45080dca5af4802bd2af7b31f04bfd5"}</script></div>
 </div>
 <section id="double-layer-potential">
 <h2><span class="section-number">33.1. </span>Double layer potential<a class="headerlink" href="#double-layer-potential" title="Link to this heading">#</a></h2>
@@ -593,7 +594,7 @@ and passing to the limit, i.e.</p>
 <span class="ne">TypeError</span>: __init__(): incompatible constructor arguments. The following argument types are supported:
 <span class="g g-Whitespace">    </span><span class="mi">1</span><span class="o">.</span> <span class="n">ngsolve</span><span class="o">.</span><span class="n">bem</span><span class="o">.</span><span class="n">SingularMLMultiPoleCF</span><span class="p">(</span><span class="n">center</span><span class="p">:</span> <span class="n">ngsolve</span><span class="o">.</span><span class="n">bla</span><span class="o">.</span><span class="n">Vec3D</span><span class="p">,</span> <span class="n">r</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">kappa</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span>
 
-<span class="n">Invoked</span> <span class="k">with</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">ngsolve</span><span class="o">.</span><span class="n">bla</span><span class="o">.</span><span class="n">Vec3D</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x10d0d2170</span><span class="o">&gt;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mf">3.141592653589793</span>
+<span class="n">Invoked</span> <span class="k">with</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">ngsolve</span><span class="o">.</span><span class="n">bla</span><span class="o">.</span><span class="n">Vec3D</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x1118486f0</span><span class="o">&gt;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mf">3.141592653589793</span>
 </pre></div>
 </div>
 </div>

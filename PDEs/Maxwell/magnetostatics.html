@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -253,6 +253,7 @@
 <li class="toctree-l2"><a class="reference internal" href="exercises.html">24.4. Exercises</a></li>
 <li class="toctree-l2"><a class="reference internal" href="HCurl.html">24.5. The function space H(curl)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="deRham.html">24.6. The de Rham complex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="checkrank.html">24.7. Ranks of discrete operators</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="../Helmholtz.html">25. Helmholtz Equation</a></li>
@@ -499,16 +500,16 @@ B = \operatorname{curl} \, A.
 \]</div>
 <p>Inserting the vector-potential into the system of equations, one obtains
 the second order equation</p>
-<div class="amsmath math notranslate nohighlight" id="equation-032a576d-650a-49aa-ae07-b3b9cc071876">
-<span class="eqno">(24.1)<a class="headerlink" href="#equation-032a576d-650a-49aa-ae07-b3b9cc071876" title="Permalink to this equation">#</a></span>\[\begin{equation}
+<div class="amsmath math notranslate nohighlight" id="equation-905edf8e-66d7-4ea4-b01e-93380e32c491">
+<span class="eqno">(24.1)<a class="headerlink" href="#equation-905edf8e-66d7-4ea4-b01e-93380e32c491" title="Permalink to this equation">#</a></span>\[\begin{equation}
 \operatorname{curl} \, \mu^{-1}  \operatorname{curl} A = j.
 \end{equation}\]</div>
 <p>The two original fields <span class="math notranslate nohighlight">\(B\)</span> and <span class="math notranslate nohighlight">\(H\)</span> can be obtained from the vector potential <span class="math notranslate nohighlight">\(A\)</span>.</p>
 <p>The vector-potential <span class="math notranslate nohighlight">\(A\)</span> is not uniquely defined. One
 may add a gradient field to <span class="math notranslate nohighlight">\(A\)</span>, and the equation is still true. To obtain a unique
 solution, the so called Coloumb-Gauging can be applied:</p>
-<div class="amsmath math notranslate nohighlight" id="equation-f6a0463e-ff3b-48d1-a0f5-161385dbc21c">
-<span class="eqno">(24.2)<a class="headerlink" href="#equation-f6a0463e-ff3b-48d1-a0f5-161385dbc21c" title="Permalink to this equation">#</a></span>\[\begin{equation}
+<div class="amsmath math notranslate nohighlight" id="equation-8de50bb5-f1d8-4f48-806d-c260ce532eb5">
+<span class="eqno">(24.2)<a class="headerlink" href="#equation-8de50bb5-f1d8-4f48-806d-c260ce532eb5" title="Permalink to this equation">#</a></span>\[\begin{equation}
 \operatorname{div} \, A = 0.
 \end{equation}\]</div>
 <section id="variational-formulation">
@@ -528,8 +529,8 @@ then we have more equations than unknowns. The system is still solvable, since w
 have made the assumption <span class="math notranslate nohighlight">\(\operatorname{div} \, j = 0\)</span>, and thus <span class="math notranslate nohighlight">\(j\)</span> is in the range of the <span class="math notranslate nohighlight">\(\operatorname{curl}\)</span>-
 operator. To obtain a symmetric system, we add a new scalar variable <span class="math notranslate nohighlight">\(\varphi\)</span>.
 The problem is now: Find <span class="math notranslate nohighlight">\(A \in V = ?\)</span> and <span class="math notranslate nohighlight">\(\varphi \in Q = H^1 / \mathbb{R}\)</span> such that</p>
-<div class="amsmath math notranslate nohighlight" id="equation-0ffb7f26-466b-4d33-ad12-e013077d034c">
-<span class="eqno">(24.3)<a class="headerlink" href="#equation-0ffb7f26-466b-4d33-ad12-e013077d034c" title="Permalink to this equation">#</a></span>\[\begin{equation} 
+<div class="amsmath math notranslate nohighlight" id="equation-6a7159af-0734-4ea2-ab2a-2090bf68726e">
+<span class="eqno">(24.3)<a class="headerlink" href="#equation-6a7159af-0734-4ea2-ab2a-2090bf68726e" title="Permalink to this equation">#</a></span>\[\begin{equation} 
 \begin{array}{ccccll}
 \int \mu^{-1} \operatorname{curl} A \, \cdot \operatorname{curl} v \, dx &amp; + &amp; 
 \int \nabla \varphi \cdot v \, dx &amp; = &amp; 
