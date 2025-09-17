@@ -8,7 +8,8 @@ parts:
     numbered: True
     chapters:
     - file: basiclinalg/bla
-    - file: basiclinalg/bla-git
+    - file: basiclinalg/bla-environment
+      title: Development environment
     - file: basiclinalg/bla-refreshCpp
     - file: basiclinalg/bla-docu.md
     - file: basiclinalg/bla-expressions.md

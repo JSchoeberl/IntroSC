@@ -9,12 +9,12 @@ We assume you have a basic knowledge of C++, and repeat only shortly some featur
 template <typename T>
 class Vector
 {
-  size_t size_;
-  T * data_;
+  size_t size;
+  T * data;
 
 public:
-  Vector (size_t size) 
-    : size_(size), data_(new T[size]) { ; }
+  Vector (size_t _size) 
+    : size(_size), data(new T[_size]) { ; }
 
   Vector (const Vector & v)  // copy ctor
     : Vector(v.Size())
@@ -23,31 +23,32 @@ public:
   }
 
   Vector (Vector && v)    // move ctor
-    : size_(0), data_(nullptr)
+    : size(0), data(nullptr)
   {
-    std::swap(size_, v.size_);
-    std::swap(data_, v.data_);
+    std::swap(size, v.size);
+    std::swap(data, v.data);
   }
 
   ~Vector () { delete [] data_; }
 
   Vector & operator= (const Vector & v2)
   {
-    for (size_t i = 0; i < size_; i++)
+    for (size_t i = 0; i < size; i++)
       data_[i] = v2(i);
     return *this;
   }
 
   Vector & operator= (Vector && v2)
   {
-    for (size_t i = 0; i < size_; i++)
-      data_[i] = v2(i);
+    std::swap(size, v.size);
+    std::swap(data, v.data);
     return *this;
   }
 
-  size_t Size() const { return size_; }
-  T & operator() (size_t i) { return data_[i]; }
-  const T & operator() (size_t i) const { return data_[i]; }
+  size_t Size() const { return size; }
+  
+  T & operator() (size_t i) { return data[i]; }
+  const T & operator() (size_t i) const { return data[i]; }
 };
 ```
 

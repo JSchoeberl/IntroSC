@@ -1,35 +1,31 @@
 ## Creating documentation
 
-We use [ReadTheDocs](https://docs.readthedocs.io) based on [Sphinx](https://www.sphinx-doc.org) for creating documentation.
+We are using [Jupyter Book](https://jupyterbook.org/en/stable/intro.html) for creating user documentation.
+It requires some configuration files, the contents is provided by markdown (.md) and jupyter-notebooks (.ipynb) files.
 
-Install the python packages *sphinx* and the rtd-theme using
 
-    pip install sphinx sphinx_rtd_theme
+Install the python packages jupyter-book, and one more to work with github pages:
+
+    pip install -U jupyter-book ghp-import
+
+
+The ASC-bla project includes a little start for the documentation:
+
 
 Quick steps to setup the documentation are as follows. You don't have to do it for the bla project, files are already there.
 
-    mkdir docs
     cd docs
-    sphinx-quickstart
-
-Now, and after changing contents in the file `index.rst` run 
-
-    make html
+    jupyter-book build .
 
 
-In the configuration file `conf.py` you can select the theme, for example:
+This creates an html-documentation in `_build/html`, which you can now open in the browser.
 
-    html_theme = 'sphinx_rtd_theme'
+Adapt the '_config.yml' and '_toc.yml' files for your project.
 
 
-To publish your documentation online register at [readthedocs.org](https://readthedocs.org)
-with your github account.
-On your dash-board you can see your (public!) github projects.
+To publish the documentation within your own bla-project on github run
 
-Import your bla-project, and give a unique name for the documentation.
-
-Put the 'docs passing' batch into your github-readme file.
-
+    ghp-import -n -p -f _build/html
 
 
 
