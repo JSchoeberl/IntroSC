@@ -49,12 +49,12 @@ template <typename T>
 template <typename TA, typename TB>
   class SumVecExpr : public VecExpr<SumVecExpr<TA,TB>>
   {
-    TA a_;
-    TB b_;
+    TA a;
+    TB b;
   public:
-    SumVecExpr (TA a, TB b) : a_(a), b_(b) { }
+    SumVecExpr (TA _a, TB _b) : a(_a), b(_b) { }
 
-    auto operator() (size_t i) const { return a_(i)+b_(i); }
+    auto operator() (size_t i) const { return a(i)+b(i); }
     size_t Size() const { return a_.Size(); }      
   };
 
@@ -88,11 +88,11 @@ template <typename T>
 class VectorView : public VecExpr<VectorView<T>>
 {
 protected:
-  size_t size_;
-  T * data_;
+  size_t size;
+  T * data;
 public:
-  VectorView (size_t size, T * data)
-    : size_(size), data_(data) { }
+  VectorView (size_t _size, T * _data)
+    : size(_size), data(_data) { }
 
 T & operator()(size_t i) { return data[i]; }
 };
@@ -103,7 +103,7 @@ class Vector : public VectorView<T>
  public:
    Vector (size_t size)
      : VectorView (size, new T[size]) { }
-   ~Vector() { delete [] data_; }
+   ~Vector() { delete [] data; }
 };
 
 ```
@@ -124,11 +124,11 @@ With this we can, for example, zero elements with indices in semi-open interval 
 A generalization of a `VectorView` allows vectors whose value don't have to lie consecutively in memory. For that we provide the `dist` member variable:
 ```cpp
 class VectorView {
-  size_t size_;
-  size_t dist_;
-  T * data_;
+  size_t size;
+  size_t dist;
+  T * data;
   ... 
-  T & operator()(size_t i) { return data[i*dist_]; }  
+  T & operator()(size_t i) { return data[i*dist]; }  
 }
 ```
 
@@ -137,11 +137,11 @@ Ok, this is more general - but the index calculation comes with some price, whic
 ```cpp
 template <typename T, typename TDIST=std::integral_constant<1>>
 class VectorView {
-  size_t size_;
-  TDIST dist_;
-  T * data_;
+  size_t size;
+  TDIST dist;
+  T * data;
   ... 
-  T & operator()(size_t i) { return data[i*dist_]; }  
+  T & operator()(size_t i) { return data[i*dist]; }  
 }
 ```
 
@@ -154,7 +154,7 @@ class VectorView {
     ```cpp
     template <typename T, template ORDERING>
     class MatrixView {
-      size_t height_, width_, dist_;
+      size_t height, width, dist;
       T * data_;
     }
     ```
