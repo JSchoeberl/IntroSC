@@ -13,6 +13,7 @@ parts:
     - file: basiclinalg/bla-refreshCpp
     - file: basiclinalg/bla-docu.md
     - file: basiclinalg/bla-expressions.md
+    - file: basiclinalg/bla-testing.md    
     - file: basiclinalg/bla-python2.ipynb
     - file: basiclinalg/bla-lapack.ipynb
 
@@ -21,6 +22,9 @@ parts:
     chapters:
     - file: performance/overview.md    
     - file: performance/vectorization.md
+      sections:
+      - file: performance/simdclass.md
+      - file: performance/mathfunc.md      
     - file: performance/pipelining.md
     - file: performance/caches1.md
     - file: performance/parallelization.md
@@ -33,6 +37,10 @@ parts:
     - file: ODEs/theory
     - file: ODEs/firstmethods
     - file: ODEs/implementation
+      sections:
+      - file: ODEs/implementation_newton.md
+      - file: ODEs/implementation_ie.md
+      - file: ODEs/implementation_ad.md
     - file: ODEs/RungeKutta
     - file: ODEs/mechanical
 
