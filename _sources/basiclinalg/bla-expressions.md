@@ -76,7 +76,7 @@ If we call the call operator `operator()(size_t)` of an `VecExpr<T>` object, it 
 
 How can this `operator+` be applied to `Vector`s ? Do we have to define all combinations of `operator+([Vector|VecExpr], [Vector|VecExpr])` ? We can avoid it by letting `Vector` derive from `VecExpr`. However, we don't want to copy the vector into the `SumVecExpr`. We could do it by using references - or, alternatively, we introduce a **view** of a vector, a `VectorView`.
 
-### VectorView
+## VectorView
 
 Consider the following class hierarchy:
 
@@ -145,7 +145,7 @@ class VectorView {
 }
 ```
 
-### Excercise
+## Excercise
 
   * Merge the expr - branch from TUWien-ASC/ASC-bla into your main branch [instructions](inst_merge.md)
 
@@ -176,7 +176,7 @@ class VectorView {
   
   * Simplify the `Inverse` function using these new features
   
-### Pitfalls
+## Pitfalls
 
 
   * What happens with the statement `A = A*B`, where A and B are two matrices ?
@@ -192,7 +192,7 @@ class VectorView {
   ```
 
     
-### How good is it ? 
+## How good is it ? 
 
 But can the compiler really generate good code from all of these nested functions and expression objects ? Yes ! It is important that the compiler can inline all the functions, sees the whole flow of data, and optimizes everything as a single function.
 

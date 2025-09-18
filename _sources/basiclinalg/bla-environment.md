@@ -1,4 +1,4 @@
-## Setup your development environment
+# Setup your development environment
 
 
 We will develop software in C++ on our own computer, so we have to install developement tools first.
@@ -18,7 +18,7 @@ Please download and install it.
 
 
 
-### Clone a project from github
+## Clone a project from github
 
 [Git](https://git-scm.com) is a popular version control system. It is free and open source.
 
@@ -57,7 +57,7 @@ You should have produced an executable 'test_vector', try it out.
 
 
 
-### Extend ASC-bla in team-work
+## Extend ASC-bla in team-work
 
 You will now add more functionality to ASC-bla. You want to do it in team-work.
 Form teams by 2-4 students. Go back to github, and register. One of the team will *fork* ASC-bla (name it as you like),

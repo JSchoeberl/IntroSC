@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>6. Python bindings &#8212; Introduction to Scientific Computing</title>
+    <title>7. Python bindings &#8212; Introduction to Scientific Computing</title>
   
   
   
@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -62,8 +62,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'basiclinalg/bla-python2';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="7. Interfacing Lapack" href="bla-lapack.html" />
-    <link rel="prev" title="5. Expression templates" href="bla-expressions.html" />
+    <link rel="next" title="8. Interfacing Lapack" href="bla-lapack.html" />
+    <link rel="prev" title="6. Automatic testing" href="bla-testing.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -188,86 +188,99 @@
 <li class="toctree-l1"><a class="reference internal" href="bla-refreshCpp.html">3. Refresh your C++</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bla-docu.html">4. Creating documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bla-expressions.html">5. Expression templates</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">6. Python bindings</a></li>
-<li class="toctree-l1"><a class="reference internal" href="bla-lapack.html">7. Interfacing Lapack</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bla-testing.html">6. Automatic testing</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">7. Python bindings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bla-lapack.html">8. Interfacing Lapack</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Performance</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../performance/overview.html">8. Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../performance/vectorization.html">9. Vectorization</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../performance/pipelining.html">10. Pipelining</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../performance/caches1.html">11. Caches</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../performance/parallelization.html">12. Parallelization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance/overview.html">9. Overview</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../performance/vectorization.html">10. Vectorization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../performance/simdclass.html">10.1. The SIMD - class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../performance/mathfunc.html">10.2. Vectorizing mathematical functions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance/pipelining.html">11. Pipelining</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance/caches1.html">12. Caches</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance/parallelization.html">13. Parallelization</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">ODEs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../ODEs/ODEs.html">13. Solving ordinary differential equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ODEs/theory.html">14. A little bit of theory</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ODEs/firstmethods.html">15. Some simple time-stepping methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ODEs/implementation.html">16. Implementation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ODEs/RungeKutta.html">17. Runge-Kutta methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../ODEs/mechanical.html">18. Mechanical Systems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ODEs/ODEs.html">14. Solving ordinary differential equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ODEs/theory.html">15. A little bit of theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ODEs/firstmethods.html">16. Some simple time-stepping methods</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ODEs/implementation.html">17. Implementation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ODEs/implementation_newton.html">17.1. Implementing a Newton solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ODEs/implementation_ie.html">17.2. Coding the Implicit Euler method</a></li>
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="../ODEs/implementation_ad.html">17.6. Automatic Differentiation</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../ODEs/RungeKutta.html">18. Runge-Kutta methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ODEs/mechanical.html">19. Mechanical Systems</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">PDEs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">19. Partial differential equations</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../PDEs/PoissonEquation.html">20. The Poisson Equation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/first_example.html">20.1. Solving the Poisson Equation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/Poisson/boundary_conditions.html">20.2. Boundary Conditions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/Poisson/approximation.html">20.3. Approximation of functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/Poisson/capacitor.html">20.4. The electric field in a capacitor</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/Poisson/solvers.html">20.5. Iterative Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">20. Partial differential equations</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../PDEs/PoissonEquation.html">21. The Poisson Equation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/first_example.html">21.1. Solving the Poisson Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Poisson/boundary_conditions.html">21.2. Boundary Conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Poisson/approximation.html">21.3. Approximation of functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Poisson/capacitor.html">21.4. The electric field in a capacitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Poisson/solvers.html">21.5. Iterative Solvers</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../PDEs/timedependent/timedependent.html">21. Time-dependent equations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/timedependent/heatequation.html">21.1. Heat Equation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/timedependent/heatequationmethods.html">21.2. Various methods for the Heat Equation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/timedependent/waveequation.html">21.3. Wave Equation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/timedependent/verlet.html">21.4. Verlet time-stepping and Mass-lumping</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/timedependent/waveguide.html">21.5. Waveguides</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../PDEs/timedependent/timedependent.html">22. Time-dependent equations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/timedependent/heatequation.html">22.1. Heat Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/timedependent/heatequationmethods.html">22.2. Various methods for the Heat Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/timedependent/waveequation.html">22.3. Wave Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/timedependent/verlet.html">22.4. Verlet time-stepping and Mass-lumping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/timedependent/waveguide.html">22.5. Waveguides</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../PDEs/elasticity/intro.html">22. Elasticity</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/modeling.html">22.1. Modeling Elasticity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/Newton.html">22.2. Newton’s method</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/elasticity2D.html">22.3. Solving nonlinear Elasticity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/elasticity3D.html">22.4. 3D Solid Mechanics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/dynamics.html">22.5. Elastodynamics with Newmark time-stepping</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/forces_and_moments.html">22.6. Forces and Moments</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/metamaterial_thick.html">22.7. Meta-material with negative <span class="math notranslate nohighlight">\(\nu\)</span></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/Exercises.html">22.8. Exercises</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../PDEs/elasticity/intro.html">23. Elasticity</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/modeling.html">23.1. Modeling Elasticity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/Newton.html">23.2. Newton’s method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/elasticity2D.html">23.3. Solving nonlinear Elasticity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/elasticity3D.html">23.4. 3D Solid Mechanics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/dynamics.html">23.5. Elastodynamics with Newmark time-stepping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/forces_and_moments.html">23.6. Forces and Moments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/metamaterial_thick.html">23.7. Meta-material with negative <span class="math notranslate nohighlight">\(\nu\)</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/Exercises.html">23.8. Exercises</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../PDEs/CFD/NavierStokes.html">23. Navier Stokes Equations:</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/CFD/Stokes.html">23.1. Stokes Equation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/CFD/Transport.html">23.2. Instationary transport equation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/CFD/SchaeferTurek.html">23.3. Benchmark: Flow around a cylinder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/CFD/naca.html">23.4. NACA airfoil</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/CFD/tesla.html">23.5. Tesla Valve</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../PDEs/CFD/NavierStokes.html">24. Navier Stokes Equations:</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/CFD/Stokes.html">24.1. Stokes Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/CFD/Transport.html">24.2. Instationary transport equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/CFD/SchaeferTurek.html">24.3. Benchmark: Flow around a cylinder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/CFD/naca.html">24.4. NACA airfoil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/CFD/tesla.html">24.5. Tesla Valve</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../PDEs/Maxwell/Maxwell.html">24. Maxwell’s equations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/magnetostatics.html">24.1. Magnetostics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/coil-simple.html">24.2. A simple coil</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/coil.html">24.3. An advanced coil</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/exercises.html">24.4. Exercises</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/HCurl.html">24.5. The function space H(curl)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/deRham.html">24.6. The de Rham complex</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/checkrank.html">24.7. Ranks of discrete operators</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../PDEs/Maxwell/Maxwell.html">25. Maxwell’s equations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/magnetostatics.html">25.1. Magnetostics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/coil-simple.html">25.2. A simple coil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/coil.html">25.3. An advanced coil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/exercises.html">25.4. Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/HCurl.html">25.5. The function space H(curl)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/deRham.html">25.6. The de Rham complex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/checkrank.html">25.7. Ranks of discrete operators</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/Helmholtz.html">25. Helmholtz Equation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/Eigenvalues.html">26. Eigenvalue problems</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/stationaryTransport.html">27. Stationary Transport Equation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/instationaryTransport.html">28. Instationary Transport Equation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/NavierStokes.html">29. Navier Stokes Equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/Curvature.html">30. Computation of Curvature</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/Helmholtz.html">26. Helmholtz Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/Eigenvalues.html">27. Eigenvalue problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/stationaryTransport.html">28. Stationary Transport Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/instationaryTransport.html">29. Instationary Transport Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/NavierStokes.html">30. Navier Stokes Equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/Curvature.html">31. Computation of Curvature</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">FMM</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../fmm/intro_fmm.html">31. Fast Multipole Methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../fmm/basisfunctions.html">32. Multipole basis functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../fmm/layerpotentials.html">33. Layer potentials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fmm/intro_fmm.html">32. Fast Multipole Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fmm/basisfunctions.html">33. Multipole basis functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fmm/layerpotentials.html">34. Layer potentials</a></li>
 </ul>
 
     </div>
@@ -431,15 +444,15 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#binding-c-classes-to-python">6.1. Binding C++ classes to Python:</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#some-more-operators-vector-vector-vector-scalar-scalar-vector">6.1.1. some more operators: vector+vector, vector<span class="math notranslate nohighlight">\(*\)</span>scalar, scalar<span class="math notranslate nohighlight">\(*\)</span>vector</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setter-getter-functions">6.1.2. setter/getter functions:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#binding-c-classes-to-python">7.1. Binding C++ classes to Python:</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#some-more-operators-vector-vector-vector-scalar-scalar-vector">7.1.1. some more operators: vector+vector, vector<span class="math notranslate nohighlight">\(*\)</span>scalar, scalar<span class="math notranslate nohighlight">\(*\)</span>vector</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setter-getter-functions">7.1.2. setter/getter functions:</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#importing-the-python-module">6.2. Importing the python module</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pickling-support">6.3. Pickling support</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise">6.4. Exercise</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-the-python-package">6.5. Building the Python-package</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#importing-the-python-module">7.2. Importing the python module</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pickling-support">7.3. Pickling support</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise">7.4. Exercise</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-the-python-package">7.5. Building the Python-package</a></li>
 </ul>
             </nav>
         </div>
@@ -452,7 +465,7 @@ document.write(`
                 <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="python-bindings">
-<h1><span class="section-number">6. </span>Python bindings<a class="headerlink" href="#python-bindings" title="Link to this heading">#</a></h1>
+<h1><span class="section-number">7. </span>Python bindings<a class="headerlink" href="#python-bindings" title="Link to this heading">#</a></h1>
 <p>C++ and Python are are strong combination: With C++ we can program for maximal performance, with Python we can work with objects in a very convenient way. Both share a similar object oriented paradigm.</p>
 <p>Python bindings allow to use C++ functions and classes from Python.</p>
 <p>A popular library for wrapping C++ objects to Python is
@@ -473,19 +486,19 @@ document.write(`
 <p>Building, installing and testing ASC-bla should now work with</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cd ASC-bla
 pip install . -v
-cd py_tests
-python3 test_vector.py
+cd py_demos
+python3 demo_vector.py
 </pre></div>
 </div>
 <p>The command <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">.</span></code> reads information from the files <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> and <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>, and calls <em>cmake</em> to build the project. The <em>cmake</em>-file <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> needed some update to find the Python installation, and the pybind11 - directories.</p>
 <p>The Python file <em>test_vector.py</em> uses features of our <code class="docutils literal notranslate"><span class="pre">Vector</span></code> Python-class.</p>
 <p>If this works, merge the pybind branch into the main branch of your repo.</p>
 <section id="binding-c-classes-to-python">
-<h2><span class="section-number">6.1. </span>Binding C++ classes to Python:<a class="headerlink" href="#binding-c-classes-to-python" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">7.1. </span>Binding C++ classes to Python:<a class="headerlink" href="#binding-c-classes-to-python" title="Link to this heading">#</a></h2>
 <p>Python-wrapping makes our C++ functions and classes available in Python.
 All code for wrapping the classes and functions happens in <em>src/bind_bla.cpp</em>:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;pybind11/pybind11.h&gt;</span>
-<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;vector.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;vector.hpp&quot;</span>
 
 <span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">ASC_bla</span><span class="p">;</span>
 <span class="k">namespace</span><span class="w"> </span><span class="nn">py</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nn">pybind11</span><span class="p">;</span>
@@ -518,7 +531,7 @@ All code for wrapping the classes and functions happens in <em>src/bind_bla.cpp<
 <li><p>the function <code class="docutils literal notranslate"><span class="pre">__str__</span></code> is called to convert the object to a string, it is used from the <code class="docutils literal notranslate"><span class="pre">print(vec)</span></code> function</p></li>
 </ul>
 <section id="some-more-operators-vector-vector-vector-scalar-scalar-vector">
-<h3><span class="section-number">6.1.1. </span>some more operators: vector+vector, vector<span class="math notranslate nohighlight">\(*\)</span>scalar, scalar<span class="math notranslate nohighlight">\(*\)</span>vector<a class="headerlink" href="#some-more-operators-vector-vector-vector-scalar-scalar-vector" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">7.1.1. </span>some more operators: vector+vector, vector<span class="math notranslate nohighlight">\(*\)</span>scalar, scalar<span class="math notranslate nohighlight">\(*\)</span>vector<a class="headerlink" href="#some-more-operators-vector-vector-vector-scalar-scalar-vector" title="Link to this heading">#</a></h3>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="p">.</span><span class="n">def</span><span class="p">(</span><span class="s">&quot;__add__&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">[](</span><span class="n">Vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">self</span><span class="p">,</span><span class="w"> </span><span class="n">Vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">other</span><span class="p">)</span>
 <span class="w">    </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">Vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">self</span><span class="o">+</span><span class="n">other</span><span class="p">);</span><span class="w"> </span><span class="p">})</span>
 <span class="p">.</span><span class="n">def</span><span class="p">(</span><span class="s">&quot;__mul__&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">[](</span><span class="n">Vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">self</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">scal</span><span class="p">)</span>
@@ -531,7 +544,7 @@ All code for wrapping the classes and functions happens in <em>src/bind_bla.cpp<
 <a class="reference external" href="https://docs.python.org/3/library/operator.html">Python-operators</a></p>
 </section>
 <section id="setter-getter-functions">
-<h3><span class="section-number">6.1.2. </span>setter/getter functions:<a class="headerlink" href="#setter-getter-functions" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">7.1.2. </span>setter/getter functions:<a class="headerlink" href="#setter-getter-functions" title="Link to this heading">#</a></h3>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="p">.</span><span class="n">def</span><span class="p">(</span><span class="s">&quot;__setitem__&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">[](</span><span class="n">Vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">self</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">Size</span><span class="p">();</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">self</span><span class="p">.</span><span class="n">Size</span><span class="p">())</span><span class="w"> </span><span class="k">throw</span><span class="w"> </span><span class="n">py</span><span class="o">::</span><span class="n">index_error</span><span class="p">(</span><span class="s">&quot;vector index out of range&quot;</span><span class="p">);</span>
@@ -552,7 +565,7 @@ The Python slice operator <code class="docutils literal notranslate"><span class
 </section>
 </section>
 <section id="importing-the-python-module">
-<h2><span class="section-number">6.2. </span>Importing the python module<a class="headerlink" href="#importing-the-python-module" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">7.2. </span>Importing the python module<a class="headerlink" href="#importing-the-python-module" title="Link to this heading">#</a></h2>
 <p>We can now import the python module bla from the package ASCsoft. Either in a plain <em>.py</em> Python file, or into jupyter notebooks:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -561,12 +574,7 @@ The Python slice operator <code class="docutils literal notranslate"><span class
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">ASCsoft.bla</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;ASCsoft&#39;
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>importing ASC-bla
 </pre></div>
 </div>
 </div>
@@ -589,10 +597,15 @@ The Python slice operator <code class="docutils literal notranslate"><span class
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>x+y = 3, 4, 5, 6, 7
+</pre></div>
+</div>
+</div>
 </div>
 </section>
 <section id="pickling-support">
-<h2><span class="section-number">6.3. </span>Pickling support<a class="headerlink" href="#pickling-support" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">7.3. </span>Pickling support<a class="headerlink" href="#pickling-support" title="Link to this heading">#</a></h2>
 <p>Pickling is the standard Python serialization (file io, parallel communication). Python knows how to convert built-in data structures (strings, floating-point values, lists, tuples, …) to a stream ob bytes. To support pickling also for our user types, we have to convert our objects into standard Python objects. For this we use the <code class="docutils literal notranslate"><span class="pre">py::pickle</span></code> support function, which takes two lamda-functions for pickling, and unpickling:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="p">.</span><span class="n">def</span><span class="p">(</span><span class="n">py</span><span class="o">::</span><span class="n">pickle</span><span class="p">(</span>
 <span class="w">    </span><span class="p">[](</span><span class="n">Vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">// __getstate__</span>
@@ -632,10 +645,16 @@ A more advanced version of pickling uses <a class="reference external" href="htt
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[2, &#39;hello&#39;, &lt;ASCsoft.bla.Vector object at 0x10cb60170&gt;]
+7, 7, 7
+</pre></div>
+</div>
+</div>
 </div>
 </section>
 <section id="exercise">
-<h2><span class="section-number">6.4. </span>Exercise<a class="headerlink" href="#exercise" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">7.4. </span>Exercise<a class="headerlink" href="#exercise" title="Link to this heading">#</a></h2>
 <ul>
 <li><p>Wrap your <code class="docutils literal notranslate"><span class="pre">Matrix&lt;double,RowMajor&gt;</span></code> to Python. Add getter/setter functions and operators. Add a property <code class="docutils literal notranslate"><span class="pre">shape</span></code>.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w"> </span><span class="p">.</span><span class="n">def</span><span class="p">(</span><span class="s">&quot;__getitem__&quot;</span><span class="p">,</span>
@@ -655,7 +674,7 @@ A more advanced version of pickling uses <a class="reference external" href="htt
 </ul>
 </section>
 <section id="building-the-python-package">
-<h2><span class="section-number">6.5. </span>Building the Python-package<a class="headerlink" href="#building-the-python-package" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">7.5. </span>Building the Python-package<a class="headerlink" href="#building-the-python-package" title="Link to this heading">#</a></h2>
 <p>You found two new files <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> and <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code>. They are responsible for building and installing a Python package. If we call</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>pip install .
 </pre></div>
@@ -704,12 +723,12 @@ A more advanced version of pickling uses <a class="reference external" href="htt
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="bla-expressions.html"
+       href="bla-testing.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">5. </span>Expression templates</p>
+        <p class="prev-next-title"><span class="section-number">6. </span>Automatic testing</p>
       </div>
     </a>
     <a class="right-next"
@@ -717,7 +736,7 @@ A more advanced version of pickling uses <a class="reference external" href="htt
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">7. </span>Interfacing Lapack</p>
+        <p class="prev-next-title"><span class="section-number">8. </span>Interfacing Lapack</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -737,15 +756,15 @@ A more advanced version of pickling uses <a class="reference external" href="htt
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#binding-c-classes-to-python">6.1. Binding C++ classes to Python:</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#some-more-operators-vector-vector-vector-scalar-scalar-vector">6.1.1. some more operators: vector+vector, vector<span class="math notranslate nohighlight">\(*\)</span>scalar, scalar<span class="math notranslate nohighlight">\(*\)</span>vector</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setter-getter-functions">6.1.2. setter/getter functions:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#binding-c-classes-to-python">7.1. Binding C++ classes to Python:</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#some-more-operators-vector-vector-vector-scalar-scalar-vector">7.1.1. some more operators: vector+vector, vector<span class="math notranslate nohighlight">\(*\)</span>scalar, scalar<span class="math notranslate nohighlight">\(*\)</span>vector</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setter-getter-functions">7.1.2. setter/getter functions:</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#importing-the-python-module">6.2. Importing the python module</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pickling-support">6.3. Pickling support</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise">6.4. Exercise</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-the-python-package">6.5. Building the Python-package</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#importing-the-python-module">7.2. Importing the python module</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pickling-support">7.3. Pickling support</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise">7.4. Exercise</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-the-python-package">7.5. Building the Python-package</a></li>
 </ul>
   </nav></div>
 
