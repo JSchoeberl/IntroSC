@@ -3,7 +3,6 @@
 C++ and Python are are strong combination: With C++ we can program for maximal performance, with Python we can work with objects in a very convenient way. Both share a similar object oriented paradigm.
 
 
-
 Python bindings allow to use C++ functions and classes from Python.
 
 A popular library for wrapping C++ objects to Python is
