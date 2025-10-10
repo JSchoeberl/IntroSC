@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -481,12 +481,23 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "794306dc1c034397ab96f0bbcdbf6d73"}</script><script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "e00700ec6ff64a56ac0b9829a5b0b07d"}</script></div>
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "880fe04dffce46d1a72d7555bed48c62"}</script><script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "c944b924384c436291c4d5f6fc7ec4ff"}</script></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">ngsolve.bem</span><span class="w"> </span><span class="kn">import</span> <span class="n">SingularMLMultiPoleCF</span><span class="p">,</span> <span class="n">RegularMLMultiPoleCF</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">ngsolve.bla</span><span class="w"> </span><span class="kn">import</span> <span class="n">Vec3D</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ImportError</span><span class="g g-Whitespace">                               </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">ngsolve.bem</span><span class="w"> </span><span class="kn">import</span> <span class="n">SingularMLMultiPoleCF</span><span class="p">,</span> <span class="n">RegularMLMultiPoleCF</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">from</span><span class="w"> </span><span class="nn">ngsolve.bla</span><span class="w"> </span><span class="kn">import</span> <span class="n">Vec3D</span>
+
+<span class="ne">ImportError</span>: cannot import name &#39;SingularMLMultiPoleCF&#39; from &#39;ngsolve.bem&#39; (/Applications/Netgen.app/Contents/Resources/lib/python3.14/site-packages/ngsolve/ngslib.so)
 </pre></div>
 </div>
 </div>
@@ -516,11 +527,6 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>number of source points:  27830
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -528,8 +534,6 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "010e782b65334098ada9079bae494ecf"}</script></div>
 </div>
 <p>We see that the single layer potential is continuous across the surface <span class="math notranslate nohighlight">\(\Gamma\)</span>, but has a kink at <span class="math notranslate nohighlight">\(\Gamma\)</span>. This shows that the normal derivative is jumping (exactly by <span class="math notranslate nohighlight">\(\rho\)</span>).</p>
 <div class="cell docutils container">
@@ -545,8 +549,6 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "e1769f2bd5714895b50da882721ae97d"}</script></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -554,8 +556,6 @@ document.write(`
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "7eabff91764340b093b538ecb28841de"}</script></div>
 </div>
 <section id="double-layer-potential">
 <h2><span class="section-number">34.1. </span>Double layer potential<a class="headerlink" href="#double-layer-potential" title="Link to this heading">#</a></h2>
@@ -592,22 +592,6 @@ and passing to the limit, i.e.</p>
 
 <span class="n">Draw</span> <span class="p">(</span><span class="n">mp</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">vismesh</span><span class="p">,</span> <span class="nb">min</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span><span class="nb">max</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">animate_complex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">Draw</span> <span class="p">(</span><span class="n">mp</span><span class="p">,</span> <span class="n">vismesh</span><span class="p">,</span> <span class="nb">min</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span><span class="nb">max</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">animate_complex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">2</span><span class="p">);</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="n">line</span> <span class="mi">2</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">kappa</span> <span class="o">=</span> <span class="n">pi</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">mp</span> <span class="o">=</span> <span class="n">SingularMLMultiPoleCF</span><span class="p">(</span><span class="n">Vec3D</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="n">kappa</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">ir</span> <span class="o">=</span> <span class="n">IntegrationRule</span><span class="p">(</span><span class="n">TRIG</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">pnts</span> <span class="o">=</span> <span class="n">mesh</span><span class="o">.</span><span class="n">MapToAllElements</span><span class="p">(</span><span class="n">ir</span><span class="p">,</span> <span class="n">BND</span><span class="p">)</span>
-
-<span class="ne">TypeError</span>: __init__(): incompatible constructor arguments. The following argument types are supported:
-<span class="g g-Whitespace">    </span><span class="mi">1</span><span class="o">.</span> <span class="n">ngsolve</span><span class="o">.</span><span class="n">bem</span><span class="o">.</span><span class="n">SingularMLMultiPoleCF</span><span class="p">(</span><span class="n">center</span><span class="p">:</span> <span class="n">ngsolve</span><span class="o">.</span><span class="n">bla</span><span class="o">.</span><span class="n">Vec3D</span><span class="p">,</span> <span class="n">r</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">kappa</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span>
-
-<span class="n">Invoked</span> <span class="k">with</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">ngsolve</span><span class="o">.</span><span class="n">bla</span><span class="o">.</span><span class="n">Vec3D</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x10f2da430</span><span class="o">&gt;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mf">3.141592653589793</span>
 </pre></div>
 </div>
 </div>
