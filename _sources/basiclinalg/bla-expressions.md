@@ -22,7 +22,7 @@ seems to be much more efficient, no temporary objects are created, and the resul
 The trick is that `x+3*y` does not return vectors, but it returns the logic information of the expression, like *I am the sum of a vector and a second vector scaled by the scalar 3*. Such expressions can be built by the compiler using templates, something like the type
 
 ```cpp
-AddExpr< Vector , ScaleExpr< double, Vector > >
+SumExpr< Vector , ScaleExpr< double, Vector > >
 ```
 
 The use of templates for encoding such expressions is called the expression template paradigm.
