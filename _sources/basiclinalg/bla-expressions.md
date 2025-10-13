@@ -11,7 +11,7 @@ where `x,y,z` are vectors. What happens ? First, the `operator* (double, Vector)
 
 Writing an old-style C code
 ```cpp
-for (size_t i = 0; i < z.Size(); i++)
+for (size_t i = 0; i < z.size(); i++)
   z(i) = x(i) + 3*y(i);
 ```
 seems to be much more efficient, no temporary objects are created, and the result values are stored at the right position immediately.
@@ -22,7 +22,7 @@ seems to be much more efficient, no temporary objects are created, and the resul
 The trick is that `x+3*y` does not return vectors, but it returns the logic information of the expression, like *I am the sum of a vector and a second vector scaled by the scalar 3*. Such expressions can be built by the compiler using templates, something like the type
 
 ```cpp
-SumExpr< Vector , ScaleExpr< double, Vector > >
+AddExpr< Vector , ScaleExpr< double, Vector > >
 ```
 
 The use of templates for encoding such expressions is called the expression template paradigm.
@@ -41,9 +41,9 @@ template <typename T>
   class VecExpr
   {
   public:
-    auto Upcast() const { return static_cast<const T&> (*this); }
-    size_t Size() const { return Upcast().Size(); }
-    auto operator() (size_t i) const { return Upcast()(i); }
+    auto upcast() const { return static_cast<const T&> (*this); }
+    size_t size() const { return upcast().Size(); }
+    auto operator() (size_t i) const { return upcast()(i); }
   };
 
 template <typename TA, typename TB>
@@ -55,13 +55,13 @@ template <typename TA, typename TB>
     SumVecExpr (TA _a, TB _b) : a(_a), b(_b) { }
 
     auto operator() (size_t i) const { return a(i)+b(i); }
-    size_t Size() const { return a_.Size(); }      
+    size_t size() const { return a.size(); }      
   };
 
 template <typename TA, typename TB>
   auto operator+ (const VecExpr<TA> & a, const VecExpr<TB> & b)
 {
-  return SumVecExpr(a.Upcast(), b.Upcast());
+  return SumVecExpr(a.upcast(), b.upcast());
 }
 ```
 
@@ -88,13 +88,13 @@ template <typename T>
 class VectorView : public VecExpr<VectorView<T>>
 {
 protected:
-  size_t size;
-  T * data;
+  size_t m_size;
+  T * m_data;
 public:
-  VectorView (size_t _size, T * _data)
-    : size(_size), data(_data) { }
+  VectorView (size_t size, T * data)
+    : m_size(size), m_data(data) { }
 
-T & operator()(size_t i) { return data[i]; }
+T & operator()(size_t i) { return m_data[i]; }
 };
 
 template <typename T>
@@ -103,7 +103,7 @@ class Vector : public VectorView<T>
  public:
    Vector (size_t size)
      : VectorView (size, new T[size]) { }
-   ~Vector() { delete [] data; }
+   ~Vector() { delete [] m_data; }
 };
 
 ```
@@ -115,8 +115,8 @@ A `VectorView` allows also to access a range of a vector:
 ```cpp
 class VectorView {
   ...
-  VectorView Range(size_t first, size_t next)
-    { return VectorView(next-first, data+first); }
+  VectorView range(size_t first, size_t next)
+    { return VectorView(next-first, m_data+first); }
 }
 ```
 With this we can, for example, zero elements with indices in semi-open interval $[10,15)$ via `vec.Range(10,15) = 0`.
@@ -124,11 +124,11 @@ With this we can, for example, zero elements with indices in semi-open interval 
 A generalization of a `VectorView` allows vectors whose value don't have to lie consecutively in memory. For that we provide the `dist` member variable:
 ```cpp
 class VectorView {
-  size_t size;
-  size_t dist;
-  T * data;
+  size_t m_size;
+  size_t m_dist;
+  T * m_data;
   ... 
-  T & operator()(size_t i) { return data[i*dist]; }  
+  T & operator()(size_t i) { return m_data[i*m_dist]; }  
 }
 ```
 
@@ -137,15 +137,15 @@ Ok, this is more general - but the index calculation comes with some price, whic
 ```cpp
 template <typename T, typename TDIST=std::integral_constant<1>>
 class VectorView {
-  size_t size;
-  TDIST dist;
-  T * data;
+  size_t m_size;
+  TDIST m_dist;
+  T * m_data;
   ... 
-  T & operator()(size_t i) { return data[i*dist]; }  
+  T & operator()(size_t i) { return m_data[i*m_dist]; }  
 }
 ```
 
-## Excercise
+## Exercise
 
   * Merge the expr - branch from TUWien-ASC/ASC-bla into your main branch [instructions](inst_merge.md)
 
@@ -154,13 +154,13 @@ class VectorView {
     ```cpp
     template <typename T, template ORDERING>
     class MatrixView {
-      size_t height, width, dist;
-      T * data_;
+      size_t m_rows, m_cols, m_dist;
+      T * m_data_;
     }
     ```
-    Index calculation is `i*dist+j` in the row-major case, and `i+j*dist` in the col-major case.
+    Index calculation is `i*m_dist+j` in the row-major case, and `i+j*m_dist` in the col-major case.
 
-    Let your `Matrix` class derive vom `MatrixView`. Initialize the `dist` variable either with the width, or the height of the matrix, depending on row or column-major storage.
+    Let your `Matrix` class derive from `MatrixView`. Initialize the `m_dist` variable either with the width, or the height of the matrix, depending on row or column-major storage.
 
   * Introduce expression templates for matrices, including
     - MatExpr + MatExpr -> MatExpr
@@ -168,13 +168,13 @@ class VectorView {
     - MatExpr * VecExpr -> VecExpr
 
 
-  * Implement `matrix.Row(i)` and `matrix.Col(j)` methods returning a `VectorView` of individual rows and columns.
+  * Implement `matrix.row(i)` and `matrix.col(j)` methods returning a `VectorView` of individual rows and columns.
 
-  * Implement `matrix.Rows(first,next)` and `matrix.Cols(first,next)` methods returning a `MatrixView` of a range of rows/cols.
+  * Implement `matrix.rows(first,next)` and `matrix.cols(first,next)` methods returning a `MatrixView` of a range of rows/cols.
 
-  * Implement a `Transpose(matrix)` function resulting in a `MatrixView` of opposite ordering
+  * Implement a `transpose(matrix)` function resulting in a `MatrixView` of opposite ordering
   
-  * Simplify the `Inverse` function using these new features
+  * Simplify the `inverse` function using these new features
   
 ## Pitfalls
 
@@ -185,9 +185,9 @@ class VectorView {
 
   * what happens here ? 
   ```cpp
-  auto Func() {
+  auto func() {
     Matrix a(10,10);
-    return a.Row(3); 
+    return a.row(3); 
   }
   ```
 
@@ -196,9 +196,9 @@ class VectorView {
 
 But can the compiler really generate good code from all of these nested functions and expression objects ? Yes ! It is important that the compiler can inline all the functions, sees the whole flow of data, and optimizes everything as a single function.
 
-To verify what the compiler generates, we can have a look into the generated assembly code. There is an online tool [Compiler Explorer](https://godbolt.org/z/qePEhvaov). You copy in the source code, and it immediately displays the generated assembly code. It allows to choose between a lot of compilers, versions and provided flags.
+To verify what the compiler generates, we can have a look into the generated assembly code. There is an online tool [Compiler Explorer](https://godbolt.org/z/qePEhvaov). You copy in the source code, and it immediately displays the generated assembly code. It allows choosing between a lot of compilers, versions and provided flags.
 
-If you scroll down within the left window you find two functions `MyFunc`, and `MyFunc2`. One uses expresion templates, the other one hand-written C-code. In the right window you see the generated assemply code. You can identify a loop (with compare `cmp` and not-equal branching `jne`. You find one addition `addsd` and one multiplication `mulsd` within the loop. You see that the two generated codes are identic, there is no overhead coming from the expression templates.
+If you scroll down within the left window you find two functions `MyFunc`, and `MyFunc2`. One uses expression templates, the other one handwritten C-code. In the right window you see the generated assembly code. You can identify a loop (with compare `cmp` and not-equal branching `jne`). You find one addition `addsd` and one multiplication `mulsd` within the loop. You see that the two generated codes are identical, there is no overhead coming from the expression templates.
 
 
 
