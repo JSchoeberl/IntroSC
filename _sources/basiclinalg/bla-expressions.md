@@ -155,7 +155,7 @@ class VectorView {
     template <typename T, template ORDERING>
     class MatrixView {
       size_t m_rows, m_cols, m_dist;
-      T * m_data_;
+      T * m_data;
     }
     ```
     Index calculation is `i*m_dist+j` in the row-major case, and `i+j*m_dist` in the col-major case.

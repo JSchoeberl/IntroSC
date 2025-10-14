@@ -446,9 +446,48 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="automatic-testing">
 <h1><span class="section-number">6. </span>Automatic testing<a class="headerlink" href="#automatic-testing" title="Link to this heading">#</a></h1>
-<p>Usually you implement some algorithm, test them - and they work. But often you modify your code, and it happes that you break code that worked before. It often takes long to find these errors.</p>
-<p>For that reason it is a good idea to add a test-suite of well chosen tests that verifies your algorithm.</p>
+<p>Usually you implement some algorithms, test them - and they work. But often you modify your code later, and it happes that you break code that worked before. It often takes a long time to find these errors.</p>
+<p>For that reason it is a good idea to add a test-suite of well chosen tests that verify the individual units of your library.</p>
 <p>We are going to use <a class="reference external" href="https://github.com/catchorg/Catch2">Catch2</a> for setting up such tests.</p>
+<p>Now, merge the branch <code class="docutils literal notranslate"><span class="pre">catch</span></code> into your project. It gives you an extra directory <code class="docutils literal notranslate"><span class="pre">tests</span></code> containing the test suite.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">TEST_CASE</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;bla-tests&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;[vector size test]&quot;</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">Vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+<span class="w">  </span><span class="n">Vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
+<span class="w">  </span><span class="n">REQUIRE</span><span class="p">(</span><span class="n">y</span><span class="p">.</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">5</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">TEST_CASE</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;bla-tests&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;[vector add and scale test]&quot;</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">Vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+<span class="w">  </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="w">  </span><span class="n">Vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="mi">-2</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
+<span class="w">  </span><span class="n">REQUIRE</span><span class="p">(</span><span class="n">y</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">3</span><span class="p">);</span><span class="w"> </span>
+<span class="p">}</span>
+
+<span class="n">TEST_CASE</span><span class="p">(</span><span class="w"> </span><span class="s">&quot;bla-tests&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;[buggy vector add and scale test]&quot;</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">Vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+<span class="w">  </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="w">  </span><span class="n">Vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="mi">-2</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
+<span class="w">  </span><span class="n">REQUIRE</span><span class="p">(</span><span class="n">y</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">4</span><span class="p">);</span><span class="w">  </span><span class="c1">// wrong test !!</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Compiling and running the tests will produce the following output:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>/Users/joachim/texjs/lva/IntroSC/ASC-bla/tests/tests_vector.cpp:27: FAILED:
+   REQUIRE( y(0) == 4 )
+with expansion:
+  3.0 == 4
+
+===============================================================================
+test cases: 3 | 2 passed | 1 failed
+assertions: 3 | 2 passed | 1 failed
+</pre></div>
+</div>
+<p>Actually, not the vector class, but the test case is buggy.</p>
+<p>One can setup the github server such that with every commit the test-suite is run automatically, see
+<a class="reference external" href="https://github.com/resources/articles/devops/ci-cd">Continuous Integraton</a>.
+That should help to detect errors at an early stage.</p>
+<p>A larger project using automatic testing is setup here:
+<a class="reference external" href="https://gitlab.tuwien.ac.at/ngsolve/ngsolve/-/pipelines">NGSolve gitlab</a></p>
 </section>
 
     <script type="text/x-thebe-config">
