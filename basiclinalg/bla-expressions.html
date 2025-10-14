@@ -600,6 +600,13 @@ In the breaking work by Todd Veldhuizen <a class="reference download internal" d
 <li><p>MatExpr * MatExpr -&gt; MatExpr</p></li>
 <li><p>MatExpr * VecExpr -&gt; VecExpr</p></li>
 </ul>
+<p>To get the type of the summation variable in the mat-mat or mat-vec products you may use</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>using elemtypeA = std::invoke_result&lt;TA,size_t,size_t&gt;::type;
+using elemtypeB = std::invoke_result&lt;TB,size_t&gt;::type;
+using TSUM = decltype(std::declval&lt;elemtypeA&gt;()*std::declval&lt;elemtypeB&gt;());
+TSUM sum = 0;
+</pre></div>
+</div>
 </li>
 <li><p>Implement <code class="docutils literal notranslate"><span class="pre">matrix.row(i)</span></code> and <code class="docutils literal notranslate"><span class="pre">matrix.col(j)</span></code> methods returning a <code class="docutils literal notranslate"><span class="pre">VectorView</span></code> of individual rows and columns.</p></li>
 <li><p>Implement <code class="docutils literal notranslate"><span class="pre">matrix.rows(first,next)</span></code> and <code class="docutils literal notranslate"><span class="pre">matrix.cols(first,next)</span></code> methods returning a <code class="docutils literal notranslate"><span class="pre">MatrixView</span></code> of a range of rows/cols.</p></li>

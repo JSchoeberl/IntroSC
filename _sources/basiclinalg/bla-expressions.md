@@ -167,6 +167,12 @@ class VectorView {
     - MatExpr * MatExpr -> MatExpr
     - MatExpr * VecExpr -> VecExpr
 
+    To get the type of the summation variable in the mat-mat or mat-vec products you may use
+
+        using elemtypeA = std::invoke_result<TA,size_t,size_t>::type;
+        using elemtypeB = std::invoke_result<TB,size_t>::type;
+        using TSUM = decltype(std::declval<elemtypeA>()*std::declval<elemtypeB>());
+        TSUM sum = 0;
 
   * Implement `matrix.row(i)` and `matrix.col(j)` methods returning a `VectorView` of individual rows and columns.
 
