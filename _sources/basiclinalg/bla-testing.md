@@ -53,5 +53,4 @@ One can setup the github server such that with every commit the test-suite is ru
 [Continuous Integraton](https://github.com/resources/articles/devops/ci-cd).
 That should help to detect errors at an early stage.
 
-A larger project using automatic testing is setup here:
-[NGSolve gitlab](https://gitlab.tuwien.ac.at/ngsolve/ngsolve/-/pipelines)
+
