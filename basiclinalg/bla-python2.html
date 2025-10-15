@@ -574,12 +574,7 @@ The Python slice operator <code class="docutils literal notranslate"><span class
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span><span class="w"> </span><span class="nn">ASCsoft.bla</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;ASCsoft&#39;
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>importing ASC-bla
 </pre></div>
 </div>
 </div>
@@ -599,6 +594,11 @@ The Python slice operator <code class="docutils literal notranslate"><span class
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;x+y =&quot;</span><span class="p">,</span><span class="n">x</span><span class="o">+</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>x+y = 3, 4, 5, 6, 7
 </pre></div>
 </div>
 </div>
@@ -642,6 +642,12 @@ A more advanced version of pickling uses <a class="reference external" href="htt
 <span class="n">val</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f2</span><span class="p">)</span>
 <span class="nb">print</span> <span class="p">(</span><span class="n">val</span><span class="p">)</span>
 <span class="nb">print</span> <span class="p">(</span><span class="n">val</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[2, &#39;hello&#39;, &lt;ASCsoft.bla.Vector object at 0x10ce1ccb0&gt;]
+7, 7, 7
 </pre></div>
 </div>
 </div>
