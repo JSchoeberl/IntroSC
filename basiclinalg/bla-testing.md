@@ -49,9 +49,17 @@ Compiling and running the tests will produce the following output:
 Actually, not the vector class, but the test case is buggy.
 
 
-One can setup the github server such that with every commit the test-suite is run automatically, see
+
+In vs-code, you can use the testing symbol to run the tests:
+```{image} vscode-testing.png
+:width: 40%
+:align: center
+```
+
+
+One can set up the GitHub server such that with every commit the test-suite is run automatically, see
 [Continuous Integraton](https://github.com/resources/articles/devops/ci-cd).
 That should help to detect errors at an early stage.
 
-A larger project using automatic testing is setup here:
-[NGSolve gitlab](https://gitlab.tuwien.ac.at/ngsolve/ngsolve/-/pipelines)
+
+

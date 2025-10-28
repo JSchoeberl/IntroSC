@@ -41,9 +41,9 @@ template <typename T>
   class VecExpr
   {
   public:
-    auto upcast() const { return static_cast<const T&> (*this); }
-    size_t size() const { return upcast().Size(); }
-    auto operator() (size_t i) const { return upcast()(i); }
+    auto derived() const { return static_cast<const T&> (*this); }
+    size_t size() const { return derived().size(); }
+    auto operator() (size_t i) const { return derived()(i); }
   };
 
 template <typename TA, typename TB>
@@ -61,7 +61,7 @@ template <typename TA, typename TB>
 template <typename TA, typename TB>
   auto operator+ (const VecExpr<TA> & a, const VecExpr<TB> & b)
 {
-  return SumVecExpr(a.upcast(), b.upcast());
+  return SumVecExpr(a.derived(), b.derived());
 }
 ```
 
@@ -72,7 +72,7 @@ This idiom is known as
 In the breaking work by Todd Veldhuizen [Expression Templates](./Veldhuizen.pdf) the expression templates paradigm for vector operations was introduced. However, back in 1995, it was too much for compiler technology.
 
 
-If we call the call operator `operator()(size_t)` of an `VecExpr<T>` object, it upcasts to `T`, and calls the call operator there. In this example the `operator()` of a `SumVecExpr` calls the `operator()` of both of its members.
+If we call the call operator `operator()(size_t)` of an `VecExpr<T>` object, it downcasts to `T`, and calls the call operator there. In this example the `operator()` of a `SumVecExpr` calls the `operator()` of both of its members.
 
 How can this `operator+` be applied to `Vector`s ? Do we have to define all combinations of `operator+([Vector|VecExpr], [Vector|VecExpr])` ? We can avoid it by letting `Vector` derive from `VecExpr`. However, we don't want to copy the vector into the `SumVecExpr`. We could do it by using references - or, alternatively, we introduce a **view** of a vector, a `VectorView`.
 
@@ -167,6 +167,14 @@ class VectorView {
     - MatExpr * MatExpr -> MatExpr
     - MatExpr * VecExpr -> VecExpr
 
+    To get the type of the summation variable in the mat-mat or mat-vec products you may use
+
+        using elemtypeA = typename std::invoke_result<TA,size_t,size_t>::type;
+        using elemtypeB = typename std::invoke_result<TB,size_t>::type;
+        using TSUM = decltype(std::declval<elemtypeA>()*std::declval<elemtypeB>());
+        TSUM sum = 0;
+
+    You may first implement an inner product (`dot` - function) and use that in matrix-vector and matrix-matrix products. 
 
   * Implement `matrix.row(i)` and `matrix.col(j)` methods returning a `VectorView` of individual rows and columns.
 
