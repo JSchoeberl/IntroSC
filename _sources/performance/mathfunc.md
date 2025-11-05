@@ -22,104 +22,107 @@ References:
      of mathematical functions:
   
 
-```cpp
-static constexpr double sincof[] = {
-    1.58962301576546568060E-10,
-    -2.50507477628578072866E-8,
-    2.75573136213857245213E-6,
-    -1.98412698295895385996E-4,
-    8.33333333332211858878E-3,
-    -1.66666666666666307295E-1,
-  };
-
-static constexpr double coscof[6] = {
-    -1.13585365213876817300E-11,
-    2.08757008419747316778E-9,
-    -2.75573141792967388112E-7,
-    2.48015872888517045348E-5,
-    -1.38888888888730564116E-3,
-    4.16666666666665929218E-2,
-  };
-
-// highly accurate on [-pi/4, pi/4]
-template <typename T>
-auto sincos_reduced (T x)
-{
-  auto x2 = x*x;
+  ```cpp
+  static constexpr double sincof[] = {
+      1.58962301576546568060E-10,
+      -2.50507477628578072866E-8,
+      2.75573136213857245213E-6,
+      -1.98412698295895385996E-4,
+      8.33333333332211858878E-3,
+      -1.66666666666666307295E-1,
+    };
   
-  auto s = (((((sincof[0]*x2+sincof[1])*x2+sincof[2])*x2+sincof[3])*x2+sincof[4])*x2+sincof[5]);
-  s = x + x*x*x * s;
+  static constexpr double coscof[6] = {
+      -1.13585365213876817300E-11,
+      2.08757008419747316778E-9,
+      -2.75573141792967388112E-7,
+      2.48015872888517045348E-5,
+      -1.38888888888730564116E-3,
+      4.16666666666665929218E-2,
+    };
+  
+  // highly accurate on [-pi/4, pi/4]
+  template <typename T>
+  auto sincos_reduced (T x) 
+  {
+    auto x2 = x*x;
+    
+    auto s = (((((sincof[0]*x2+sincof[1])*x2+sincof[2])*x2+sincof[3])*x2+sincof[4])*x2+sincof[5]);
+    s = x + x*x*x * s;
+  
+    auto c = (((((coscof[0]*x2+coscof[1])*x2+coscof[2])*x2+coscof[3])*x2+coscof[4])*x2+coscof[5]);
+    c = 1.0 - 0.5*x2 + x2*x2*c;
+  
+    return std::tuple{ s, c };
+  }
+  ```
 
-  auto c = (((((coscof[0]*x2+coscof[1])*x2+coscof[2])*x2+coscof[3])*x2+coscof[4])*x2+coscof[5]);
-  c = 1.0 - 0.5*x2 + x2*x2*c;
+  This polynomial approximation can be used the same way for `double x`, and `SIMD<double> x`.
 
-  return std::tuple{ s, c };
-}
-
-```  
 
 * Global approximation
 
-We write
-
-$$
-x = q \frac{\pi}{2} + \tilde x
-$$
-with an integer $q$ and the reminder $\tilde x \in [-\pi/2, \pi/2]$.
-
-Depending on the reminder, we can reduce the evaluation of $\sin x$ to
-local evaluation of $\sin$ or $\cos$ for small $\tilde x$:
-
-$$
-\sin(x) = \left\{ \begin{array}{cc}
-        \sin(\tilde x) & \text{for } q \text{ mod } 4 = 0, \\
-        \cos(\tilde x) & \text{for } q \text{ mod } 4 = 1, \\
-        -\sin(\tilde x) & \text{for } q \text{ mod } 4 = 2, \\
-        -\cos(\tilde x) & \text{for } q \text{ mod } 4 = 3 
-        \end{array} \right.
-$$
-
-The choice of the branch can be made by the conditional operator `?` applied to the lowest bits of `q`:
-
-```cpp
-auto sincos (double x)
-{
-  double y = round((2/M_PI) * x);
-  int q = lround(y);
+  We represent
   
-  auto [s1,c1] = sincos_reduced(x - y * (M_PI/2));
+  $$
+  x = q \frac{\pi}{2} + \tilde x
+  $$
+  with an integer $q$ and the reminder $\tilde x \in [-\pi/4, \pi/4]$.
 
-  double s2 = ((q & 1) == 0) ? s1 : c1;
-  double s  = ((q & 2) == 0) ? s2 : -s2;
-
-  double c2 = ((q & 1) == 0) ? c1 : -s1;
-  double c  = ((q & 2) == 0) ? c2 : -c2;
+  Depending on the reminder, we can reduce the evaluation of $\sin x$ to
+  local evaluation of $\sin$ or $\cos$ for small $\tilde x$:
   
-  return std::tuple{ s, c };
-}
-```
-
-
-All these operations can be perfectly simded:
-
-```cpp
-template <int N>
-auto sincos (SIMD<double,N> x)
-{
-  SIMD<double,N> y = round((2/M_PI) * x);
-  SIMD<int64_t,N> q = lround(y);
+  $$
+  \sin(x) = \left\{ \begin{array}{cc}
+          \sin(\tilde x) & \text{for } q \text{ mod } 4 = 0, \\
+          \cos(\tilde x) & \text{for } q \text{ mod } 4 = 1, \\
+          -\sin(\tilde x) & \text{for } q \text{ mod } 4 = 2, \\
+          -\cos(\tilde x) & \text{for } q \text{ mod } 4 = 3 
+          \end{array} \right.
+  $$
   
-  auto [s1,c1] = sincos_reduced(x - y * (M_PI/2));
+  The choice of the branch can be made by the conditional operator `?` applied to the lowest bits of `q`:
+  
+  ```cpp
+  auto sincos (double x)
+  {
+    double y = round((2/M_PI) * x);
+    int q = lround(y);
+    
+    auto [s1,c1] = sincos_reduced(x - y * (M_PI/2));
+  
+    double s2 = ((q & 1) == 0) ? s1 : c1;
+    double s  = ((q & 2) == 0) ? s2 : -s2;
+  
+    double c2 = ((q & 1) == 0) ? c1 : -s1;
+    double c  = ((q & 2) == 0) ? c2 : -c2;
+    
+    return std::tuple{ s, c };
+  }
+  ```
 
-  auto s2 = select((q & SIMD<int64_t,N>(1)) == SIMD<int64_t,N>(0), s1,  c1);
-  auto s  = select((q & SIMD<int64_t,N>(2)) == SIMD<int64_t,N>(0), s2, -s2);
+
+  All these operations can be perfectly simded:
   
-  auto c2 = select((q & SIMD<int64_t,N>(1)) == SIMD<int64_t,N>(0), c1, -s1);
-  auto c  = select((q & SIMD<int64_t,N>(2)) == SIMD<int64_t,N>(0), c2, -c2);
+  ```cpp
+  template <int N>
+  auto sincos (SIMD<double,N> x)
+  {
+    SIMD<double,N> y = round((2/M_PI) * x);
+    SIMD<int64_t,N> q = lround(y);
+    
+    auto [s1,c1] = sincos_reduced(x - y * (M_PI/2)); 
   
-  return std::tuple{ s, c };
-}
-```
+    auto s2 = select((q & SIMD<int64_t,N>(1)) == SIMD<int64_t,N>(0), s1,  c1);
+    auto s  = select((q & SIMD<int64_t,N>(2)) == SIMD<int64_t,N>(0), s2, -s2);
+    
+    auto c2 = select((q & SIMD<int64_t,N>(1)) == SIMD<int64_t,N>(0), c1, -s1);
+    auto c  = select((q & SIMD<int64_t,N>(2)) == SIMD<int64_t,N>(0), c2, -c2);
+    
+    return std::tuple{ s, c };
+  }
+  ```
+
 
 
 ## What the f..k?
@@ -156,7 +159,11 @@ For example, processors by Arm provide intrinsics exactly for that Newton iterat
 
 ## Exercise
 
-* add missing SIMD-functions for the $\sin$ and $\cos$ function
+* add missing SIMD-functions for the $\sin$ and $\cos$ function.
+
+  Check accuary of the function by comparing to the standard $\sin$ and $\cos$ functions.
+  
+  Measure speed by calling $10^8$ functions.
 
 
 * Implement the $\exp$ function for `SIMD` types.

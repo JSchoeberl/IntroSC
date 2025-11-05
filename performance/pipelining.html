@@ -527,12 +527,12 @@ operations is <span class="math notranslate nohighlight">\(1 : 1\)</span>. Inste
 </div>
 <p><strong>Excersicse:</strong></p>
 <ul class="simple">
-<li><p>Try the examples in the file <em>demos/simd_timings.cc</em> containing such loops.
+<li><p>Try the examples in the file <em>demos/simd_timings.cpp</em> containing such loops.
 We measure run-time, and compute GFlop-rate, i.e. billion fma-instructions per second.</p></li>
 <li><p>Experiment with different block sizes for simultaneous vector updates. What are your best GFlop-rates you can achieve ?</p></li>
 <li><p>Look at assembly code, find the inner loops of your functions (enter <em>make help</em> and then <em>make demos/simd_timings.s</em>).</p></li>
 <li><p>Include the SIMD-classes into your BLA project. Implement a matrix-matrix multiplication using the best loops you found
-from simd_timings.cc.</p></li>
+from simd_timings.cpp.</p></li>
 </ul>
 </section>
 

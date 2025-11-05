@@ -95,11 +95,11 @@ for (size_t i = 0; i < wa; i++) {
 ```
 
 **Excersicse:**
-* Try the examples in the file *demos/simd_timings.cc* containing such loops.
+* Try the examples in the file *demos/simd_timings.cpp* containing such loops.
 We measure run-time, and compute GFlop-rate, i.e. billion fma-instructions per second.
 * Experiment with different block sizes for simultaneous vector updates. What are your best GFlop-rates you can achieve ?  
 * Look at assembly code, find the inner loops of your functions (enter *make help* and then *make demos/simd_timings.s*).
 * Include the SIMD-classes into your BLA project. Implement a matrix-matrix multiplication using the best loops you found
-from simd_timings.cc.
+from simd_timings.cpp.
 
 

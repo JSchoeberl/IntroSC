@@ -476,8 +476,6 @@ document.write(`
 A uniform best approxiamtion is obtained via Chebyshev interpolation.
 We took the coefficients from CEPHES, file cmath.tgz, which is the basis of many implementations
 of mathematical functions:</p>
-</li>
-</ul>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">sincof</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="mf">1.58962301576546568060E-10</span><span class="p">,</span>
 <span class="w">    </span><span class="mf">-2.50507477628578072866E-8</span><span class="p">,</span>
@@ -498,7 +496,7 @@ of mathematical functions:</p>
 
 <span class="c1">// highly accurate on [-pi/4, pi/4]</span>
 <span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
-<span class="k">auto</span><span class="w"> </span><span class="n">sincos_reduced</span><span class="w"> </span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">x</span><span class="p">)</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">sincos_reduced</span><span class="w"> </span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span>
 <span class="p">{</span>
 <span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">x2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="p">;</span>
 <span class="w">  </span>
@@ -512,26 +510,26 @@ of mathematical functions:</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-<ul class="simple">
-<li><p>Global approximation</p></li>
-</ul>
-<p>We write</p>
+<p>This polynomial approximation can be used the same way for <code class="docutils literal notranslate"><span class="pre">double</span> <span class="pre">x</span></code>, and <code class="docutils literal notranslate"><span class="pre">SIMD&lt;double&gt;</span> <span class="pre">x</span></code>.</p>
+</li>
+<li><p>Global approximation</p>
+<p>We represent</p>
 <div class="math notranslate nohighlight">
 \[
-x = q \frac{\pi}{2} + \tilde x
-\]</div>
-<p>with an integer <span class="math notranslate nohighlight">\(q\)</span> and the reminder <span class="math notranslate nohighlight">\(\tilde x \in [-\pi/2, \pi/2]\)</span>.</p>
+  x = q \frac{\pi}{2} + \tilde x
+  \]</div>
+<p>with an integer <span class="math notranslate nohighlight">\(q\)</span> and the reminder <span class="math notranslate nohighlight">\(\tilde x \in [-\pi/4, \pi/4]\)</span>.</p>
 <p>Depending on the reminder, we can reduce the evaluation of <span class="math notranslate nohighlight">\(\sin x\)</span> to
 local evaluation of <span class="math notranslate nohighlight">\(\sin\)</span> or <span class="math notranslate nohighlight">\(\cos\)</span> for small <span class="math notranslate nohighlight">\(\tilde x\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
-\sin(x) = \left\{ \begin{array}{cc}
-        \sin(\tilde x) &amp; \text{for } q \text{ mod } 4 = 0, \\
-        \cos(\tilde x) &amp; \text{for } q \text{ mod } 4 = 1, \\
-        -\sin(\tilde x) &amp; \text{for } q \text{ mod } 4 = 2, \\
-        -\cos(\tilde x) &amp; \text{for } q \text{ mod } 4 = 3 
-        \end{array} \right.
-\end{split}\]</div>
+  \sin(x) = \left\{ \begin{array}{cc}
+          \sin(\tilde x) &amp; \text{for } q \text{ mod } 4 = 0, \\
+          \cos(\tilde x) &amp; \text{for } q \text{ mod } 4 = 1, \\
+          -\sin(\tilde x) &amp; \text{for } q \text{ mod } 4 = 2, \\
+          -\cos(\tilde x) &amp; \text{for } q \text{ mod } 4 = 3 
+          \end{array} \right.
+  \end{split}\]</div>
 <p>The choice of the branch can be made by the conditional operator <code class="docutils literal notranslate"><span class="pre">?</span></code> applied to the lowest bits of <code class="docutils literal notranslate"><span class="pre">q</span></code>:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">sincos</span><span class="w"> </span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">x</span><span class="p">)</span>
 <span class="p">{</span>
@@ -557,7 +555,7 @@ local evaluation of <span class="math notranslate nohighlight">\(\sin\)</span> o
 <span class="w">  </span><span class="n">SIMD</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span><span class="n">N</span><span class="o">&gt;</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">round</span><span class="p">((</span><span class="mi">2</span><span class="o">/</span><span class="n">M_PI</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">x</span><span class="p">);</span>
 <span class="w">  </span><span class="n">SIMD</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="p">,</span><span class="n">N</span><span class="o">&gt;</span><span class="w"> </span><span class="n">q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lround</span><span class="p">(</span><span class="n">y</span><span class="p">);</span>
 <span class="w">  </span>
-<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="p">[</span><span class="n">s1</span><span class="p">,</span><span class="n">c1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sincos_reduced</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">M_PI</span><span class="o">/</span><span class="mi">2</span><span class="p">));</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="p">[</span><span class="n">s1</span><span class="p">,</span><span class="n">c1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sincos_reduced</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">M_PI</span><span class="o">/</span><span class="mi">2</span><span class="p">));</span><span class="w"> </span>
 
 <span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">s2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">select</span><span class="p">((</span><span class="n">q</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">SIMD</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="p">,</span><span class="n">N</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">SIMD</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="p">,</span><span class="n">N</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="w"> </span><span class="n">s1</span><span class="p">,</span><span class="w">  </span><span class="n">c1</span><span class="p">);</span>
 <span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">s</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">select</span><span class="p">((</span><span class="n">q</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">SIMD</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="p">,</span><span class="n">N</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">SIMD</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="p">,</span><span class="n">N</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="w"> </span><span class="n">s2</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">s2</span><span class="p">);</span>
@@ -569,6 +567,8 @@ local evaluation of <span class="math notranslate nohighlight">\(\sin\)</span> o
 <span class="p">}</span>
 </pre></div>
 </div>
+</li>
+</ul>
 </section>
 <section id="what-the-f-k">
 <h2><span class="section-number">10.2.2. </span>What the f..k?<a class="headerlink" href="#what-the-f-k" title="Link to this heading">#</a></h2>
@@ -600,7 +600,10 @@ Find the full code including the documented initial value for Newton’s method 
 <section id="exercise">
 <h2><span class="section-number">10.2.3. </span>Exercise<a class="headerlink" href="#exercise" title="Link to this heading">#</a></h2>
 <ul>
-<li><p>add missing SIMD-functions for the <span class="math notranslate nohighlight">\(\sin\)</span> and <span class="math notranslate nohighlight">\(\cos\)</span> function</p></li>
+<li><p>add missing SIMD-functions for the <span class="math notranslate nohighlight">\(\sin\)</span> and <span class="math notranslate nohighlight">\(\cos\)</span> function.</p>
+<p>Check accuary of the function by comparing to the standard <span class="math notranslate nohighlight">\(\sin\)</span> and <span class="math notranslate nohighlight">\(\cos\)</span> functions.</p>
+<p>Measure speed by calling <span class="math notranslate nohighlight">\(10^8\)</span> functions.</p>
+</li>
 <li><p>Implement the <span class="math notranslate nohighlight">\(\exp\)</span> function for <code class="docutils literal notranslate"><span class="pre">SIMD</span></code> types.</p>
 <p>Rewrite for</p>
 <div class="math notranslate nohighlight">
