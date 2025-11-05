@@ -448,6 +448,18 @@ document.write(`
                   
   <section id="pipelining">
 <h1><span class="section-number">11. </span>Pipelining<a class="headerlink" href="#pipelining" title="Link to this heading">#</a></h1>
+<p>Let’s recall the ski-lift. What are important timings ?</p>
+<ul>
+<li><p>For one person, it may take about 10 minutes to get up the mountain. This we call latency time <span class="math notranslate nohighlight">\(t_{lat}\)</span>.</p></li>
+<li><p>The lift can board new people about every 10 seconds. This time we call reciprocal throughput <span class="math notranslate nohighlight">\(t_{rtp}\)</span>. The thoughput is <span class="math notranslate nohighlight">\(t_{rtp}^{-1}\)</span>, in this example 0.1 chair per second.</p></li>
+<li><p>To fully occupy the lift we need at least</p>
+<div class="math notranslate nohighlight">
+\[
+  \frac { t_{lat} } { t_{rtp} } \times {\text{seat width} }
+  \]</div>
+<p>people.</p>
+</li>
+</ul>
 <p>Look at the documentation of the <code class="docutils literal notranslate"><span class="pre">_mm256_fmadd_pd</span></code> (fused-multiply-add) intrinsic:
 <a class="reference external" href="https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#text=256_fmadd_pd&amp;amp;avxnewtechs=FMA&amp;amp;ig_expand=3101,3101">docu</a>.
 It tells us that the instruction has a latency of 4 clock-cycles, but there is an inverse throughput (CPI=clocks per instruction)

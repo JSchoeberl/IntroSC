@@ -57,6 +57,11 @@ Lookup the documentation of the functions used above!
 
 These intrinsics are supported by all major compilers (gcc, clang, msvc, icc, ...), however with slightly different behaviour. For example, gcc has arithmetic operations for type `__m256d` predefined, in msvc the intrinsic function must be called.
 
+For Apple Silicon processors you can find information from
+[Arm](https://developer.arm.com/documentation/den0018/a/NEON-Intrinsics/Programming-using-NEON-intrinsics?lang=en).
+
+
+
 
 Vectorization is like
 ```{image} skilift.jpg
