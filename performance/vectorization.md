@@ -63,3 +63,7 @@ Vectorization is like
 :width: 70%
 :align: center
 ```
+
+One can benefit from the wide chairs if people come aligned for boarding
+
+
