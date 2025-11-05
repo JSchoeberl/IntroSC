@@ -2,7 +2,7 @@
 
 Look at the documentation of the `_mm256_fmadd_pd` (fused-multiply-add) intrinsic:
 [docu](https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#text=256_fmadd_pd&avxnewtechs=FMA&ig_expand=3101,3101).
-It tells us that the instruction has a latency of 4 clock-cycles, but there is a throughput (CPI=clocks per instruction)
+It tells us that the instruction has a latency of 4 clock-cycles, but there is an inverse throughput (CPI=clocks per instruction)
 of 0.5. This means that we can start two of these instruction in every clock cycle, but we have to wait 4 clock cycles until
 the result is available. 
 
@@ -77,7 +77,7 @@ for (size_t i = 0; i < n; i++) {
 In every loop we load 2 x-values, and 2 y-values, and perform 4 fma operations. Now memory transfer to arithmetic
 operations is $1 : 1$. Instead of vectors of scalars, each entry can also be a 256bit `SIMD<double,4>` value.
 
-An important use multiple inner products is a matrix-matrix multiplication. Assuem $A$ is stored row-major, and $B$ is col-major. Then entries $C_{ij}, C_{i+1,j}, C_{i,j+1}, C_{i+1,j+1}$ can be computed by simultaneous inner products of rows $i$ and $i+1$ of $A$, and columns $j$ and $j+1$ of $B$.
+An important usecase of multiple inner products is a matrix-matrix multiplication. Assuem $A$ is stored row-major, and $B$ is col-major. Then entries $C_{ij}, C_{i+1,j}, C_{i,j+1}, C_{i+1,j+1}$ can be computed by simultaneous inner products of rows $i$ and $i+1$ of $A$, and columns $j$ and $j+1$ of $B$.
 
 The most important case is that $A,B,C$ are stored with the same ordering, say row-major. Then we can multiply two rows of $A$ with $8$ columns (what are two SIMD<double,4>) of $B$ simultaneously:
 

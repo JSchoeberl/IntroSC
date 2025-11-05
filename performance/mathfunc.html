@@ -444,7 +444,7 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-implement-sin-and-cos">10.2.1. How to implement <span class="math notranslate nohighlight">\(sin\)</span> and <span class="math notranslate nohighlight">\(cos\)</span> ?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-implement-sin-and-cos">10.2.1. How to implement <code class="docutils literal notranslate"><span class="pre">sin</span></code> and <code class="docutils literal notranslate"><span class="pre">cos</span></code> ?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-the-f-k">10.2.2. What the f..k?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise">10.2.3. Exercise</a></li>
 </ul>
@@ -465,30 +465,166 @@ document.write(`
 <ul class="simple">
 <li><p>Stephen L. Moshier: Methods and Programs For Mathematical Functions
 <a class="reference external" href="https://www.moshier.net/methprog.pdf">https://www.moshier.net/methprog.pdf</a></p></li>
-<li><p>CEPHES MATHEMATICAL FUNCTION LIBRARY
+<li><p>CEPHES mathematical function library
 <a class="reference external" href="https://www.netlib.org/cephes/">https://www.netlib.org/cephes/</a></p></li>
 </ul>
 <section id="how-to-implement-sin-and-cos">
-<h2><span class="section-number">10.2.1. </span>How to implement <span class="math notranslate nohighlight">\(sin\)</span> and <span class="math notranslate nohighlight">\(cos\)</span> ?<a class="headerlink" href="#how-to-implement-sin-and-cos" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">10.2.1. </span>How to implement <code class="docutils literal notranslate"><span class="pre">sin</span></code> and <code class="docutils literal notranslate"><span class="pre">cos</span></code> ?<a class="headerlink" href="#how-to-implement-sin-and-cos" title="Link to this heading">#</a></h2>
 <ul>
 <li><p>Local approximation by polynomials</p>
-<p>Taylor, Chebyshev interpolation, …</p>
+<p>For small values of the argument <span class="math notranslate nohighlight">\(x\)</span>, polynomial approximation via Taylor expansion can be used.
+A uniform best approxiamtion is obtained via Chebyshev interpolation.
+We took the coefficients from CEPHES, file cmath.tgz, which is the basis of many implementations
+of mathematical functions:</p>
 </li>
+</ul>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">sincof</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="mf">1.58962301576546568060E-10</span><span class="p">,</span>
+<span class="w">    </span><span class="mf">-2.50507477628578072866E-8</span><span class="p">,</span>
+<span class="w">    </span><span class="mf">2.75573136213857245213E-6</span><span class="p">,</span>
+<span class="w">    </span><span class="mf">-1.98412698295895385996E-4</span><span class="p">,</span>
+<span class="w">    </span><span class="mf">8.33333333332211858878E-3</span><span class="p">,</span>
+<span class="w">    </span><span class="mf">-1.66666666666666307295E-1</span><span class="p">,</span>
+<span class="w">  </span><span class="p">};</span>
+
+<span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">coscof</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="mf">-1.13585365213876817300E-11</span><span class="p">,</span>
+<span class="w">    </span><span class="mf">2.08757008419747316778E-9</span><span class="p">,</span>
+<span class="w">    </span><span class="mf">-2.75573141792967388112E-7</span><span class="p">,</span>
+<span class="w">    </span><span class="mf">2.48015872888517045348E-5</span><span class="p">,</span>
+<span class="w">    </span><span class="mf">-1.38888888888730564116E-3</span><span class="p">,</span>
+<span class="w">    </span><span class="mf">4.16666666666665929218E-2</span><span class="p">,</span>
+<span class="w">  </span><span class="p">};</span>
+
+<span class="c1">// highly accurate on [-pi/4, pi/4]</span>
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">sincos_reduced</span><span class="w"> </span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">x</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">x2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="p">;</span>
+<span class="w">  </span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(((((</span><span class="n">sincof</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">x2</span><span class="o">+</span><span class="n">sincof</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">*</span><span class="n">x2</span><span class="o">+</span><span class="n">sincof</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">*</span><span class="n">x2</span><span class="o">+</span><span class="n">sincof</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span><span class="o">*</span><span class="n">x2</span><span class="o">+</span><span class="n">sincof</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span><span class="o">*</span><span class="n">x2</span><span class="o">+</span><span class="n">sincof</span><span class="p">[</span><span class="mi">5</span><span class="p">]);</span>
+<span class="w">  </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">s</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(((((</span><span class="n">coscof</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">x2</span><span class="o">+</span><span class="n">coscof</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">*</span><span class="n">x2</span><span class="o">+</span><span class="n">coscof</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span><span class="o">*</span><span class="n">x2</span><span class="o">+</span><span class="n">coscof</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span><span class="o">*</span><span class="n">x2</span><span class="o">+</span><span class="n">coscof</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span><span class="o">*</span><span class="n">x2</span><span class="o">+</span><span class="n">coscof</span><span class="p">[</span><span class="mi">5</span><span class="p">]);</span>
+<span class="w">  </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">0.5</span><span class="o">*</span><span class="n">x2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">x2</span><span class="o">*</span><span class="n">x2</span><span class="o">*</span><span class="n">c</span><span class="p">;</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="p">{</span><span class="w"> </span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="p">};</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ul class="simple">
 <li><p>Global approximation</p></li>
 </ul>
+<p>We write</p>
+<div class="math notranslate nohighlight">
+\[
+x = q \frac{\pi}{2} + \tilde x
+\]</div>
+<p>with an integer <span class="math notranslate nohighlight">\(q\)</span> and the reminder <span class="math notranslate nohighlight">\(\tilde x \in [-\pi/2, \pi/2]\)</span>.</p>
+<p>Depending on the reminder, we can reduce the evaluation of <span class="math notranslate nohighlight">\(\sin x\)</span> to
+local evaluation of <span class="math notranslate nohighlight">\(\sin\)</span> or <span class="math notranslate nohighlight">\(\cos\)</span> for small <span class="math notranslate nohighlight">\(\tilde x\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\sin(x) = \left\{ \begin{array}{cc}
+        \sin(\tilde x) &amp; \text{for } q \text{ mod } 4 = 0, \\
+        \cos(\tilde x) &amp; \text{for } q \text{ mod } 4 = 1, \\
+        -\sin(\tilde x) &amp; \text{for } q \text{ mod } 4 = 2, \\
+        -\cos(\tilde x) &amp; \text{for } q \text{ mod } 4 = 3 
+        \end{array} \right.
+\end{split}\]</div>
+<p>The choice of the branch can be made by the conditional operator <code class="docutils literal notranslate"><span class="pre">?</span></code> applied to the lowest bits of <code class="docutils literal notranslate"><span class="pre">q</span></code>:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">sincos</span><span class="w"> </span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">x</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">round</span><span class="p">((</span><span class="mi">2</span><span class="o">/</span><span class="n">M_PI</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">x</span><span class="p">);</span>
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lround</span><span class="p">(</span><span class="n">y</span><span class="p">);</span>
+<span class="w">  </span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="p">[</span><span class="n">s1</span><span class="p">,</span><span class="n">c1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sincos_reduced</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">M_PI</span><span class="o">/</span><span class="mi">2</span><span class="p">));</span>
+
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">s2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">((</span><span class="n">q</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">s1</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">c1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">s</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="p">((</span><span class="n">q</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">s2</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="o">-</span><span class="n">s2</span><span class="p">;</span>
+
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">c2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">((</span><span class="n">q</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">c1</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="o">-</span><span class="n">s1</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">c</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="p">((</span><span class="n">q</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">c2</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="o">-</span><span class="n">c2</span><span class="p">;</span>
+<span class="w">  </span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="p">{</span><span class="w"> </span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="p">};</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>All these operations can be perfectly simded:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="kt">int</span><span class="w"> </span><span class="n">N</span><span class="o">&gt;</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">sincos</span><span class="w"> </span><span class="p">(</span><span class="n">SIMD</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span><span class="n">N</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="n">SIMD</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span><span class="n">N</span><span class="o">&gt;</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">round</span><span class="p">((</span><span class="mi">2</span><span class="o">/</span><span class="n">M_PI</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">x</span><span class="p">);</span>
+<span class="w">  </span><span class="n">SIMD</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="p">,</span><span class="n">N</span><span class="o">&gt;</span><span class="w"> </span><span class="n">q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lround</span><span class="p">(</span><span class="n">y</span><span class="p">);</span>
+<span class="w">  </span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="p">[</span><span class="n">s1</span><span class="p">,</span><span class="n">c1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sincos_reduced</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">M_PI</span><span class="o">/</span><span class="mi">2</span><span class="p">));</span>
+
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">s2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">select</span><span class="p">((</span><span class="n">q</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">SIMD</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="p">,</span><span class="n">N</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">SIMD</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="p">,</span><span class="n">N</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="w"> </span><span class="n">s1</span><span class="p">,</span><span class="w">  </span><span class="n">c1</span><span class="p">);</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">s</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">select</span><span class="p">((</span><span class="n">q</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">SIMD</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="p">,</span><span class="n">N</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">SIMD</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="p">,</span><span class="n">N</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="w"> </span><span class="n">s2</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">s2</span><span class="p">);</span>
+<span class="w">  </span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">c2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">select</span><span class="p">((</span><span class="n">q</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">SIMD</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="p">,</span><span class="n">N</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">SIMD</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="p">,</span><span class="n">N</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="w"> </span><span class="n">c1</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">s1</span><span class="p">);</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">c</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">select</span><span class="p">((</span><span class="n">q</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">SIMD</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="p">,</span><span class="n">N</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">SIMD</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="p">,</span><span class="n">N</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="w"> </span><span class="n">c2</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">c2</span><span class="p">);</span>
+<span class="w">  </span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="p">{</span><span class="w"> </span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="p">};</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 </section>
 <section id="what-the-f-k">
 <h2><span class="section-number">10.2.2. </span>What the f..k?<a class="headerlink" href="#what-the-f-k" title="Link to this heading">#</a></h2>
-<p>Quake III Arena</p>
+<p>An important operation in compute graphics (games!) is the normalization of a vector, <span class="math notranslate nohighlight">\(|v| = 1/\sqrt(v*v) v\)</span>.
+This requires the inverse square root function</p>
 <div class="math notranslate nohighlight">
 \[
-\frac{1}{\sqrt{x}}
+y = \frac{1}{\sqrt{x}}
 \]</div>
-<p>Newton with good starting values</p>
+<p>Instead of calling a <code class="docutils literal notranslate"><span class="pre">sqrt</span></code> function and a division, one may solve the nonlinear equation</p>
+<div class="math notranslate nohighlight">
+\[
+F(y) = \frac{1}{y^2} - x = 0
+\]</div>
+<p>using a few steps of Newton’s method:</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{eqnarray*}
+y_{n+1} &amp; = &amp; y_n - \frac{F(y_n)}{F^\prime(y_n)} \\
+   &amp; = &amp; y_n - \frac{ y_n^{-2} - x } { - 2 y_n^{-3} } \\
+   &amp; = &amp; \tfrac{3}{2} y - \tfrac{1}{2} x y_n^2
+\end{eqnarray*}\]</div>
+<p>Every step requires only 3 multiplications.</p>
+<p>This algorithm got famous in <a class="reference external" href="https://en.wikipedia.org/wiki/Fast_inverse_square_root">Quake III Arena</a>
+providing fluent 3D graphics (in the year 1999).
+Find the full code including the documented initial value for Newton’s method at this page.</p>
+<p>For example, processors by Arm provide intrinsics exactly for that Newton iteration:
+<a class="reference external" href="https://docs.unity3d.com/Packages/com.unity.burst&#64;1.6/api/Unity.Burst.Intrinsics.Arm.Neon.vrsqrtsq_f64.html">instruction</a></p>
 </section>
 <section id="exercise">
 <h2><span class="section-number">10.2.3. </span>Exercise<a class="headerlink" href="#exercise" title="Link to this heading">#</a></h2>
-<p>Implement the <span class="math notranslate nohighlight">\(exp\)</span> function for <code class="docutils literal notranslate"><span class="pre">SIMD</span></code> types.</p>
+<ul>
+<li><p>add missing SIMD-functions for the <span class="math notranslate nohighlight">\(\sin\)</span> and <span class="math notranslate nohighlight">\(\cos\)</span> function</p></li>
+<li><p>Implement the <span class="math notranslate nohighlight">\(\exp\)</span> function for <code class="docutils literal notranslate"><span class="pre">SIMD</span></code> types.</p>
+<p>Rewrite for</p>
+<div class="math notranslate nohighlight">
+\[
+  x = q \ln 2 + \tilde x
+  \]</div>
+<p>with <span class="math notranslate nohighlight">\(q \in {\mathbb Z}\)</span> and reminder <span class="math notranslate nohighlight">\(\tilde x \in [-\tfrac{\ln 2}{2}, \tfrac{\ln 2}{2}]\)</span>:</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{eqnarray*}
+e^x &amp; = &amp; e^{ q \ln 2 + \tilde x} = e^{q \ln2 } e^\tilde x \\
+&amp; = &amp; 2^q \, e^{\tilde x}
+\end{eqnarray*}\]</div>
+<ul class="simple">
+<li><p>implement an approximation of <span class="math notranslate nohighlight">\(\exp(x)\)</span> for small <span class="math notranslate nohighlight">\(x\)</span></p></li>
+<li><p>to implement <span class="math notranslate nohighlight">\(2^q\)</span>, use the representation of <a class="reference external" href="https://en.wikipedia.org/wiki/Double-precision_floating-point_format">floating point numbers</a></p></li>
+</ul>
+</li>
+</ul>
+<p>Some places to find insparation:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/vectorclass/version2/blob/master/vectormath_trig.h">Agner Fogs’ vectorclass</a></p></li>
+<li><p><a class="reference external" href="https://sleef.org">SLEEF library</a></p></li>
+<li><p><a class="reference external" href="https://github.com/NGSolve/netgen/blob/master/libsrc/core/simd_math.hpp">Netgen/NGSolve simd functions</a></p></li>
+</ul>
 </section>
 </section>
 
@@ -556,7 +692,7 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-implement-sin-and-cos">10.2.1. How to implement <span class="math notranslate nohighlight">\(sin\)</span> and <span class="math notranslate nohighlight">\(cos\)</span> ?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-implement-sin-and-cos">10.2.1. How to implement <code class="docutils literal notranslate"><span class="pre">sin</span></code> and <code class="docutils literal notranslate"><span class="pre">cos</span></code> ?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-the-f-k">10.2.2. What the f..k?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise">10.2.3. Exercise</a></li>
 </ul>

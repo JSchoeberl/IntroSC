@@ -448,15 +448,16 @@ document.write(`
 <h1><span class="section-number">9. </span>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h1>
 <p>We learn how to unleash the full power of our computers. This includes</p>
 <ul class="simple">
-<li><p><strong>Vectorization</strong>: single instructions can operate on multiple data, for example perform four double precision multiplications simulteneously</p></li>
-<li><p><strong>Pipelining</strong>: several vector-instructions can be started per clock
-cycle, but it takes several cycles to complete. Start new work befor
-results of old work are ready</p></li>
-<li><p><strong>Caches</strong>: getting data from main memory is expensive. Caches keep recently used data in fast but small cache memory.</p></li>
-<li><p><strong>Parallelization</strong>: most CPUs have several physical cores. Write multi-threaded code to split work to multiple cores</p></li>
+<li><p><strong>Vectorization</strong>: single instructions can operate on multiple data, for example perform four double precision multiplications simultaneously.</p></li>
+<li><p><strong>Pipelining</strong>: several vector-instructions can be started per clock.
+cycle, but it takes several cycles to complete. Start new work before
+results of old work are ready.</p></li>
+<li><p><strong>Caches</strong>: getting data from main memory is slow. Caches keep recently used data in fast but small cache memory.</p></li>
+<li><p><strong>Parallelization</strong>: most CPUs have several physical cores. Write multi-threaded code to
+split the work across multiple cores.</p></li>
 </ul>
 <p>Fork and clone github repo <a class="reference external" href="https://github.com/TUWien-ASC/ASC-HPC.git">ASC-HPC</a>.</p>
-<p>This repository contains another github project as a submodule,
+<p>This repository contains another github project as a <a class="reference external" href="https://www.atlassian.com/git/tutorials/git-submodule">git submodule</a>,
 which you have to initialize using</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>git submodule update --init
 </pre></div>
