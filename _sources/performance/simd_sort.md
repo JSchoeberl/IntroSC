@@ -156,7 +156,7 @@ void BitonicSort (VectorView<T> a)
   if (n <= 1) return;
   size_t n2 = n/2;
   BitonicSort<UP> (a.range(0,n2);
-  BitonicSort<!UP> (a.range(n2,2);
+  BitonicSort<!UP> (a.range(n2,n);
   BitonicMerge<UP> (a);
 }
 ```
