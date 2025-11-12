@@ -208,12 +208,13 @@
 <li class="toctree-l1"><a class="reference internal" href="theory.html">15. A little bit of theory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="firstmethods.html">16. Some simple time-stepping methods</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="implementation.html">17. Implementation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="implementation_newton.html">17.1. Implementing a Newton solver</a></li>
-<li class="toctree-l2"><a class="reference internal" href="implementation_ie.html">17.2. Coding the Implicit Euler method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementation_ee.html">17.1. Implementing the explicit Euler method</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="implementation_newton.html">17.3. Implementing a Newton solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementation_ad.html">17.4. Automatic Differentiation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementation_ie.html">17.5. Coding the Implicit Euler method</a></li>
 
 
-
-<li class="toctree-l2"><a class="reference internal" href="implementation_ad.html">17.6. Automatic Differentiation</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="RungeKutta.html">18. Runge-Kutta methods</a></li>
@@ -453,8 +454,28 @@ document.write(`
 <li><p>Connecting masses with springs</p></li>
 <li><p>Introducing constraints</p></li>
 </ul>
-<p>Fork and clone github repo <a class="reference external" href="https://github.com/TUWien-ASC/ASC-ODE.git">ASC-ODE</a>.</p>
-<p>Add your own bla-repo as an external sub-module, and adjust function calls if necessary.</p>
+<p>Fork that github repo <a class="reference external" href="https://github.com/TUWien-ASC/ASC-ODE.git">ASC-ODE</a>, and clone it via</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/my_fork_on_github/ASC-ODE.git
+</pre></div>
+</div>
+<p>It contains the basic linear algebra package nanoblas as an git submodule. Populate it using</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cd ASC-ODE
+git submodule update --init
+</pre></div>
+</div>
+<p>You are welcome to replace nanoblas by your preferred linear algebra package.</p>
+<p>ASC-ODE has the following dependencies which must be installed:</p>
+<ul class="simple">
+<li><p>pybind11</p></li>
+<li><p>lapack</p></li>
+</ul>
+<p>Then you can build cmake to build ASC-ODE:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mkdir build
+cd build
+cmake ..
+make
+</pre></div>
+</div>
 </section>
 
     <script type="text/x-thebe-config">

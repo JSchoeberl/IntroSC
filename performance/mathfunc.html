@@ -62,7 +62,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'performance/mathfunc';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="11. Pipelining" href="pipelining.html" />
+    <link rel="next" title="10.3. Branch-free sorting" href="simd_sort.html" />
     <link rel="prev" title="10.1. The SIMD - class" href="simdclass.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -198,6 +198,7 @@
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="vectorization.html">10. Vectorization</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="simdclass.html">10.1. The SIMD - class</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">10.2. Vectorizing mathematical functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simd_sort.html">10.3. Branch-free sorting</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="pipelining.html">11. Pipelining</a></li>
@@ -210,12 +211,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../ODEs/theory.html">15. A little bit of theory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ODEs/firstmethods.html">16. Some simple time-stepping methods</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../ODEs/implementation.html">17. Implementation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../ODEs/implementation_newton.html">17.1. Implementing a Newton solver</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../ODEs/implementation_ie.html">17.2. Coding the Implicit Euler method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ODEs/implementation_ee.html">17.1. Implementing the explicit Euler method</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../ODEs/implementation_newton.html">17.3. Implementing a Newton solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ODEs/implementation_ad.html">17.4. Automatic Differentiation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ODEs/implementation_ie.html">17.5. Coding the Implicit Euler method</a></li>
 
 
-
-<li class="toctree-l2"><a class="reference internal" href="../ODEs/implementation_ad.html">17.6. Automatic Differentiation</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="../ODEs/RungeKutta.html">18. Runge-Kutta methods</a></li>
@@ -460,7 +462,11 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="vectorizing-mathematical-functions">
 <h1><span class="section-number">10.2. </span>Vectorizing mathematical functions<a class="headerlink" href="#vectorizing-mathematical-functions" title="Link to this heading">#</a></h1>
-<p>The aim is to implement mathematical functions like <code class="docutils literal notranslate"><span class="pre">exp</span></code>, <code class="docutils literal notranslate"><span class="pre">sin</span></code> and <code class="docutils literal notranslate"><span class="pre">cos</span></code> using the <code class="docutils literal notranslate"><span class="pre">SIMD</span></code> types.</p>
+<p>The aim is to implement mathematical functions like <code class="docutils literal notranslate"><span class="pre">exp</span></code>, <code class="docutils literal notranslate"><span class="pre">sin</span></code> and <code class="docutils literal notranslate"><span class="pre">cos</span></code> using the <code class="docutils literal notranslate"><span class="pre">SIMD</span></code> types.
+One motivation for doing so is speeding up the simulation of
+<a class="reference external" href="https://docu.ngsolve.org/latest/i-tutorials/unit-11.3-bem-Helmholtz/BrakhageWerner.html#prostprocessing-on-screen">scattering problems</a>, where
+a good fraction of the compute time is spent in the complex <code class="docutils literal notranslate"><span class="pre">exp</span></code> function.</p>
+<p>Most implementations found online go back to these sources:</p>
 <p>References:</p>
 <ul class="simple">
 <li><p>Stephen L. Moshier: Methods and Programs For Mathematical Functions
@@ -473,9 +479,8 @@ document.write(`
 <ul>
 <li><p>Local approximation by polynomials</p>
 <p>For small values of the argument <span class="math notranslate nohighlight">\(x\)</span>, polynomial approximation via Taylor expansion can be used.
-A uniform best approxiamtion is obtained via Chebyshev interpolation.
-We took the coefficients from CEPHES, file cmath.tgz, which is the basis of many implementations
-of mathematical functions:</p>
+A uniform best approxiamtion on the interval <span class="math notranslate nohighlight">\([-\pi/4, \pi/4]\)</span> is obtained via Chebyshev interpolation.
+We took the coefficients from CEPHES, file cmath.tgz.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="k">constexpr</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">sincof</span><span class="p">[]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="mf">1.58962301576546568060E-10</span><span class="p">,</span>
 <span class="w">    </span><span class="mf">-2.50507477628578072866E-8</span><span class="p">,</span>
@@ -513,6 +518,7 @@ of mathematical functions:</p>
 <p>This polynomial approximation can be used the same way for <code class="docutils literal notranslate"><span class="pre">double</span> <span class="pre">x</span></code>, and <code class="docutils literal notranslate"><span class="pre">SIMD&lt;double&gt;</span> <span class="pre">x</span></code>.</p>
 </li>
 <li><p>Global approximation</p>
+<p>For a general <span class="math notranslate nohighlight">\(x \in {\mathbb R}\)</span>, we have to figure out the right branch to reduce the evaluation to the small interval.</p>
 <p>We represent</p>
 <div class="math notranslate nohighlight">
 \[
@@ -567,12 +573,14 @@ local evaluation of <span class="math notranslate nohighlight">\(\sin\)</span> o
 <span class="p">}</span>
 </pre></div>
 </div>
+<p>Rounding on AVX2: <code class="docutils literal notranslate"><span class="pre">_mm256_round_pd</span></code>. Converting to int64: <code class="docutils literal notranslate"><span class="pre">_mm256_cvtepi32_epi64(_mm256_cvtpd_epi32(val))</span></code> <br>
+Rounding for arm-neon: <code class="docutils literal notranslate"><span class="pre">vrndnq_f64</span></code>, <code class="docutils literal notranslate"><span class="pre">vcvtq_s64_f64</span></code></p>
 </li>
 </ul>
 </section>
 <section id="what-the-f-k">
 <h2><span class="section-number">10.2.2. </span>What the f..k?<a class="headerlink" href="#what-the-f-k" title="Link to this heading">#</a></h2>
-<p>An important operation in compute graphics (games!) is the normalization of a vector, <span class="math notranslate nohighlight">\(|v| = 1/\sqrt(v*v) v\)</span>.
+<p>An important operation in compute graphics (games!) is the normalization of a vector, <span class="math notranslate nohighlight">\(|v| = \frac{1}{\sqrt{v \cdot v}} v\)</span>.
 This requires the inverse square root function</p>
 <div class="math notranslate nohighlight">
 \[
@@ -588,7 +596,9 @@ F(y) = \frac{1}{y^2} - x = 0
 \[\begin{eqnarray*}
 y_{n+1} &amp; = &amp; y_n - \frac{F(y_n)}{F^\prime(y_n)} \\
    &amp; = &amp; y_n - \frac{ y_n^{-2} - x } { - 2 y_n^{-3} } \\
-   &amp; = &amp; \tfrac{3}{2} y - \tfrac{1}{2} x y_n^2
+   %    &amp; = &amp; y_n + \frac{ y_n - x y_n^2 } {2 }  
+   % &amp; = &amp; \tfrac{3}{2} y_n - \tfrac{1}{2} x y_n^2 \\
+   &amp; = &amp; y_n \frac{ 3 - x y_n^2}{2}  
 \end{eqnarray*}\]</div>
 <p>Every step requires only 3 multiplications.</p>
 <p>This algorithm got famous in <a class="reference external" href="https://en.wikipedia.org/wiki/Fast_inverse_square_root">Quake III Arena</a>
@@ -602,7 +612,7 @@ Find the full code including the documented initial value for Newton’s method 
 <ul>
 <li><p>add missing SIMD-functions for the <span class="math notranslate nohighlight">\(\sin\)</span> and <span class="math notranslate nohighlight">\(\cos\)</span> function.</p>
 <p>Check accuary of the function by comparing to the standard <span class="math notranslate nohighlight">\(\sin\)</span> and <span class="math notranslate nohighlight">\(\cos\)</span> functions.</p>
-<p>Measure speed by calling <span class="math notranslate nohighlight">\(10^8\)</span> functions.</p>
+<p>Measure speed by calling functions <span class="math notranslate nohighlight">\(10^8\)</span> times.</p>
 </li>
 <li><p>Implement the <span class="math notranslate nohighlight">\(\exp\)</span> function for <code class="docutils literal notranslate"><span class="pre">SIMD</span></code> types.</p>
 <p>Rewrite for</p>
@@ -616,9 +626,32 @@ Find the full code including the documented initial value for Newton’s method 
 e^x &amp; = &amp; e^{ q \ln 2 + \tilde x} = e^{q \ln2 } e^\tilde x \\
 &amp; = &amp; 2^q \, e^{\tilde x}
 \end{eqnarray*}\]</div>
-<ul class="simple">
-<li><p>implement an approximation of <span class="math notranslate nohighlight">\(\exp(x)\)</span> for small <span class="math notranslate nohighlight">\(x\)</span></p></li>
-<li><p>to implement <span class="math notranslate nohighlight">\(2^q\)</span>, use the representation of <a class="reference external" href="https://en.wikipedia.org/wiki/Double-precision_floating-point_format">floating point numbers</a></p></li>
+<ul>
+<li><p>implement an approximation of <span class="math notranslate nohighlight">\(\exp(\tilde x)\)</span> for small <span class="math notranslate nohighlight">\(\tilde x\)</span></p></li>
+<li><p>to implement <span class="math notranslate nohighlight">\(2^q\)</span>, use the representation of <a class="reference external" href="https://en.wikipedia.org/wiki/Double-precision_floating-point_format">floating point numbers</a>.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstring&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdint&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;algorithm&gt;</span>
+<span class="kt">double</span><span class="w"> </span><span class="nf">double_power_of_two</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="c1">// Clamp input to allowed range and add offset:</span>
+<span class="w">  </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="mi">-1022</span><span class="p">);</span>
+<span class="w">  </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">min</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="w">  </span><span class="mi">1023</span><span class="p">);</span>
+<span class="w">  </span><span class="n">n</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1023</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// convert to 64bit, and shift to exponent</span>
+<span class="w">  </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">exp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">bits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">exp</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">52</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// reinterpret bits as double</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">result</span><span class="p">;</span>
+<span class="w">  </span><span class="n">memcpy</span><span class="w"> </span><span class="p">(</span><span class="o">&amp;</span><span class="n">result</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">bits</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">);</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>See the result on <a class="reference external" href="https://godbolt.org/z/3fKT58TWe">Compiler explorer</a></p>
+</li>
 </ul>
 </li>
 </ul>
@@ -671,11 +704,11 @@ e^x &amp; = &amp; e^{ q \ln 2 + \tilde x} = e^{q \ln2 } e^\tilde x \\
       </div>
     </a>
     <a class="right-next"
-       href="pipelining.html"
+       href="simd_sort.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">11. </span>Pipelining</p>
+        <p class="prev-next-title"><span class="section-number">10.3. </span>Branch-free sorting</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

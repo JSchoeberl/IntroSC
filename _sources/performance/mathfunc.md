@@ -1,7 +1,12 @@
 # Vectorizing mathematical functions
 
 The aim is to implement mathematical functions like `exp`, `sin` and `cos` using the `SIMD` types.
+One motivation for doing so is speeding up the simulation of 
+[scattering problems](https://docu.ngsolve.org/latest/i-tutorials/unit-11.3-bem-Helmholtz/BrakhageWerner.html#prostprocessing-on-screen), where
+a good fraction of the compute time is spent in the complex `exp` function.
 
+
+Most implementations found online go back to these sources:
 
 References:
 
@@ -17,9 +22,8 @@ References:
 * Local approximation by polynomials
 
   For small values of the argument $x$, polynomial approximation via Taylor expansion can be used.
-  A uniform best approxiamtion is obtained via Chebyshev interpolation.
-  We took the coefficients from CEPHES, file cmath.tgz, which is the basis of many implementations
-     of mathematical functions:
+  A uniform best approxiamtion on the interval $[-\pi/4, \pi/4]$ is obtained via Chebyshev interpolation.
+  We took the coefficients from CEPHES, file cmath.tgz.
   
 
   ```cpp
@@ -59,8 +63,10 @@ References:
 
   This polynomial approximation can be used the same way for `double x`, and `SIMD<double> x`.
 
-
+  
 * Global approximation
+
+  For a general $x \in {\mathbb R}$, we have to figure out the right branch to reduce the evaluation to the small interval.
 
   We represent
   
@@ -123,11 +129,14 @@ References:
   }
   ```
 
+  Rounding on AVX2: `_mm256_round_pd`. Converting to int64: `_mm256_cvtepi32_epi64(_mm256_cvtpd_epi32(val))` <br>
+  Rounding for arm-neon: `vrndnq_f64`, `vcvtq_s64_f64`
+
 
 
 ## What the f..k?
 
-An important operation in compute graphics (games!) is the normalization of a vector, $|v| = 1/\sqrt(v*v) v$.
+An important operation in compute graphics (games!) is the normalization of a vector, $|v| = \frac{1}{\sqrt{v \cdot v}} v$.
 This requires the inverse square root function
 
 $$
@@ -145,7 +154,9 @@ using a few steps of Newton's method:
 \begin{eqnarray*}
 y_{n+1} & = & y_n - \frac{F(y_n)}{F^\prime(y_n)} \\
    & = & y_n - \frac{ y_n^{-2} - x } { - 2 y_n^{-3} } \\
-   & = & \tfrac{3}{2} y - \tfrac{1}{2} x y_n^2
+   %    & = & y_n + \frac{ y_n - x y_n^2 } {2 }  
+   % & = & \tfrac{3}{2} y_n - \tfrac{1}{2} x y_n^2 \\
+   & = & y_n \frac{ 3 - x y_n^2}{2}  
 \end{eqnarray*}
 
 Every step requires only 3 multiplications.
@@ -163,7 +174,7 @@ For example, processors by Arm provide intrinsics exactly for that Newton iterat
 
   Check accuary of the function by comparing to the standard $\sin$ and $\cos$ functions.
   
-  Measure speed by calling $10^8$ functions.
+  Measure speed by calling functions $10^8$ times.
 
 
 * Implement the $\exp$ function for `SIMD` types.
@@ -181,9 +192,33 @@ For example, processors by Arm provide intrinsics exactly for that Newton iterat
   & = & 2^q \, e^{\tilde x}
   \end{eqnarray*}
 
-  * implement an approximation of $\exp(x)$ for small $x$
+  * implement an approximation of $\exp(\tilde x)$ for small $\tilde x$
 
-  * to implement $2^q$, use the representation of [floating point numbers](https://en.wikipedia.org/wiki/Double-precision_floating-point_format)
+  * to implement $2^q$, use the representation of [floating point numbers](https://en.wikipedia.org/wiki/Double-precision_floating-point_format).
+
+    ```cpp
+    #include <cstring>
+    #include <cstdint>
+    #include <algorithm>
+    double double_power_of_two(int n)
+    {
+      // Clamp input to allowed range and add offset:
+      n = std::max(n, -1022);
+      n = std::min(n,  1023);
+      n += 1023;
+    
+      // convert to 64bit, and shift to exponent
+      uint64_t exp = n;
+      uint64_t bits = exp << 52;
+  
+      // reinterpret bits as double
+      double result;
+      memcpy (&result, &bits, 8);
+      return result;
+    }
+    ```
+
+    See the result on [Compiler explorer](https://godbolt.org/z/3fKT58TWe)
 
 
 Some places to find insparation:

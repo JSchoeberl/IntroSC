@@ -9,7 +9,26 @@ We are developing a library for solving nonlinear ordinary differential equation
 
 
 
-Fork and clone github repo [ASC-ODE](https://github.com/TUWien-ASC/ASC-ODE.git).
+Fork that github repo [ASC-ODE](https://github.com/TUWien-ASC/ASC-ODE.git), and clone it via
 
-Add your own bla-repo as an external sub-module, and adjust function calls if necessary.
+    git clone https://github.com/my_fork_on_github/ASC-ODE.git
+
+It contains the basic linear algebra package nanoblas as an git submodule. Populate it using
+
+    cd ASC-ODE
+    git submodule update --init
+
+You are welcome to replace nanoblas by your preferred linear algebra package.
+
+ASC-ODE has the following dependencies which must be installed:
+
+  * pybind11
+  * lapack 
+
+Then you can build cmake to build ASC-ODE:
+
+    mkdir build
+    cd build
+    cmake ..
+    make
 

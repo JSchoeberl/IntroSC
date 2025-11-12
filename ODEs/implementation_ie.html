@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>17.2. Coding the Implicit Euler method &#8212; Introduction to Scientific Computing</title>
+    <title>17.5. Coding the Implicit Euler method &#8212; Introduction to Scientific Computing</title>
   
   
   
@@ -62,8 +62,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'ODEs/implementation_ie';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="17.6. Automatic Differentiation" href="implementation_ad.html" />
-    <link rel="prev" title="17.1. Implementing a Newton solver" href="implementation_newton.html" />
+    <link rel="next" title="18. Runge-Kutta methods" href="RungeKutta.html" />
+    <link rel="prev" title="17.4. Automatic Differentiation" href="implementation_ad.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -210,12 +210,13 @@
 <li class="toctree-l1"><a class="reference internal" href="theory.html">15. A little bit of theory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="firstmethods.html">16. Some simple time-stepping methods</a></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="implementation.html">17. Implementation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="implementation_newton.html">17.1. Implementing a Newton solver</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">17.2. Coding the Implicit Euler method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementation_ee.html">17.1. Implementing the explicit Euler method</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="implementation_newton.html">17.3. Implementing a Newton solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementation_ad.html">17.4. Automatic Differentiation</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">17.5. Coding the Implicit Euler method</a></li>
 
 
-
-<li class="toctree-l2"><a class="reference internal" href="implementation_ad.html">17.6. Automatic Differentiation</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="RungeKutta.html">18. Runge-Kutta methods</a></li>
@@ -444,10 +445,9 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">17.2. Coding the Implicit Euler method</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-time-stepping-method">17.3. Using the time-stepping method</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#excercises">17.4. Excercises</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#stability-function">17.5. Stability function</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">17.5. Coding the Implicit Euler method</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#excercises">17.6. Excercises</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#stability-function">17.7. Stability function</a></li>
 </ul>
 
             </nav>
@@ -461,7 +461,7 @@ document.write(`
                 <article class="bd-article">
                   
   <section id="coding-the-implicit-euler-method">
-<h1><span class="section-number">17.2. </span>Coding the Implicit Euler method<a class="headerlink" href="#coding-the-implicit-euler-method" title="Link to this heading">#</a></h1>
+<h1><span class="section-number">17.5. </span>Coding the Implicit Euler method<a class="headerlink" href="#coding-the-implicit-euler-method" title="Link to this heading">#</a></h1>
 <p>In every time-step we have to solve for the new value <span class="math notranslate nohighlight">\(y^{n+1}\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[
@@ -495,55 +495,8 @@ given by the user. Then the implicit Euler method is coded up like that:</p>
 </pre></div>
 </div>
 </section>
-<section id="using-the-time-stepping-method">
-<h1><span class="section-number">17.3. </span>Using the time-stepping method<a class="headerlink" href="#using-the-time-stepping-method" title="Link to this heading">#</a></h1>
-<p>A mass attached to a spring is described by the ODE</p>
-<div class="math notranslate nohighlight">
-\[
-m y^{\prime \prime}(t) = -k y(t)
-\]</div>
-<p>where <span class="math notranslate nohighlight">\(m\)</span> is mass, <span class="math notranslate nohighlight">\(k\)</span> is the stiffness of the spring, and <span class="math notranslate nohighlight">\(y(t)\)</span> is the
-displacement of the mass. The equation comes from Newton’s law</p>
-<blockquote>
-<div><p>force = mass <span class="math notranslate nohighlight">\(\times\)</span> acceleration</p>
-</div></blockquote>
-<p>We replace the second-order equation with a first order system. For mathematical simplicity we set <span class="math notranslate nohighlight">\(k = m = 1\)</span>.
-Then we can define the right-hand-side as a <code class="docutils literal notranslate"><span class="pre">NonlinearFunction</span></code>. The derivative is needed for the Newton solver:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MassSpring</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">NonlinearFunction</span>
-<span class="p">{</span>
-<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="nf">DimX</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="nf">DimF</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-<span class="w">  </span>
-<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">Evaluate</span><span class="w"> </span><span class="p">(</span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span>
-<span class="w">  </span><span class="p">{</span>
-<span class="w">    </span><span class="n">f</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
-<span class="w">    </span><span class="n">f</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">x</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="w">  </span>
-<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="nf">EvaluateDeriv</span><span class="w"> </span><span class="p">(</span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">MatrixView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">df</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span>
-<span class="w">  </span><span class="p">{</span>
-<span class="w">    </span><span class="n">df</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">;</span>
-<span class="w">    </span><span class="n">df</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-<span class="w">    </span><span class="n">df</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="p">};</span>
-</pre></div>
-</div>
-<p>Finally, We start the time-stepper with the time interval, number of steps, initial values,
-right-hand-side function, and a call-back function called at the end of every time-step:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">double</span><span class="w"> </span><span class="n">tend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="o">*</span><span class="n">M_PI</span><span class="p">;</span>
-<span class="kt">int</span><span class="w"> </span><span class="n">steps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span>
-<span class="n">Vector</span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">};</span>
-<span class="k">auto</span><span class="w"> </span><span class="n">rhs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">MassSpring</span><span class="o">&gt;</span><span class="p">();</span>
-
-<span class="n">SolveODE_IE</span><span class="p">(</span><span class="n">tend</span><span class="p">,</span><span class="w"> </span><span class="n">steps</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">rhs</span><span class="p">,</span>
-<span class="w">            </span><span class="p">[](</span><span class="kt">double</span><span class="w"> </span><span class="n">t</span><span class="p">,</span><span class="w"> </span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;  &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">y</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">y</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span><span class="w"> </span><span class="p">});</span>
-</pre></div>
-</div>
-<p>This example is provided in <code class="docutils literal notranslate"><span class="pre">demos/test_ode.cc</span></code>.</p>
-</section>
 <section id="excercises">
-<h1><span class="section-number">17.4. </span>Excercises<a class="headerlink" href="#excercises" title="Link to this heading">#</a></h1>
+<h1><span class="section-number">17.6. </span>Excercises<a class="headerlink" href="#excercises" title="Link to this heading">#</a></h1>
 <ul class="simple">
 <li><p>Implement an explicit Euler time-stepper, and the Crank-Nicolson method.</p></li>
 <li><p>Compare the results of the mass-spring system for these methods, and various time-steps. Plot the solution function. What do you observe ?</p></li>
@@ -582,7 +535,7 @@ U_C(t) + R C \frac{dU_C}{dt}(t) = U_0(t)
 <p>Use initial condition for voltage at capacitor <span class="math notranslate nohighlight">\(U_C(t_0) = 0\)</span>, for <span class="math notranslate nohighlight">\(t_0=0\)</span>.</p>
 </section>
 <section id="stability-function">
-<h1><span class="section-number">17.5. </span>Stability function<a class="headerlink" href="#stability-function" title="Link to this heading">#</a></h1>
+<h1><span class="section-number">17.7. </span>Stability function<a class="headerlink" href="#stability-function" title="Link to this heading">#</a></h1>
 <p>An ODE <span class="math notranslate nohighlight">\(y^\prime(t) = A y(t)\)</span> with <span class="math notranslate nohighlight">\(A \in {\mathbb R}^n\)</span> diagonizable can be brought to <span class="math notranslate nohighlight">\(n\)</span> scalar ODEs</p>
 <div class="math notranslate nohighlight">
 \[
@@ -671,20 +624,20 @@ numerical solutions. This is the case for the implicit Euler, but not for the Cr
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="implementation_newton.html"
+       href="implementation_ad.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">17.1. </span>Implementing a Newton solver</p>
+        <p class="prev-next-title"><span class="section-number">17.4. </span>Automatic Differentiation</p>
       </div>
     </a>
     <a class="right-next"
-       href="implementation_ad.html"
+       href="RungeKutta.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">17.6. </span>Automatic Differentiation</p>
+        <p class="prev-next-title"><span class="section-number">18. </span>Runge-Kutta methods</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -704,10 +657,9 @@ numerical solutions. This is the case for the implicit Euler, but not for the Cr
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">17.2. Coding the Implicit Euler method</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-time-stepping-method">17.3. Using the time-stepping method</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#excercises">17.4. Excercises</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#stability-function">17.5. Stability function</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">17.5. Coding the Implicit Euler method</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#excercises">17.6. Excercises</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#stability-function">17.7. Stability function</a></li>
 </ul>
 
   </nav></div>
