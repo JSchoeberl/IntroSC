@@ -1,5 +1,17 @@
 ## Pipelining
 
+Let's recall the ski-lift. What are important timings ?
+
+* For one person, it may take about 10 minutes to get up the mountain. This we call latency time $t_{lat}$.
+* The lift can board new people about every 10 seconds. This time we call reciprocal throughput $t_{rtp}$. The thoughput is $t_{rtp}^{-1}$, in this example 0.1 chair per second.
+* To fully occupy the lift we need at least
+
+  $$
+  \frac { t_{lat} } { t_{rtp} } \times {\text{seat width} }
+  $$
+  people.
+
+
 Look at the documentation of the `_mm256_fmadd_pd` (fused-multiply-add) intrinsic:
 [docu](https://www.intel.com/content/www/us/en/docs/intrinsics-guide/index.html#text=256_fmadd_pd&avxnewtechs=FMA&ig_expand=3101,3101).
 It tells us that the instruction has a latency of 4 clock-cycles, but there is an inverse throughput (CPI=clocks per instruction)

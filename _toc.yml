@@ -25,6 +25,7 @@ parts:
       sections:
       - file: performance/simdclass.md
       - file: performance/mathfunc.md      
+      - file: performance/simd_sort.md      
     - file: performance/pipelining.md
     - file: performance/caches1.md
     - file: performance/parallelization.md
@@ -38,6 +39,8 @@ parts:
     - file: ODEs/firstmethods
     - file: ODEs/implementation
       sections:
+      - file: ODEs/functionalgebra.md
+      - file: ODEs/implementation_ee.md
       - file: ODEs/implementation_newton.md
       - file: ODEs/implementation_ie.md
       - file: ODEs/implementation_ad.md

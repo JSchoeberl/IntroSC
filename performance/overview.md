@@ -3,7 +3,7 @@
 We learn how to unleash the full power of our computers. This includes
 
 - **Vectorization**: single instructions can operate on multiple data, for example perform four double precision multiplications simultaneously.
-- **Pipelining**: several vector-instructions can be started per clock.
+- **Pipelining**: several vector-instructions can be started per clock
   cycle, but it takes several cycles to complete. Start new work before
   results of old work are ready.
 - **Caches**: getting data from main memory is slow. Caches keep recently used data in fast but small cache memory. 
