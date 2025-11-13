@@ -444,8 +444,7 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#excercises">17.4.1. Excercises</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stability-function">17.4.2. Stability function</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stability-function">17.4.1. Stability function</a></li>
 </ul>
             </nav>
         </div>
@@ -471,36 +470,62 @@ If we make the time-step not too large, the value <span class="math notranslate 
 <p>To express that the independent varible is <span class="math notranslate nohighlight">\(y^{n+1}\)</span>, we create an <code class="docutils literal notranslate"><span class="pre">IdentityFunction</span></code>. The old
 value is considered as a constant, i.e. a <code class="docutils literal notranslate"><span class="pre">ConstantFunction</span></code>. The right hand side function is
 given by the user. Then the implicit Euler method is coded up like that:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">SolveODE_IE</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">tend</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">steps</span><span class="p">,</span>
-<span class="w">                 </span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">y</span><span class="p">,</span><span class="w"> </span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">NonlinearFunction</span><span class="o">&gt;</span><span class="w"> </span><span class="n">rhs</span><span class="p">,</span>
-<span class="w">                 </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="kt">double</span><span class="p">,</span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="p">)</span><span class="o">&gt;</span><span class="w"> </span><span class="n">callback</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ImplicitEuler</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">TimeStepper</span>
 <span class="p">{</span>
-<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">dt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tend</span><span class="o">/</span><span class="n">steps</span><span class="p">;</span>
-<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">yold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">ConstantFunction</span><span class="o">&gt;</span><span class="p">(</span><span class="n">y</span><span class="p">);</span>
-<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">ynew</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">IdentityFunction</span><span class="o">&gt;</span><span class="p">(</span><span class="n">y</span><span class="p">.</span><span class="n">Size</span><span class="p">());</span>
-<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">equ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ynew</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">yold</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">dt</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">rhs</span><span class="p">;</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">NonlinearFunction</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_equ</span><span class="p">;</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Parameter</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_tau</span><span class="p">;</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">ConstantFunction</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_yold</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="n">ImplicitEuler</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">NonlinearFunction</span><span class="o">&gt;</span><span class="w"> </span><span class="n">rhs</span><span class="p">)</span><span class="w"> </span>
+<span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">TimeStepper</span><span class="p">(</span><span class="n">rhs</span><span class="p">),</span><span class="w"> </span><span class="n">m_tau</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">Parameter</span><span class="o">&gt;</span><span class="p">(</span><span class="mf">0.0</span><span class="p">))</span><span class="w"> </span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="n">m_yold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">ConstantFunction</span><span class="o">&gt;</span><span class="p">(</span><span class="n">rhs</span><span class="o">-&gt;</span><span class="n">dimX</span><span class="p">());</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">ynew</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">IdentityFunction</span><span class="o">&gt;</span><span class="p">(</span><span class="n">rhs</span><span class="o">-&gt;</span><span class="n">dimX</span><span class="p">());</span>
+<span class="w">    </span><span class="n">m_equ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ynew</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">m_yold</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">m_tau</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m_rhs</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
 
-<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">steps</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
-<span class="w">    </span><span class="p">{</span>
-<span class="w">      </span><span class="n">NewtonSolver</span><span class="w"> </span><span class="p">(</span><span class="n">equ</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">);</span>
-<span class="w">      </span><span class="n">yold</span><span class="o">-&gt;</span><span class="n">Set</span><span class="p">(</span><span class="n">y</span><span class="p">);</span>
-<span class="w">      </span><span class="n">t</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">dt</span><span class="p">;</span>
-<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">callback</span><span class="p">)</span><span class="w"> </span><span class="n">callback</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">);</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="p">}</span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="n">DoStep</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">tau</span><span class="p">,</span><span class="w"> </span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="k">override</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="n">m_yold</span><span class="o">-&gt;</span><span class="n">set</span><span class="p">(</span><span class="n">y</span><span class="p">);</span>
+<span class="w">    </span><span class="n">m_tau</span><span class="o">-&gt;</span><span class="n">set</span><span class="p">(</span><span class="n">tau</span><span class="p">);</span>
+<span class="w">    </span><span class="n">NewtonSolver</span><span class="p">(</span><span class="n">m_equ</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">};</span>
 </pre></div>
 </div>
-<section id="excercises">
-<h2><span class="section-number">17.4.1. </span>Excercises<a class="headerlink" href="#excercises" title="Link to this heading">#</a></h2>
-<ul class="simple">
-<li><p>Implement an explicit Euler time-stepper, and the Crank-Nicolson method.</p></li>
-<li><p>Compare the results of the mass-spring system for these methods, and various time-steps. Plot the solution function. What do you observe ?</p></li>
-<li><p>Model an electric network by an ODE. Bring it to autonomous form.
-Solve the ODE numerically for various parameters with the three methods, and various time-steps.</p></li>
-</ul>
-<a class="reference internal image-reference" href="../_images/RC.png"><img alt="../_images/RC.png" class="align-center" src="../_images/RC.png" style="width: 200px;" />
-</a>
+<p>void SolveODE_IE(double tend, int steps,
+VectorView<double> y, shared_ptr<NonlinearFunction> rhs,
+std::function&lt;void(double,VectorView<double>)&gt; callback = nullptr)
+{
+double dt = tend/steps;
+auto yold = make_shared<ConstantFunction>(y);
+auto ynew = make_shared<IdentityFunction>(y.Size());
+auto equ = ynew - yold - dt * rhs;</p>
+<p>double t = 0;
+for (int i = 0; i &lt; steps; i++)
+{
+NewtonSolver (equ, y);
+yold-&gt;Set(y);
+t += dt;
+if (callback) callback(t, y);
+}
+}</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+
+## Excercises
+
+* Implement an explicit Euler time-stepper, and the Crank-Nicolson method.
+
+* Compare the results of the mass-spring system for these methods, and various time-steps. Plot the solution function. What do you observe ?
+
+* Model an electric network by an ODE. Bring it to autonomous form.
+Solve the ODE numerically for various parameters with the three methods, and various time-steps.
+
+```{image} pictures/RC.png
+:width: 200px
+:align: center
+</pre></div>
+</div>
 <p>Voltage source <span class="math notranslate nohighlight">\(U_0(t) = \cos(100 \pi t)\)</span>, <span class="math notranslate nohighlight">\(R = C = 1\)</span> or <span class="math notranslate nohighlight">\(R = 100, C = 10^{-6}\)</span>.</p>
 <p>Ohm’s law for a resistor <span class="math notranslate nohighlight">\(R\)</span> with resistivity <span class="math notranslate nohighlight">\(R\)</span>:</p>
 <div class="math notranslate nohighlight">
@@ -529,9 +554,8 @@ Thus we have a constant current along the loop.</p></li>
 U_C(t) + R C \frac{dU_C}{dt}(t) = U_0(t)
 \]</div>
 <p>Use initial condition for voltage at capacitor <span class="math notranslate nohighlight">\(U_C(t_0) = 0\)</span>, for <span class="math notranslate nohighlight">\(t_0=0\)</span>.</p>
-</section>
 <section id="stability-function">
-<h2><span class="section-number">17.4.2. </span>Stability function<a class="headerlink" href="#stability-function" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">17.4.1. </span>Stability function<a class="headerlink" href="#stability-function" title="Link to this heading">#</a></h2>
 <p>An ODE <span class="math notranslate nohighlight">\(y^\prime(t) = A y(t)\)</span> with <span class="math notranslate nohighlight">\(A \in {\mathbb R}^n\)</span> diagonizable can be brought to <span class="math notranslate nohighlight">\(n\)</span> scalar ODEs</p>
 <div class="math notranslate nohighlight">
 \[
@@ -654,8 +678,7 @@ numerical solutions. This is the case for the implicit Euler, but not for the Cr
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#excercises">17.4.1. Excercises</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stability-function">17.4.2. Stability function</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stability-function">17.4.1. Stability function</a></li>
 </ul>
   </nav></div>
 
