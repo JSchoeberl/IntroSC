@@ -1,4 +1,4 @@
-## Coding the Implicit Euler method
+# Coding the Implicit Euler method
 
 In every time-step we have to solve for the new value $y^{n+1}$:
 

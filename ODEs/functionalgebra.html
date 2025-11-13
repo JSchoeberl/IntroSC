@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>17.5. Automatic Differentiation &#8212; Introduction to Scientific Computing</title>
+    <title>17.1. Function algebra &#8212; Introduction to Scientific Computing</title>
   
   
   
@@ -57,11 +57,13 @@
     <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'ODEs/implementation_ad';</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'ODEs/functionalgebra';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="18. Runge-Kutta methods" href="RungeKutta.html" />
-    <link rel="prev" title="17.4. Coding the Implicit Euler method" href="implementation_ie.html" />
+    <link rel="next" title="17.2. Implementing the explicit Euler method" href="implementation_ee.html" />
+    <link rel="prev" title="17. Implementation" href="implementation.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -209,11 +211,11 @@
 <li class="toctree-l1"><a class="reference internal" href="theory.html">15. A little bit of theory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="firstmethods.html">16. Some simple time-stepping methods</a></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="implementation.html">17. Implementation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="functionalgebra.html">17.1. Function algebra</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">17.1. Function algebra</a></li>
 <li class="toctree-l2"><a class="reference internal" href="implementation_ee.html">17.2. Implementing the explicit Euler method</a></li>
 <li class="toctree-l2"><a class="reference internal" href="implementation_newton.html">17.3. Implementing a Newton solver</a></li>
 <li class="toctree-l2"><a class="reference internal" href="implementation_ie.html">17.4. Coding the Implicit Euler method</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">17.5. Automatic Differentiation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementation_ad.html">17.5. Automatic Differentiation</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="RungeKutta.html">18. Runge-Kutta methods</a></li>
@@ -348,7 +350,7 @@
       
       
       
-      <li><a href="../_sources/ODEs/implementation_ad.md" target="_blank"
+      <li><a href="../_sources/ODEs/functionalgebra.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -430,7 +432,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Automatic Differentiation</h1>
+    <h1>Function algebra</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -444,9 +446,87 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="automatic-differentiation">
-<h1><span class="section-number">17.5. </span>Automatic Differentiation<a class="headerlink" href="#automatic-differentiation" title="Link to this heading">#</a></h1>
-<p>under construction</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="function-algebra">
+<h1><span class="section-number">17.1. </span>Function algebra<a class="headerlink" href="#function-algebra" title="Link to this heading">#</a></h1>
+<p>We implement a function algebra, which allows us to write expressions like</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">func</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Id</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">Compose</span><span class="w"> </span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="n">g</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">f</span></code> and <code class="docutils literal notranslate"><span class="pre">g</span></code> are functions, and <code class="docutils literal notranslate"><span class="pre">Id</span></code> is the identic function. Then
+the composed function <code class="docutils literal notranslate"><span class="pre">func</span></code> shall be able to compute the function value
+and the derivative at a given point <span class="math notranslate nohighlight">\(x\)</span> (of type <code class="docutils literal notranslate"><span class="pre">Vector</span></code>).</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">Vector</span><span class="w"> </span><span class="nf">vecf</span><span class="p">(</span><span class="n">func</span><span class="o">-&gt;</span><span class="n">dimF</span><span class="p">());</span>
+<span class="n">func</span><span class="o">-&gt;</span><span class="n">Evaluate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">vecf</span><span class="p">);</span>
+<span class="w"> </span>
+<span class="n">Matrix</span><span class="w"> </span><span class="nf">jacobi</span><span class="p">(</span><span class="n">func</span><span class="o">-&gt;</span><span class="n">dimF</span><span class="p">(),</span><span class="w"> </span><span class="n">func</span><span class="o">-&gt;</span><span class="n">dimX</span><span class="p">());</span>
+<span class="n">func</span><span class="o">-&gt;</span><span class="n">EvaluateDeriv</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">jacobi</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Our base class for such functions is</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">NonlinearFunction</span><span class="w"> </span><span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="o">~</span><span class="n">NonlinearFunction</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">default</span><span class="p">;</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="nf">dimX</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="nf">dimF</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">evaluate</span><span class="w"> </span><span class="p">(</span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">evaluateDeriv</span><span class="w"> </span><span class="p">(</span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">MatrixView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">df</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">dimX</span></code> and <code class="docutils literal notranslate"><span class="pre">dimF</span></code> provide the vector space dimensions of the domain, and the image.
+The <code class="docutils literal notranslate"><span class="pre">evaluate</span></code> and <code class="docutils literal notranslate"><span class="pre">evaluateDeriv</span></code> take vector- and matrix-views, such that we can
+take sub-vectors and sub-matrices when calling the evaluations.</p>
+<p>The function algebra is implemented in the file <code class="docutils literal notranslate"><span class="pre">nonlinfunc.hpp</span></code>.</p>
+<p>We build expression trees, similar as the expression templates for vectors and matrices.
+But now we use virtual inheritance instead of the Barton Neckman trick (i.e. dynamic
+polymorphism instead of static polymorphism). This is more expensive to create, but it allows to
+pass <code class="docutils literal notranslate"><span class="pre">NonlinearFunction</span></code> objects between C++ functions.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">SumFunction</span></code> implements the sum <span class="math notranslate nohighlight">\(f_A+f_B\)</span>. The two childs are provided by pointers.
+Shared pointers allow simple life-time management:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">SumFunction</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">NonlinearFunction</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">NonlinearFunction</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_fa</span><span class="p">,</span><span class="w"> </span><span class="n">m_fb</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="n">SumFunction</span><span class="w"> </span><span class="p">(</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">NonlinearFunction</span><span class="o">&gt;</span><span class="w"> </span><span class="n">fa</span><span class="p">,</span>
+<span class="w">               </span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">NonlinearFunction</span><span class="o">&gt;</span><span class="w"> </span><span class="n">fb</span><span class="p">)</span>
+<span class="w">    </span><span class="o">:</span><span class="w"> </span><span class="n">m_fa</span><span class="p">(</span><span class="n">fa</span><span class="p">),</span><span class="w"> </span><span class="n">m_fb</span><span class="p">(</span><span class="n">fb</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span><span class="w"> </span>
+<span class="w">    </span>
+<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">dimX</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">m_fa</span><span class="o">-&gt;</span><span class="n">dimX</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">dimF</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">m_fa</span><span class="o">-&gt;</span><span class="n">dimF</span><span class="p">();</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="n">evaluate</span><span class="w"> </span><span class="p">(</span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="k">const</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="n">m_fa</span><span class="o">-&gt;</span><span class="n">evaluate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">);</span>
+<span class="w">    </span><span class="n">Vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">tmp</span><span class="p">(</span><span class="n">dimF</span><span class="p">());</span>
+<span class="w">    </span><span class="n">m_fb</span><span class="o">-&gt;</span><span class="n">Evaluate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">tmp</span><span class="p">);</span>
+<span class="w">    </span><span class="n">f</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">tmp</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="n">EvaluateDeriv</span><span class="w"> </span><span class="p">(</span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">MatrixView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">df</span><span class="p">)</span><span class="w"> </span><span class="k">const</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="n">fa</span><span class="o">-&gt;</span><span class="n">dvaluateDeriv</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">df</span><span class="p">);</span>
+<span class="w">    </span><span class="n">Matrix</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">tmp</span><span class="p">(</span><span class="n">dimF</span><span class="p">(),</span><span class="w"> </span><span class="n">dimX</span><span class="p">());</span>
+<span class="w">    </span><span class="n">fb</span><span class="o">-&gt;</span><span class="n">dvaluateDeriv</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">tmp</span><span class="p">);</span>
+<span class="w">    </span><span class="n">df</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">tmp</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>To generate such a <code class="docutils literal notranslate"><span class="pre">SumFunction</span></code> object, we overload the <code class="docutils literal notranslate"><span class="pre">operator+</span></code> for two <code class="docutils literal notranslate"><span class="pre">NonlinearFunction</span></code> objects,
+represented as shared objectes:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="k">operator</span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">NonlinearFunction</span><span class="o">&gt;</span><span class="w"> </span><span class="n">fa</span><span class="p">,</span><span class="w"> </span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">NonlinearFunction</span><span class="o">&gt;</span><span class="w"> </span><span class="n">fb</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">SumFunction</span><span class="o">&gt;</span><span class="p">(</span><span class="n">fa</span><span class="p">,</span><span class="w"> </span><span class="n">fb</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Some more building blocks for our function hierarchy are:</p>
+<ul class="simple">
+<li><p>The IdentityFunction <span class="math notranslate nohighlight">\(f(x) = x\)</span></p></li>
+<li><p>A constant function <span class="math notranslate nohighlight">\(f(x) = val\)</span></p></li>
+<li><p>A scaled function <span class="math notranslate nohighlight">\(\alpha f\)</span>, wehere <span class="math notranslate nohighlight">\(\alpha\)</span> is a scalar</p></li>
+<li><p>A composed function <span class="math notranslate nohighlight">\(f \circ g\)</span></p></li>
+<li><p>…</p></li>
+</ul>
 </section>
 
     <script type="text/x-thebe-config">
@@ -480,20 +560,20 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="implementation_ie.html"
+       href="implementation.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">17.4. </span>Coding the Implicit Euler method</p>
+        <p class="prev-next-title"><span class="section-number">17. </span>Implementation</p>
       </div>
     </a>
     <a class="right-next"
-       href="RungeKutta.html"
+       href="implementation_ee.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">18. </span>Runge-Kutta methods</p>
+        <p class="prev-next-title"><span class="section-number">17.2. </span>Implementing the explicit Euler method</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

@@ -25,7 +25,7 @@ ASC-ODE has the following dependencies which must be installed:
   * pybind11
   * lapack 
 
-Then you can build cmake to build ASC-ODE:
+Then you can use cmake to build ASC-ODE:
 
     mkdir build
     cd build

@@ -62,8 +62,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'ODEs/implementation_newton';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="17.4. Automatic Differentiation" href="implementation_ad.html" />
-    <link rel="prev" title="17.1. Implementing the explicit Euler method" href="implementation_ee.html" />
+    <link rel="next" title="17.4. Coding the Implicit Euler method" href="implementation_ie.html" />
+    <link rel="prev" title="17.2. Implementing the explicit Euler method" href="implementation_ee.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -198,6 +198,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../performance/vectorization.html">10. Vectorization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../performance/simdclass.html">10.1. The SIMD - class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../performance/mathfunc.html">10.2. Vectorizing mathematical functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../performance/simd_sort.html">10.3. Branch-free sorting</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="../performance/pipelining.html">11. Pipelining</a></li>
@@ -210,13 +211,13 @@
 <li class="toctree-l1"><a class="reference internal" href="theory.html">15. A little bit of theory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="firstmethods.html">16. Some simple time-stepping methods</a></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="implementation.html">17. Implementation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="implementation_ee.html">17.1. Implementing the explicit Euler method</a></li>
-
+<li class="toctree-l2"><a class="reference internal" href="functionalgebra.html">17.1. Function algebra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementation_ee.html">17.2. Implementing the explicit Euler method</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">17.3. Implementing a Newton solver</a></li>
-<li class="toctree-l2"><a class="reference internal" href="implementation_ad.html">17.4. Automatic Differentiation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="implementation_ie.html">17.5. Coding the Implicit Euler method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementation_ie.html">17.4. Coding the Implicit Euler method</a></li>
 
 
+<li class="toctree-l2"><a class="reference internal" href="implementation_ad.html">17.7. Automatic Differentiation</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="RungeKutta.html">18. Runge-Kutta methods</a></li>
@@ -447,7 +448,7 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="implementing-a-newton-solver">
+  <section class="tex2jax_ignore mathjax_ignore" id="implementing-a-newton-solver">
 <h1><span class="section-number">17.3. </span>Implementing a Newton solver<a class="headerlink" href="#implementing-a-newton-solver" title="Link to this heading">#</a></h1>
 <p>Newton’s method for solving the non-linear equation</p>
 <div class="math notranslate nohighlight">
@@ -527,15 +528,15 @@ Newton’s method converges quadratically:</p>
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">17.1. </span>Implementing the explicit Euler method</p>
+        <p class="prev-next-title"><span class="section-number">17.2. </span>Implementing the explicit Euler method</p>
       </div>
     </a>
     <a class="right-next"
-       href="implementation_ad.html"
+       href="implementation_ie.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">17.4. </span>Automatic Differentiation</p>
+        <p class="prev-next-title"><span class="section-number">17.4. </span>Coding the Implicit Euler method</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

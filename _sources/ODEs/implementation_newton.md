@@ -1,5 +1,4 @@
-
-## Implementing a Newton solver
+# Implementing a Newton solver
 
 Newton's method for solving the non-linear equation
 
