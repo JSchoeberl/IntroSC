@@ -20,22 +20,25 @@ $$
 $$
 This means the number of valid digits double in every iteration.
 
+Here is a simple implementation of Newton's method using `NonlinearFunction`.
+The vector `x` is used to provide the initial guess, as well as for the solution:
+
 ```cpp
 void NewtonSolver (shared_ptr<NonlinearFunction> func, VectorView<double> x,
                    double tol = 1e-10, int maxsteps = 10,
                    std::function<void(int,double,VectorView<double>)> callback = nullptr)
 {
-  Vector<> res(func->DimF());
-  Matrix<> fprime(func->DimF(), func->DimX());
+  Vector<> res(func->dimF());
+  Matrix<> fprime(func->dimF(), func->dimX());
 
   for (int i = 0; i < maxsteps; i++)
     {
-      func->Evaluate(x, res);
-      func->EvaluateDeriv(x, fprime);
-      CalcInverse(fprime);
+      func->evaluate(x, res);
+      func->evaluateDeriv(x, fprime);
+      calcInverse(fprime);
       x -= fprime*res;
 
-      double err = Norm(res);
+      double err = norm(res);
       if (callback) callback(i, err, x);
       if (err < tol) return;
     }
@@ -45,4 +48,15 @@ void NewtonSolver (shared_ptr<NonlinearFunction> func, VectorView<double> x,
 
 ```
 
+
+It can be used as:
+```cpp
+shared_ptr<NonlinearFunction> myfunc = ...
+Vector<double> x = { 1.0, 2.0, 3.0 };
+
+NewtonSolver (myfunc, x, 1e-8, 20,
+             [](int step, double err, VectorView<double> x) {
+             cout << "step " << step << ", err " << err << ", x = " << x << endl;
+             }
+```
 

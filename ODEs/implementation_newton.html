@@ -215,9 +215,7 @@
 <li class="toctree-l2"><a class="reference internal" href="implementation_ee.html">17.2. Implementing the explicit Euler method</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">17.3. Implementing a Newton solver</a></li>
 <li class="toctree-l2"><a class="reference internal" href="implementation_ie.html">17.4. Coding the Implicit Euler method</a></li>
-
-
-<li class="toctree-l2"><a class="reference internal" href="implementation_ad.html">17.7. Automatic Differentiation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementation_ad.html">17.5. Automatic Differentiation</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="RungeKutta.html">18. Runge-Kutta methods</a></li>
@@ -467,27 +465,39 @@ Newton’s method converges quadratically:</p>
 \| x^{n+1} - x^\ast \| \leq c \, \| x^n - x^\ast \|^2
 \]</div>
 <p>This means the number of valid digits double in every iteration.</p>
+<p>Here is a simple implementation of Newton’s method using <code class="docutils literal notranslate"><span class="pre">NonlinearFunction</span></code>.
+The vector <code class="docutils literal notranslate"><span class="pre">x</span></code> is used to provide the initial guess, as well as for the solution:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">NewtonSolver</span><span class="w"> </span><span class="p">(</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">NonlinearFunction</span><span class="o">&gt;</span><span class="w"> </span><span class="n">func</span><span class="p">,</span><span class="w"> </span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="p">,</span>
 <span class="w">                   </span><span class="kt">double</span><span class="w"> </span><span class="n">tol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1e-10</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">maxsteps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span>
 <span class="w">                   </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="kt">int</span><span class="p">,</span><span class="kt">double</span><span class="p">,</span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="p">)</span><span class="o">&gt;</span><span class="w"> </span><span class="n">callback</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">nullptr</span><span class="p">)</span>
 <span class="p">{</span>
-<span class="w">  </span><span class="n">Vector</span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">res</span><span class="p">(</span><span class="n">func</span><span class="o">-&gt;</span><span class="n">DimF</span><span class="p">());</span>
-<span class="w">  </span><span class="n">Matrix</span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">fprime</span><span class="p">(</span><span class="n">func</span><span class="o">-&gt;</span><span class="n">DimF</span><span class="p">(),</span><span class="w"> </span><span class="n">func</span><span class="o">-&gt;</span><span class="n">DimX</span><span class="p">());</span>
+<span class="w">  </span><span class="n">Vector</span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">res</span><span class="p">(</span><span class="n">func</span><span class="o">-&gt;</span><span class="n">dimF</span><span class="p">());</span>
+<span class="w">  </span><span class="n">Matrix</span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">fprime</span><span class="p">(</span><span class="n">func</span><span class="o">-&gt;</span><span class="n">dimF</span><span class="p">(),</span><span class="w"> </span><span class="n">func</span><span class="o">-&gt;</span><span class="n">dimX</span><span class="p">());</span>
 
 <span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">maxsteps</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">      </span><span class="n">func</span><span class="o">-&gt;</span><span class="n">Evaluate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">res</span><span class="p">);</span>
-<span class="w">      </span><span class="n">func</span><span class="o">-&gt;</span><span class="n">EvaluateDeriv</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">fprime</span><span class="p">);</span>
-<span class="w">      </span><span class="n">CalcInverse</span><span class="p">(</span><span class="n">fprime</span><span class="p">);</span>
+<span class="w">      </span><span class="n">func</span><span class="o">-&gt;</span><span class="n">evaluate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">res</span><span class="p">);</span>
+<span class="w">      </span><span class="n">func</span><span class="o">-&gt;</span><span class="n">evaluateDeriv</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">fprime</span><span class="p">);</span>
+<span class="w">      </span><span class="n">calcInverse</span><span class="p">(</span><span class="n">fprime</span><span class="p">);</span>
 <span class="w">      </span><span class="n">x</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="n">fprime</span><span class="o">*</span><span class="n">res</span><span class="p">;</span>
 
-<span class="w">      </span><span class="kt">double</span><span class="w"> </span><span class="n">err</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Norm</span><span class="p">(</span><span class="n">res</span><span class="p">);</span>
+<span class="w">      </span><span class="kt">double</span><span class="w"> </span><span class="n">err</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">norm</span><span class="p">(</span><span class="n">res</span><span class="p">);</span>
 <span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">callback</span><span class="p">)</span><span class="w"> </span><span class="n">callback</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">err</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">);</span>
 <span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">err</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">tol</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">domain_error</span><span class="p">(</span><span class="s">&quot;Newton did not converge&quot;</span><span class="p">);</span>
 <span class="w">  </span><span class="p">}</span>
+</pre></div>
+</div>
+<p>It can be used as:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">NonlinearFunction</span><span class="o">&gt;</span><span class="w"> </span><span class="n">myfunc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...</span>
+<span class="n">Vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">2.0</span><span class="p">,</span><span class="w"> </span><span class="mf">3.0</span><span class="w"> </span><span class="p">};</span>
+
+<span class="n">NewtonSolver</span><span class="w"> </span><span class="p">(</span><span class="n">myfunc</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="mf">1e-8</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span>
+<span class="w">             </span><span class="p">[](</span><span class="kt">int</span><span class="w"> </span><span class="n">step</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">err</span><span class="p">,</span><span class="w"> </span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">             </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;step &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">step</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;, err &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">err</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;, x = &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
+<span class="w">             </span><span class="p">}</span>
 </pre></div>
 </div>
 </section>
