@@ -198,6 +198,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../performance/vectorization.html">10. Vectorization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../performance/simdclass.html">10.1. The SIMD - class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../performance/mathfunc.html">10.2. Vectorizing mathematical functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../performance/simd_sort.html">10.3. Branch-free sorting</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="../performance/pipelining.html">11. Pipelining</a></li>
@@ -210,12 +211,11 @@
 <li class="toctree-l1"><a class="reference internal" href="theory.html">15. A little bit of theory</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">16. Some simple time-stepping methods</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="implementation.html">17. Implementation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="implementation_newton.html">17.1. Implementing a Newton solver</a></li>
-<li class="toctree-l2"><a class="reference internal" href="implementation_ie.html">17.2. Coding the Implicit Euler method</a></li>
-
-
-
-<li class="toctree-l2"><a class="reference internal" href="implementation_ad.html">17.6. Automatic Differentiation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="functionalgebra.html">17.1. Function algebra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementation_ee.html">17.2. Implementing the explicit Euler method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementation_newton.html">17.3. Implementing a Newton solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementation_ie.html">17.4. Coding the Implicit Euler method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementation_ad.html">17.5. Automatic Differentiation</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="RungeKutta.html">18. Runge-Kutta methods</a></li>
@@ -466,13 +466,13 @@ document.write(`
 \[
 y^\prime(t) = f(t, y(t)) \; \; \forall \, t \in (t_0, T), \quad y(t_0) = y_0
 \]</div>
-<p>by a numerical method.</p>
+<p>using a numerical method.</p>
 <p>We introduce time points</p>
 <div class="math notranslate nohighlight">
 \[
 t_0 &lt; t_1 &lt; \ldots &lt; t_n = T,
 \]</div>
-<p>usually we choose <span class="math notranslate nohighlight">\(n \in {\mathbb N}\)</span>, define <span class="math notranslate nohighlight">\(h := \frac{T-t_0}{n}\)</span>, and
+<p>usually we choose <span class="math notranslate nohighlight">\(n \in {\mathbb N}\)</span>, define <span class="math notranslate nohighlight">\(\tau := \frac{T-t_0}{n}\)</span>, and
 <span class="math notranslate nohighlight">\(t_i := t_0 + ih\)</span>.</p>
 <p>We compute a discrete approximate solution</p>
 <div class="math notranslate nohighlight">
@@ -493,10 +493,10 @@ y^\prime (t_i)
 \[
 \frac{y_{i+1} - y_i}{t_{i+1}-t_i} = f(t_i, y_i)
 \]</div>
-<p>or (with constant mesh size <span class="math notranslate nohighlight">\(h = t_{i+1} - t_i\)</span>)</p>
+<p>or (with constant mesh size <span class="math notranslate nohighlight">\(\tau = t_{i+1} - t_i\)</span>)</p>
 <div class="math notranslate nohighlight">
 \[
-y_{i+1} = y_i + h f(t_i, y_i) \qquad 0 \leq i &lt; n
+y_{i+1} = y_i + \tau f(t_i, y_i) \qquad 0 \leq i &lt; n
 \]</div>
 <p>This method is very simple, it is a fully explicit algorithm. The next step <span class="math notranslate nohighlight">\(y_{i+1}\)</span> is
 defined by simply evaluating this formula.</p>
@@ -515,8 +515,8 @@ now seen as an approximation to <span class="math notranslate nohighlight">\(y^\
 y_{i+1} = y_i + h f(t_{i+1}, y_{i+1}) \qquad 0 \leq i &lt; n
 \]</div>
 <p>Now, the new step <span class="math notranslate nohighlight">\(y_{i+1}\)</span> shows up also within the right-hand side. We cannot simply
-evaluate a formula, but have to solve a system of equations. If the right hand side <span class="math notranslate nohighlight">\(f(t,y)\)</span>
-depends non-linear on the the state <span class="math notranslate nohighlight">\(y\)</span>, one has to solve a non-linear system. Typically,
+evaluate a formula, but have to solve a system of equations. If the right-hand side <span class="math notranslate nohighlight">\(f(t,y)\)</span>
+depends non-linear on the state <span class="math notranslate nohighlight">\(y\)</span>, one has to solve a non-linear system. Typically,
 this is done using Newton’s method.</p>
 </section>
 <section id="crank-nicolson-method">
@@ -525,7 +525,7 @@ this is done using Newton’s method.</p>
 the mid-point <span class="math notranslate nohighlight">\(\frac{t_{i}+t_{i+1}}{2}\)</span>, we end up with the Crank-Nicolson method</p>
 <div class="math notranslate nohighlight">
 \[
-y_{i+1} = y_i + \frac{h}{2} \big( f(t_i, y_i) + f(t_{i+1}, y_{i+1}) \big) \qquad 0 \leq i &lt; n.
+y_{i+1} = y_i + \frac{\tau}{2} \big( f(t_i, y_i) + f(t_{i+1}, y_{i+1}) \big) \qquad 0 \leq i &lt; n.
 \]</div>
 <p>Like the implicit Euler method, it is an implicit method as well. Numerical analysis proves that
 this method provides a better rate of convergence.</p>
@@ -543,8 +543,7 @@ y^\prime(t) = f(t, y(t)) \qquad y(t_i) = y_i
 y(t) = y_i + \int_{t_i}^t f(s, y(s)) \, ds \qquad \forall \, t \in [t_i, t_{i+1}]
 \]</div>
 <p>We insert <span class="math notranslate nohighlight">\(t = t_{i+1}\)</span> to obtain the next time-step,
-and use numerial integration to approximate the integral on the right hand side.
-The left-sided rectangular rule</p>
+and use numerical integration to approximate the integral on the right-hand side. The left-sided rectangular rule</p>
 <div class="math notranslate nohighlight">
 \[
 \int_a^b f(x) \, dx \approx (b-a) \, f(a)
@@ -552,7 +551,7 @@ The left-sided rectangular rule</p>
 <p>leads to</p>
 <div class="math notranslate nohighlight">
 \[
-y_{i+1} = y_i + h f(t_i, y_i),
+y_{i+1} = y_i + \tau f(t_i, y_i),
 \]</div>
 <p>the right-sided rectangular rule</p>
 <div class="math notranslate nohighlight">
@@ -562,7 +561,7 @@ y_{i+1} = y_i + h f(t_i, y_i),
 <p>leads to</p>
 <div class="math notranslate nohighlight">
 \[
-y_{i+1} = y_i + h f(t_{i+1}, y_{i+1}).
+y_{i+1} = y_i + \tau f(t_{i+1}, y_{i+1}).
 \]</div>
 <p>The more accurate trapezoidal rule</p>
 <div class="math notranslate nohighlight">
@@ -572,7 +571,7 @@ y_{i+1} = y_i + h f(t_{i+1}, y_{i+1}).
 <p>leads to the Crank-Nicolson method</p>
 <div class="math notranslate nohighlight">
 \[
-y_{i+1} = y_i + \frac{h}{2} \big( f(t_i, y_i) +  f(t_{i+1}, y_{i+1})\big)
+y_{i+1} = y_i + \frac{\tau}{2} \big( f(t_i, y_i) +  f(t_{i+1}, y_{i+1})\big)
 \]</div>
 <p>We see that we have recovered the same three methods from numerical integration, as we
 had already motivated before from numerical differentiation.
@@ -672,7 +671,7 @@ By J. Schöberl
 
   <p class="copyright">
     
-      © Copyright 2023.
+      © Copyright 2023-2025.
       <br/>
     
   </p>

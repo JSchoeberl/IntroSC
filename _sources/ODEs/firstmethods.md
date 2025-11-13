@@ -6,7 +6,7 @@ $$
 y^\prime(t) = f(t, y(t)) \; \; \forall \, t \in (t_0, T), \quad y(t_0) = y_0
 $$
 
-by a numerical method.
+using a numerical method.
 
 We introduce time points
 
@@ -14,10 +14,10 @@ $$
 t_0 < t_1 < \ldots < t_n = T,
 $$
 
-usually we choose $n \in {\mathbb N}$, define $h := \frac{T-t_0}{n}$, and
+usually we choose $n \in {\mathbb N}$, define $\tau := \frac{T-t_0}{n}$, and
 $t_i := t_0 + ih$.
 
-We compute a discrete approximate solution 
+We compute a discrete approximate solution
 
 $$
 y_i \approx y(t_i) \qquad \forall \, i \in { 0, \ldots , n}
@@ -40,10 +40,10 @@ $$
 \frac{y_{i+1} - y_i}{t_{i+1}-t_i} = f(t_i, y_i)
 $$
 
-or (with constant mesh size $h = t_{i+1} - t_i$)
+or (with constant mesh size $\tau = t_{i+1} - t_i$)
 
 $$
-y_{i+1} = y_i + h f(t_i, y_i) \qquad 0 \leq i < n
+y_{i+1} = y_i + \tau f(t_i, y_i) \qquad 0 \leq i < n
 $$
 
 This method is very simple, it is a fully explicit algorithm. The next step $y_{i+1}$ is
@@ -65,8 +65,8 @@ y_{i+1} = y_i + h f(t_{i+1}, y_{i+1}) \qquad 0 \leq i < n
 $$
 
 Now, the new step $y_{i+1}$ shows up also within the right-hand side. We cannot simply
-evaluate a formula, but have to solve a system of equations. If the right hand side $f(t,y)$
-depends non-linear on the the state $y$, one has to solve a non-linear system. Typically,
+evaluate a formula, but have to solve a system of equations. If the right-hand side $f(t,y)$
+depends non-linear on the state $y$, one has to solve a non-linear system. Typically,
 this is done using Newton's method.
 
 ## Crank-Nicolson method
@@ -75,7 +75,7 @@ Interpreting the difference quotient as an approximation to the derivative in
 the mid-point $\frac{t_{i}+t_{i+1}}{2}$, we end up with the Crank-Nicolson method
 
 $$
-y_{i+1} = y_i + \frac{h}{2} \big( f(t_i, y_i) + f(t_{i+1}, y_{i+1}) \big) \qquad 0 \leq i < n.
+y_{i+1} = y_i + \frac{\tau}{2} \big( f(t_i, y_i) + f(t_{i+1}, y_{i+1}) \big) \qquad 0 \leq i < n.
 $$
 
 Like the implicit Euler method, it is an implicit method as well. Numerical analysis proves that
@@ -97,8 +97,7 @@ y(t) = y_i + \int_{t_i}^t f(s, y(s)) \, ds \qquad \forall \, t \in [t_i, t_{i+1}
 $$
 
 We insert $t = t_{i+1}$ to obtain the next time-step, 
-and use numerial integration to approximate the integral on the right hand side.
-The left-sided rectangular rule
+and use numerical integration to approximate the integral on the right-hand side. The left-sided rectangular rule
 
 $$
 \int_a^b f(x) \, dx \approx (b-a) \, f(a)
@@ -107,7 +106,7 @@ $$
 leads to
 
 $$
-y_{i+1} = y_i + h f(t_i, y_i),
+y_{i+1} = y_i + \tau f(t_i, y_i),
 $$
 
 the right-sided rectangular rule
@@ -119,7 +118,7 @@ $$
 leads to
 
 $$
-y_{i+1} = y_i + h f(t_{i+1}, y_{i+1}).
+y_{i+1} = y_i + \tau f(t_{i+1}, y_{i+1}).
 $$
 
 The more accurate trapezoidal rule
@@ -131,7 +130,7 @@ $$
 leads to the Crank-Nicolson method
 
 $$
-y_{i+1} = y_i + \frac{h}{2} \big( f(t_i, y_i) +  f(t_{i+1}, y_{i+1})\big)
+y_{i+1} = y_i + \frac{\tau}{2} \big( f(t_i, y_i) +  f(t_{i+1}, y_{i+1})\big)
 $$
 
 We see that we have recovered the same three methods from numerical integration, as we

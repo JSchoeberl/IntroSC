@@ -30,13 +30,11 @@ class TimeStepper
 
 ```
 
-It has the right hand side of the ode as a member (`m_rhs`), and introduces a virtual function `DoStep` which
+It has the right-hand side of the ode as a member (`m_rhs`), and introduces a virtual function `DoStep` which
 evolves the state vector `y` by the time-step `tau`. It is a pure virtual function, since the base class has no
 glue how to compute the time-step.
 
-
-
-The explicit Euler mmethod is a derived class from `TimeStepper`:
+The explicit Euler method is a derived class from `TimeStepper`:
 
 ```cpp
 class ExplicitEuler : public TimeStepper
@@ -55,8 +53,7 @@ public:
 ```
 
 It implements the update of the state vector by adding $\tau f(y_n)$ to the vector.
-It requires one help vector for evaluating $f$. To avoid reallocation of the vector in every timestep we
-made it a private class member.
+It requires one help vector for evaluating $f$. To avoid reallocation of the vector in every time-step we made it a private class member.
 
 
 
@@ -69,7 +66,7 @@ made it a private class member.
 A mass attached to a spring is described by the ODE
 
 $$
-m y^{\prime \prime}(t) = -k y(t)
+m y^{\prime \prime}(t) = -k y(t),
 $$
 
 where $m$ is mass, $k$ is the stiffness of the spring, and $y(t)$ is the
@@ -112,10 +109,8 @@ private:
 };
 ```
 
-
 We can now use the `TimerStepper` for soling the ode. We create a `NonlinearFunction` object as
-`MassSpring` object, and pass it to the `ExplicitEuler` timerstepper. Then we can run a simple loop
-to evolve the state by a time-step $\tau$:
+`MassSpring` object, and pass it to the `ExplicitEuler` timer-stepper. Then we can run a simple time-loop to evolve the state by time-steps $\tau$:
 
 ```cpp
 double tend = 4*M_PI;
@@ -123,7 +118,7 @@ int steps = 100;
 double tau = tend/steps;
 
 Vector<> y = { 1, 0 };  // initializer list
-shared_ptr<NonlienarFunction> rhs = std::make_shared<MassSpring>(1, 1);
+shared_ptr<NonlinearFunction> rhs = std::make_shared<MassSpring>(1, 1);
   
 ExplicitEuler stepper(rhs);
 

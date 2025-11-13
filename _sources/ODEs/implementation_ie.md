@@ -6,7 +6,7 @@ $$
 \frac{y_{i+1} - y_i}{\tau} = f(y_{i+1})
 $$
 
-The function $f : {\mathbb R}^n \rightarrow {\mathbb R}^n$ is the right hand side of the ODE,
+The function $f : {\mathbb R}^n \rightarrow {\mathbb R}^n$ is the right-hand side of the ODE,
 which has been brought into autonomous form.
 
 For the current time-step we rename $y_i$ and $y_{i+1}$ to $y_{\text{old}}$ and $y$, and rewrite the
@@ -20,10 +20,10 @@ $$
 We use our function algebra to build this composed function `m_equ`, and throw it into the Newton solver.
 If we make the time-step not too large, the value $y^n$ of the old time-step is a good starting value.
 
-To express that the independent varible is $y^{n+1}$, we create an `IdentityFunction`. The old
+To express that the independent variable is $y^{n+1}$, we create an `IdentityFunction`. The old
 value $y_{\text{old}}$ is a constant, represented as `ConstantFunction`.
 In every time-step we reset the value for $y_{\text{old}}$.
-The time-step $\tau$ itself goes `Parameter` into the function algebra. Such a parameter can be set and changed later.
+The time-step $\tau$ itself goes as `Parameter` into the function algebra. Such a parameter can be set and changed later.
 Then the implementation of the implicit Euler method looks like:
 
 ```cpp
@@ -61,50 +61,48 @@ public:
 What do you oberve?
 
 * Model an electric network by an ODE. Bring it to autonomous form.
-Solve the ODE numerically for various parameters with the three methods, and various time-steps.
+  Solve the ODE numerically for various parameters with the three methods, and various time-steps.
 
-```{image} pictures/RC.png
-:width: 200px
-:align: center
-```
+  ```{image} pictures/RC.png
+  :width: 200px
+  :align: center
+  ```
+  
+  Voltage source $U_0(t) = \cos(100 \pi t)$, $R = C = 1$ or $R = 100, C = 10^{-6}$.
 
-
-Voltage source $U_0(t) = \cos(100 \pi t)$, $R = C = 1$ or $R = 100, C = 10^{-6}$.
-
-Ohm's law for a resistor $R$ with resistivity $R$:
-
-$$
-U = R I
-$$
-
-Equation for a capacitor $C$ with capacity $C$:
-
-$$
-I = C \frac{dU }{dt}
-$$
-
-Kirchhoff's laws:
-* Currents in a node sum up to zero.
-  Thus we have a constant current along the loop.
-* Voltages around a loop sum up to zero. This gives:
-
+  Ohm's law for a resistor $R$ with resistivity $R$:
+  
   $$
-  U_0 = U_R + U_C
+  U = R I
   $$
+  
+  Equation for a capacitor $C$ with capacity $C$:
+  
+  $$
+  I = C \frac{dU }{dt}
+  $$
+  
+  Kirchhoff's laws:
+  * Currents in a node sum up to zero.
+    Thus we have a constant current along the loop.
+  * Voltages around a loop sum up to zero. This gives:
+  
+    $$
+    U_0 = U_R + U_C
+    $$
 
-Together:
-
-$$
-U_C(t) + R C \frac{dU_C}{dt}(t) = U_0(t)
-$$
-
-Use initial condition for voltage at capacitor $U_C(t_0) = 0$, for $t_0=0$.
-
+  Together:
+  
+  $$
+  U_C(t) + R C \frac{dU_C}{dt}(t) = U_0(t)
+  $$
+  
+  Use initial condition for voltage at capacitor $U_C(t_0) = 0$, for $t_0=0$.
 
 
 ## Stability function
 
-The obersvations you made can be explained by the stability function of the method.
+The observations you made can be explained by the stability function of the method.
 
 An ODE $y^\prime(t) = A y(t)$ with $A \in {\mathbb R}^n$ diagonizable can be brought to $n$ scalar ODEs
 

@@ -63,7 +63,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="12. Caches" href="caches1.html" />
-    <link rel="prev" title="10.2. Vectorizing mathematical functions" href="mathfunc.html" />
+    <link rel="prev" title="10.3. Branch-free sorting" href="simd_sort.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -198,6 +198,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="vectorization.html">10. Vectorization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="simdclass.html">10.1. The SIMD - class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mathfunc.html">10.2. Vectorizing mathematical functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simd_sort.html">10.3. Branch-free sorting</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">11. Pipelining</a></li>
@@ -210,12 +211,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../ODEs/theory.html">15. A little bit of theory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ODEs/firstmethods.html">16. Some simple time-stepping methods</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../ODEs/implementation.html">17. Implementation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../ODEs/implementation_newton.html">17.1. Implementing a Newton solver</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../ODEs/implementation_ie.html">17.2. Coding the Implicit Euler method</a></li>
-
-
-
-<li class="toctree-l2"><a class="reference internal" href="../ODEs/implementation_ad.html">17.6. Automatic Differentiation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ODEs/functionalgebra.html">17.1. Function algebra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ODEs/implementation_ee.html">17.2. Implementing the explicit Euler method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ODEs/implementation_newton.html">17.3. Implementing a Newton solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ODEs/implementation_ie.html">17.4. Coding the Implicit Euler method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ODEs/implementation_ad.html">17.5. Automatic Differentiation</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="../ODEs/RungeKutta.html">18. Runge-Kutta methods</a></li>
@@ -579,12 +579,12 @@ from simd_timings.cpp.</p></li>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="mathfunc.html"
+       href="simd_sort.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title"><span class="section-number">10.2. </span>Vectorizing mathematical functions</p>
+        <p class="prev-next-title"><span class="section-number">10.3. </span>Branch-free sorting</p>
       </div>
     </a>
     <a class="right-next"
@@ -622,7 +622,7 @@ By J. Schöberl
 
   <p class="copyright">
     
-      © Copyright 2023.
+      © Copyright 2023-2025.
       <br/>
     
   </p>

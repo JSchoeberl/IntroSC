@@ -1,6 +1,6 @@
 # A little bit of theory
 
-An ordinary differential equation (ODE) is given by
+An ordinary differential equation (ODE) of first order in explicit form is given by
 
 $$
 y^\prime (t) = f(t,y(t)) \qquad \forall \, t \in (t_0, T)
@@ -12,7 +12,7 @@ y(t_0) = y_0,
 $$
 
 where
-* $f : [t_0, T] \times {\mathbb R}^n \rightarrow {\mathbb R}^n$ is the given **right hand side**
+* $f : [t_0, T] \times {\mathbb R}^n \rightarrow {\mathbb R}^n$ is the given **right-hand side**
 * $y : [t_0, T] \rightarrow {\mathbb R}^n$ is the unknown function, called **state**
 * $t \in [t_0, T]$ is called **time**
 * $y_0 \in {\mathbb R}^n$ is the **initial value**
@@ -26,12 +26,12 @@ $$
 y^\prime(t) = a y, \quad y(t_0) = y_0
 $$
 
-This ode has the solution $y(t) = y_0 e^{a (t-t_0)}$. If $a > 0$, the solution is exponentiall increasing,
+This ode has the solution $y(t) = y_0 e^{a (t-t_0)}$. If $a > 0$, the solution is exponentially increasing,
 for $a < 0$, it is exponentially decreasing.
 
 
 * Consider $y^{\prime \prime}(t) = -\omega^2 y(t)$ with $y(0) = y_0$, $y^\prime(0) = y_{0p}$. This is a second order
-ODE, which can be reduced to a first oder system with the definition $y_1 := y$ and $y_2 := y^\prime/\omega$:
+ODE, which can be reduced to a first order system with the definition $y_1 := y$ and $y_2 := y^\prime/\omega$:
 
 $$
 \left( \begin{array}{c} y_1 \\ y_2 \end{array} \right)^\prime =
@@ -48,13 +48,13 @@ Its solution is $y(t) = y_0 \cos( \omega t ) + \frac{y_{0p}}{\omega} \sin (\omeg
 
 **Theorem: Picard Lindelöf**
 
-Assume the right hand side satisfies a Liptschitz condition in the second argument
+Assume the right hand side satisfies a Lipschitz condition in the second argument
 
 $$
 \| f(t, y) - f(t, z) \| \leq L \, \| y - z \| \qquad \forall \, t \in [t_0, T], \, \forall \, y,z \in {\mathbb R}^n.
 $$
 
-Then there exisits a unique solution of the ODE.
+Then there exists a unique solution of the ODE.
 
 **Theorem: Stability with respect to initial conditions**
 
@@ -73,7 +73,7 @@ $$
 \| y(t) - z(t) \| \leq e^{L (t-t_0)} \| y_0 - z_0 \|
 $$
 
-This means that an error in the initial condition may be propagated with exponential groth with constant $L$.
+This means that an error in the initial condition may be propagated with exponential growth with constant $L$.
 
 
 **Theorem: One-sided Lipschitz condition**
@@ -96,7 +96,7 @@ This is an essential improvement for the first example above when $a < 0$. The s
 
 ## Autonomous ODEs
 
-An ODE is called autonomous iff the right hand side does not depend explicitely on $t$, i.e.
+An ODE is called autonomous iff the right hand side does not depend explicitly on $t$, i.e.
 $y^\prime(t) = f(y(t))$. Then the time axis can be shifted arbitrarily.
 
 A non-autonomous ODE in ${\mathbb R}^n$ can be transformed to an autonomous one in

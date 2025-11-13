@@ -57,6 +57,8 @@
     <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'ODEs/implementation_ad';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -419,7 +421,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -435,6 +439,17 @@ document.write(`
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#numerical-differentiation">17.5.1. Numerical differentiation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">17.5.2. Automatic differentiation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation-of-an-autodiff-data-type">17.5.3. Implementation of an <code class="docutils literal notranslate"><span class="pre">AutoDiff</span></code> data type</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">17.5.4. Exercises</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -446,7 +461,131 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="automatic-differentiation">
 <h1><span class="section-number">17.5. </span>Automatic Differentiation<a class="headerlink" href="#automatic-differentiation" title="Link to this heading">#</a></h1>
-<p>under construction</p>
+<p>Often it is cumbersome and error prune to compute derivatives exactly. Two <em>different</em> ways to avoid manual differentiation are numerical differentiation, and automatic differentiation.</p>
+<section id="numerical-differentiation">
+<h2><span class="section-number">17.5.1. </span>Numerical differentiation<a class="headerlink" href="#numerical-differentiation" title="Link to this heading">#</a></h2>
+<p>To approximate the derivative of a function one may use finite differences, for example use a central difference quotient for the <span class="math notranslate nohighlight">\(i^{th}\)</span> partial derivative:</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial f}{\partial x_i}(x) \approx \frac{f(x + \varepsilon e_i) - f(x - \varepsilon e_i)}{2 \varepsilon}
+\]</div>
+<p>Here, <span class="math notranslate nohighlight">\(e_i\)</span> is the <span class="math notranslate nohighlight">\(i^{th}\)</span> unit-vector, and <span class="math notranslate nohighlight">\(\varepsilon\)</span> is a small value. If the function is smooth, one easily verifies using Taylor expansion that the approximation is <span class="math notranslate nohighlight">\(O(\varepsilon^2)\)</span>. To have a good approximation, one should choose <span class="math notranslate nohighlight">\(\epsilon\)</span> small.</p>
+<p>On the other hand, one subtracts two similar values in the numerator, and observes numerical cancellation if <span class="math notranslate nohighlight">\(\varepsilon\)</span> is very small. Thus, a good compromise is needed.</p>
+<p>The advantage of numerical differentiation is that it is non-invasive, it works without any change of the code evaluating the function <span class="math notranslate nohighlight">\(f\)</span>.</p>
+</section>
+<section id="id1">
+<h2><span class="section-number">17.5.2. </span>Automatic differentiation<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<p>With automatic differentiation, we represent the value, and the derivative in every step of the evaluation of a function. From rules of calculus, we know how derivatives are computed for all (differentiable) elementary operations.</p>
+<p>As an example, let</p>
+<div class="math notranslate nohighlight">
+\[
+f(u,v) = u * v.
+\]</div>
+<p>Say <span class="math notranslate nohighlight">\((x_1, \ldots x_n)\)</span> are the independent variables after whom we want to differentiate. Say <span class="math notranslate nohighlight">\(u\)</span> and <span class="math notranslate nohighlight">\(v\)</span> are intermediate results, for which we know the value, and all partial derivatives (the gradient <span class="math notranslate nohighlight">\(\nabla u\)</span>). They are represented as</p>
+<div class="math notranslate nohighlight">
+\[
+{\bf u} = \left( \begin{array}{c} u \atop g_u \end{array} \right) \quad \text{and} \quad
+{\bf v} = \left( \begin{array}{c} v \atop g_v \end{array} \right)
+\]</div>
+<p>Then, by the product rule, we know that</p>
+<div class="math notranslate nohighlight">
+\[
+{\bf w} = f( {\bf u}, {\bf v})
+\]</div>
+<p>should have value and gradient:</p>
+<div class="math notranslate nohighlight">
+\[
+{\bf w} = \left( \begin{array}{c} w \atop g_u \end{array} \right) =  \left( \begin{array}{c} u v \atop u g_v + v g_u \end{array} \right)
+\]</div>
+<p>We now that from the chain rule that</p>
+<div class="math notranslate nohighlight">
+\[
+\nabla \sin (u) = \cos(u) \nabla u
+\]</div>
+<p>Thus, the value-gradient tuple is defined as</p>
+<div class="math notranslate nohighlight">
+\[
+\sin({\bf u}) = 
+\left( \begin{array}{c} \sin(u) \atop \cos(u) g_u \end{array} \right)
+\]</div>
+<p>The advantage of automatic differentiation is that no choice of a small parameter <span class="math notranslate nohighlight">\(\varepsilon\)</span> is needed. However, one needs access to the code implementing the function <span class="math notranslate nohighlight">\(f\)</span>.</p>
+</section>
+<section id="implementation-of-an-autodiff-data-type">
+<h2><span class="section-number">17.5.3. </span>Implementation of an <code class="docutils literal notranslate"><span class="pre">AutoDiff</span></code> data type<a class="headerlink" href="#implementation-of-an-autodiff-data-type" title="Link to this heading">#</a></h2>
+<p>We implement a data type for automatic differentiation. It stores the function value (<code class="docutils literal notranslate"><span class="pre">m_val</span></code>), and the gradient (<code class="docutils literal notranslate"><span class="pre">m_deriv</span></code>). We use a template argument <code class="docutils literal notranslate"><span class="pre">N</span></code> to specify the number of independent variables, what is the dimension of the gradient:</p>
+<div class="highlight-cppp notranslate"><div class="highlight"><pre><span></span>template &lt;size_t N, typename T = double&gt;
+class AutoDiff
+{
+  T m_val;
+  std::array&lt;T, N&gt; m_deriv;
+public: 
+  AutoDiff () : m_val(0), m_deriv{} {}
+  AutoDiff (T v) : m_val(v), m_deriv{} 
+    
+  template &lt;size_t I&gt;
+  AutoDiff (Variable&lt;I, T&gt; var) : m_val(var.value()), m_deriv{} {
+      m_deriv[I] = 1.0;
+  }
+
+  T value() const { return m_val; }
+  std::array&lt;T, N&gt;&amp; deriv() { return m_deriv; }
+  const std::array&lt;T, N&gt;&amp; deriv() const { return m_deriv; }
+};
+</pre></div>
+</div>
+<p>For that class we implement the mathematical functions and operators we want to support, for example</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="kt">size_t</span><span class="w"> </span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">double</span><span class="o">&gt;</span>
+<span class="n">AutoDiff</span><span class="o">&lt;</span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="k">operator</span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">AutoDiff</span><span class="o">&lt;</span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">AutoDiff</span><span class="o">&lt;</span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"> </span>
+<span class="p">{</span>
+<span class="w">   </span><span class="n">AutoDiff</span><span class="o">&lt;</span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">result</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">value</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">value</span><span class="p">());</span>
+<span class="w">   </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<span class="w">      </span><span class="n">result</span><span class="p">.</span><span class="n">deriv</span><span class="p">()[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">deriv</span><span class="p">()[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">value</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">value</span><span class="p">()</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">deriv</span><span class="p">()[</span><span class="n">i</span><span class="p">];</span>
+<span class="w">   </span><span class="k">return</span><span class="w"> </span><span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="kt">size_t</span><span class="w"> </span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">double</span><span class="o">&gt;</span>
+<span class="n">AutoDiff</span><span class="o">&lt;</span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">sin</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">AutoDiff</span><span class="o">&lt;</span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">a</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="n">AutoDiff</span><span class="o">&lt;</span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">result</span><span class="p">(</span><span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">value</span><span class="p">()));</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<span class="w">     </span><span class="n">result</span><span class="p">.</span><span class="n">deriv</span><span class="p">()[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cos</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">value</span><span class="p">())</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">deriv</span><span class="p">()[</span><span class="n">i</span><span class="p">];</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">result</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">Variable&lt;I&gt;</span></code> class is used to define and initialize
+the <code class="docutils literal notranslate"><span class="pre">I</span></code>th independent variable.</p>
+<p>It can be used as follows. Say, we have the function</p>
+<div class="math notranslate nohighlight">
+\[
+f(x,y) = x * y
+\]</div>
+<p>and we want to compute</p>
+<div class="math notranslate nohighlight">
+\[
+\nabla f(x,y) \quad \text{for} \quad x=1, y=2
+\]</div>
+<p>For that we declare our independent variables</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">AutoDiff</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Variable</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">(</span><span class="mf">1.0</span><span class="p">);</span>
+<span class="n">AutoDiff</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Variable</span><span class="o">&lt;</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">(</span><span class="mf">2.0</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>and define</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="o">*</span><span class="n">y</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>to obtain the gradient.</p>
+<p>Find the code in <code class="docutils literal notranslate"><span class="pre">src\autodiff.hpp</span></code> and some demos in <code class="docutils literal notranslate"><span class="pre">demos\demo_autodiff.cpp</span></code>.</p>
+</section>
+<section id="exercises">
+<h2><span class="section-number">17.5.4. </span>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>add additional useful operators for the <code class="docutils literal notranslate"><span class="pre">AutoDiff</span></code> class</p></li>
+<li><p>add some more functions (<code class="docutils literal notranslate"><span class="pre">cos</span></code>, <code class="docutils literal notranslate"><span class="pre">exp</span></code>, <code class="docutils literal notranslate"><span class="pre">log</span></code>, …) for the <code class="docutils literal notranslate"><span class="pre">AutoDiff</span></code> class.</p></li>
+</ul>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -504,6 +643,24 @@ document.write(`
             
             
               
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#numerical-differentiation">17.5.1. Numerical differentiation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">17.5.2. Automatic differentiation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation-of-an-autodiff-data-type">17.5.3. Implementation of an <code class="docutils literal notranslate"><span class="pre">AutoDiff</span></code> data type</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">17.5.4. Exercises</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
             
           </div>
           <footer class="bd-footer-content">
@@ -523,7 +680,7 @@ By J. Schöberl
 
   <p class="copyright">
     
-      © Copyright 2023.
+      © Copyright 2023-2025.
       <br/>
     
   </p>
