@@ -3,18 +3,28 @@
 In every time-step we have to solve for the new value $y^{n+1}$:
 
 $$
-y^{n+1} - y^n - h f(y^{n+1}) = 0
+\frac{y_{i+1} - y_i}{\tau} = f(y_{i+1})
 $$
 
 The function $f : {\mathbb R}^n \rightarrow {\mathbb R}^n$ is the right hand side of the ODE,
 which has been brought into autonomous form.
 
-We use our function algebra to build this composed function, and throw it into the Newton solver.
+For the current time-step we rename $y_i$ and $y_{i+1}$ to $y_{\text{old}}$ and $y$, and rewrite the
+equation as
+
+$$
+y - y_{\text{old}} - \tau f(y) = 0
+$$
+
+
+We use our function algebra to build this composed function `m_equ`, and throw it into the Newton solver.
 If we make the time-step not too large, the value $y^n$ of the old time-step is a good starting value.
 
 To express that the independent varible is $y^{n+1}$, we create an `IdentityFunction`. The old
-value is considered as a constant, i.e. a `ConstantFunction`. The right hand side function is
-given by the user. Then the implicit Euler method is coded up like that:
+value $y_{\text{old}}$ is a constant, represented as `ConstantFunction`.
+In every time-step we reset the value for $y_{\text{old}}$.
+The time-step $\tau$ itself goes `Parameter` into the function algebra. Such a parameter can be set and changed later.
+Then the implementation of the implicit Euler method looks like:
 
 ```cpp
 class ImplicitEuler : public TimeStepper
@@ -41,32 +51,14 @@ public:
 ```
 
 
-void SolveODE_IE(double tend, int steps,
-                 VectorView<double> y, shared_ptr<NonlinearFunction> rhs,
-                 std::function<void(double,VectorView<double>)> callback = nullptr)
-{
-  double dt = tend/steps;
-  auto yold = make_shared<ConstantFunction>(y);
-  auto ynew = make_shared<IdentityFunction>(y.Size());
-  auto equ = ynew - yold - dt * rhs;
-
-  double t = 0;
-  for (int i = 0; i < steps; i++)
-    {
-      NewtonSolver (equ, y);
-      yold->Set(y);
-      t += dt;
-      if (callback) callback(t, y);
-    }
-}
-```
-
-
 ## Excercises
 
-* Implement an explicit Euler time-stepper, and the Crank-Nicolson method.
+* Try the implicit Euler method for the mass-pring system
 
-* Compare the results of the mass-spring system for these methods, and various time-steps. Plot the solution function. What do you observe ?
+* Implement the Crank-Nicolson method.
+
+* Compare the results of the mass-spring system for these three methods, and various time-steps.
+What do you oberve?
 
 * Model an electric network by an ODE. Bring it to autonomous form.
 Solve the ODE numerically for various parameters with the three methods, and various time-steps.
@@ -112,6 +104,8 @@ Use initial condition for voltage at capacitor $U_C(t_0) = 0$, for $t_0=0$.
 
 ## Stability function
 
+The obersvations you made can be explained by the stability function of the method.
+
 An ODE $y^\prime(t) = A y(t)$ with $A \in {\mathbb R}^n$ diagonizable can be brought to $n$ scalar ODEs
 
 $$
@@ -125,25 +119,25 @@ is decaying (non-increasing). Skip index $i$.
 The explicit Euler method with time-step $h$ leads to
 
 $$
-y_{i+1} = (1 + h \lambda) y_i,
+y_{i+1} = (1 + \tau \lambda) y_i,
 $$
 
 the implicit Euler method to
 
 $$
-y_{i+1} = \frac{1}{1-h \lambda} y_i,
+y_{i+1} = \frac{1}{1-\tau \lambda} y_i,
 $$
 
 and the Crank-Nicolson to
 
 $$
-y_{i+1} = \frac{ 2 + h \lambda }  { 2 - h \lambda } y_i
+y_{i+1} = \frac{ 2 + \tau \lambda }  { 2 - \tau \lambda } y_i
 $$
 
 The stability function $g(\cdot)$ of a method is defined such that
 
 $$
-y_{i+1} = g(h \lambda) y_i
+y_{i+1} = g(\tau \lambda) y_i
 $$
 
 These are for the explicit Euler, the implicit Euler, and the Crank-Nicolson:
@@ -172,10 +166,10 @@ $$
 S_{CN} = \{ z : {\text Re} (z) \leq 0 \}
 $$
 
-If Re$(\lambda) \leq 0$, then $h \lambda$ is always in the domain of stability of the implicit Euler,
+If Re$(\lambda) \leq 0$, then $\tau \lambda$ is always in the domain of stability of the implicit Euler,
 and of the Crank-Nicolson. This property of an method is called $A$-stability. The explicit Euler leads to
 (quickly) increasing numerical solutions if $h$ is not small enough.
 
 If $\lim_{z \rightarrow -\infty} g(z) = 0$, quickly decaying solutions lead to quickly decaying
-numerical solutions. This is the case for the implicit Euler, but not for the Crank-Nicolson. This property is called $L$-stability. One observes (slowly decreasing) oscillations with the CR - method when $-h \lambda$ is large.
+numerical solutions. This is the case for the implicit Euler, but not for the Crank-Nicolson. This property is called $L$-stability. One observes (slowly decreasing) oscillations with the CR - method when $-\tau \lambda$ is large.
 
