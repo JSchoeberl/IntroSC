@@ -3,7 +3,7 @@
 We want to implement a time-stepping method for solving the autonomous ODE
 
 $$
-y\prime (t) = f(y(t)) \qquad \forall t \in [0, T], \qquad y(0) = y_0
+y^\prime (t) = f(y(t)) \qquad \forall t \in [0, T], \qquad y(0) = y_0
 $$
 
 using the explicit Euler method:
