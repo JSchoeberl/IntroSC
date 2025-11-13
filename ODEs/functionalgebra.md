@@ -1,6 +1,5 @@
 # Function algebra
 
-
 We implement a function algebra, which allows us to write expressions like
 ```cpp
   func = Id + 3 * Compose (f, g);

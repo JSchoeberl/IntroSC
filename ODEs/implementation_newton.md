@@ -49,7 +49,7 @@ void NewtonSolver (shared_ptr<NonlinearFunction> func, VectorView<double> x,
 ```
 
 
-It can be used as:
+It can be used as follows:
 ```cpp
 shared_ptr<NonlinearFunction> myfunc = ...
 Vector<double> x = { 1.0, 2.0, 3.0 };
