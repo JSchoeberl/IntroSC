@@ -78,26 +78,26 @@ of the result matrix $C$ by multiplyging $A_{IJ}$ with the rows $J$ of factor $B
 To access rows and cols of matrices, the `MatrixView` object is useful:
 
 ```cpp
-void AddMatMat (MatrixView<> A, MatrixView<> B, MatrixView<> C) {
+void addMatMat (MatrixView<> A, MatrixView<> B, MatrixView<> C) {
   constexpr size_t BH=96;
   constexpr size_t BW=96;
   alignas (64) double memBA[BH*BW];
-  for (size_t i1 = 0; i1+BH <= A.Height(); i1 += BH)
-    for (size_t j1 = 0; j1+BW <= A.Width(); j1 += BW) {
-      size_t i2 = min(A.Height(), i1+BH);
-      size_t j2 = min(A.Width(), j1+BW);
+  for (size_t i1 = 0; i1 < A.rows(); i1 += BH)
+    for (size_t j1 = 0; j1 < A.cols(); j1 += BW) {
+      size_t i2 = min(A.rows(), i1+BH);
+      size_t j2 = min(A.cols(), j1+BW);
 
-      MatrixView Ablock(i2-i1, j2-j1, BW, memBA);
-      Ablock = A.Rows(i1,i2).Cols(j1,j2);
-      AddMatMat2 (Ablock, B.Rows(j1,j2), C.Rows(i1,i2));
+      MatrixView<> Ablock(i2-i1, j2-j1, BW, memBA);
+      Ablock = A.rows(i1,i2).cols(j1,j2);
+      addMatMat2 (Ablock, B.rows(j1,j2), C.rows(i1,i2));
     }
 }
 ```
-In each inner iteration we copy at most `BH*BW` values, and perform `BH*BW*C.Width()` fused multiply-add operations,
+In each inner iteration we copy at most `BH*BW` values, and perform `BH*BW*C.cols()` fused multiply-add operations,
 the time needed for copying can be neglected if the width of `B` and `C` is large.
 
 
-In the inner function `AddMatMat2` we are now using the micro-kernel for updatig small (like $4 \times 12$) blocks of $C$:
+In the inner function `addMatMat2` we are now using the micro-kernel for updatig small (like $4 \times 12$) blocks of $C$:
 
 ```{image} pictures/matmat2.png
 :width: 500px
@@ -106,14 +106,14 @@ In the inner function `AddMatMat2` we are now using the micro-kernel for updatig
 
 
 ```cpp
-void AddMatMat2 (MatrixView<> A, MatrixView<> B, MatrixView<> C) {
+void addMatMat2 (MatrixView<> A, MatrixView<> B, MatrixView<> C) {
   constexpr size_t H=4;
   constexpr size_t W=12;
 
-  for (size_t j = 0; j+W <= C.Width(); j += W) 
-    for (size_t i = 0; i+H <= C.Height(); i += H)
-      AddMatMatKernel<H,W> (A.Width(), &A(i,0), A.Dist(),
-                           &B(0,j), B.dist(), &C(i,j), C.Dist());
+  for (size_t j = 0; j+W <= C.cols(); j += W) 
+    for (size_t i = 0; i+H <= C.rows(); i += H)
+      AddMatMatKernel<H,W> (A.cols(), &A(i,0), A.dist(),
+                           &B(0,j), B.dist(), &C(i,j), C.dist());
   // leftover rows and cols
 }
 ```
@@ -121,8 +121,40 @@ void AddMatMat2 (MatrixView<> A, MatrixView<> B, MatrixView<> C) {
 Now, entries from both factors $A$ and $B$ will stay in caches:
 
 * The entries of a slim block from $B$ are loaded from main memory. They are reused frequently in every iteration
-over the height of $C$, and will stay in level-1 cache. Since every $B$ entry is used in $C.Height() \approx 96$ multiplications, the time for loading from memory is small in comparison to floating point operations.
+over the height of $C$, and will stay in level-1 cache. Since every $B$ entry is used in`C.rows()` $\approx$ 96 multiplications, the time for loading from memory is small in comparison to floating point operations.
 
 * All entries of the $A$ block are reused after the $A$ block is used completely. Only a slim block from $B$ is loaded in the meanwhile. So, the whole $A$ block stays in the level-2 cache.
 
 
+
+**Exercise:**
+
+* Add a cache-awere matrix-matrix product to your linalg
+
+* (Advanced) Combine expression templates with SIMD. Add the function `GetTile` to the `MatExpr`.
+
+  ```cpp
+  template <size_t H, size_t W, Ordering ORD>
+  auto GetTile(size_t i, size_t j) {
+    return Tile<ResType, H, W, ORD> (...);
+  }
+  ```
+
+  Therefore, implement a `Tile` class into the simd-libraray. A `Tile` is a small matrix, where the rows are stored as `SIMD` types.
+  
+  ```cpp
+  template <typename T, size_t H, size_t W, Ordering ORD>
+  class Tile {
+    std::array<SIMD<T,W>, H> m_data;
+  }
+  ```
+
+  Alternatively, implement a `Tile` recursively by splitting it into `lo` and `hi` sub-tiles of half the height.
+
+
+  When evaluationg the expressions, you have to decide if you want to evaluate row-wise or column-wise tiles. To decide, add a cost estimation function to MatExpr:
+
+  ```cpp
+  template <size_t H, size_t W, Ordering ORD>
+  constexpr double EstimateCosts();
+  ```
