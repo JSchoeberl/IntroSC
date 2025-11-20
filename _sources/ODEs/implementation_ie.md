@@ -166,7 +166,7 @@ $$
 
 If Re$(\lambda) \leq 0$, then $\tau \lambda$ is always in the domain of stability of the implicit Euler,
 and of the Crank-Nicolson. This property of an method is called $A$-stability. The explicit Euler leads to
-(quickly) increasing numerical solutions if $h$ is not small enough.
+(quickly) increasing numerical solutions if $\tau$ is not small enough.
 
 If $\lim_{z \rightarrow -\infty} g(z) = 0$, quickly decaying solutions lead to quickly decaying
 numerical solutions. This is the case for the implicit Euler, but not for the Crank-Nicolson. This property is called $L$-stability. One observes (slowly decreasing) oscillations with the CR - method when $-\tau \lambda$ is large.
