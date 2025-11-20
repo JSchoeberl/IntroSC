@@ -445,10 +445,10 @@
 the composed function <code class="docutils literal notranslate"><span class="pre">func</span></code> shall be able to compute the function value
 and the derivative at a given point <span class="math notranslate nohighlight">\(x\)</span> (of type <code class="docutils literal notranslate"><span class="pre">Vector</span></code>).</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">Vector</span><span class="w"> </span><span class="nf">vecf</span><span class="p">(</span><span class="n">func</span><span class="o">-&gt;</span><span class="n">dimF</span><span class="p">());</span>
-<span class="n">func</span><span class="o">-&gt;</span><span class="n">Evaluate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">vecf</span><span class="p">);</span>
+<span class="n">func</span><span class="o">-&gt;</span><span class="n">evaluate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">vecf</span><span class="p">);</span>
 <span class="w"> </span>
 <span class="n">Matrix</span><span class="w"> </span><span class="nf">jacobi</span><span class="p">(</span><span class="n">func</span><span class="o">-&gt;</span><span class="n">dimF</span><span class="p">(),</span><span class="w"> </span><span class="n">func</span><span class="o">-&gt;</span><span class="n">dimX</span><span class="p">());</span>
-<span class="n">func</span><span class="o">-&gt;</span><span class="n">EvaluateDeriv</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">jacobi</span><span class="p">);</span>
+<span class="n">func</span><span class="o">-&gt;</span><span class="n">evaluateDeriv</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">jacobi</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>Our base class for such functions is</p>
@@ -486,15 +486,15 @@ Shared pointers allow simple life-time management:</p>
 <span class="w">  </span><span class="p">{</span>
 <span class="w">    </span><span class="n">m_fa</span><span class="o">-&gt;</span><span class="n">evaluate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">);</span>
 <span class="w">    </span><span class="n">Vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">tmp</span><span class="p">(</span><span class="n">dimF</span><span class="p">());</span>
-<span class="w">    </span><span class="n">m_fb</span><span class="o">-&gt;</span><span class="n">Evaluate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">tmp</span><span class="p">);</span>
+<span class="w">    </span><span class="n">m_fb</span><span class="o">-&gt;</span><span class="n">evaluate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">tmp</span><span class="p">);</span>
 <span class="w">    </span><span class="n">f</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">tmp</span><span class="p">;</span>
 <span class="w">  </span><span class="p">}</span>
 
-<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="n">EvaluateDeriv</span><span class="w"> </span><span class="p">(</span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">MatrixView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">df</span><span class="p">)</span><span class="w"> </span><span class="k">const</span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="n">evaluateDeriv</span><span class="w"> </span><span class="p">(</span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">MatrixView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">df</span><span class="p">)</span><span class="w"> </span><span class="k">const</span>
 <span class="w">  </span><span class="p">{</span>
-<span class="w">    </span><span class="n">fa</span><span class="o">-&gt;</span><span class="n">dvaluateDeriv</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">df</span><span class="p">);</span>
+<span class="w">    </span><span class="n">m_fa</span><span class="o">-&gt;</span><span class="n">evaluateDeriv</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">df</span><span class="p">);</span>
 <span class="w">    </span><span class="n">Matrix</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">tmp</span><span class="p">(</span><span class="n">dimF</span><span class="p">(),</span><span class="w"> </span><span class="n">dimX</span><span class="p">());</span>
-<span class="w">    </span><span class="n">fb</span><span class="o">-&gt;</span><span class="n">dvaluateDeriv</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">tmp</span><span class="p">);</span>
+<span class="w">    </span><span class="n">m_fb</span><span class="o">-&gt;</span><span class="n">evaluateDeriv</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">tmp</span><span class="p">);</span>
 <span class="w">    </span><span class="n">df</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">tmp</span><span class="p">;</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">};</span>

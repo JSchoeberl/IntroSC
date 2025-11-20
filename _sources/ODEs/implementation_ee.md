@@ -25,12 +25,12 @@ class TimeStepper
   public:
     TimeStepper(std::shared_ptr<NonlinearFunction> rhs) : m_rhs(rhs) {}
     virtual ~TimeStepper() = default;
-    virtual void DoStep(double tau, VectorView<double> y) = 0;
+    virtual void doStep(double tau, VectorView<double> y) = 0;
 };
 
 ```
 
-It has the right-hand side of the ode as a member (`m_rhs`), and introduces a virtual function `DoStep` which
+It has the right-hand side of the ode as a member (`m_rhs`), and introduces a virtual function `doStep` which
 evolves the state vector `y` by the time-step `tau`. It is a pure virtual function, since the base class has no
 glue how to compute the time-step.
 
@@ -44,7 +44,7 @@ public:
   ExplicitEuler(std::shared_ptr<NonlinearFunction> rhs) 
   : TimeStepper(rhs), m_vecf(rhs->dimF()) {}
   
-  void DoStep(double tau, VectorView<double> y) override
+  void doStep(double tau, VectorView<double> y) override
   {
     this->m_rhs->evaluate(y, m_vecf);
     y += tau * m_vecf;
@@ -86,10 +86,12 @@ Then we define the right-hand-side as a `NonlinearFunction`. The derivative is n
 ```cpp
 class MassSpring : public NonlinearFunction
 {
-private:
-  double m_m, m_k;
-
-  MassSpring (double m, double k) : m_m(m), m_k(k) {} 
+  double m_mass;
+  double m_stiffness;
+  
+public:
+  MassSpring (double m, double k)
+    : m_mass(m), m_stiffness(k) {} 
   
   size_t dimX() const override { return 2; }
   size_t dimF() const override { return 2; }
@@ -97,14 +99,14 @@ private:
   void evaluate (VectorView<double> x, VectorView<double> f) const override
   {
     f(0) = x(1);
-    f(1) = -m_k/m_m * x(0);
+    f(1) = -m_stiffness/m_mass * x(0);
   }
   
   void evaluateDeriv (VectorView<double> x, MatrixView<double> df) const override
   {
     df = 0.0;
     df(0,1) = 1;
-    df(1,0) = -m_k/m_m;
+    df(1,0) = -m_stiffness/m_mass;
   }
 };
 ```
@@ -125,7 +127,7 @@ ExplicitEuler stepper(rhs);
 std::cout << 0.0 << "  " << y(0) << " " << y(1) << std::endl;
 for (int i = 0; i < steps; i++)
   {
-     stepper.DoStep(tau, y);
+     stepper.doStep(tau, y);
      std::cout << (i+1) * tau << "  " << y(0) << " " << y(1) << std::endl;
   }
 ```    

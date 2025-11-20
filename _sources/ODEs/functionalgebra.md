@@ -9,10 +9,10 @@ the composed function `func` shall be able to compute the function value
 and the derivative at a given point $x$ (of type `Vector`).
 ```cpp
 Vector vecf(func->dimF());
-func->Evaluate(x, vecf);
+func->evaluate(x, vecf);
  
 Matrix jacobi(func->dimF(), func->dimX());
-func->EvaluateDeriv(x, jacobi);
+func->evaluateDeriv(x, jacobi);
 ```
 
 Our base class for such functions is
@@ -56,15 +56,15 @@ public:
   {
     m_fa->evaluate(x, f);
     Vector<double> tmp(dimF());
-    m_fb->Evaluate(x, tmp);
+    m_fb->evaluate(x, tmp);
     f += tmp;
   }
 
-  void EvaluateDeriv (VectorView<double> x, MatrixView<double> df) const
+  void evaluateDeriv (VectorView<double> x, MatrixView<double> df) const
   {
-    fa->dvaluateDeriv(x, df);
+    m_fa->evaluateDeriv(x, df);
     Matrix<double> tmp(dimF(), dimX());
-    fb->dvaluateDeriv(x, tmp);
+    m_fb->evaluateDeriv(x, tmp);
     df += tmp;
   }
 };

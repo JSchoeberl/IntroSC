@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>17.5. Automatic Differentiation &#8212; Introduction to Scientific Computing</title>
+    <title>18. Automatic Differentiation &#8212; Introduction to Scientific Computing</title>
   
   
   
@@ -65,7 +65,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'ODEs/implementation_ad';</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="18. Runge-Kutta methods" href="RungeKutta.html" />
+    <link rel="next" title="19. Runge-Kutta methods" href="RungeKutta.html" />
     <link rel="prev" title="17.4. Coding the Implicit Euler method" href="implementation_ie.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -202,77 +202,77 @@
 <li class="toctree-l1"><a class="reference internal" href="ODEs.html">14. Solving ordinary differential equations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theory.html">15. A little bit of theory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="firstmethods.html">16. Some simple time-stepping methods</a></li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="implementation.html">17. Implementation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="implementation.html">17. Implementation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="functionalgebra.html">17.1. Function algebra</a></li>
 <li class="toctree-l2"><a class="reference internal" href="implementation_ee.html">17.2. Implementing the explicit Euler method</a></li>
 <li class="toctree-l2"><a class="reference internal" href="implementation_newton.html">17.3. Implementing a Newton solver</a></li>
 <li class="toctree-l2"><a class="reference internal" href="implementation_ie.html">17.4. Coding the Implicit Euler method</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">17.5. Automatic Differentiation</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="RungeKutta.html">18. Runge-Kutta methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="mechanical.html">19. Mechanical Systems</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">18. Automatic Differentiation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RungeKutta.html">19. Runge-Kutta methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mechanical.html">20. Mechanical Systems</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">PDEs</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">20. Partial differential equations</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../PDEs/PoissonEquation.html">21. The Poisson Equation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/first_example.html">21.1. Solving the Poisson Equation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/Poisson/boundary_conditions.html">21.2. Boundary Conditions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/Poisson/approximation.html">21.3. Approximation of functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/Poisson/capacitor.html">21.4. The electric field in a capacitor</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/Poisson/solvers.html">21.5. Iterative Solvers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">21. Partial differential equations</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../PDEs/PoissonEquation.html">22. The Poisson Equation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/first_example.html">22.1. Solving the Poisson Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Poisson/boundary_conditions.html">22.2. Boundary Conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Poisson/approximation.html">22.3. Approximation of functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Poisson/capacitor.html">22.4. The electric field in a capacitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Poisson/solvers.html">22.5. Iterative Solvers</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../PDEs/timedependent/timedependent.html">22. Time-dependent equations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/timedependent/heatequation.html">22.1. Heat Equation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/timedependent/heatequationmethods.html">22.2. Various methods for the Heat Equation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/timedependent/waveequation.html">22.3. Wave Equation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/timedependent/verlet.html">22.4. Verlet time-stepping and Mass-lumping</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/timedependent/waveguide.html">22.5. Waveguides</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../PDEs/timedependent/timedependent.html">23. Time-dependent equations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/timedependent/heatequation.html">23.1. Heat Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/timedependent/heatequationmethods.html">23.2. Various methods for the Heat Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/timedependent/waveequation.html">23.3. Wave Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/timedependent/verlet.html">23.4. Verlet time-stepping and Mass-lumping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/timedependent/waveguide.html">23.5. Waveguides</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../PDEs/elasticity/intro.html">23. Elasticity</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/modeling.html">23.1. Modeling Elasticity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/Newton.html">23.2. Newton’s method</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/elasticity2D.html">23.3. Solving nonlinear Elasticity</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/elasticity3D.html">23.4. 3D Solid Mechanics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/dynamics.html">23.5. Elastodynamics with Newmark time-stepping</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/forces_and_moments.html">23.6. Forces and Moments</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/metamaterial_thick.html">23.7. Meta-material with negative <span class="math notranslate nohighlight">\(\nu\)</span></a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/Exercises.html">23.8. Exercises</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../PDEs/elasticity/intro.html">24. Elasticity</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/modeling.html">24.1. Modeling Elasticity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/Newton.html">24.2. Newton’s method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/elasticity2D.html">24.3. Solving nonlinear Elasticity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/elasticity3D.html">24.4. 3D Solid Mechanics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/dynamics.html">24.5. Elastodynamics with Newmark time-stepping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/forces_and_moments.html">24.6. Forces and Moments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/metamaterial_thick.html">24.7. Meta-material with negative <span class="math notranslate nohighlight">\(\nu\)</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/Exercises.html">24.8. Exercises</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../PDEs/CFD/NavierStokes.html">24. Navier Stokes Equations:</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/CFD/Stokes.html">24.1. Stokes Equation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/CFD/Transport.html">24.2. Instationary transport equation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/CFD/SchaeferTurek.html">24.3. Benchmark: Flow around a cylinder</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/CFD/naca.html">24.4. NACA airfoil</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/CFD/tesla.html">24.5. Tesla Valve</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../PDEs/CFD/NavierStokes.html">25. Navier Stokes Equations:</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/CFD/Stokes.html">25.1. Stokes Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/CFD/Transport.html">25.2. Instationary transport equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/CFD/SchaeferTurek.html">25.3. Benchmark: Flow around a cylinder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/CFD/naca.html">25.4. NACA airfoil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/CFD/tesla.html">25.5. Tesla Valve</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../PDEs/Maxwell/Maxwell.html">25. Maxwell’s equations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/magnetostatics.html">25.1. Magnetostics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/coil-simple.html">25.2. A simple coil</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/coil.html">25.3. An advanced coil</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/exercises.html">25.4. Exercises</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/HCurl.html">25.5. The function space H(curl)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/deRham.html">25.6. The de Rham complex</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/checkrank.html">25.7. Ranks of discrete operators</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../PDEs/Maxwell/Maxwell.html">26. Maxwell’s equations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/magnetostatics.html">26.1. Magnetostics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/coil-simple.html">26.2. A simple coil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/coil.html">26.3. An advanced coil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/exercises.html">26.4. Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/HCurl.html">26.5. The function space H(curl)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/deRham.html">26.6. The de Rham complex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/checkrank.html">26.7. Ranks of discrete operators</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/Helmholtz.html">26. Helmholtz Equation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/Eigenvalues.html">27. Eigenvalue problems</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/stationaryTransport.html">28. Stationary Transport Equation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/instationaryTransport.html">29. Instationary Transport Equation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/NavierStokes.html">30. Navier Stokes Equations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../PDEs/Curvature.html">31. Computation of Curvature</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/Helmholtz.html">27. Helmholtz Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/Eigenvalues.html">28. Eigenvalue problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/stationaryTransport.html">29. Stationary Transport Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/instationaryTransport.html">30. Instationary Transport Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/NavierStokes.html">31. Navier Stokes Equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/Curvature.html">32. Computation of Curvature</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">FMM</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../fmm/intro_fmm.html">32. Fast Multipole Methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../fmm/basisfunctions.html">33. Multipole basis functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../fmm/layerpotentials.html">34. Layer potentials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fmm/intro_fmm.html">33. Fast Multipole Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fmm/basisfunctions.html">34. Multipole basis functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fmm/layerpotentials.html">35. Layer potentials</a></li>
 </ul>
 
     </div>
@@ -433,10 +433,11 @@
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#numerical-differentiation">17.5.1. Numerical differentiation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">17.5.2. Automatic differentiation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation-of-an-autodiff-data-type">17.5.3. Implementation of an <code class="docutils literal notranslate"><span class="pre">AutoDiff</span></code> data type</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">17.5.4. Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#numerical-differentiation">18.1. Numerical differentiation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">18.2. Automatic differentiation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation-of-an-autodiff-data-type">18.3. Implementation of an <code class="docutils literal notranslate"><span class="pre">AutoDiff</span></code> data type</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">18.4. Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-test-the-autodiff-class-for-the-pendulum">18.5. Exercise: test the <code class="docutils literal notranslate"><span class="pre">AutoDiff</span></code> class for the pendulum</a></li>
 </ul>
             </nav>
         </div>
@@ -449,21 +450,21 @@
                 <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="automatic-differentiation">
-<h1><span class="section-number">17.5. </span>Automatic Differentiation<a class="headerlink" href="#automatic-differentiation" title="Link to this heading">#</a></h1>
-<p>Often it is cumbersome and error prune to compute derivatives exactly. Two <em>different</em> ways to avoid manual differentiation are numerical differentiation, and automatic differentiation.</p>
+<h1><span class="section-number">18. </span>Automatic Differentiation<a class="headerlink" href="#automatic-differentiation" title="Link to this heading">#</a></h1>
+<p>Often it is cumbersome and error prune to compute derivatives exactly. Two <em>different</em> ways to avoid manual differentiation are numerical differentiation, and automatic differentiation. We don’t cover symbolic differentiation as provided by computer algebra libraries as <em>sympy</em>.</p>
 <section id="numerical-differentiation">
-<h2><span class="section-number">17.5.1. </span>Numerical differentiation<a class="headerlink" href="#numerical-differentiation" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">18.1. </span>Numerical differentiation<a class="headerlink" href="#numerical-differentiation" title="Link to this heading">#</a></h2>
 <p>To approximate the derivative of a function one may use finite differences, for example use a central difference quotient for the <span class="math notranslate nohighlight">\(i^{th}\)</span> partial derivative:</p>
 <div class="math notranslate nohighlight">
 \[
 \frac{\partial f}{\partial x_i}(x) \approx \frac{f(x + \varepsilon e_i) - f(x - \varepsilon e_i)}{2 \varepsilon}
 \]</div>
-<p>Here, <span class="math notranslate nohighlight">\(e_i\)</span> is the <span class="math notranslate nohighlight">\(i^{th}\)</span> unit-vector, and <span class="math notranslate nohighlight">\(\varepsilon\)</span> is a small value. If the function is smooth, one easily verifies using Taylor expansion that the approximation is <span class="math notranslate nohighlight">\(O(\varepsilon^2)\)</span>. To have a good approximation, one should choose <span class="math notranslate nohighlight">\(\epsilon\)</span> small.</p>
+<p>Here, <span class="math notranslate nohighlight">\(e_i\)</span> is the <span class="math notranslate nohighlight">\(i^{th}\)</span> unit-vector, and <span class="math notranslate nohighlight">\(\varepsilon\)</span> is a small value. If the function is smooth, one easily verifies using Taylor expansion that the approximation error is <span class="math notranslate nohighlight">\(O(\varepsilon^2)\)</span>. To have a good approximation, one should choose <span class="math notranslate nohighlight">\(\epsilon\)</span> small.</p>
 <p>On the other hand, one subtracts two similar values in the numerator, and observes numerical cancellation if <span class="math notranslate nohighlight">\(\varepsilon\)</span> is very small. Thus, a good compromise is needed.</p>
 <p>The advantage of numerical differentiation is that it is non-invasive, it works without any change of the code evaluating the function <span class="math notranslate nohighlight">\(f\)</span>.</p>
 </section>
 <section id="id1">
-<h2><span class="section-number">17.5.2. </span>Automatic differentiation<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">18.2. </span>Automatic differentiation<a class="headerlink" href="#id1" title="Link to this heading">#</a></h2>
 <p>With automatic differentiation, we represent the value, and the derivative in every step of the evaluation of a function. From rules of calculus, we know how derivatives are computed for all (differentiable) elementary operations.</p>
 <p>As an example, let</p>
 <div class="math notranslate nohighlight">
@@ -484,9 +485,9 @@ f(u,v) = u * v.
 <p>should have value and gradient:</p>
 <div class="math notranslate nohighlight">
 \[
-{\bf w} = \left( \begin{array}{c} w \atop g_u \end{array} \right) =  \left( \begin{array}{c} u v \atop u g_v + v g_u \end{array} \right)
+{\bf w} = \left( \begin{array}{c} w \atop g_w \end{array} \right) =  \left( \begin{array}{c} u v \atop u g_v + v g_u \end{array} \right)
 \]</div>
-<p>We now that from the chain rule that</p>
+<p>We now from the chain rule that</p>
 <div class="math notranslate nohighlight">
 \[
 \nabla \sin (u) = \cos(u) \nabla u
@@ -500,26 +501,26 @@ f(u,v) = u * v.
 <p>The advantage of automatic differentiation is that no choice of a small parameter <span class="math notranslate nohighlight">\(\varepsilon\)</span> is needed. However, one needs access to the code implementing the function <span class="math notranslate nohighlight">\(f\)</span>.</p>
 </section>
 <section id="implementation-of-an-autodiff-data-type">
-<h2><span class="section-number">17.5.3. </span>Implementation of an <code class="docutils literal notranslate"><span class="pre">AutoDiff</span></code> data type<a class="headerlink" href="#implementation-of-an-autodiff-data-type" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">18.3. </span>Implementation of an <code class="docutils literal notranslate"><span class="pre">AutoDiff</span></code> data type<a class="headerlink" href="#implementation-of-an-autodiff-data-type" title="Link to this heading">#</a></h2>
 <p>We implement a data type for automatic differentiation. It stores the function value (<code class="docutils literal notranslate"><span class="pre">m_val</span></code>), and the gradient (<code class="docutils literal notranslate"><span class="pre">m_deriv</span></code>). We use a template argument <code class="docutils literal notranslate"><span class="pre">N</span></code> to specify the number of independent variables, what is the dimension of the gradient:</p>
-<div class="highlight-cppp notranslate"><div class="highlight"><pre><span></span>template &lt;size_t N, typename T = double&gt;
-class AutoDiff
-{
-  T m_val;
-  std::array&lt;T, N&gt; m_deriv;
-public: 
-  AutoDiff () : m_val(0), m_deriv{} {}
-  AutoDiff (T v) : m_val(v), m_deriv{} 
-    
-  template &lt;size_t I&gt;
-  AutoDiff (Variable&lt;I, T&gt; var) : m_val(var.value()), m_deriv{} {
-      m_deriv[I] = 1.0;
-  }
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="kt">size_t</span><span class="w"> </span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">double</span><span class="o">&gt;</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">AutoDiff</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="n">T</span><span class="w"> </span><span class="n">m_val</span><span class="p">;</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m_deriv</span><span class="p">;</span>
+<span class="k">public</span><span class="o">:</span><span class="w"> </span>
+<span class="w">  </span><span class="n">AutoDiff</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">m_val</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="w"> </span><span class="n">m_deriv</span><span class="p">{}</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">  </span><span class="n">AutoDiff</span><span class="w"> </span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">v</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">m_val</span><span class="p">(</span><span class="n">v</span><span class="p">),</span><span class="w"> </span><span class="n">m_deriv</span><span class="p">{}</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">    </span>
+<span class="w">  </span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="kt">size_t</span><span class="w"> </span><span class="n">I</span><span class="o">&gt;</span>
+<span class="w">  </span><span class="n">AutoDiff</span><span class="w"> </span><span class="p">(</span><span class="n">Variable</span><span class="o">&lt;</span><span class="n">I</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">var</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">m_val</span><span class="p">(</span><span class="n">var</span><span class="p">.</span><span class="n">value</span><span class="p">()),</span><span class="w"> </span><span class="n">m_deriv</span><span class="p">{}</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">m_deriv</span><span class="p">[</span><span class="n">I</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
 
-  T value() const { return m_val; }
-  std::array&lt;T, N&gt;&amp; deriv() { return m_deriv; }
-  const std::array&lt;T, N&gt;&amp; deriv() const { return m_deriv; }
-};
+<span class="w">  </span><span class="n">T</span><span class="w"> </span><span class="n">value</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">m_val</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">deriv</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">m_deriv</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">N</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">deriv</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">m_deriv</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">};</span>
 </pre></div>
 </div>
 <p>For that class we implement the mathematical functions and operators we want to support, for example</p>
@@ -545,7 +546,7 @@ public:
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">Variable&lt;I&gt;</span></code> class is used to define and initialize
-the <code class="docutils literal notranslate"><span class="pre">I</span></code>th independent variable.</p>
+the <code class="docutils literal notranslate"><span class="pre">I</span></code>-th independent variable.</p>
 <p>It can be used as follows. Say, we have the function</p>
 <div class="math notranslate nohighlight">
 \[
@@ -556,7 +557,7 @@ f(x,y) = x * y
 \[
 \nabla f(x,y) \quad \text{for} \quad x=1, y=2
 \]</div>
-<p>For that we declare our independent variables</p>
+<p>We declare our independent variables</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">AutoDiff</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Variable</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">(</span><span class="mf">1.0</span><span class="p">);</span>
 <span class="n">AutoDiff</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Variable</span><span class="o">&lt;</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">(</span><span class="mf">2.0</span><span class="p">);</span>
 </pre></div>
@@ -569,11 +570,92 @@ f(x,y) = x * y
 <p>Find the code in <code class="docutils literal notranslate"><span class="pre">src\autodiff.hpp</span></code> and some demos in <code class="docutils literal notranslate"><span class="pre">demos\demo_autodiff.cpp</span></code>.</p>
 </section>
 <section id="exercises">
-<h2><span class="section-number">17.5.4. </span>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
-<ul class="simple">
-<li><p>add additional useful operators for the <code class="docutils literal notranslate"><span class="pre">AutoDiff</span></code> class</p></li>
-<li><p>add some more functions (<code class="docutils literal notranslate"><span class="pre">cos</span></code>, <code class="docutils literal notranslate"><span class="pre">exp</span></code>, <code class="docutils literal notranslate"><span class="pre">log</span></code>, …) for the <code class="docutils literal notranslate"><span class="pre">AutoDiff</span></code> class.</p></li>
+<h2><span class="section-number">18.4. </span>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
+<ul>
+<li><p>Add additional useful operators for the <code class="docutils literal notranslate"><span class="pre">AutoDiff</span></code> class</p></li>
+<li><p>Add some more functions (<code class="docutils literal notranslate"><span class="pre">cos</span></code>, <code class="docutils literal notranslate"><span class="pre">exp</span></code>, <code class="docutils literal notranslate"><span class="pre">log</span></code>, …) for the <code class="docutils literal notranslate"><span class="pre">AutoDiff</span></code> class.</p></li>
+<li><p>Evaluate and plot Legendre-polynomials up to order 5, in the interval <span class="math notranslate nohighlight">\(-1 \leq x \leq 1\)</span>. Evaluate and plot also
+their derivatives (using AutoDiff).</p>
+<p>Legendre polynomials are recursively defined:</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{eqnarray*}
+P_0(x) &amp; = &amp; 1 \\
+P_1(x) &amp; = &amp; x \\
+P_n(x) &amp; = &amp; \frac{2n-1}{n} x P_{n-1}(x) + \frac{n-1}{n} P_{n-2}(x) \qquad n \geq 2
+\end{eqnarray*}\]</div>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="kt">void</span><span class="w"> </span><span class="n">LegendrePolynomials</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">P</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">P</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+<span class="w">        </span><span class="k">return</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="n">P</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">    </span><span class="n">P</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">T</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="p">;</span>
+<span class="w">    </span><span class="n">P</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">P</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">((</span><span class="n">T</span><span class="p">(</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">k</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">P</span><span class="p">[</span><span class="n">k</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">])</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">T</span><span class="p">(</span><span class="n">k</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">P</span><span class="p">[</span><span class="n">k</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">2</span><span class="p">])</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">T</span><span class="p">(</span><span class="n">k</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
 </ul>
+</section>
+<section id="exercise-test-the-autodiff-class-for-the-pendulum">
+<h2><span class="section-number">18.5. </span>Exercise: test the <code class="docutils literal notranslate"><span class="pre">AutoDiff</span></code> class for the pendulum<a class="headerlink" href="#exercise-test-the-autodiff-class-for-the-pendulum" title="Link to this heading">#</a></h2>
+<p>The pendulum is modeled by an ode whith non-linear right-hand side. The ode as second order equation is</p>
+<div class="math notranslate nohighlight">
+\[
+\alpha^{\prime \prime} = -\frac{g}{l} \sin (\alpha), \qquad \alpha(t_0) = \alpha_0, \; \alpha^\prime(0) = \alpha_{0p},
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\alpha\)</span> is the angular displacement, <span class="math notranslate nohighlight">\(l\)</span> is the length of the pendulum, and <span class="math notranslate nohighlight">\(g\)</span> the gravitational acceleration
+(roughly <span class="math notranslate nohighlight">\(9.81 m s^{-2}\)</span> on earth).</p>
+<p>Reformulate the equation as first order ODE in <span class="math notranslate nohighlight">\({\mathbb R}^2\)</span>.</p>
+<p>We want to implement the right-hand side function only once, where the data type is the template typename <code class="docutils literal notranslate"><span class="pre">T</span></code>,
+see function <code class="docutils literal notranslate"><span class="pre">T_evaluate</span></code>. To evaluate <span class="math notranslate nohighlight">\(f\)</span>, we call the template with a <code class="docutils literal notranslate"><span class="pre">double</span></code> type. To evaluate <span class="math notranslate nohighlight">\(f^\prime\)</span>,
+we call <code class="docutils literal notranslate"><span class="pre">T_evaluate</span></code> with an <code class="docutils literal notranslate"><span class="pre">AutoDiff&lt;2&gt;</span></code> type.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">PendulumAD</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">NonlinearFunction</span>
+<span class="p">{</span>
+<span class="k">private</span><span class="o">:</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">m_length</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">m_gravity</span><span class="p">;</span>
+
+<span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="n">PendulumAD</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">length</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">gravity</span><span class="o">=</span><span class="mf">9.81</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">m_length</span><span class="p">(</span><span class="n">length</span><span class="p">),</span><span class="w"> </span><span class="n">m_gravity</span><span class="p">(</span><span class="n">gravity</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">dimX</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">dimF</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="n">evaluate</span><span class="w"> </span><span class="p">(</span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="n">T_evaluate</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="n">evaluateDeriv</span><span class="w"> </span><span class="p">(</span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">MatrixView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">df</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Vector</span><span class="o">&lt;</span><span class="n">AutoDiff</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">x_ad</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+<span class="w">    </span><span class="n">Vector</span><span class="o">&lt;</span><span class="n">AutoDiff</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">f_ad</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">x_ad</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Variable</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">(</span><span class="n">x</span><span class="p">(</span><span class="mi">0</span><span class="p">));</span>
+<span class="w">    </span><span class="n">x_ad</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Variable</span><span class="o">&lt;</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">(</span><span class="n">x</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
+<span class="w">    </span><span class="n">T_evaluate</span><span class="o">&lt;</span><span class="n">AutoDiff</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">x_ad</span><span class="p">,</span><span class="w"> </span><span class="n">f_ad</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<span class="w">      </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span>
+<span class="w">         </span><span class="n">df</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f_ad</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="n">deriv</span><span class="p">()[</span><span class="n">j</span><span class="p">];</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="n">T_evaluate</span><span class="w"> </span><span class="p">(</span><span class="n">VectorView</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">VectorView</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="k">const</span>
+
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="n">f</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">    </span><span class="n">f</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">m_gravity</span><span class="o">/</span><span class="n">m_length</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">(</span><span class="mi">0</span><span class="p">));</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">};</span>
+</pre></div>
+</div>
 </section>
 </section>
 
@@ -621,7 +703,7 @@ f(x,y) = x * y
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">18. </span>Runge-Kutta methods</p>
+        <p class="prev-next-title"><span class="section-number">19. </span>Runge-Kutta methods</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -642,10 +724,11 @@ f(x,y) = x * y
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#numerical-differentiation">17.5.1. Numerical differentiation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">17.5.2. Automatic differentiation</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation-of-an-autodiff-data-type">17.5.3. Implementation of an <code class="docutils literal notranslate"><span class="pre">AutoDiff</span></code> data type</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">17.5.4. Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#numerical-differentiation">18.1. Numerical differentiation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">18.2. Automatic differentiation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation-of-an-autodiff-data-type">18.3. Implementation of an <code class="docutils literal notranslate"><span class="pre">AutoDiff</span></code> data type</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">18.4. Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercise-test-the-autodiff-class-for-the-pendulum">18.5. Exercise: test the <code class="docutils literal notranslate"><span class="pre">AutoDiff</span></code> class for the pendulum</a></li>
 </ul>
   </nav></div>
 

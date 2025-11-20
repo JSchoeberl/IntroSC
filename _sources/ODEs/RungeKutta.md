@@ -1,10 +1,16 @@
 # Runge-Kutta methods
 
-The goal of Runge-Kutta methods is to obtain higher accuracy by
-using a more accurate integration rule:
+Recall the integral formulation of the ODE on time interval $[t_i, t_{i+1}]$:
 
 $$
-y_{i+1} = y_i + h \sum_{j=0}^{s-1} b_j f(t_i+c_j h, y_i^j)
+y(t_{i+1}) = y(t_i) + \int_{t_i}^{t_{i+1}} f(s, y(s)) ds
+$$
+
+The goal of Runge-Kutta methods is to obtain higher accuracy by
+using more accurate numerical integration rule:
+
+$$
+y_{i+1} = y_i + \tau \sum_{j=0}^{s-1} b_j f(t_i+c_j \tau, y_i^j)
 $$
 
 where
@@ -17,18 +23,18 @@ $$
 \int_0^1 f(t) dt \approx \sum_{j=0}^{s-1} b_j f(c_j)
 $$
 
-* $y_i^j$ are approximations to $y(t_i + c_j h)$, which are also unknown
+* $y_i^j$ are approximations to $y(t_i + c_j \tau)$, which are also unknown
 
 The exact values at the stage-points are
 
 $$
-y(t_i+c_j h) = y(t_i) + \int_{t_i}^{t_i+c_j h} f(t, y(t)) dt
+y(t_i+c_j \tau) = y(t_i) + \int_{t_i}^{t_i+c_j \tau} f(t, y(t)) dt
 $$
 
 Again, we use numerical integration to define the numerical stage values (skipping the index $i$):
 
 $$
-y^j = y_i + h \sum_{l=0}^{s-1}  a_{jl} f(t_i+c_l h, y^l) \qquad 0 \leq j < s
+y^j = y_i + \tau \sum_{l=0}^{s-1}  a_{jl} f(t_i+c_l \tau, y^l) \qquad 0 \leq j < s
 $$
 
 We use the same integration points as above, however the weigths are adjusted
@@ -55,13 +61,13 @@ $$
 Instead of having the $y^j$ as unknonws, one often solves for $k$-values ($k$ like slope):
 
 $$
-k^j = f(y_i + c_j h, y_i + h \sum_{l=0}^{s-1} a_{jl} k^l)
+k^j = f(y_i + c_j \tau, y_i + \tau \sum_{l=0}^{s-1} a_{jl} k^l)
 $$
 
 and then
 
 $$
-y_{i+1} = y_i + h \sum_{l=0}^{s-1} b_l k^l
+y_{i+1} = y_i + \tau \sum_{l=0}^{s-1} b_l k^l
 $$
 
 
@@ -74,30 +80,45 @@ Examples are
 
 * the $RK_2$ - method, aka the explicit mid-point rule
 
-$$
-\begin{array}{c|cc}
-0 & 0 & 0 \\
-\frac{1}{2} & \frac{1}{2} & 0 \\
-\hline
- & 0 & 1
-\end{array}
-$$
+  $$
+  \begin{array}{c|cc}
+  0 & 0 & 0 \\
+  \frac{1}{2} & \frac{1}{2} & 0 \\
+  \hline
+   & 0 & 1
+  \end{array}
+  $$
 
-It is evaluated as
+  It is evaluated as
 
-$$
-\begin{array}{rcl}
-y^0 & = & y_i \\
-y^1 & = & y_i + \tfrac{h}{2} f(t_i, y^0)
-\end{array}
-$$
+  $$
+  \begin{array}{rcl}
+  y^0 & = & y_i \\
+  y^1 & = & y_i + \tfrac{\tau}{2} f(t_i, y^0)
+  \end{array}
+  $$
 
-and then
+  and then
 
-$$
-y_{i+1} = y_i + h f(t_i+\tfrac{h}{2}, y^1)
-$$
+  $$
+  y_{i+1} = y_i + \tau f(t_i+\tfrac{h}{2}, y^1)
+  $$
 
+  Evaluation in $k$-values:
+
+  $$
+  \begin{array}{rcl}
+  k^0 & = & f(t_i, y_i) \\
+  k^1 & = & f(t_i+\frac{\tau}{2}, y_i + \frac{\tau}{2} k^0)
+  \end{array}
+  $$
+  
+  and then
+
+  $$
+  y_{i+1} = y_i + \tau k^1
+  $$
+ 
 
 
 * the $RK_4$ - method, aka THE classical Runge Kutta method
@@ -117,18 +138,37 @@ $$
 $$
 \begin{array}{rcl}
 y^0  & = & y_i \\
-y^1  & = & y_i + \tfrac{h}{2} f(t_i, y^0) \\
-y^2  & = & y_i + \tfrac{h}{2} f(t_i+\tfrac{h}{2}, y^1) \\
-y^3  & = & y_i + h f(t_i+\tfrac{h}{2}, y^2) \\
+y^1  & = & y_i + \tfrac{\tau}{2} f(t_i, y^0) \\
+y^2  & = & y_i + \tfrac{\tau}{2} f(t_i+\tfrac{\tau}{2}, y^1) \\
+y^3  & = & y_i + \tau f(t_i+\tfrac{\tau}{2}, y^2) \\
 \end{array}
 $$
 
 and then
 
 $$
-y_{i+1} = y_i + \frac{h}{6} \big(f(t_i, y^0) + 2 f(t_i+\tfrac{h}{2}, y^1)
-+ 2 f(t_i+\tfrac{h}{2}, y^2) + f(t_i+h, y^3) \big)
+y_{i+1} = y_i + \frac{\tau}{6} \big(f(t_i, y^0) + 2 f(t_i+\tfrac{h}{\tau}, y^1)
++ 2 f(t_i+\tfrac{\tau}{2}, y^2) + f(t_i+\tau, y^3) \big)
 $$
+
+  
+ 
+  $$
+  \begin{array}{rcl}
+  k^0  & = & f(t_i, y_i) \\
+  k^1  & = & f(t_i+\frac{\tau}{2}, y_i + \frac{\tau}{2} k^0) \\
+  k^2  & = & f(t_i+\frac{\tau}{2}, y_i + \frac{\tau}{2} k^1) \\
+  k^3  & = & f(t_i + \tau, y_i + \tau k^2)
+  \end{array}
+  $$
+
+  and then
+
+  $$
+  y_{i+1} = y_i + \frac{\tau}{6} \big( k^0 + 2 k^1 + 2 k^2 + k^3 \big)
+  $$
+
+
 
 
 
@@ -165,24 +205,48 @@ $$
 
 Many examples can be found here: [Butcher tableaus examples](https://en.wikipedia.org/wiki/List_of_Runge–Kutta_methods).
 
-## Exercise: Implement a Runge-Kutta time-stepper for arbitrary Butcher tableaus.
+## Implementation of a Runge-Kutta time-stepper for arbitrary Butcher tableaus.
 
-Solve the non-linear system of equation for $k \in {\mathbb R}^{sn}$:
+They are implemented in ASC-ODE, branch RungeKutta. Merge that branch into your main branch:
+
+    git remote add upstream https://github.com/TUWien-ASC/ASC-ODE.git
+    git fetch upstream
+    git merge upstream/RungeKutta
+
+
+Solve a non-linear system of equations for $k^0, \ldots k^{s-1}$ such that
 
 $$
-k - \tilde f ( \tilde y_i  + h A \otimes k) = 0
+\left( \begin{array}{c}
+k^0 \\ \vdots \\ k^{s-1}
+\end{array} \right)
+-
+\left( \begin{array}{c}
+f( y_i + \tau (a_{0,0} k^0 + \cdots + a_{0,s-1} k^{s-1}) ) \\
+\vdots \\
+f( y_i + \tau (a_{s-1,0} k^0 + \cdots + a_{s-1,s-1} k^{s-1}) )
+\end{array} \right)
+= 0
+$$
+
+This system of equations is rewritten in compact form for
+the unknown $k \in {\mathbb R}^{sn}$:
+
+$$
+k - \widetilde f ( \tilde y_i  + \tau A \otimes k) = 0
 $$
 
 Where
-* $k = (k_0, \ldots k_{s-1})$, with $k_j \in {\mathbb R}^n$
+* $k = (k^0, \ldots k^{s-1})$, with $k^j \in {\mathbb R}^n$
 * $\tilde y_i = (\underbrace{y_i, \ldots , y_i}_{s-{\text times}}) \in {\mathbb R}^{sn}$
 * $\tilde f : {\mathbb R}^{sn} \rightarrow {\mathbb R}^{sn} : (x_0, \ldots, x_{s_-1}) \mapsto (f(x_0), \ldots, f(x_{s-1}))$
 * for $A \in {\mathbb R}^{h \times w}$ define
 $A \otimes :  {\mathbb R}^{wn} \rightarrow {\mathbb R}^{hn} : (x_0, \ldots, x_{w-1}) \mapsto (y_0, \ldots , y_{h-1})$ such that $y_j = \sum_l a_{jl} x_l$.
 
-Derive two classes from `NonlinearFunction` for that (for example, named `BlockFunction` and `BlockMatVec`).
+We derive two classes from `NonlinearFunction` for that (named `MultipleFunction` and `MatVecFunc`).
 
-Setup the Runge-Kutta equation, and solve it using `NewtonSolver`.
+Setup the Runge-Kutta time-stepper, and solve the ODE.
+
 
 
 ### Runge-Kutta methods of arbitrary order
