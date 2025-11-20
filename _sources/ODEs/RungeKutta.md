@@ -281,6 +281,11 @@ Similar for the Radau IIA: Find roots of the $P^{(1,0)}$ Jacobi-polynomial, tran
 This is done by function `gaujac` from Numerical recipes. The logarithmic-gamma function is lgamma in C++.
 
 
+## Exercises
 
+* Try out and compare various Runge-Kutta methods already implemented for the examples above.
+
+* Implement and test an `ExplicitRungeKutta` time-stepper for arbitrary Butcher tableaus (with a lower triangular matrix for
+the $a$-coefficents). 
 
 
