@@ -6,8 +6,10 @@ It requires some configuration files, the contents is provided by markdown (.md)
 
 Install the python packages jupyter-book, and one more to work with github pages:
 
-    pip install -U jupyter-book ghp-import
+    pip install -U "jupyter-book<2.0" ghp-import
 
+
+**Note:** This workflow referes to Jupyter Book 1. The recently (Nov '25) released Jupyter Book 2 requires a different one.
 
 The ASC-bla project includes a little start for the documentation:
 
