@@ -321,7 +321,7 @@ bool atomic<T>::compare_exchange_strong (T& expected, T desired);
 ```
 
 * If the value of the atomic value is equal to `expected`, the atomic variable is replaced by `desired`, and the function returns true.
-* otherwise, `expected` is replaced by the value of the atomic.
+* otherwise, `expected` is replaced by the value of the atomic, and the function returns false.
 
 
 

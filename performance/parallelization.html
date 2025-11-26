@@ -736,7 +736,7 @@ provided as member function of the C++ <code class="docutils literal notranslate
 </div>
 <ul class="simple">
 <li><p>If the value of the atomic value is equal to <code class="docutils literal notranslate"><span class="pre">expected</span></code>, the atomic variable is replaced by <code class="docutils literal notranslate"><span class="pre">desired</span></code>, and the function returns true.</p></li>
-<li><p>otherwise, <code class="docutils literal notranslate"><span class="pre">expected</span></code> is replaced by the value of the atomic.</p></li>
+<li><p>otherwise, <code class="docutils literal notranslate"><span class="pre">expected</span></code> is replaced by the value of the atomic, and the function returns false.</p></li>
 </ul>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Node</span>
 <span class="p">{</span>
