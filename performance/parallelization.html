@@ -754,7 +754,7 @@ provided as member function of the C++ <code class="docutils literal notranslate
 
 <span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">add</span><span class="p">(</span><span class="n">Node</span><span class="o">*</span><span class="w"> </span><span class="n">node</span><span class="p">)</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="n">Node</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">currenthead</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">head</span><span class="p">;</span>
+<span class="w">        </span><span class="n">Node</span><span class="o">*</span><span class="w"> </span><span class="n">currenthead</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">head</span><span class="p">;</span>
 <span class="w">        </span><span class="k">do</span><span class="w"> </span><span class="p">{</span>
 <span class="w">            </span><span class="n">node</span><span class="o">-&gt;</span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">currenthead</span><span class="p">;</span>
 <span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">head</span><span class="p">.</span><span class="n">compare_exchange_strong</span><span class="p">(</span><span class="n">currenthead</span><span class="p">,</span><span class="w"> </span><span class="n">node</span><span class="p">));</span>
@@ -762,7 +762,7 @@ provided as member function of the C++ <code class="docutils literal notranslate
 
 <span class="w">    </span><span class="n">Node</span><span class="o">*</span><span class="w"> </span><span class="n">try_get</span><span class="p">()</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="n">Node</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">currenthead</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">head</span><span class="p">;</span>
+<span class="w">        </span><span class="n">Node</span><span class="o">*</span><span class="w"> </span><span class="n">currenthead</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">head</span><span class="p">;</span>
 <span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">currenthead</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="o">!</span><span class="n">head</span><span class="p">.</span><span class="n">compare_exchange_strong</span><span class="p">(</span><span class="n">currenthead</span><span class="p">,</span><span class="w"> </span><span class="n">currenthead</span><span class="o">-&gt;</span><span class="n">next</span><span class="p">))</span>
 <span class="w">           </span><span class="n">currenthead</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">head</span><span class="p">;</span>
 
@@ -771,8 +771,11 @@ provided as member function of the C++ <code class="docutils literal notranslate
 <span class="p">};</span>
 </pre></div>
 </div>
-<p>However, there is an issue known as ABA problem. The problem as well
-as two smart solutions are described here: <a class="reference external" href="https://moodycamel.com/blog/2014/solving-the-aba-problem-for-lock-free-free-lists">lock-free
+<p>There is a potential problem with memory allocation/freeing. If one thread pops the head node of the list
+and frees it, another thread may still ask for the <code class="docutils literal notranslate"><span class="pre">next</span></code> element. One solution is to allocate all nodes together,
+and keep them alive as long as the List is active.<br />
+There is another issue known as ABA problem (which is avoided if all nodes are allocated once and kept alive).
+The problem as well as two smart solutions are described here: <a class="reference external" href="https://moodycamel.com/blog/2014/solving-the-aba-problem-for-lock-free-free-lists">lock-free
 list</a>.
 The author, Cameron Desrochers, is the developer of the concurrent
 queue we are using.</p>

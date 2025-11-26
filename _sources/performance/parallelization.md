@@ -342,7 +342,7 @@ public:
 
     void add(Node* node)
     {
-        Node * currenthead = head;
+        Node* currenthead = head;
         do {
             node->next = currenthead;
         } while (!head.compare_exchange_strong(currenthead, node));
@@ -350,7 +350,7 @@ public:
 
     Node* try_get()
     {
-        Node * currenthead = head;
+        Node* currenthead = head;
         while (currenthead && !head.compare_exchange_strong(currenthead, currenthead->next))
            currenthead = head;
 
@@ -359,8 +359,11 @@ public:
 };
 ```
 
-However, there is an issue known as ABA problem. The problem as well
-as two smart solutions are described here: [lock-free
+There is a potential problem with memory allocation/freeing. If one thread pops the head node of the list
+and frees it, another thread may still ask for the `next` element. One solution is to allocate all nodes together,
+and keep them alive as long as the List is active.  
+There is another issue known as ABA problem (which is avoided if all nodes are allocated once and kept alive). 
+The problem as well as two smart solutions are described here: [lock-free
 list](https://moodycamel.com/blog/2014/solving-the-aba-problem-for-lock-free-free-lists).
 The author, Cameron Desrochers, is the developer of the concurrent
 queue we are using.
