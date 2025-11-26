@@ -123,9 +123,9 @@ cout << "cnt = " << cnt << endl;
 
 I get varying output, something similar to `cnt = 962`. What goes wrong ?
 Thread A reads the value of `cnt`, increments it, and stores the value back to memory.
-If thread B reads cnt between load and store of thread A, and stores after thread A is storing,
+If thread B reads `cnt` between load and store of thread A, and stores after thread A is storing,
 it overwrites A's result, one count is lost. If the result depends unpredictable on the progress 
-of the different threads we generated a so called *race condition*.
+of the different threads we generated a so-called *race condition*.
 
 The solution is to make `load-increment-store` an atomic operation, what is provided in modern C++
 by the `std::atomic` class template:
@@ -305,7 +305,7 @@ However, locks have some price.
 If many threads access the list, most of them might end up waiting for the lock.
 The worst case is when some thread claims the lock,
 and this thread gets scheduled away by the operating system (for several milliseconds).
-All other thraeds waiting to enter the lock-protected region are blocked. 
+All other threads waiting to enter the lock-protected region are blocked. 
 
 
 
@@ -320,16 +320,16 @@ provided as member function of the C++ `atomic` type:
 bool atomic<T>::compare_exchange_strong (T& expected, T desired);
 ```
 
-* If the value of the atomic value is equal to `expected`, the atomic variable is replace by `desired`, and the function returns true.
-* otherwise, `expected` is replace by the value of the atomic.
+* If the value of the atomic value is equal to `expected`, the atomic variable is replaced by `desired`, and the function returns true.
+* otherwise, `expected` is replaced by the value of the atomic.
 
 
 
 ```cpp
 class Node
 {
-    int data;                  // whatever we put into the list
-    std::atomic<Node*> next;   // next node
+    int data;          // whatever we put into the list
+    Node* next;        // next node
 };
 
 class List
@@ -352,9 +352,9 @@ public:
     {
         Node * currenthead = head;
         while (currenthead && !head.compare_exchange_strong(currenthead, currenthead->next))
-           continue;
+           currenthead = head;
 
-        return head;
+        return currenthead;
     }
 };
 ```
