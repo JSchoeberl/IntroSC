@@ -469,7 +469,7 @@ document.write(`
 other. To speed up computations, one can combine several CPUs in a
 parallel program. Here, CPU means a compute unit, what is typically
 one core within a microprocessor.</p>
-<p>There are many possibilities to arange the hardware:</p>
+<p>There are many possibilities to arrange the hardware:</p>
 <ul class="simple">
 <li><p>Shared memory parallelization: All CPUs have access to the same
 memory. Data structures are automatically shared between
@@ -478,13 +478,14 @@ cores. It is relatively easy to write shared memory parallel
 programs. However, it is expensive to build shared memory parallel
 systems with many (say 20 or more) CPUs.</p></li>
 <li><p>Distributed memory parallelization: Every CPU has its own memory,
-CPUs are conncected with a network.  For communication, one has to
-send explicitely data between the CPUs.  The standard library for this is <a class="reference external" href="https://en.wikipedia.org/wiki/Message_Passing_Interface">MPI-message passing interface</a>.
+CPUs are connected with a network.  For communication, one has to
+send explicitly data between the CPUs.<br />
+The standard library for this is <a class="reference external" href="https://en.wikipedia.org/wiki/Message_Passing_Interface">MPI-message passing interface</a>.
 The world’s most powerful parallel computers are listed in the <a class="reference external" href="https://www.top500.org">Top
 500 list</a>, Austria’s largest parallel
 computers belong to the family of <a class="reference external" href="https://vsc.ac.at//home">VSC - Vienna Scientific
 Cluster</a> systems.</p></li>
-<li><p>Accelerators: Are specialized compute unites for heavy (for example
+<li><p>Accelerators: Are specialized compute units for heavy (for example
 linear algebra) computations. While in typical CPUs most transistors
 are dedicated to program workflow, in so called GPUs (graphics processing units)
 most parts of the chip are used for computing. Nowadays most popular are
@@ -499,11 +500,11 @@ However, with new features in modern C++, a do-it-yourself approach is also poss
 <section id="using-our-own-task-manager">
 <h2><span class="section-number">13.1. </span>Using our own task manager<a class="headerlink" href="#using-our-own-task-manager" title="Link to this heading">#</a></h2>
 <p>We build a simple task scheduler on top of a <a class="reference external" href="https://github.com/cameron314/concurrentqueue">concurrent queue available as open source</a>.
-It is implemented within the ASC-HPC package in src/taskmanager.[h|cc], and demos are in
-demos/demo_tasks.cc.</p>
+It is implemented within the ASC-HPC package in src/taskmanager.[h|c]pp, and demos are in
+demos/demo_tasks.cpp.</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">StartWorkers</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
 <span class="w">  </span>
-<span class="n">RunParallel</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="p">[]</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">size</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="n">TunParallel</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="p">[]</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">size</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;I am task &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; out of &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
 <span class="p">});</span>
 
@@ -513,7 +514,8 @@ demos/demo_tasks.cc.</p>
 <p>With <code class="docutils literal notranslate"><span class="pre">StartWorkers</span></code> and <code class="docutils literal notranslate"><span class="pre">StopWorkers</span></code> we start and stop additional threads. These new threads support the main thread executing tasks, so in total we have 4 threads in this example.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">RunParallel</span></code> function triggers the execution of tasks. The task is given by a function object,
 for example implemented as lambda-function (as in our example). We specify how many tasks we create.
-In this example the function will be called with arguments <span class="math notranslate nohighlight">\((i, size)\)</span> = <span class="math notranslate nohighlight">\((0,10), \ldots, (9,10)\)</span>. The <code class="docutils literal notranslate"><span class="pre">RunParallel</span></code> function returns when all of its tasks are completed.</p>
+In this example the function will be called with arguments <span class="math notranslate nohighlight">\((i, size)\)</span> = <span class="math notranslate nohighlight">\((0,10), \ldots, (9,10)\)</span>.
+The <code class="docutils literal notranslate"><span class="pre">RunParallel</span></code> function returns when all of its tasks are completed.</p>
 <p>We can create tasks also recursively, a task can create more tasks:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">RunParallel</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="p">[]</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">RunParallel</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">s2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -550,7 +552,8 @@ Horizontally we have time (values are given in milliseconds). We have 4 rows cor
 within some interval in time:</p>
 <a class="reference internal image-reference" href="../_images/vitetrace.png"><img alt="../_images/vitetrace.png" class="align-center" src="../_images/vitetrace.png" style="width: 80%;" />
 </a>
-<p>Vite can be installed on Linux by the package manager, compiled vite executables for Windows and MacOS are available from <a class="reference external" href="https://www.asc.tuwien.ac.at/~mhochsteger/files/vite/">https://www.asc.tuwien.ac.at/~mhochsteger/files/vite/</a>.</p>
+<p>Vite can be installed on Linux by the package manager, compiled vite executables for Windows and MacOS are available from
+<a class="reference external" href="https://ngsolve.org/files/vite/">https://ngsolve.org/files/vite/</a>.</p>
 </section>
 <section id="c-types-for-parallel-computing">
 <h2><span class="section-number">13.3. </span>C++ types for parallel computing<a class="headerlink" href="#c-types-for-parallel-computing" title="Link to this heading">#</a></h2>
