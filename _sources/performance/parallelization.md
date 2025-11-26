@@ -50,7 +50,7 @@ demos/demo_tasks.cpp.
 ```cpp
 StartWorkers(3);
   
-TunParallel(10, [] (int i, int size) {
+RunParallel(10, [] (int i, int size) {
     cout << "I am task " << i << " out of " << size << endl;
 });
 
