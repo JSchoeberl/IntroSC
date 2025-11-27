@@ -193,7 +193,7 @@ Merge branch `Newmark` from ASC-ODE into your main branch.
 
 For small system it is reasonable to implement directly the right-hand-side function.
 For larger mechanical system it is of advantage to build some data structures describing the system.
-See files [here](https://github.com/JSchoeberl/ASC-ODE/tree/main/mass_spring).
+See files [here](https://github.com/TUWien-ASC/ASC-ODE/tree/Newmark).
 The class `MassSpringSystem` has containers for lists of masses, fixations and spring connections.
 By Python-bindings one can setup such a system by adding these components.
 The `MSS_Functions` implements the right-hand-side function for the ODE based on the `MassSpringSystem` model.
