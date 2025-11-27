@@ -177,6 +177,7 @@ $$
 
 ## Exercises
 
+<!--
 ### Test Newmark and Generalized-$\alpha$ solvers
 
 - compile and run the cods test_newmark and test_alpha. Plot the solution functions
@@ -184,9 +185,11 @@ $$
 - test the equation for the pendulum using the angle $\alpha$
 
 - implement a double pendulum as DAE
-
+-->
 
 ### Mass-spring system
+
+Merge branch `Newmark` from ASC-ODE into your main branch.
 
 For small system it is reasonable to implement directly the right-hand-side function.
 For larger mechanical system it is of advantage to build some data structures describing the system.
@@ -201,7 +204,7 @@ There is
 
 Exercise:
 - build and run the examples in the mass_spring directory
-- add distance constraints to the MassSpring system. Enforce them using Lagrange multipliers, similar as in `test_alpha.cc`.
+- add distance constraints to the MassSpring system. Enforce them using Lagrange multipliers. <!--, similar as in `test_alpha.cc`.-->
 - the class `MSS_Function` implements the derivative using numerical differentiation. Implement the exact derivative.
 - Experiment with different mechanical structures:
   * Extend the double-pendulum to a chain
