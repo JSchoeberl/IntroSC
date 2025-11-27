@@ -485,19 +485,20 @@ document.write(`
 \[
 F_i := -\frac{\partial U}{\partial x_i}(x)
 \]</div>
-<p>gives the force onto the mass.</p>
+<p>gives the force acting on the mass point <span class="math notranslate nohighlight">\(i\)</span>.</p>
 <p>In case of gravity it is <span class="math notranslate nohighlight">\(-m_i g e_z\)</span>, in case of springs it is</p>
 <div class="math notranslate nohighlight">
 \[
 -\sum_j k_{ij} ( |x_i - x_j | - l_{ij} ) \frac{x_i - x_j}{|x_i - x_j|}
 \]</div>
-<p>i.e. spring constant multiplid by elongation, in the direction of the vector <span class="math notranslate nohighlight">\(x_j-x_i\)</span>.</p>
+<p>i.e. spring constant multiplied by elongation, in the direction of the vector <span class="math notranslate nohighlight">\(x_j-x_i\)</span>.
+The sum runs over all mass points <span class="math notranslate nohighlight">\(j\)</span> connected to mass point <span class="math notranslate nohighlight">\(i\)</span> with a spring.</p>
 <p>By Newton’s principle, the force leads to acceleration:</p>
 <div class="math notranslate nohighlight">
 \[
 m_i \ddot x_i = -\frac{\partial U}{\partial x_i}
 \]</div>
-<p>Now we denote the derivative w.r.t. time <span class="math notranslate nohighlight">\(t\)</span> via <span class="math notranslate nohighlight">\(\dot {x}\)</span>.</p>
+<p>Now we denote the derivative w.r.t. time <span class="math notranslate nohighlight">\(t\)</span> as <span class="math notranslate nohighlight">\(\dot {x}\)</span>.</p>
 <section id="the-newmark-method">
 <h2><span class="section-number">20.1. </span>The Newmark method<a class="headerlink" href="#the-newmark-method" title="Link to this heading">#</a></h2>
 <p>We start with reducing the second order equation to a first order system. Therefore, we introduce velocity <span class="math notranslate nohighlight">\(v_i = \dot x_i\)</span>:</p>
@@ -512,30 +513,32 @@ m_i \dot v_i &amp; = &amp; -F_i(x)
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{array}{rcl}
-x_{n+1} - x_n &amp; = &amp; \frac{h}{2} (v_n + v_{n+1} ) \\
-M (v_{n+1} - v_n) &amp; = &amp; \frac{h}{2} (F(x_n) + F(x_{n+1}))
+x_{n+1} - x_n &amp; = &amp; \frac{\tau}{2} (v_n + v_{n+1} ) \\
+M (v_{n+1} - v_n) &amp; = &amp; \frac{\tau}{2} (F(x_n) + F(x_{n+1}))
 \end{array}
 \end{split}\]</div>
 <p>By renaming <span class="math notranslate nohighlight">\(a_n := M^{-1} F(x_n)\)</span>, we can substitute</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{array}{rcl}
-v_{n+1} &amp; = &amp; v_n + \frac{h}{2} (a_n + a_{n+1}) \\
-x_{n+1} &amp; = &amp; x_n + \frac{h}{2} (v_n + v_{n+1}) = x_n + h v_n + \frac{h^2}{4} (a_n + a_{n+1} )
+v_{n+1} &amp; = &amp; v_n + \frac{\tau}{2} (a_n + a_{n+1}) \\
+x_{n+1} &amp; = &amp; x_n + \frac{\tau}{2} (v_n + v_{n+1}) = x_n + \tau v_n + \frac{\tau^2}{4} (a_n + a_{n+1} )
 \end{array}
 \end{split}\]</div>
 <p>and obtain the equation for the new <span class="math notranslate nohighlight">\(a_{n+1}\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[
-M a_{n+1} = F \big( x_n + h v_n + \tfrac{h^2}{4} (a_n + a_{n+1} ) \big)
+M a_{n+1} = F \big( x_n + \tau v_n + \tfrac{\tau^2}{4} (a_n + a_{n+1} ) \big)
 \]</div>
+<p>The dimension of the nonlinear system is the same as the number of state variables (and not twice the size,
+as it looks after introducing the first order system).</p>
 </section>
 <section id="generalized-alpha-method">
 <h2><span class="section-number">20.2. </span>Generalized-<span class="math notranslate nohighlight">\(\alpha\)</span> method<a class="headerlink" href="#generalized-alpha-method" title="Link to this heading">#</a></h2>
 <p>Although the Newmark method preserves energy exactly for linear ODEs, it leads to
 instabilities for non-linear equations. For this reason, the following generalization is
 usually used in mechanical simulation codes:</p>
-<p>By adding a bunch of parameters, one ends up with the Generalied <span class="math notranslate nohighlight">\(\alpha\)</span> method:</p>
+<p>By adding a bunch of parameters, one ends up with the <em>Generalized <span class="math notranslate nohighlight">\(\alpha\)</span> method</em>:</p>
 <div class="math notranslate nohighlight">
 \[
 M a_{n+1-\alpha_m} = F(x_{n+1-\alpha_f})
@@ -544,8 +547,8 @@ M a_{n+1-\alpha_m} = F(x_{n+1-\alpha_f})
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{array}{rcl}
-x_{n+1} &amp; = &amp; x_n + h v_n  + h^2 ( ( \frac{1}{2} - \beta) a_n + \beta a_{n+1} ) \\
-v_{n+1} &amp; = &amp; v_n + h ( (1-\gamma) a_n + \gamma a_{n+1} ) \\
+x_{n+1} &amp; = &amp; x_n + \tau v_n  + \tau^2 ( ( \frac{1}{2} - \beta) a_n + \beta a_{n+1} ) \\
+v_{n+1} &amp; = &amp; v_n + \tau ( (1-\gamma) a_n + \gamma a_{n+1} ) \\
 x_{n+1-\alpha_f} &amp; = &amp; (1-\alpha_f) x_{n+1} + \alpha_f x_n \\
 a_{n+1-\alpha_m} &amp; = &amp; (1-\alpha_m) a_{n+1} + \alpha_m a_n 
 \end{array}
@@ -562,8 +565,8 @@ and stabilty are obtained by</p>
 \end{array}
 \end{split}\]</div>
 <p>The parameter <span class="math notranslate nohighlight">\(\rho^\infty\)</span> specifies the damping for high frequency functions.
-The reference is J. Chung and G.M. Hulbert <em>A Time Integration Algorithm for Structural Dynamics With Improved Numerical Dissipation: The Generalized-α Method</em>, J. Appl. Mech., 1993, <a class="reference external" href="https://asmedigitalcollection.asme.org/appliedmechanics/article/60/2/371/423023/A-Time-Integration-Algorithm-for-Structural?casa_token=PkMuU1hl_4AAAAAA:btyl_IyLpSdrI9q5LjNYSDLzOECUIoT1b3IRqcF86A773ZNWRnyuN94Tizg4kQUaVw2gZftWhg">see</a>
-An easy to read derivation is <a class="reference external" href="https://miaodi.github.io/finite%20element%20method/newmark-generalized/">here</a>.</p>
+The reference is J. Chung and G.M. Hulbert <em>A Time Integration Algorithm for Structural Dynamics With Improved Numerical Dissipation: The Generalized-α Method</em>, J. Appl. Mech., 1993, <a class="reference external" href="https://asmedigitalcollection.asme.org/appliedmechanics/article/60/2/371/423023/A-Time-Integration-Algorithm-for-Structural?casa_token=PkMuU1hl_4AAAAAA:btyl_IyLpSdrI9q5LjNYSDLzOECUIoT1b3IRqcF86A773ZNWRnyuN94Tizg4kQUaVw2gZftWhg">see</a></p>
+<p>An easy to read derivation is <a class="reference external" href="https://miaodi.github.io/finite%20element%20method/newmark-generalized/">here</a>.</p>
 </section>
 <section id="systems-with-constraints">
 <h2><span class="section-number">20.3. </span>Systems with constraints<a class="headerlink" href="#systems-with-constraints" title="Link to this heading">#</a></h2>
@@ -579,7 +582,7 @@ the stick, and the orthogonal complement, and ends up with the equation for the 
 difficult for more complex systems. A simpler possibility is to pose the length constraint</p>
 <div class="math notranslate nohighlight">
 \[
-0 = g(x) := | x - x_0 | - l,
+0 = g(x) := | x - x_0 |^2 - l^2,
 \]</div>
 <p>where <span class="math notranslate nohighlight">\(x_0\)</span> is the anchor point of the pendulum, and define the Lagrange function</p>
 <div class="math notranslate nohighlight">
@@ -595,7 +598,7 @@ m_i \ddot x_i &amp; = &amp; \frac{\partial}{\partial x_i} L(x, \lambda) \\
 <p>The physical meaning of the Lagrange parameter <span class="math notranslate nohighlight">\(\lambda\)</span> is the longitudinal force in the pendulum (precisely: <span class="math notranslate nohighlight">\(\lambda \nabla_x g\)</span> is the force vector).
 This is an ordinary differential equation, with algebraic constraints,
 a so called differential-algebraic equation (DAE).</p>
-<p>One can diretly use the generalized-<span class="math notranslate nohighlight">\(\alpha\)</span> method for this DAE. The right hand side is the gradient of the Lagrange function, the mass matrix on the left hand side is extended by <span class="math notranslate nohighlight">\(0\)</span> for the Lagrange parameters:</p>
+<p>One can directly use the generalized-<span class="math notranslate nohighlight">\(\alpha\)</span> method for this DAE. The right-hand side is the gradient of the Lagrange function, the mass matrix on the left-hand side is extended by <span class="math notranslate nohighlight">\(0\)</span> for the Lagrange parameters:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \left( \begin{array}{cc}
@@ -604,7 +607,7 @@ a so called differential-algebraic equation (DAE).</p>
  \end{array} \right)
 \left( \begin{array}{cc}
    \ddot x \\
-   \ddot \lambda
+   0
  \end{array} \right) =
  \nabla L (x, \lambda)
 \end{split}\]</div>
@@ -629,7 +632,7 @@ By Python-bindings one can setup such a system by adding these components.
 The <code class="docutils literal notranslate"><span class="pre">MSS_Functions</span></code> implements the right-hand-side function for the ODE based on the <code class="docutils literal notranslate"><span class="pre">MassSpringSystem</span></code> model.
 There is</p>
 <ul class="simple">
-<li><p>file <code class="docutils literal notranslate"><span class="pre">mass_spring.cc</span></code> for testing a system from C++</p></li>
+<li><p>file <code class="docutils literal notranslate"><span class="pre">mass_spring.cpp</span></code> for testing a system from C++</p></li>
 <li><p>file <code class="docutils literal notranslate"><span class="pre">test_mass_spring.py</span></code> for testing the system from Python</p></li>
 <li><p>Jupyter-notebook file <code class="docutils literal notranslate"><span class="pre">mass_spring.ipynb</span></code> for testing the system including 3D visualization</p></li>
 </ul>

@@ -23,7 +23,7 @@ $$
 F_i := -\frac{\partial U}{\partial x_i}(x)
 $$
 
-gives the force onto the mass.
+gives the force acting on the mass point $i$.
 
 In case of gravity it is $-m_i g e_z$, in case of springs it is
 
@@ -31,7 +31,8 @@ $$
 -\sum_j k_{ij} ( |x_i - x_j | - l_{ij} ) \frac{x_i - x_j}{|x_i - x_j|}
 $$
 
-i.e. spring constant multiplid by elongation, in the direction of the vector $x_j-x_i$.
+i.e. spring constant multiplied by elongation, in the direction of the vector $x_j-x_i$.
+The sum runs over all mass points $j$ connected to mass point $i$ with a spring.
 
 
 By Newton's principle, the force leads to acceleration:
@@ -40,7 +41,7 @@ $$
 m_i \ddot x_i = -\frac{\partial U}{\partial x_i}
 $$
 
-Now we denote the derivative w.r.t. time $t$ via $\dot {x}$.
+Now we denote the derivative w.r.t. time $t$ as $\dot {x}$.
 
 ## The Newmark method
 
@@ -57,8 +58,8 @@ Applying the Crank-Nicolson time-stepping scheme we obtain
 
 $$
 \begin{array}{rcl}
-x_{n+1} - x_n & = & \frac{h}{2} (v_n + v_{n+1} ) \\
-M (v_{n+1} - v_n) & = & \frac{h}{2} (F(x_n) + F(x_{n+1}))
+x_{n+1} - x_n & = & \frac{\tau}{2} (v_n + v_{n+1} ) \\
+M (v_{n+1} - v_n) & = & \frac{\tau}{2} (F(x_n) + F(x_{n+1}))
 \end{array}
 $$
 
@@ -66,17 +67,19 @@ By renaming $a_n := M^{-1} F(x_n)$, we can substitute
 
 $$
 \begin{array}{rcl}
-v_{n+1} & = & v_n + \frac{h}{2} (a_n + a_{n+1}) \\
-x_{n+1} & = & x_n + \frac{h}{2} (v_n + v_{n+1}) = x_n + h v_n + \frac{h^2}{4} (a_n + a_{n+1} )
+v_{n+1} & = & v_n + \frac{\tau}{2} (a_n + a_{n+1}) \\
+x_{n+1} & = & x_n + \frac{\tau}{2} (v_n + v_{n+1}) = x_n + \tau v_n + \frac{\tau^2}{4} (a_n + a_{n+1} )
 \end{array}
 $$
 
 and obtain the equation for the new $a_{n+1}$:
 
 $$
-M a_{n+1} = F \big( x_n + h v_n + \tfrac{h^2}{4} (a_n + a_{n+1} ) \big)
+M a_{n+1} = F \big( x_n + \tau v_n + \tfrac{\tau^2}{4} (a_n + a_{n+1} ) \big)
 $$
 
+The dimension of the nonlinear system is the same as the number of state variables (and not twice the size,
+as it looks after introducing the first order system).
 
 ## Generalized-$\alpha$ method
 
@@ -84,7 +87,7 @@ Although the Newmark method preserves energy exactly for linear ODEs, it leads t
 instabilities for non-linear equations. For this reason, the following generalization is
 usually used in mechanical simulation codes:
 
-By adding a bunch of parameters, one ends up with the Generalied $\alpha$ method:
+By adding a bunch of parameters, one ends up with the *Generalized $\alpha$ method*:
 
 $$
 M a_{n+1-\alpha_m} = F(x_{n+1-\alpha_f})
@@ -94,8 +97,8 @@ with
 
 $$
 \begin{array}{rcl}
-x_{n+1} & = & x_n + h v_n  + h^2 ( ( \frac{1}{2} - \beta) a_n + \beta a_{n+1} ) \\
-v_{n+1} & = & v_n + h ( (1-\gamma) a_n + \gamma a_{n+1} ) \\
+x_{n+1} & = & x_n + \tau v_n  + \tau^2 ( ( \frac{1}{2} - \beta) a_n + \beta a_{n+1} ) \\
+v_{n+1} & = & v_n + \tau ( (1-\gamma) a_n + \gamma a_{n+1} ) \\
 x_{n+1-\alpha_f} & = & (1-\alpha_f) x_{n+1} + \alpha_f x_n \\
 a_{n+1-\alpha_m} & = & (1-\alpha_m) a_{n+1} + \alpha_m a_n 
 \end{array}
@@ -115,6 +118,7 @@ $$
 
 The parameter $\rho^\infty$ specifies the damping for high frequency functions.
 The reference is J. Chung and G.M. Hulbert *A Time Integration Algorithm for Structural Dynamics With Improved Numerical Dissipation: The Generalized-α Method*, J. Appl. Mech., 1993, [see](https://asmedigitalcollection.asme.org/appliedmechanics/article/60/2/371/423023/A-Time-Integration-Algorithm-for-Structural?casa_token=PkMuU1hl_4AAAAAA:btyl_IyLpSdrI9q5LjNYSDLzOECUIoT1b3IRqcF86A773ZNWRnyuN94Tizg4kQUaVw2gZftWhg)
+
 An easy to read derivation is [here](https://miaodi.github.io/finite%20element%20method/newmark-generalized/).
 
 
@@ -135,7 +139,7 @@ However, such a direct modeling with angles (so called generalized coordinates) 
 difficult for more complex systems. A simpler possibility is to pose the length constraint
 
 $$
-0 = g(x) := | x - x_0 | - l,
+0 = g(x) := | x - x_0 |^2 - l^2,
 $$
 
 where $x_0$ is the anchor point of the pendulum, and define the Lagrange function
@@ -155,7 +159,7 @@ The physical meaning of the Lagrange parameter $\lambda$ is the longitudinal for
 This is an ordinary differential equation, with algebraic constraints,
 a so called differential-algebraic equation (DAE).
 
-One can diretly use the generalized-$\alpha$ method for this DAE. The right hand side is the gradient of the Lagrange function, the mass matrix on the left hand side is extended by $0$ for the Lagrange parameters:
+One can directly use the generalized-$\alpha$ method for this DAE. The right-hand side is the gradient of the Lagrange function, the mass matrix on the left-hand side is extended by $0$ for the Lagrange parameters:
 
 $$
 \left( \begin{array}{cc}
@@ -164,7 +168,7 @@ $$
  \end{array} \right)
 \left( \begin{array}{cc}
    \ddot x \\
-   \ddot \lambda
+   0
  \end{array} \right) =
  \nabla L (x, \lambda)
 $$
@@ -191,7 +195,7 @@ The class `MassSpringSystem` has containers for lists of masses, fixations and s
 By Python-bindings one can setup such a system by adding these components.
 The `MSS_Functions` implements the right-hand-side function for the ODE based on the `MassSpringSystem` model.
 There is
-- file `mass_spring.cc` for testing a system from C++
+- file `mass_spring.cpp` for testing a system from C++
 - file `test_mass_spring.py` for testing the system from Python
 - Jupyter-notebook file `mass_spring.ipynb` for testing the system including 3D visualization
 
