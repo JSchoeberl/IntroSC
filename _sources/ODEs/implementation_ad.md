@@ -171,8 +171,8 @@ template <typename NLF>
 class NonlinearFunctionAutoDif : public NonlinearFunction {
 public:
 
-  void evaluate(VecgtorView<double> x, VectorView<double> f) const override {
-    staitic_cast<const NFL*>(this) -> T_evaluate(x, f);
+  void evaluate(VectorView<double> x, VectorView<double> f) const override {
+    static_cast<const NFL*>(this) -> T_evaluate(x, f);
   }
 
   void evaluateDeriv (VectorView<double> x, MatrixView<double> df) const override {
@@ -183,7 +183,7 @@ public:
       for (int j = 0; j < dimX(); j++)
         adx(j) = x(j);
       adx(i) = Variable<0>(x(i));
-      staitic_cast<const NFL*>(this) -> T_evaluate(adx, adf);
+      static_cast<const NFL*>(this) -> T_evaluate(adx, adf);
       for (int j = 0; j < dimF(); j++)
         df(j,i) = adf(j).deriv()[0];
     }
