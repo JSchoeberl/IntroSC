@@ -144,6 +144,69 @@ to obtain the gradient.
 Find the code in `src\autodiff.hpp` and some demos in `demos\demo_autodiff.cpp`.
 
 
+## Using numerical and automatic differentiation for the nonlinear-function class
+
+```cpp
+class NonlinearFunctionNumDiff : public NonlinearFunction {
+  double m_eps;
+public:
+  NonlinearFunctionNumDiff (double eps) : m_eps(eps) { }
+  void evaluateDeriv (VectorView<double> x, MatrixView<double> df) const override {
+    Vector xl(dimX()), xr(dimX());
+    Vector fl(dimF()), fr(dimF());
+    for (int i = 0; i < dimX(); i++) {
+      xl = x; xr = x;
+      xl(i) -= eps; xr(i) += eps;
+      evaluate(xl,fl);
+      evaluate(xr,fr);
+      df.Col(i) = 1/(2*eps)*(fr-fl);
+    }
+  };
+}
+```
+
+
+```cpp
+template <typename NLF>
+class NonlinearFunctionAutoDif : public NonlinearFunction {
+public:
+
+  void evaluate(VecgtorView<double> x, VectorView<double> f) const override {
+    staitic_cast<const NFL*>(this) -> T_evaluate(x, f);
+  }
+
+  void evaluateDeriv (VectorView<double> x, MatrixView<double> df) const override {
+    Vector<AutoDiff<1>> adx(dimX());
+    Vector<AutoDiff<1>> adf(dimF());
+
+    for (int i = 0; i < dimX(); i++) {
+      for (int j = 0; j < dimX(); j++)
+        adx(j) = x(j);
+      adx(i) = Variable<0>(x(i));
+      staitic_cast<const NFL*>(this) -> T_evaluate(adx, adf);
+      for (int j = 0; j < dimF(); j++)
+        df(j,i) = adf(j).deriv()[0];
+    }
+  }  
+};
+```
+
+and the actual function:
+
+```cpp
+class MyFunc : public NonlinearFunctionAutoDiff<MyFunc> {
+
+ public:
+ template <typename T>
+ void T_evaluate(VectorView<T> x, VectorView<T> f) const {
+    // evaluation of function
+ }
+}
+```
+
+
+
+
 ## Exercises
 
 * Add additional useful operators for the `AutoDiff` class

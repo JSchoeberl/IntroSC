@@ -1,0 +1,712 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>20. Automatic step-size control &#8212; Introduction to Scientific Computing</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css?v=6644e6bb" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'ODEs/adaptive';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="21. Mechanical Systems" href="mechanical.html" />
+    <link rel="prev" title="19. Runge-Kutta methods" href="RungeKutta.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/ASC_Logo_transparent_300ppi_RGB.png" class="logo__image only-light" alt="Introduction to Scientific Computing - Home"/>
+    <script>document.write(`<img src="../_static/ASC_Logo_transparent_300ppi_RGB.png" class="logo__image only-dark" alt="Introduction to Scientific Computing - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Introduction to Scientific Computing
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Basic Linear Algebra</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../basiclinalg/bla.html">1. Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basiclinalg/bla-environment.html">2. Development environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basiclinalg/bla-refreshCpp.html">3. Refresh your C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basiclinalg/bla-docu.html">4. Creating documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basiclinalg/bla-expressions.html">5. Expression templates</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basiclinalg/bla-testing.html">6. Automatic testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basiclinalg/bla-python2.html">7. Python bindings</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basiclinalg/bla-lapack.html">8. Interfacing Lapack</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Performance</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../performance/overview.html">9. Overview</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../performance/vectorization.html">10. Vectorization</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../performance/simdclass.html">10.1. The SIMD - class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../performance/mathfunc.html">10.2. Vectorizing mathematical functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../performance/simd_sort.html">10.3. Branch-free sorting</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance/pipelining.html">11. Pipelining</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../performance/caches1.html">12. Caches</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../performance/Cholesky.html">12.3. Efficient Cholesky factorization</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../performance/parallelization.html">13. Parallelization</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">ODEs</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="ODEs.html">14. Solving ordinary differential equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="theory.html">15. A little bit of theory</a></li>
+<li class="toctree-l1"><a class="reference internal" href="firstmethods.html">16. Some simple time-stepping methods</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="implementation.html">17. Implementation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="functionalgebra.html">17.1. Function algebra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementation_ee.html">17.2. Implementing the explicit Euler method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementation_newton.html">17.3. Implementing a Newton solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="implementation_ie.html">17.4. Coding the Implicit Euler method</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="implementation_ad.html">18. Automatic Differentiation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RungeKutta.html">19. Runge-Kutta methods</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">20. Automatic step-size control</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mechanical.html">21. Mechanical Systems</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">PDEs</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/PDEs.html">22. Partial differential equations</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../PDEs/PoissonEquation.html">23. The Poisson Equation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/first_example.html">23.1. Solving the Poisson Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Poisson/boundary_conditions.html">23.2. Boundary Conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Poisson/approximation.html">23.3. Approximation of functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Poisson/capacitor.html">23.4. The electric field in a capacitor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Poisson/solvers.html">23.5. Iterative Solvers</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../PDEs/timedependent/timedependent.html">24. Time-dependent equations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/timedependent/heatequation.html">24.1. Heat Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/timedependent/heatequationmethods.html">24.2. Various methods for the Heat Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/timedependent/waveequation.html">24.3. Wave Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/timedependent/verlet.html">24.4. Verlet time-stepping and Mass-lumping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/timedependent/waveguide.html">24.5. Waveguides</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../PDEs/elasticity/intro.html">25. Elasticity</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/modeling.html">25.1. Modeling Elasticity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/Newton.html">25.2. Newton’s method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/elasticity2D.html">25.3. Solving nonlinear Elasticity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/elasticity3D.html">25.4. 3D Solid Mechanics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/dynamics.html">25.5. Elastodynamics with Newmark time-stepping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/forces_and_moments.html">25.6. Forces and Moments</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/metamaterial_thick.html">25.7. Meta-material with negative <span class="math notranslate nohighlight">\(\nu\)</span></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/elasticity/Exercises.html">25.8. Exercises</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../PDEs/CFD/NavierStokes.html">26. Navier Stokes Equations:</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/CFD/Stokes.html">26.1. Stokes Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/CFD/Transport.html">26.2. Instationary transport equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/CFD/SchaeferTurek.html">26.3. Benchmark: Flow around a cylinder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/CFD/naca.html">26.4. NACA airfoil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/CFD/tesla.html">26.5. Tesla Valve</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../PDEs/Maxwell/Maxwell.html">27. Maxwell’s equations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/magnetostatics.html">27.1. Magnetostics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/coil-simple.html">27.2. A simple coil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/coil.html">27.3. An advanced coil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/exercises.html">27.4. Exercises</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/HCurl.html">27.5. The function space H(curl)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/deRham.html">27.6. The de Rham complex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../PDEs/Maxwell/checkrank.html">27.7. Ranks of discrete operators</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/Helmholtz.html">28. Helmholtz Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/Eigenvalues.html">29. Eigenvalue problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/stationaryTransport.html">30. Stationary Transport Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/instationaryTransport.html">31. Instationary Transport Equation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/NavierStokes.html">32. Navier Stokes Equations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../PDEs/Curvature.html">33. Computation of Curvature</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">FMM</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../fmm/intro_fmm.html">34. Fast Multipole Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fmm/basisfunctions.html">35. Multipole basis functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../fmm/layerpotentials.html">36. Layer potentials</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/JSchoeberl/IntroSC.git" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/ODEs/adaptive.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Automatic step-size control</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">20.1. Examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#arenstorf-orbit">20.1.1. Arenstorf-Orbit</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#chemical-reaction-equations">20.1.2. Chemical reaction equations:</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="automatic-step-size-control">
+<h1><span class="section-number">20. </span>Automatic step-size control<a class="headerlink" href="#automatic-step-size-control" title="Link to this heading">#</a></h1>
+<p>Some ODEs have local features, which require locally small step sizes. For other regions on can use larger step sizes,
+and save computations. A simple adaptive algorithm is as follows.</p>
+<p>To estimate the local error, we apply two different time stepping methods, and take the difference as error estimation.
+The error in one time-step should be about <span class="math notranslate nohighlight">\(\tau \times \text{tol}\)</span>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">while</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">Tend</span>
+    <span class="n">y1</span> <span class="o">=</span> <span class="n">y</span><span class="p">;</span>
+    <span class="n">method1</span><span class="o">.</span><span class="n">doStep</span><span class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="n">y1</span><span class="p">);</span>
+    <span class="n">y2</span> <span class="o">=</span> <span class="n">y</span><span class="p">;</span>
+    <span class="n">method2</span><span class="o">.</span><span class="n">doStep</span><span class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="n">y2</span><span class="p">);</span>
+    <span class="n">double</span> <span class="n">errest</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">y2</span><span class="o">-</span><span class="n">y1</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="n">errest</span> <span class="o">&lt;</span> <span class="n">tau</span><span class="o">*</span><span class="n">tol</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">t</span> <span class="o">+</span> <span class="n">tau</span><span class="p">;</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y1</span><span class="p">;</span>  <span class="o">//</span> <span class="n">accept</span> <span class="n">step</span>
+        <span class="n">tau</span> <span class="o">=</span> <span class="n">tau</span> <span class="o">*</span> <span class="mf">1.5</span><span class="p">;</span>  <span class="o">//</span> <span class="n">increase</span> <span class="n">step</span> <span class="n">size</span>
+    <span class="k">else</span>
+        <span class="n">tau</span> <span class="o">=</span> <span class="n">tau</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">;</span>  <span class="o">//</span> <span class="n">decrease</span> <span class="n">step</span> <span class="n">size</span>       
+</pre></div>
+</div>
+<p>A better way to increase the time-step is</p>
+<div class="math notranslate nohighlight">
+\[
+  \tau = \sqrt[p+1]{\frac{0.5 * tol}{errest}} \; \tau
+\]</div>
+<p>If Newton’s method did not converge, we also try with a smaller time-step:</p>
+<div class="highlight-code notranslate"><div class="highlight"><pre><span></span>try {
+  method1.doStep(tau,y1);
+  method2.doStep(tau,y2);
+}
+catch (std::exception &amp; e) {. // Nowton did not converge
+  tau *= 0.5;
+  continue;
+}
+</pre></div>
+</div>
+<section id="examples">
+<h2><span class="section-number">20.1. </span>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h2>
+<section id="arenstorf-orbit">
+<h3><span class="section-number">20.1.1. </span>Arenstorf-Orbit<a class="headerlink" href="#arenstorf-orbit" title="Link to this heading">#</a></h3>
+<p><em>vgl. Aufgabe 4.4 aus Numerische Mathematik II, P. Deuflhard, F. Bornemann</em>
+Die Differentialgleichungen der Bewegung eines Satelliten um das System Erde-Mond lautet in den Koordinaten <span class="math notranslate nohighlight">\(x =(x_1,x_2)\)</span> des mitrotierenden Schwerpunktsystems</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*} 
+x_1'' &amp; = x_1 + 2 x_2' - \hat{\mu} \frac{x_1 + \mu}{N_1}- \mu \frac{x_1-\hat{\mu}}{N_2} \\
+x_2'' &amp;= x_2 - 2 x_1' - \hat{\mu} \frac{x_2}{N_1} - \mu \frac{x_2}{N_2}
+\end{align*}\]</div>
+<p>mit  den Abkürzungen</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{equation*}
+N_1 = ( (x_1 + \mu)^2 + x_2^2)^{3/2}, \quad N_2 = ( (x_1 - \hat{\mu})^2 + x_2^2 )^{3/2}
+\end{equation*}\]</div>
+<p>und den Daten</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{equation*}
+\mu = 0.012277471 , \quad \hat{\mu} = 1  - \mu.
+\end{equation*}\]</div>
+<p>Dabei ist <span class="math notranslate nohighlight">\(\mu\)</span> das Verhältnis der Mondmasse zur Masse der Gesamtsystems. L”angeneinheit f”ur die euklidische Norm <span class="math notranslate nohighlight">\(|x|\)</span> ist die mittlere Entfernung Erde-Mond (ca. <span class="math notranslate nohighlight">\(384000 \, km\)</span>),
+Zeiteinheit ein Monat.
+Die Anfangswerte</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{equation*}
+x_1(0) = 0.994, \quad x_1'(0) = 0, \quad x_2(0) = 0, \quad x_2'(0) = -2.0015851063790825
+\end{equation*}\]</div>
+<p>sind so gewählt, dass sich der kleeblattförmige <a class="reference external" href="http://en.wikipedia.org/wiki/Richard_Arenstorf">Arenstorf-Orbit ergibt</a>. Die Periode dieses Orbits beträgt</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{equation*}
+T = 17.0652166.
+\end{equation*}\]</div>
+<p>Berechnen und plotten Sie die Bahnkurve <span class="math notranslate nohighlight">\(x(t)\)</span> (Empfehlung: RK4 Verfahren und automatische Schrittweitensteuerung). Es wird eine Genauigkeit von <span class="math notranslate nohighlight">\(x(T)\)</span> von 1 km gewünscht.</p>
+</section>
+<section id="chemical-reaction-equations">
+<h3><span class="section-number">20.1.2. </span>Chemical reaction equations:<a class="headerlink" href="#chemical-reaction-equations" title="Link to this heading">#</a></h3>
+<p>molecules of type A and type B react to form molecules of type C and type D.</p>
+<div class="math notranslate nohighlight">
+\[
+A + B \stackrel{k}{\longrightarrow } C + D
+\]</div>
+<p>The probability of the reaction is <span class="math notranslate nohighlight">\(k c_A c_B\)</span>, where <span class="math notranslate nohighlight">\(c_A, c_B, ...\)</span> are concentrations of molecules.
+This leads to differential equations:</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{eqnarray*}
+c_A^\prime &amp; = &amp; - k c_A c_B \\
+c_B^\prime &amp; = &amp; - k c_A c_B \\
+c_C^\prime &amp; = &amp;   k c_A c_B \\ 
+c_D^\prime &amp; = &amp;  k c_A c_B. 
+\end{eqnarray*}\]</div>
+<p>An interesting example is the  Zhabotinski-Belousov-Reaction (the so called Oregonator) in simplified form is</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{eqnarray*}
+Br O_3 + Br &amp; \stackrel{k_1}{\longrightarrow } &amp; H Br O_2 + HOBr \\
+HBrO_2 + Br &amp; \stackrel{k_2}{\longrightarrow } &amp; 2 HOBr \\
+BrO_3 + H Br O_2 &amp; \stackrel{k_3}{\longrightarrow } &amp; 2 HBrO_2 + H_2O \\
+HBrO_2 + HBrO_2  &amp; \stackrel{k_4}{\longrightarrow } &amp; HOBr + BrO_3\\
+H_2O   &amp; \stackrel{k_5}{\longrightarrow } &amp; Br
+\end{eqnarray*}\]</div>
+<p>The concentrations <span class="math notranslate nohighlight">\((c_1, c_2, c_3, c_4, c_5)\)</span> give the densities of (<span class="math notranslate nohighlight">\(BrO_3\)</span>, <span class="math notranslate nohighlight">\(Br\)</span>, <span class="math notranslate nohighlight">\(HBrO_2\)</span>, <span class="math notranslate nohighlight">\(HOBr\)</span>, <span class="math notranslate nohighlight">\(H_2O\)</span>), hydrogen is available as much as needed.</p>
+<p>This results in the ODE system</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{eqnarray*}
+c_1^\prime &amp; = &amp; -k_1 c_1 c_2 - k_3 c_1 c_3 + k_4 c_3^2\\
+c_2^\prime &amp; = &amp; -k_1 c_1 c_2 - k_2 c_2 c_3 + k_5 c_5 \\
+c_3^\prime &amp; = &amp; k_1 c_1 c_2 - k_2 c_2 c_3 + k_3 c_1 c_3 - 2 k_4 c_3^2 \\
+c_4^\prime &amp; = &amp; k_1 c_1 c_2 + k_2 c_2 c_3 + k_4 c_3^2 \\
+c_5^\prime &amp; = &amp; k_3 c_1 c_3 - k_5 c_5
+\end{eqnarray*}\]</div>
+<p>With reaction constants</p>
+<div class="math notranslate nohighlight">
+\[
+k_1 = 1.34, \quad k_2 = 1.6\cdot 10^9, \quad k_3 = 8.0 \cdot 10^3, \quad k_4 = 4.0 \cdot 10^7, \quad k_5 = 1.0, 
+\]</div>
+<p>Initial conditions are</p>
+<div class="math notranslate nohighlight">
+\[
+c_1(0) = 0.05, \quad c_2(0) = 1 \cdot 10^{-4}, \quad c_3(0) = 1 \cdot 10^{-10}, \quad c_4(0) = 0.1, c_5(0) = 1 \cdot 10^{-4}.
+\]</div>
+<p>Solve the equation with automatic step-size control.</p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./ODEs"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="RungeKutta.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title"><span class="section-number">19. </span>Runge-Kutta methods</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="mechanical.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><span class="section-number">21. </span>Mechanical Systems</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">20.1. Examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#arenstorf-orbit">20.1.1. Arenstorf-Orbit</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#chemical-reaction-equations">20.1.2. Chemical reaction equations:</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By J. Schöberl
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023-2025.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
