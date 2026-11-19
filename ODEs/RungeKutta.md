@@ -209,34 +209,13 @@ Many examples can be found here: [Butcher tableaus examples](https://en.wikipedi
 (sec:rk-order)=
 ## Order and stability of Runge-Kutta methods
 
-We always assume the row-sum condition $c_j = \sum_l a_{jl}$, i.e. the stage $j$ integrates
-exactly from $t_n$ to $t_n + c_j \tau$ for constant functions.
-By Taylor expansion of the exact and the numerical solution one derives conditions
-on the coefficients such that the local error is of order $\tau^{p+1}$, i.e. the method is
-consistent of order $p$ (see section {ref}`sec:convergence`):
+The order $p$ of a Runge-Kutta method (see section {ref}`sec:convergence`) is determined by algebraic conditions
+on the coefficients, obtained by Taylor expansion. For example, the quadrature rule $(b, c)$ must be exact for polynomials
+of degree $p-1$, further conditions involve the $a$-coefficients. The number of conditions grows quickly with the order (8 conditions for $p = 4$).
+An explicit method with $s$ stages has order at most $s$, for $p \geq 5$ more than $p$ stages are needed.
 
-| order | conditions |
-|-------|------------|
-| $p \geq 1$ | $\sum_j b_j = 1$ |
-| $p \geq 2$ | $\sum_j b_j c_j = \frac{1}{2}$ |
-| $p \geq 3$ | $\sum_j b_j c_j^2 = \frac{1}{3}, \quad \sum_{j,l} b_j a_{jl} c_l = \frac{1}{6}$ |
-| $p \geq 4$ | $\sum_j b_j c_j^3 = \frac{1}{4}, \quad \sum_{j,l} b_j c_j a_{jl} c_l = \frac{1}{8}, \quad \sum_{j,l} b_j a_{jl} c_l^2 = \frac{1}{12}, \quad \sum_{j,l,m} b_j a_{jl} a_{lm} c_m = \frac{1}{24}$ |
-
-The first condition in every row says that the quadrature rule $(b, c)$ is exact for polynomials of degree $p-1$.
-The other conditions involve the $a$-coefficients, they make sure that the stage values are accurate enough.
-The number of conditions grows quickly with the order. An explicit method with $s$ stages has order
-at most $s$, and for order $p \geq 5$ one needs more than $p$ stages.
-
-Applied to the test equation $y^\prime = \lambda y$, the stage equations become linear, and we obtain
-the stability function (see section {ref}`sec:stability`)
-
-$$
-g(z) = 1 + z \, b^T (I - z A)^{-1} {\mathbb 1}, \qquad {\mathbb 1} = (1, \ldots, 1)^T.
-$$
-
-For explicit methods $A$ is strictly lower triangular, and $g$ is a polynomial. Thus $|g(z)| \rightarrow \infty$ for $|z| \rightarrow \infty$,
-and no explicit method is $A$-stable. For $s = p \leq 4$ the stability function is the Taylor polynomial
-$g(z) = \sum_{k=0}^{s} z^k / k!$ of $e^z$.
+For the test equation $y^\prime = \lambda y$ (see section {ref}`sec:stability`), the stability function of an explicit
+method is a polynomial. Thus $|g(z)| \rightarrow \infty$ for $|z| \rightarrow \infty$, and no explicit method is $A$-stable.
 
 | method | stages $s$ | order $p$ | type | $A$-stable | $L$-stable |
 |--------|-----------|-----------|------|------------|------------|
@@ -290,14 +269,80 @@ Where
 $A \otimes :  {\mathbb R}^{qd} \rightarrow {\mathbb R}^{pd} : (x_0, \ldots, x_{q-1}) \mapsto (z_0, \ldots , z_{p-1})$ such that $z_j = \sum_l a_{jl} x_l$,
 i.e. multiplication with the Kronecker product $A \otimes I_d$.
 
-We derive two classes from `NonlinearFunction` for that (named `MultipleFunc` and `MatVecFunc`).
-With them, the class `ImplicitRungeKutta` in `src/implicitRK.hpp` sets up the equation for $k$ by the function algebra:
+For $\widetilde f$ and $A \otimes$ the branch adds two building blocks to the function algebra in `src/nonlinfunc.hpp`.
+
+`MultipleFunc` applies $f$ to every block of the vector. Its Jacobi matrix is block-diagonal, every block is computed
+by `evaluateDeriv` of $f$ itself:
 
 ```cpp
-m_equ = knew - Compose(multiple_rhs, m_yold + m_tau * std::make_shared<MatVecFunc>(a, m_n));
+void evaluate (VectorView<double> x, VectorView<double> f) const override
+{
+  for (size_t i = 0; i < num; i++)
+    func->evaluate(x.range(i*fdimx, (i+1)*fdimx),
+                   f.range(i*fdimf, (i+1)*fdimf));
+}
+
+void evaluateDeriv (VectorView<double> x, MatrixView<double> df) const override
+{
+  df = 0.0;
+  for (size_t i = 0; i < num; i++)
+    func->evaluateDeriv(x.range(i*fdimx, (i+1)*fdimx),
+                        df.rows(i*fdimf, (i+1)*fdimf).cols(i*fdimx, (i+1)*fdimx));
+}
 ```
 
-and solves it with Newton's method in every time-step.
+Here we see why `evaluate` and `evaluateDeriv` take vector- and matrix-views: $f$ writes directly into a block of the
+big vector and the big matrix, no copies are needed.
+
+`MatVecFunc` implements the linear map $A \otimes$. If we interpret the vector $x \in {\mathbb R}^{qd}$ as a $q \times d$ matrix $X$,
+where row $l$ holds the block $x_l$, then $A \otimes x$ is simply the matrix product $A X$:
+
+```cpp
+void evaluate (VectorView<double> x, VectorView<double> f) const override
+{
+  MatrixView<double> mx(m_a.cols(), m_n, m_n, x.data());
+  MatrixView<double> mf(m_a.rows(), m_n, m_n, f.data());
+  mf = m_a * mx;
+}
+```
+
+Its Jacobi matrix is the constant matrix $A \otimes I_d$, consisting of the diagonal blocks $a_{jl} I_d$.
+
+With these building blocks, the constructor of `ImplicitRungeKutta` in `src/implicitRK.hpp` writes down the equation
+$k - \widetilde f ( \tilde y_n  + \tau A \otimes k) = 0$ almost literally:
+
+```cpp
+auto multiple_rhs = make_shared<MultipleFunc>(rhs, m_stages);
+m_yold = std::make_shared<ConstantFunction>(m_stages*m_n);
+auto knew = std::make_shared<IdentityFunction>(m_stages*m_n);
+m_equ = knew - Compose(multiple_rhs, m_yold + m_tau*std::make_shared<MatVecFunc>(a, m_n));
+```
+
+The time-step sets the constant $\tilde y_n$ and the parameter $\tau$, solves for $k$ with Newton's method, and
+combines the stages with the weights $b_j$:
+
+```cpp
+void doStep(double tau, VectorView<double> y) override
+{
+  for (int j = 0; j < m_stages; j++)
+    m_y.range(j*m_n, (j+1)*m_n) = y;
+  m_yold->set(m_y);
+  m_tau->set(tau);
+
+  m_k = 0.0;
+  NewtonSolver(m_equ, m_k);
+
+  for (int j = 0; j < m_stages; j++)
+    y += tau * m_b(j) * m_k.range(j*m_n, (j+1)*m_n);
+}
+```
+
+As for the implicit Euler method, nobody codes the Jacobi matrix $I - \tau \, \widetilde f^\prime \, (A \otimes I_d)$ of the stage equations,
+it follows from the chain-rule in `ComposeFunction`. Newton's method solves a dense system of size $sd$, which is fine for small systems.
+For large systems one exploits the block structure, but this is beyond this class.
+
+For explicit methods, the matrix $A$ is strictly lower triangular, and the stages can be computed one after the other
+without Newton's method.
 
 
 
@@ -347,6 +392,13 @@ The functions `GaussLegendre` and `GaussRadau` compute these points, they are ta
   Good initial guesses are $x_j = \cos \big( \pi \frac{j + 3/4}{s + 1/2} \big)$, $0 \leq j < s$. Compare with `GaussLegendre`.
 
 * Implement and test an `ExplicitRungeKutta` time-stepper for arbitrary Butcher tableaus (with a strictly lower triangular matrix for
-the $a$-coefficients). Verify the order conditions for the $RK_4$ method.
+  the $a$-coefficients). Use the same constructor as `ImplicitRungeKutta`, such that both can be exchanged:
+
+  ```cpp
+  ExplicitRungeKutta (std::shared_ptr<NonlinearFunction> rhs,
+                      const Matrix<> & a, const Vector<> & b, const Vector<> & c);
+  ```
+
+  Verify the order of the $RK_4$ method with the convergence test.
 
 

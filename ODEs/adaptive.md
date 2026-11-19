@@ -133,6 +133,42 @@ For stiff problems we use a pair of implicit methods, preferably both $L$-stable
 Euler method ($p = 1$) for the error estimate, together with the two-stage Radau IIA method (order 3).
 
 
+## Interfaces for the implementation
+
+Step-size control is your own implementation, the following interfaces are a suggestion.
+A time-stepper which provides an error estimate extends the `TimeStepper` interface:
+
+```cpp
+class EmbeddedTimeStepper : public TimeStepper
+{
+public:
+  using TimeStepper::TimeStepper;
+  // advances y by tau, returns the estimated local error
+  virtual double doStepWithError (double tau, VectorView<double> y) = 0;
+  // order p of the method used for the error estimate
+  virtual int order() const = 0;
+};
+```
+
+Two implementations are needed: an embedded Runge-Kutta method with weights $b$ and $\hat b$, and a pair of two
+independent `TimeStepper` objects, such as the implicit Euler and the Radau IIA method.
+The adaptive loop only uses the interface, and works for both:
+
+```cpp
+void SolveODE_Adaptive (EmbeddedTimeStepper & stepper,
+                        double tend, double tau, double tol,
+                        VectorView<double> y,
+                        std::function<void(double,VectorView<double>)> callback = nullptr);
+```
+
+It must
+
+* not step beyond `tend`,
+* reject a step if the error is too large, or if Newton's method throws, and restore `y`,
+* limit the change of the time-step,
+* count accepted and rejected steps, which is the main measure of efficiency.
+
+
 ## Examples
 
 ### Arenstorf-Orbit
@@ -225,10 +261,12 @@ The concentrations oscillate with a period of roughly 60 time units. The eigenva
 
 ## Exercises
 
-* Implement the adaptive time-stepping loop for two `TimeStepper` objects, including the handling of non-converging Newton iterations.
+* Implement `SolveODE_Adaptive`, and an `EmbeddedTimeStepper` combining two `TimeStepper` objects, including the handling of non-converging Newton iterations.
 
-* Extend your `ExplicitRungeKutta` class to an embedded method with weights $b$ and $\hat b$, which also provides the error estimate.
+* Extend your `ExplicitRungeKutta` class to an `EmbeddedTimeStepper` with weights $b$ and $\hat b$.
   Implement the Bogacki-Shampine pair, and verify the orders of $b$ and $\hat b$ with constant time-steps.
+
+* Test the step-size control: the error at the end time should decrease proportional to `tol`.
 
 * Compute and plot the Arenstorf orbit $x(t)$ with automatic step-size control. The desired accuracy of $x(T)$ is 1 km.
   Plot the time-step $\tau$ over time. How many steps does the classical $RK_4$ method with constant time-step need for the same accuracy?

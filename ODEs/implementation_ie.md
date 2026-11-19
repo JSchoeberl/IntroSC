@@ -65,6 +65,10 @@ What do you observe?
   Use the explicit Euler, improved Euler, implicit Euler, and Crank-Nicolson methods with $N = 2^4, 2^5, \ldots, 2^{12}$ time-steps.
   Plot the error $\| y_N - y(T) \|$ over $\tau$ in a double-logarithmic plot, and determine the orders.
 
+* Turn the measurement into an automated test with Catch2, see {doc}`../basiclinalg/bla-testing`:
+  compute $p \approx \log_2 \big( e(\tau) / e(\tau/2) \big)$ for every method, and `REQUIRE` that it matches the expected order up to $\pm 0.1$.
+  Use this test for all methods you implement later.
+
 * Model an electric network by an ODE. Bring it to autonomous form.
   Solve the ODE numerically for various parameters with the three methods, and various time-steps.
 

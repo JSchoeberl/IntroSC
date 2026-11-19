@@ -103,6 +103,31 @@ $$
 The dimension of the nonlinear system is the same as the number of state variables (and not twice the size,
 as it looks after introducing the first order system).
 
+The function `SolveODE_Newmark` in `mechsystem/Newmark.hpp` (branch `Newmark`) solves $M \ddot x = F(x)$. Both $M$ and $F$
+are given as `NonlinearFunction`s. The new acceleration is the independent variable, and the function algebra
+expresses the new velocity and position as functions of it (with $\gamma = \frac{1}{2}$, $\beta = \frac{1}{4}$):
+
+```cpp
+auto anew = std::make_shared<IdentityFunction>(a.size());
+auto vnew = vold + dt*((1-gamma)*aold+gamma*anew);
+auto xnew = xold + dt*vold + dt*dt/2 * ((1-2*beta)*aold+2*beta*anew);
+
+auto equ = Compose(mass, anew) - Compose(rhs, xnew);
+```
+
+In every time-step, Newton's method solves `equ` for the new acceleration. The same function objects `xnew` and `vnew` then
+evaluate the new position and velocity:
+
+```cpp
+NewtonSolver (equ, a);
+xnew -> evaluate (a, x);
+vnew -> evaluate (a, v);
+
+xold->set(x);
+vold->set(v);
+aold->set(a);
+```
+
 ## The Störmer-Verlet method
 
 An explicit alternative is the Störmer-Verlet method:
@@ -234,8 +259,7 @@ $$
 
 thus the constraint is satisfied exactly in every time-step, provided it is satisfied initially.
 
-There is no equation for $\dot \lambda$. One has to differentiate the constraint three times
-with respect to time to obtain an ODE for $\lambda$, thus the DAE has *index 3*. Consequences are:
+Some practical consequences of the missing equation for $\dot \lambda$:
 
 * Explicit methods cannot be applied directly.
 
@@ -245,6 +269,118 @@ with respect to time to obtain an ODE for $\lambda$, thus the DAE has *index 3*.
 * The Lagrange parameter is sensitive to perturbations. Without numerical damping ($\rho^\infty = 1$), $\lambda$ oscillates
   from time-step to time-step, while the positions are fine. Numerical damping with $\rho^\infty < 1$ removes these oscillations.
 
+
+## Implementing mass-spring systems
+
+Merge branch `Newmark` from ASC-ODE into your main branch, see [here](https://github.com/TUWien-ASC/ASC-ODE/tree/Newmark).
+
+For small systems it is reasonable to implement the right-hand-side function directly.
+For larger mechanical systems we describe the system by data structures, which are
+implemented in `mechsystem/mass_spring.hpp`. They are templated on the spatial dimension `D`:
+
+```cpp
+template <int D> class Mass { public: double mass; Vec<D> pos; Vec<D> vel = 0.0; Vec<D> acc = 0.0; };
+template <int D> class Fix  { public: Vec<D> pos; };
+
+class Connector { public: enum CONTYPE { FIX=1, MASS=2 }; CONTYPE type; size_t nr; };
+class Spring { public: double length; double stiffness; std::array<Connector,2> connectors; };
+```
+
+A `Connector` refers to either a fixed point or a mass, by its type and index. The class `MassSpringSystem<D>`
+has containers for fixes, masses and springs, and the gravity vector. The functions `addFix` and `addMass` return
+connectors, which are then used to add springs.
+
+The state vector of the ODE consists of the positions of all masses, $D$ values per mass.
+The class `MSS_Function<D>` evaluates the right-hand side for the `MassSpringSystem`. It interprets the state vector as a matrix
+with one row per mass (via `asMatrix`), starts with the gravitational forces, and adds the forces of all springs:
+
+```cpp
+for (auto spring : mss.springs())
+  {
+    auto [c1,c2] = spring.connectors;
+    Vec<D> p1, p2;
+    if (c1.type == Connector::FIX)
+      p1 = mss.fixes()[c1.nr].pos;
+    else
+      p1 = xmat.row(c1.nr);
+    if (c2.type == Connector::FIX)
+      p2 = mss.fixes()[c2.nr].pos;
+    else
+      p2 = xmat.row(c2.nr);
+
+    double force = spring.stiffness * (norm(p1-p2)-spring.length);
+    Vec<D> dir12 = 1.0/norm(p1-p2) * (p2-p1);
+    if (c1.type == Connector::MASS)
+      fmat.row(c1.nr) += force*dir12;
+    if (c2.type == Connector::MASS)
+      fmat.row(c2.nr) -= force*dir12;
+  }
+```
+
+Finally every row is divided by its mass. Thus `MSS_Function` returns the acceleration $M^{-1} F(x)$, and the mass
+function passed to the time-stepping method is the `IdentityFunction`. The derivative is computed by numerical differentiation.
+
+Python bindings in `bind_mass_spring.cpp` allow to set up the system from Python. The function `simulate(tend, steps)`
+calls the generalized-$\alpha$ method with $\rho^\infty = 0.8$, and stores the new state in the masses:
+
+```python
+from mass_spring import *
+
+mss = MassSpringSystem3d()
+mss.gravity = (0,0,-9.81)
+
+mA = mss.add (Mass(1, (1,0,0)))
+mB = mss.add (Mass(2, (2,0,0)))
+f1 = mss.add (Fix( (0,0,0)) )
+mss.add (Spring(1, 10, (f1, mA)))
+mss.add (Spring(1, 20, (mA, mB)))
+
+mss.simulate (0.1, 10)
+print ("state = ", mss.getState())
+```
+
+The directory `mechsystem` contains
+- file `mass_spring.cpp` for testing a system from C++
+- file `test_mass_spring.py` for testing the system from Python
+- Jupyter-notebook file `mass_spring.ipynb` for testing the system including 3D visualization
+
+
+## Extending the code
+
+The following extensions are your own implementation, here are suggestions for the interfaces.
+
+**Distance constraints.** A constraint fixes the distance between two masses, or between a mass and a fixed point:
+
+```cpp
+class DistanceConstraint { public: double length; std::array<Connector,2> connectors; };
+```
+
+The `MassSpringSystem` gets a container of constraints and a function `addConstraint`. The state vector is extended by
+one Lagrange parameter per constraint, its dimension becomes $D \cdot \#\text{masses} + \#\text{constraints}$.
+For the mass rows, `MSS_Function` adds the constraint forces $\lambda \nabla_x c$ (divided by the mass, as all forces),
+for the constraint rows it returns the constraint $c(x)$.
+The mass function is not the identity anymore, but must vanish for the Lagrange parameters.
+This is the existing `Projector`:
+
+```cpp
+auto mass = std::make_shared<Projector> (dim, 0, D*mss.masses().size());
+```
+
+**Exact derivative.** Every spring contributes $D \times D$ blocks to four positions of the Jacobi matrix of `MSS_Function`.
+Test your implementation by comparing with the numerical derivative.
+
+**Störmer-Verlet.** A function with the same arguments as `SolveODE_Newmark`, but without the mass function:
+
+```cpp
+void SolveODE_Verlet (double tend, int steps,
+                      VectorView<double> x, VectorView<double> dx,
+                      std::shared_ptr<NonlinearFunction> rhs,
+                      std::function<void(double,VectorView<double>)> callback = nullptr);
+```
+
+Here, `rhs` returns the acceleration $M^{-1} F(x)$, as `MSS_Function` does. As an explicit method, it needs neither Newton's method nor the derivative of `rhs`.
+Alternatively, design a class hierarchy of time-steppers for second order systems, with a virtual function `doStep(tau, x, v)`.
+Where do you store the acceleration $a(x_{n+1})$, which is reused in the next time-step?
 
 
 ## Exercises
@@ -261,21 +397,7 @@ with respect to time to obtain an ODE for $\lambda$, thus the DAE has *index 3*.
 
 ### Mass-spring system
 
-Merge branch `Newmark` from ASC-ODE into your main branch.
-
-For small systems it is reasonable to implement directly the right-hand-side function.
-For larger mechanical systems it is of advantage to build some data structures describing the system.
-See files [here](https://github.com/TUWien-ASC/ASC-ODE/tree/Newmark).
-The class `MassSpringSystem` has containers for lists of masses, fixations and spring connections.
-By Python-bindings one can setup such a system by adding these components.
-The class `MSS_Function` implements the right-hand-side function for the ODE based on the `MassSpringSystem` model.
-There is
-- file `mass_spring.cpp` for testing a system from C++
-- file `test_mass_spring.py` for testing the system from Python
-- Jupyter-notebook file `mass_spring.ipynb` for testing the system including 3D visualization
-
-Exercise:
-- build and run the examples in the mass_spring directory
+- build and run the examples in the `mechsystem` directory
 - add distance constraints to the MassSpring system. Enforce them using Lagrange multipliers. <!--, similar as in `test_alpha.cc`.-->
 - the class `MSS_Function` implements the derivative using numerical differentiation. Implement the exact derivative.
 - Experiment with different mechanical structures:

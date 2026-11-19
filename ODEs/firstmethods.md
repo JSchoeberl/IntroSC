@@ -154,82 +154,26 @@ $$
 with the increment function $\Phi$. For the explicit Euler method we have $\Phi(t,y,\tau) = f(t,y)$. For implicit
 methods, $\Phi$ is defined implicitly by solving the equation in every time-step.
 
-### Local error
-
-We insert the exact solution into the method, and call the defect
+The local error is the error produced in one time-step, if we start the step with the exact value $y(t_n)$:
 
 $$
-\eta_{n+1} := y(t_{n+1}) - y(t_n) - \tau \, \Phi(t_n, y(t_n), \tau)
+\eta_{n+1} := y(t_{n+1}) - y(t_n) - \tau \, \Phi(t_n, y(t_n), \tau).
 $$
 
-the local error. It is the error produced in one time-step, if we start the step with the exact value $y(t_n)$.
-A method is called consistent of order $p$ if
-
-$$
-\| \eta_{n+1} \| \leq C \, \tau^{p+1},
-$$
-
-where the constant $C$ depends on derivatives of the exact solution, but not on $\tau$.
-
-For the explicit Euler method, Taylor expansion gives
-
-$$
-y(t_{n+1}) = y(t_n) + \tau y^\prime(t_n) + \frac{\tau^2}{2} y^{\prime \prime}(\xi) = y(t_n) + \tau f(t_n, y(t_n)) + \frac{\tau^2}{2} y^{\prime \prime}(\xi),
-$$
-
-with some $\xi \in (t_n, t_{n+1})$ (for each component). Thus $\eta_{n+1} = \frac{\tau^2}{2} y^{\prime \prime}(\xi)$, and the
-explicit Euler method is consistent of order $p = 1$. In the same way one shows order 1 for the implicit Euler method.
-
-For the Crank-Nicolson method, the local error is the error of the trapezoidal rule applied to $y^\prime$:
-
-$$
-\eta_{n+1} = \int_{t_n}^{t_{n+1}} y^\prime(s) \, ds - \frac{\tau}{2} \big( y^\prime(t_n) + y^\prime(t_{n+1}) \big) = -\frac{\tau^3}{12} y^{\prime \prime \prime}(\xi),
-$$
-
-thus it is consistent of order $p = 2$. In general, a quadrature rule exact for polynomials up to degree $p-1$
-leads to a method of order $p$ (as long as the stage values are accurate enough, see Runge-Kutta methods).
-
-### From local to global error
+A method is called consistent of order $p$ if $\| \eta_{n+1} \| \leq C \, \tau^{p+1}$.
+Taylor expansion shows order $p = 1$ for the explicit and the implicit Euler methods.
+For the Crank-Nicolson method, the local error is the error of the trapezoidal rule, which is $O(\tau^3)$, thus $p = 2$.
 
 In every time-step we make a local error of order $\tau^{p+1}$. After $N = (T-t_0)/\tau$ steps these errors
-add up to an error of order $\tau^p$, as long as errors from previous steps are not amplified too much.
-This is ensured by stability of the method:
+add up to a global error of order $\tau^p$, as long as errors from previous steps are not amplified too much.
+This is ensured by stability of the method. In short:
 
-**Theorem: Convergence of one-step methods**
+> consistency of order $p$ + stability $\Rightarrow$ convergence of order $p$:
+> $\| y(t_n) - y_n \| \leq C(T) \, \tau^p$.
 
-Assume the method is consistent of order $p$, and $\Phi$ satisfies a Lipschitz condition
-$\| \Phi(t,y,\tau) - \Phi(t,z,\tau) \| \leq L \, \| y - z \|$. Then the global error satisfies
-
-$$
-\| y(t_n) - y_n \| \leq \frac{C}{L} \, \big( e^{L(t_n-t_0)} - 1 \big) \, \tau^p.
-$$
-
-*Proof:* Subtracting the method from the definition of the local error, the error $e_n := y(t_n) - y_n$ satisfies
-
-$$
-e_{n+1} = e_n + \tau \big( \Phi(t_n, y(t_n), \tau) - \Phi(t_n, y_n, \tau) \big) + \eta_{n+1},
-$$
-
-and thus
-
-$$
-\| e_{n+1} \| \leq (1 + \tau L) \, \| e_n \| + C \tau^{p+1}.
-$$
-
-With $e_0 = 0$ we obtain by induction
-
-$$
-\| e_n \| \leq C \tau^{p+1} \sum_{j=0}^{n-1} (1 + \tau L)^j = C \tau^{p+1} \frac{(1+\tau L)^n - 1}{\tau L}
-\leq \frac{C}{L} \big( e^{L (t_n - t_0)} - 1 \big) \, \tau^p,
-$$
-
-where we used $1 + \tau L \leq e^{\tau L}$ and $n \tau = t_n - t_0$. $\square$
-
-In short: consistency and stability imply convergence. The order of convergence is the order of consistency.
-
-The theorem is the discrete counterpart of the stability estimate with respect to initial conditions.
-As there, the factor $e^{L (t_n-t_0)}$ may be huge, for example for stiff problems with
-large Lipschitz constant $L$. A better understanding of stability is obtained from the test equation in the next section.
+For a Lipschitz continuous increment function $\Phi$, the constant $C(T)$ grows like $e^{L (T-t_0)}$, similar as in the stability estimate
+with respect to initial conditions. For stiff problems with large $L$ this bound is useless, a better
+understanding of stability is obtained from the test equation in the next section.
 
 ### Measuring the order
 
