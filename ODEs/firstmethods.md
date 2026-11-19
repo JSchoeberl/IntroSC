@@ -15,7 +15,7 @@ t_0 < t_1 < \ldots < t_n = T,
 $$
 
 usually we choose $n \in {\mathbb N}$, define $\tau := \frac{T-t_0}{n}$, and
-$t_i := t_0 + ih$.
+$t_i := t_0 + i \tau$.
 
 We compute a discrete approximate solution
 
@@ -61,7 +61,7 @@ $$
 or
 
 $$
-y_{i+1} = y_i + h f(t_{i+1}, y_{i+1}) \qquad 0 \leq i < n
+y_{i+1} = y_i + \tau f(t_{i+1}, y_{i+1}) \qquad 0 \leq i < n
 $$
 
 Now, the new step $y_{i+1}$ shows up also within the right-hand side. We cannot simply

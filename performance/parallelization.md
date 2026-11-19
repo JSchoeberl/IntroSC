@@ -5,7 +5,7 @@ other. To speed up computations, one can combine several CPUs in a
 parallel program. Here, CPU means a compute unit, what is typically
 one core within a microprocessor.
 
-There are many possibilities to arange the hardware:
+There are many possibilities to arrange the hardware:
 
 * Shared memory parallelization: All CPUs have access to the same
   memory. Data structures are automatically shared between
@@ -15,15 +15,16 @@ There are many possibilities to arange the hardware:
   systems with many (say 20 or more) CPUs.
 
 * Distributed memory parallelization: Every CPU has its own memory,
-CPUs are conncected with a network.  For communication, one has to
-send explicitely data between the CPUs.  The standard library for this is [MPI-message passing interface](https://en.wikipedia.org/wiki/Message_Passing_Interface).
+CPUs are connected with a network.  For communication, one has to
+send explicitly data between the CPUs.  
+The standard library for this is [MPI-message passing interface](https://en.wikipedia.org/wiki/Message_Passing_Interface).
 The world's most powerful parallel computers are listed in the [Top
 500 list](https://www.top500.org), Austria's largest parallel
 computers belong to the family of [VSC - Vienna Scientific
 Cluster](https://vsc.ac.at//home) systems.
 
 
-* Accelerators: Are specialized compute unites for heavy (for example
+* Accelerators: Are specialized compute units for heavy (for example
   linear algebra) computations. While in typical CPUs most transistors
   are dedicated to program workflow, in so called GPUs (graphics processing units)
   most parts of the chip are used for computing. Nowadays most popular are 
@@ -42,8 +43,8 @@ However, with new features in modern C++, a do-it-yourself approach is also poss
 ## Using our own task manager
 
 We build a simple task scheduler on top of a [concurrent queue available as open source](https://github.com/cameron314/concurrentqueue).
-It is implemented within the ASC-HPC package in src/taskmanager.[h|cc], and demos are in
-demos/demo_tasks.cc.
+It is implemented within the ASC-HPC package in src/taskmanager.[h|c]pp, and demos are in
+demos/demo_tasks.cpp.
 
 
 ```cpp
@@ -60,7 +61,8 @@ With `StartWorkers` and `StopWorkers` we start and stop additional threads. Thes
 
 The `RunParallel` function triggers the execution of tasks. The task is given by a function object,
 for example implemented as lambda-function (as in our example). We specify how many tasks we create.
-In this example the function will be called with arguments $(i, size)$ = $(0,10), \ldots, (9,10)$. The `RunParallel` function returns when all of its tasks are completed. 
+In this example the function will be called with arguments $(i, size)$ = $(0,10), \ldots, (9,10)$. 
+The `RunParallel` function returns when all of its tasks are completed. 
 
 We can create tasks also recursively, a task can create more tasks:
 ```cpp
@@ -105,8 +107,8 @@ within some interval in time:
 :align: center
 ```
 
-Vite can be installed on Linux by the package manager, compiled vite executables for Windows and MacOS are available from https://www.asc.tuwien.ac.at/~mhochsteger/files/vite/.
-
+Vite can be installed on Linux by the package manager, compiled vite executables for Windows and MacOS are available from
+https://ngsolve.org/files/vite/.
 
 
 
@@ -121,9 +123,9 @@ cout << "cnt = " << cnt << endl;
 
 I get varying output, something similar to `cnt = 962`. What goes wrong ?
 Thread A reads the value of `cnt`, increments it, and stores the value back to memory.
-If thread B reads cnt between load and store of thread A, and stores after thread A is storing,
+If thread B reads `cnt` between load and store of thread A, and stores after thread A is storing,
 it overwrites A's result, one count is lost. If the result depends unpredictable on the progress 
-of the different threads we generated a so called *race condition*.
+of the different threads we generated a so-called *race condition*.
 
 The solution is to make `load-increment-store` an atomic operation, what is provided in modern C++
 by the `std::atomic` class template:
@@ -303,7 +305,7 @@ However, locks have some price.
 If many threads access the list, most of them might end up waiting for the lock.
 The worst case is when some thread claims the lock,
 and this thread gets scheduled away by the operating system (for several milliseconds).
-All other thraeds waiting to enter the lock-protected region are blocked. 
+All other threads waiting to enter the lock-protected region are blocked. 
 
 
 
@@ -318,16 +320,16 @@ provided as member function of the C++ `atomic` type:
 bool atomic<T>::compare_exchange_strong (T& expected, T desired);
 ```
 
-* If the value of the atomic value is equal to `expected`, the atomic variable is replace by `desired`, and the function returns true.
-* otherwise, `expected` is replace by the value of the atomic.
+* If the value of the atomic value is equal to `expected`, the atomic variable is replaced by `desired`, and the function returns true.
+* otherwise, `expected` is replaced by the value of the atomic, and the function returns false.
 
 
 
 ```cpp
 class Node
 {
-    int data;                  // whatever we put into the list
-    std::atomic<Node*> next;   // next node
+    int data;          // whatever we put into the list
+    Node* next;        // next node
 };
 
 class List
@@ -340,7 +342,7 @@ public:
 
     void add(Node* node)
     {
-        Node * currenthead = head;
+        Node* currenthead = head;
         do {
             node->next = currenthead;
         } while (!head.compare_exchange_strong(currenthead, node));
@@ -348,17 +350,20 @@ public:
 
     Node* try_get()
     {
-        Node * currenthead = head;
+        Node* currenthead = head;
         while (currenthead && !head.compare_exchange_strong(currenthead, currenthead->next))
-           continue;
+           currenthead = head;
 
-        return head;
+        return currenthead;
     }
 };
 ```
 
-However, there is an issue known as ABA problem. The problem as well
-as two smart solutions are described here: [lock-free
+There is a potential problem with memory allocation/freeing. If one thread pops the head node of the list
+and frees it, another thread may still ask for the `next` element. One solution is to allocate all nodes together,
+and keep them alive as long as the List is active.  
+There is another issue known as ABA problem (which is avoided if all nodes are allocated once and kept alive). 
+The problem as well as two smart solutions are described here: [lock-free
 list](https://moodycamel.com/blog/2014/solving-the-aba-problem-for-lock-free-free-lists).
 The author, Cameron Desrochers, is the developer of the concurrent
 queue we are using.
