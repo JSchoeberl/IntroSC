@@ -34,7 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -253,7 +253,7 @@
 <li class="toctree-l1"><a class="reference internal" href="ODEs.html">14. Solving ordinary differential equations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theory.html">15. A little bit of theory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="firstmethods.html">16. Some simple time-stepping methods</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="implementation.html">17. Implementation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="implementation.html">17. Implementing time-stepping methods</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="functionalgebra.html">17.1. Function algebra</a></li>
 <li class="toctree-l2"><a class="reference internal" href="implementation_ee.html">17.2. Implementing the explicit Euler method</a></li>
 <li class="toctree-l2"><a class="reference internal" href="implementation_newton.html">17.3. Implementing a Newton solver</a></li>
@@ -485,11 +485,16 @@
             </div>
             <nav aria-label="Page">
                 <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-newmark-method">21.1. The Newmark method</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generalized-alpha-method">21.2. Generalized-<span class="math notranslate nohighlight">\(\alpha\)</span> method</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#systems-with-constraints">21.3. Systems with constraints</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">21.4. Exercises</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mass-spring-system">21.4.1. Mass-spring system</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#energy-conservation">21.1. Energy conservation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-newmark-method">21.2. The Newmark method</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-stormer-verlet-method">21.3. The Störmer-Verlet method</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generalized-alpha-method">21.4. Generalized-<span class="math notranslate nohighlight">\(\alpha\)</span> method</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#systems-with-constraints">21.5. Systems with constraints</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementing-mass-spring-systems">21.6. Implementing mass-spring systems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extending-the-code">21.7. Extending the code</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">21.8. Exercises</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mass-spring-system">21.8.1. Mass-spring system</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#energy-and-constraints">21.8.2. Energy and constraints</a></li>
 </ul>
 </li>
 </ul>
@@ -535,15 +540,35 @@ The sum runs over all mass points <span class="math notranslate nohighlight">\(j
 \[
 m_i \ddot x_i = -\frac{\partial U}{\partial x_i}
 \]</div>
-<p>Now we denote the derivative w.r.t. time <span class="math notranslate nohighlight">\(t\)</span> as <span class="math notranslate nohighlight">\(\dot {x}\)</span>.</p>
+<p>Here, <span class="math notranslate nohighlight">\(\dot {x}\)</span> denotes the derivative w.r.t. time <span class="math notranslate nohighlight">\(t\)</span>.</p>
+<section id="energy-conservation">
+<h2><span class="section-number">21.1. </span>Energy conservation<a class="headerlink" href="#energy-conservation" title="Link to this heading">#</a></h2>
+<p>The total energy is the sum of kinetic and potential energy:</p>
+<div class="math notranslate nohighlight">
+\[
+E(t) = \sum_i \frac{1}{2} m_i |\dot x_i(t)|^2 + U(x(t)).
+\]</div>
+<p>Along a solution it is constant:</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{d}{dt} E = \sum_i m_i \, \dot x_i \cdot \ddot x_i + \sum_i \frac{\partial U}{\partial x_i} \cdot \dot x_i
+= \sum_i \Big( m_i \ddot x_i + \frac{\partial U}{\partial x_i} \Big) \cdot \dot x_i = 0.
+\]</div>
+<p>For simulations over long times, a numerical method should not destroy this property.
+We have seen in section <a class="reference internal" href="firstmethods.html#sec-stability"><span class="std std-ref">Stability for linear ODEs</span></a> for the oscillator <span class="math notranslate nohighlight">\(y^{\prime \prime} = -\omega^2 y\)</span> that the explicit Euler method increases the
+energy, the implicit Euler method damps it, and the Crank-Nicolson method preserves it exactly.
+For non-linear problems, so called symplectic methods (for example the implicit mid-point rule, Gauss-Legendre methods, and
+the Störmer-Verlet method below) do not preserve the energy exactly. But the energy error stays bounded by <span class="math notranslate nohighlight">\(O(\tau^p)\)</span> over very long times,
+there is no drift.</p>
+</section>
 <section id="the-newmark-method">
-<h2><span class="section-number">21.1. </span>The Newmark method<a class="headerlink" href="#the-newmark-method" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">21.2. </span>The Newmark method<a class="headerlink" href="#the-newmark-method" title="Link to this heading">#</a></h2>
 <p>We start with reducing the second order equation to a first order system. Therefore, we introduce velocity <span class="math notranslate nohighlight">\(v_i = \dot x_i\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{array}{rcl}
 \dot x_i &amp; = &amp; v_i \\
-m_i \dot v_i &amp; = &amp; -F_i(x)
+m_i \dot v_i &amp; = &amp; F_i(x)
 \end{array}
 \end{split}\]</div>
 <p>Applying the Crank-Nicolson time-stepping scheme we obtain</p>
@@ -569,9 +594,53 @@ M a_{n+1} = F \big( x_n + \tau v_n + \tfrac{\tau^2}{4} (a_n + a_{n+1} ) \big)
 \]</div>
 <p>The dimension of the nonlinear system is the same as the number of state variables (and not twice the size,
 as it looks after introducing the first order system).</p>
+<p>The function <code class="docutils literal notranslate"><span class="pre">SolveODE_Newmark</span></code> in <code class="docutils literal notranslate"><span class="pre">mechsystem/Newmark.hpp</span></code> (branch <code class="docutils literal notranslate"><span class="pre">Newmark</span></code>) solves <span class="math notranslate nohighlight">\(M \ddot x = F(x)\)</span>. Both <span class="math notranslate nohighlight">\(M\)</span> and <span class="math notranslate nohighlight">\(F\)</span>
+are given as <code class="docutils literal notranslate"><span class="pre">NonlinearFunction</span></code>s. The new acceleration is the independent variable, and the function algebra
+expresses the new velocity and position as functions of it (with <span class="math notranslate nohighlight">\(\gamma = \frac{1}{2}\)</span>, <span class="math notranslate nohighlight">\(\beta = \frac{1}{4}\)</span>):</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">anew</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">IdentityFunction</span><span class="o">&gt;</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">vnew</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vold</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dt</span><span class="o">*</span><span class="p">((</span><span class="mi">1</span><span class="o">-</span><span class="n">gamma</span><span class="p">)</span><span class="o">*</span><span class="n">aold</span><span class="o">+</span><span class="n">gamma</span><span class="o">*</span><span class="n">anew</span><span class="p">);</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">xnew</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xold</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dt</span><span class="o">*</span><span class="n">vold</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dt</span><span class="o">*</span><span class="n">dt</span><span class="o">/</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">((</span><span class="mi">1-2</span><span class="o">*</span><span class="n">beta</span><span class="p">)</span><span class="o">*</span><span class="n">aold</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">beta</span><span class="o">*</span><span class="n">anew</span><span class="p">);</span>
+
+<span class="k">auto</span><span class="w"> </span><span class="n">equ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Compose</span><span class="p">(</span><span class="n">mass</span><span class="p">,</span><span class="w"> </span><span class="n">anew</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">Compose</span><span class="p">(</span><span class="n">rhs</span><span class="p">,</span><span class="w"> </span><span class="n">xnew</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>In every time-step, Newton’s method solves <code class="docutils literal notranslate"><span class="pre">equ</span></code> for the new acceleration. The same function objects <code class="docutils literal notranslate"><span class="pre">xnew</span></code> and <code class="docutils literal notranslate"><span class="pre">vnew</span></code> then
+evaluate the new position and velocity:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">NewtonSolver</span><span class="w"> </span><span class="p">(</span><span class="n">equ</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">);</span>
+<span class="n">xnew</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">evaluate</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">);</span>
+<span class="n">vnew</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">evaluate</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">v</span><span class="p">);</span>
+
+<span class="n">xold</span><span class="o">-&gt;</span><span class="n">set</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+<span class="n">vold</span><span class="o">-&gt;</span><span class="n">set</span><span class="p">(</span><span class="n">v</span><span class="p">);</span>
+<span class="n">aold</span><span class="o">-&gt;</span><span class="n">set</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="the-stormer-verlet-method">
+<h2><span class="section-number">21.3. </span>The Störmer-Verlet method<a class="headerlink" href="#the-stormer-verlet-method" title="Link to this heading">#</a></h2>
+<p>An explicit alternative is the Störmer-Verlet method:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{array}{rcl}
+v_{n+1/2} &amp; = &amp; v_n + \frac{\tau}{2} a(x_n) \\
+x_{n+1} &amp; = &amp; x_n + \tau \, v_{n+1/2} \\
+v_{n+1} &amp; = &amp; v_{n+1/2} + \frac{\tau}{2} a(x_{n+1})
+\end{array}
+\end{split}\]</div>
+<p>with <span class="math notranslate nohighlight">\(a(x) = M^{-1} F(x)\)</span>. In the notation of the generalized-<span class="math notranslate nohighlight">\(\alpha\)</span> method below, it is the Newmark family with <span class="math notranslate nohighlight">\(\beta = 0\)</span>, <span class="math notranslate nohighlight">\(\gamma = \frac{1}{2}\)</span>,
+i.e. <span class="math notranslate nohighlight">\(x_{n+1} = x_n + \tau v_n + \frac{\tau^2}{2} a_n\)</span>, while the method above has <span class="math notranslate nohighlight">\(\beta = \frac{1}{4}\)</span>, <span class="math notranslate nohighlight">\(\gamma = \frac{1}{2}\)</span>.
+It needs one evaluation of the force per time-step, since <span class="math notranslate nohighlight">\(a(x_{n+1})\)</span> is reused in the next step.
+The method is of second order, symplectic, and time-reversible. Eliminating the velocities gives the two-step form</p>
+<div class="math notranslate nohighlight">
+\[
+x_{n+1} - 2 x_n + x_{n-1} = \tau^2 a(x_n),
+\]</div>
+<p>which we use for the wave equation in <a class="reference internal" href="../PDEs/timedependent/verlet.html"><span class="doc">Verlet time-stepping and Mass-lumping</span></a>.
+As an explicit method it is only conditionally stable: for the oscillator <span class="math notranslate nohighlight">\(\ddot x = -\omega^2 x\)</span> one needs <span class="math notranslate nohighlight">\(\tau \omega &lt; 2\)</span>.
+Stiff springs therefore require small time-steps, and implicit methods are preferred.</p>
 </section>
 <section id="generalized-alpha-method">
-<h2><span class="section-number">21.2. </span>Generalized-<span class="math notranslate nohighlight">\(\alpha\)</span> method<a class="headerlink" href="#generalized-alpha-method" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">21.4. </span>Generalized-<span class="math notranslate nohighlight">\(\alpha\)</span> method<a class="headerlink" href="#generalized-alpha-method" title="Link to this heading">#</a></h2>
 <p>Although the Newmark method preserves energy exactly for linear ODEs, it leads to
 instabilities for non-linear equations. For this reason, the following generalization is
 usually used in mechanical simulation codes:</p>
@@ -590,8 +659,8 @@ x_{n+1-\alpha_f} &amp; = &amp; (1-\alpha_f) x_{n+1} + \alpha_f x_n \\
 a_{n+1-\alpha_m} &amp; = &amp; (1-\alpha_m) a_{n+1} + \alpha_m a_n 
 \end{array}
 \end{split}\]</div>
-<p>Depending of one free parameter <span class="math notranslate nohighlight">\(\rho^\infty\)</span>, parameters tuned for optimal accuracy
-and stabilty are obtained by</p>
+<p>Depending on one free parameter <span class="math notranslate nohighlight">\(\rho^\infty\)</span>, parameters tuned for optimal accuracy
+and stability are obtained by</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{array}{rcl}
@@ -601,12 +670,15 @@ and stabilty are obtained by</p>
 \gamma &amp; = &amp; \frac{1}{2} - \alpha_m + \alpha_f
 \end{array}
 \end{split}\]</div>
-<p>The parameter <span class="math notranslate nohighlight">\(\rho^\infty\)</span> specifies the damping for high frequency functions.
+<p>The parameter <span class="math notranslate nohighlight">\(\rho^\infty \in [0,1]\)</span> specifies the damping for high frequency functions: <span class="math notranslate nohighlight">\(\rho^\infty = 1\)</span>
+gives no numerical damping (like the Newmark method), smaller values damp high frequencies stronger.
+The implementation <code class="docutils literal notranslate"><span class="pre">SolveODE_Alpha</span></code> in ASC-ODE uses the variant <span class="math notranslate nohighlight">\((1-\alpha_f) F(x_{n+1}) + \alpha_f F(x_n)\)</span>
+instead of <span class="math notranslate nohighlight">\(F(x_{n+1-\alpha_f})\)</span>, which coincides for linear <span class="math notranslate nohighlight">\(F\)</span>.
 The reference is J. Chung and G.M. Hulbert <em>A Time Integration Algorithm for Structural Dynamics With Improved Numerical Dissipation: The Generalized-α Method</em>, J. Appl. Mech., 1993, <a class="reference external" href="https://asmedigitalcollection.asme.org/appliedmechanics/article/60/2/371/423023/A-Time-Integration-Algorithm-for-Structural?casa_token=PkMuU1hl_4AAAAAA:btyl_IyLpSdrI9q5LjNYSDLzOECUIoT1b3IRqcF86A773ZNWRnyuN94Tizg4kQUaVw2gZftWhg">see</a></p>
 <p>An easy to read derivation is <a class="reference external" href="https://miaodi.github.io/finite%20element%20method/newmark-generalized/">here</a>.</p>
 </section>
 <section id="systems-with-constraints">
-<h2><span class="section-number">21.3. </span>Systems with constraints<a class="headerlink" href="#systems-with-constraints" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">21.5. </span>Systems with constraints<a class="headerlink" href="#systems-with-constraints" title="Link to this heading">#</a></h2>
 <p>Think of a pendulum, where a mass <span class="math notranslate nohighlight">\(m\)</span> is attached to a (mass-less) stick of length <span class="math notranslate nohighlight">\(l\)</span>.
 One can describe the system by the angle <span class="math notranslate nohighlight">\(\alpha\)</span> between the stick and the vertical axis.
 By some high-school mathematics, one splits the total gravitational force into the direction of
@@ -619,20 +691,22 @@ the stick, and the orthogonal complement, and ends up with the equation for the 
 difficult for more complex systems. A simpler possibility is to pose the length constraint</p>
 <div class="math notranslate nohighlight">
 \[
-0 = g(x) := | x - x_0 |^2 - l^2,
+0 = c(x) := | x - x_0 |^2 - l^2,
 \]</div>
 <p>where <span class="math notranslate nohighlight">\(x_0\)</span> is the anchor point of the pendulum, and define the Lagrange function</p>
 <div class="math notranslate nohighlight">
 \[
-L(x, \lambda) = -U(x) + \left&lt; \lambda , g(x) \right&gt;,
+L(x, \lambda) = -U(x) + \left&lt; \lambda , c(x) \right&gt;,
 \]</div>
 <p>with <span class="math notranslate nohighlight">\(U(x) = m g x_z\)</span>, and pose the equation</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
+\begin{array}{rcl}
 m_i \ddot x_i &amp; = &amp; \frac{\partial}{\partial x_i} L(x, \lambda) \\
  0 &amp; = &amp; \nabla_\lambda L(x, \lambda)
+\end{array}
 \end{split}\]</div>
-<p>The physical meaning of the Lagrange parameter <span class="math notranslate nohighlight">\(\lambda\)</span> is the longitudinal force in the pendulum (precisely: <span class="math notranslate nohighlight">\(\lambda \nabla_x g\)</span> is the force vector).
+<p>The physical meaning of the Lagrange parameter <span class="math notranslate nohighlight">\(\lambda\)</span> is the longitudinal force in the pendulum (precisely: <span class="math notranslate nohighlight">\(\lambda \nabla_x c\)</span> is the force vector).
 This is an ordinary differential equation, with algebraic constraints,
 a so called differential-algebraic equation (DAE).</p>
 <p>One can directly use the generalized-<span class="math notranslate nohighlight">\(\alpha\)</span> method for this DAE. The right-hand side is the gradient of the Lagrange function, the mass matrix on the left-hand side is extended by <span class="math notranslate nohighlight">\(0\)</span> for the Lagrange parameters:</p>
@@ -642,15 +716,126 @@ a so called differential-algebraic equation (DAE).</p>
  M &amp; 0 \\
  0 &amp; 0
  \end{array} \right)
-\left( \begin{array}{cc}
+\left( \begin{array}{c}
    \ddot x \\
    0
  \end{array} \right) =
  \nabla L (x, \lambda)
 \end{split}\]</div>
+<p>The Lagrange parameter is treated like an additional position variable. Its “acceleration” is an auxiliary unknown,
+only the resulting <span class="math notranslate nohighlight">\(\lambda_{n+1}\)</span> has a meaning. With the variant used in ASC-ODE, the rows of the Lagrange parameters enforce</p>
+<div class="math notranslate nohighlight">
+\[
+(1-\alpha_f) \, c(x_{n+1}) + \alpha_f \, c(x_n) = 0,
+\]</div>
+<p>thus the constraint is satisfied exactly in every time-step, provided it is satisfied initially.</p>
+<p>Some practical consequences of the missing equation for <span class="math notranslate nohighlight">\(\dot \lambda\)</span>:</p>
+<ul class="simple">
+<li><p>Explicit methods cannot be applied directly.</p></li>
+<li><p>The initial values must be consistent: <span class="math notranslate nohighlight">\(c(x(0)) = 0\)</span>, and also the time derivative <span class="math notranslate nohighlight">\(\nabla c(x(0)) \cdot \dot x(0) = 0\)</span>,
+i.e. the initial velocity is tangential to the constraint.</p></li>
+<li><p>The Lagrange parameter is sensitive to perturbations. Without numerical damping (<span class="math notranslate nohighlight">\(\rho^\infty = 1\)</span>), <span class="math notranslate nohighlight">\(\lambda\)</span> oscillates
+from time-step to time-step, while the positions are fine. Numerical damping with <span class="math notranslate nohighlight">\(\rho^\infty &lt; 1\)</span> removes these oscillations.</p></li>
+</ul>
+</section>
+<section id="implementing-mass-spring-systems">
+<h2><span class="section-number">21.6. </span>Implementing mass-spring systems<a class="headerlink" href="#implementing-mass-spring-systems" title="Link to this heading">#</a></h2>
+<p>Merge branch <code class="docutils literal notranslate"><span class="pre">Newmark</span></code> from ASC-ODE into your main branch, see <a class="reference external" href="https://github.com/TUWien-ASC/ASC-ODE/tree/Newmark">here</a>.</p>
+<p>For small systems it is reasonable to implement the right-hand-side function directly.
+For larger mechanical systems we describe the system by data structures, which are
+implemented in <code class="docutils literal notranslate"><span class="pre">mechsystem/mass_spring.hpp</span></code>. They are templated on the spatial dimension <code class="docutils literal notranslate"><span class="pre">D</span></code>:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="kt">int</span><span class="w"> </span><span class="n">D</span><span class="o">&gt;</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Mass</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">public</span><span class="o">:</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">mass</span><span class="p">;</span><span class="w"> </span><span class="n">Vec</span><span class="o">&lt;</span><span class="n">D</span><span class="o">&gt;</span><span class="w"> </span><span class="n">pos</span><span class="p">;</span><span class="w"> </span><span class="n">Vec</span><span class="o">&lt;</span><span class="n">D</span><span class="o">&gt;</span><span class="w"> </span><span class="n">vel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">;</span><span class="w"> </span><span class="n">Vec</span><span class="o">&lt;</span><span class="n">D</span><span class="o">&gt;</span><span class="w"> </span><span class="n">acc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">;</span><span class="w"> </span><span class="p">};</span>
+<span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="kt">int</span><span class="w"> </span><span class="n">D</span><span class="o">&gt;</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Fix</span><span class="w">  </span><span class="p">{</span><span class="w"> </span><span class="k">public</span><span class="o">:</span><span class="w"> </span><span class="n">Vec</span><span class="o">&lt;</span><span class="n">D</span><span class="o">&gt;</span><span class="w"> </span><span class="n">pos</span><span class="p">;</span><span class="w"> </span><span class="p">};</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Connector</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">public</span><span class="o">:</span><span class="w"> </span><span class="k">enum</span><span class="w"> </span><span class="nc">CONTYPE</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">FIX</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">MASS</span><span class="o">=</span><span class="mi">2</span><span class="w"> </span><span class="p">};</span><span class="w"> </span><span class="n">CONTYPE</span><span class="w"> </span><span class="n">type</span><span class="p">;</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">nr</span><span class="p">;</span><span class="w"> </span><span class="p">};</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Spring</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">public</span><span class="o">:</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">length</span><span class="p">;</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">stiffness</span><span class="p">;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="n">Connector</span><span class="p">,</span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">connectors</span><span class="p">;</span><span class="w"> </span><span class="p">};</span>
+</pre></div>
+</div>
+<p>A <code class="docutils literal notranslate"><span class="pre">Connector</span></code> refers to either a fixed point or a mass, by its type and index. The class <code class="docutils literal notranslate"><span class="pre">MassSpringSystem&lt;D&gt;</span></code>
+has containers for fixes, masses and springs, and the gravity vector. The functions <code class="docutils literal notranslate"><span class="pre">addFix</span></code> and <code class="docutils literal notranslate"><span class="pre">addMass</span></code> return
+connectors, which are then used to add springs.</p>
+<p>The state vector of the ODE consists of the positions of all masses, <span class="math notranslate nohighlight">\(D\)</span> values per mass.
+The class <code class="docutils literal notranslate"><span class="pre">MSS_Function&lt;D&gt;</span></code> evaluates the right-hand side for the <code class="docutils literal notranslate"><span class="pre">MassSpringSystem</span></code>. It interprets the state vector as a matrix
+with one row per mass (via <code class="docutils literal notranslate"><span class="pre">asMatrix</span></code>), starts with the gravitational forces, and adds the forces of all springs:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">spring</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">mss</span><span class="p">.</span><span class="n">springs</span><span class="p">())</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="p">[</span><span class="n">c1</span><span class="p">,</span><span class="n">c2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spring</span><span class="p">.</span><span class="n">connectors</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Vec</span><span class="o">&lt;</span><span class="n">D</span><span class="o">&gt;</span><span class="w"> </span><span class="n">p1</span><span class="p">,</span><span class="w"> </span><span class="n">p2</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">c1</span><span class="p">.</span><span class="n">type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">Connector</span><span class="o">::</span><span class="n">FIX</span><span class="p">)</span>
+<span class="w">      </span><span class="n">p1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mss</span><span class="p">.</span><span class="n">fixes</span><span class="p">()[</span><span class="n">c1</span><span class="p">.</span><span class="n">nr</span><span class="p">].</span><span class="n">pos</span><span class="p">;</span>
+<span class="w">    </span><span class="k">else</span>
+<span class="w">      </span><span class="n">p1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xmat</span><span class="p">.</span><span class="n">row</span><span class="p">(</span><span class="n">c1</span><span class="p">.</span><span class="n">nr</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">c2</span><span class="p">.</span><span class="n">type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">Connector</span><span class="o">::</span><span class="n">FIX</span><span class="p">)</span>
+<span class="w">      </span><span class="n">p2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mss</span><span class="p">.</span><span class="n">fixes</span><span class="p">()[</span><span class="n">c2</span><span class="p">.</span><span class="n">nr</span><span class="p">].</span><span class="n">pos</span><span class="p">;</span>
+<span class="w">    </span><span class="k">else</span>
+<span class="w">      </span><span class="n">p2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xmat</span><span class="p">.</span><span class="n">row</span><span class="p">(</span><span class="n">c2</span><span class="p">.</span><span class="n">nr</span><span class="p">);</span>
+
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">force</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spring</span><span class="p">.</span><span class="n">stiffness</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">norm</span><span class="p">(</span><span class="n">p1</span><span class="o">-</span><span class="n">p2</span><span class="p">)</span><span class="o">-</span><span class="n">spring</span><span class="p">.</span><span class="n">length</span><span class="p">);</span>
+<span class="w">    </span><span class="n">Vec</span><span class="o">&lt;</span><span class="n">D</span><span class="o">&gt;</span><span class="w"> </span><span class="n">dir12</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span><span class="o">/</span><span class="n">norm</span><span class="p">(</span><span class="n">p1</span><span class="o">-</span><span class="n">p2</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">p2</span><span class="o">-</span><span class="n">p1</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">c1</span><span class="p">.</span><span class="n">type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">Connector</span><span class="o">::</span><span class="n">MASS</span><span class="p">)</span>
+<span class="w">      </span><span class="n">fmat</span><span class="p">.</span><span class="n">row</span><span class="p">(</span><span class="n">c1</span><span class="p">.</span><span class="n">nr</span><span class="p">)</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">force</span><span class="o">*</span><span class="n">dir12</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">c2</span><span class="p">.</span><span class="n">type</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">Connector</span><span class="o">::</span><span class="n">MASS</span><span class="p">)</span>
+<span class="w">      </span><span class="n">fmat</span><span class="p">.</span><span class="n">row</span><span class="p">(</span><span class="n">c2</span><span class="p">.</span><span class="n">nr</span><span class="p">)</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="n">force</span><span class="o">*</span><span class="n">dir12</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Finally every row is divided by its mass. Thus <code class="docutils literal notranslate"><span class="pre">MSS_Function</span></code> returns the acceleration <span class="math notranslate nohighlight">\(M^{-1} F(x)\)</span>, and the mass
+function passed to the time-stepping method is the <code class="docutils literal notranslate"><span class="pre">IdentityFunction</span></code>. The derivative is computed by numerical differentiation.</p>
+<p>Python bindings in <code class="docutils literal notranslate"><span class="pre">bind_mass_spring.cpp</span></code> allow to set up the system from Python. The function <code class="docutils literal notranslate"><span class="pre">simulate(tend,</span> <span class="pre">steps)</span></code>
+calls the generalized-<span class="math notranslate nohighlight">\(\alpha\)</span> method with <span class="math notranslate nohighlight">\(\rho^\infty = 0.8\)</span>, and stores the new state in the masses:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mass_spring</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">mss</span> <span class="o">=</span> <span class="n">MassSpringSystem3d</span><span class="p">()</span>
+<span class="n">mss</span><span class="o">.</span><span class="n">gravity</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mf">9.81</span><span class="p">)</span>
+
+<span class="n">mA</span> <span class="o">=</span> <span class="n">mss</span><span class="o">.</span><span class="n">add</span> <span class="p">(</span><span class="n">Mass</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)))</span>
+<span class="n">mB</span> <span class="o">=</span> <span class="n">mss</span><span class="o">.</span><span class="n">add</span> <span class="p">(</span><span class="n">Mass</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">)))</span>
+<span class="n">f1</span> <span class="o">=</span> <span class="n">mss</span><span class="o">.</span><span class="n">add</span> <span class="p">(</span><span class="n">Fix</span><span class="p">(</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span> <span class="p">)</span>
+<span class="n">mss</span><span class="o">.</span><span class="n">add</span> <span class="p">(</span><span class="n">Spring</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="p">(</span><span class="n">f1</span><span class="p">,</span> <span class="n">mA</span><span class="p">)))</span>
+<span class="n">mss</span><span class="o">.</span><span class="n">add</span> <span class="p">(</span><span class="n">Spring</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="p">(</span><span class="n">mA</span><span class="p">,</span> <span class="n">mB</span><span class="p">)))</span>
+
+<span class="n">mss</span><span class="o">.</span><span class="n">simulate</span> <span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">"state = "</span><span class="p">,</span> <span class="n">mss</span><span class="o">.</span><span class="n">getState</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>The directory <code class="docutils literal notranslate"><span class="pre">mechsystem</span></code> contains</p>
+<ul class="simple">
+<li><p>file <code class="docutils literal notranslate"><span class="pre">mass_spring.cpp</span></code> for testing a system from C++</p></li>
+<li><p>file <code class="docutils literal notranslate"><span class="pre">test_mass_spring.py</span></code> for testing the system from Python</p></li>
+<li><p>Jupyter-notebook file <code class="docutils literal notranslate"><span class="pre">mass_spring.ipynb</span></code> for testing the system including 3D visualization</p></li>
+</ul>
+</section>
+<section id="extending-the-code">
+<h2><span class="section-number">21.7. </span>Extending the code<a class="headerlink" href="#extending-the-code" title="Link to this heading">#</a></h2>
+<p>The following extensions are your own implementation, here are suggestions for the interfaces.</p>
+<p><strong>Distance constraints.</strong> A constraint fixes the distance between two masses, or between a mass and a fixed point:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">DistanceConstraint</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">public</span><span class="o">:</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">length</span><span class="p">;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="n">Connector</span><span class="p">,</span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">connectors</span><span class="p">;</span><span class="w"> </span><span class="p">};</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">MassSpringSystem</span></code> gets a container of constraints and a function <code class="docutils literal notranslate"><span class="pre">addConstraint</span></code>. The state vector is extended by
+one Lagrange parameter per constraint, its dimension becomes <span class="math notranslate nohighlight">\(D \cdot \#\text{masses} + \#\text{constraints}\)</span>.
+For the mass rows, <code class="docutils literal notranslate"><span class="pre">MSS_Function</span></code> adds the constraint forces <span class="math notranslate nohighlight">\(\lambda \nabla_x c\)</span> (divided by the mass, as all forces),
+for the constraint rows it returns the constraint <span class="math notranslate nohighlight">\(c(x)\)</span>.
+The mass function is not the identity anymore, but must vanish for the Lagrange parameters.
+This is the existing <code class="docutils literal notranslate"><span class="pre">Projector</span></code>:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">mass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">Projector</span><span class="o">&gt;</span><span class="w"> </span><span class="p">(</span><span class="n">dim</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">D</span><span class="o">*</span><span class="n">mss</span><span class="p">.</span><span class="n">masses</span><span class="p">().</span><span class="n">size</span><span class="p">());</span>
+</pre></div>
+</div>
+<p><strong>Exact derivative.</strong> Every spring contributes <span class="math notranslate nohighlight">\(D \times D\)</span> blocks to four positions of the Jacobi matrix of <code class="docutils literal notranslate"><span class="pre">MSS_Function</span></code>.
+Test your implementation by comparing with the numerical derivative.</p>
+<p><strong>Störmer-Verlet.</strong> A function with the same arguments as <code class="docutils literal notranslate"><span class="pre">SolveODE_Newmark</span></code>, but without the mass function:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">SolveODE_Verlet</span><span class="w"> </span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">tend</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">steps</span><span class="p">,</span>
+<span class="w">                      </span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">dx</span><span class="p">,</span>
+<span class="w">                      </span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">NonlinearFunction</span><span class="o">&gt;</span><span class="w"> </span><span class="n">rhs</span><span class="p">,</span>
+<span class="w">                      </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="kt">double</span><span class="p">,</span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="p">)</span><span class="o">&gt;</span><span class="w"> </span><span class="n">callback</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">nullptr</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Here, <code class="docutils literal notranslate"><span class="pre">rhs</span></code> returns the acceleration <span class="math notranslate nohighlight">\(M^{-1} F(x)\)</span>, as <code class="docutils literal notranslate"><span class="pre">MSS_Function</span></code> does. As an explicit method, it needs neither Newton’s method nor the derivative of <code class="docutils literal notranslate"><span class="pre">rhs</span></code>.
+Alternatively, design a class hierarchy of time-steppers for second order systems, with a virtual function <code class="docutils literal notranslate"><span class="pre">doStep(tau,</span> <span class="pre">x,</span> <span class="pre">v)</span></code>.
+Where do you store the acceleration <span class="math notranslate nohighlight">\(a(x_{n+1})\)</span>, which is reused in the next time-step?</p>
 </section>
 <section id="exercises">
-<h2><span class="section-number">21.4. </span>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">21.8. </span>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
 <!--
 ### Test Newmark and Generalized-$\alpha$ solvers
 
@@ -661,23 +846,9 @@ a so called differential-algebraic equation (DAE).</p>
 - implement a double pendulum as DAE
 -->
 <section id="mass-spring-system">
-<h3><span class="section-number">21.4.1. </span>Mass-spring system<a class="headerlink" href="#mass-spring-system" title="Link to this heading">#</a></h3>
-<p>Merge branch <code class="docutils literal notranslate"><span class="pre">Newmark</span></code> from ASC-ODE into your main branch.</p>
-<p>For small system it is reasonable to implement directly the right-hand-side function.
-For larger mechanical system it is of advantage to build some data structures describing the system.
-See files <a class="reference external" href="https://github.com/TUWien-ASC/ASC-ODE/tree/Newmark">here</a>.
-The class <code class="docutils literal notranslate"><span class="pre">MassSpringSystem</span></code> has containers for lists of masses, fixations and spring connections.
-By Python-bindings one can setup such a system by adding these components.
-The <code class="docutils literal notranslate"><span class="pre">MSS_Functions</span></code> implements the right-hand-side function for the ODE based on the <code class="docutils literal notranslate"><span class="pre">MassSpringSystem</span></code> model.
-There is</p>
+<h3><span class="section-number">21.8.1. </span>Mass-spring system<a class="headerlink" href="#mass-spring-system" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>file <code class="docutils literal notranslate"><span class="pre">mass_spring.cpp</span></code> for testing a system from C++</p></li>
-<li><p>file <code class="docutils literal notranslate"><span class="pre">test_mass_spring.py</span></code> for testing the system from Python</p></li>
-<li><p>Jupyter-notebook file <code class="docutils literal notranslate"><span class="pre">mass_spring.ipynb</span></code> for testing the system including 3D visualization</p></li>
-</ul>
-<p>Exercise:</p>
-<ul class="simple">
-<li><p>build and run the examples in the mass_spring directory</p></li>
+<li><p>build and run the examples in the <code class="docutils literal notranslate"><span class="pre">mechsystem</span></code> directory</p></li>
 <li><p>add distance constraints to the MassSpring system. Enforce them using Lagrange multipliers. <!--, similar as in `test_alpha.cc`.--></p></li>
 <li><p>the class <code class="docutils literal notranslate"><span class="pre">MSS_Function</span></code> implements the derivative using numerical differentiation. Implement the exact derivative.</p></li>
 <li><p>Experiment with different mechanical structures:</p>
@@ -690,6 +861,17 @@ Connect three masses by distance constraints modeling the spinning top.
 Start with velocities consistent to a rotating motion</p></li>
 </ul>
 </li>
+</ul>
+</section>
+<section id="energy-and-constraints">
+<h3><span class="section-number">21.8.2. </span>Energy and constraints<a class="headerlink" href="#energy-and-constraints" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Simulate the pendulum <span class="math notranslate nohighlight">\(\ddot \alpha = -\frac{g}{l} \sin \alpha\)</span> over a long time (e.g. 1000 periods) with the explicit Euler,
+implicit Euler, Crank-Nicolson, and Störmer-Verlet methods. Plot the energy over time.</p></li>
+<li><p>Implement the Störmer-Verlet method for the <code class="docutils literal notranslate"><span class="pre">MassSpringSystem</span></code>. Find the largest stable time-step for a chain of masses
+and springs, and compare with the eigenvalues of the linearized system.</p></li>
+<li><p>Simulate the pendulum as DAE with the generalized-<span class="math notranslate nohighlight">\(\alpha\)</span> method for <span class="math notranslate nohighlight">\(\rho^\infty = 1\)</span> and <span class="math notranslate nohighlight">\(\rho^\infty = 0.8\)</span>.
+Plot the constraint <span class="math notranslate nohighlight">\(c(x)\)</span> and the Lagrange parameter <span class="math notranslate nohighlight">\(\lambda\)</span> over time.</p></li>
 </ul>
 </section>
 </section>
@@ -761,11 +943,16 @@ Start with velocities consistent to a rotating motion</p></li>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-newmark-method">21.1. The Newmark method</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generalized-alpha-method">21.2. Generalized-<span class="math notranslate nohighlight">\(\alpha\)</span> method</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#systems-with-constraints">21.3. Systems with constraints</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">21.4. Exercises</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mass-spring-system">21.4.1. Mass-spring system</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#energy-conservation">21.1. Energy conservation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-newmark-method">21.2. The Newmark method</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-stormer-verlet-method">21.3. The Störmer-Verlet method</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generalized-alpha-method">21.4. Generalized-<span class="math notranslate nohighlight">\(\alpha\)</span> method</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#systems-with-constraints">21.5. Systems with constraints</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementing-mass-spring-systems">21.6. Implementing mass-spring systems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#extending-the-code">21.7. Extending the code</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">21.8. Exercises</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mass-spring-system">21.8.1. Mass-spring system</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#energy-and-constraints">21.8.2. Energy and constraints</a></li>
 </ul>
 </li>
 </ul>

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>17. Implementation &#8212; Introduction to Scientific Computing</title>
+    <title>17. Implementing time-stepping methods &#8212; Introduction to Scientific Computing</title>
   
   
   
@@ -34,7 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -249,7 +249,7 @@
 <li class="toctree-l1"><a class="reference internal" href="ODEs.html">14. Solving ordinary differential equations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theory.html">15. A little bit of theory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="firstmethods.html">16. Some simple time-stepping methods</a></li>
-<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">17. Implementation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">17. Implementing time-stepping methods</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="functionalgebra.html">17.1. Function algebra</a></li>
 <li class="toctree-l2"><a class="reference internal" href="implementation_ee.html">17.2. Implementing the explicit Euler method</a></li>
 <li class="toctree-l2"><a class="reference internal" href="implementation_newton.html">17.3. Implementing a Newton solver</a></li>
@@ -469,7 +469,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Implementation</h1>
+    <h1>Implementing time-stepping methods</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -483,14 +483,72 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="implementation">
-<h1><span class="section-number">17. </span>Implementation<a class="headerlink" href="#implementation" title="Link to this heading">#</a></h1>
-<p>We give an implementation of time-stepping methods.</p>
-<ul class="simple">
-<li><p>We introduce the class <code class="docutils literal notranslate"><span class="pre">NonlinearFunction</span></code>. It represents the right-hand side of the ODE. It allows composing functions to build up complex expressions from simple building blocks.</p></li>
-<li><p>We introduce a class hierarchy of <code class="docutils literal notranslate"><span class="pre">TimerStepper</span></code>s for implementing different methods</p></li>
-</ul>
+  <section class="tex2jax_ignore mathjax_ignore" id="implementing-time-stepping-methods">
+<h1><span class="section-number">17. </span>Implementing time-stepping methods<a class="headerlink" href="#implementing-time-stepping-methods" title="Link to this heading">#</a></h1>
+<p>We implement the methods from the previous section in the C++ library ASC-ODE.
+The library is built from three layers:</p>
+<ol class="arabic simple">
+<li><p><strong>Functions</strong>: the class <code class="docutils literal notranslate"><span class="pre">NonlinearFunction</span></code> represents a function <span class="math notranslate nohighlight">\(f : {\mathbb R}^{m} \rightarrow {\mathbb R}^{n}\)</span>
+which can evaluate its value <span class="math notranslate nohighlight">\(f(x)\)</span> and its Jacobi-matrix <span class="math notranslate nohighlight">\(f^\prime(x)\)</span>.
+The right-hand side of an ODE is such a function.
+Simple building blocks (identity, constants, sums, scaling, composition) are combined to
+more complex functions. We call this the function algebra.</p></li>
+<li><p><strong>Solvers</strong>: Newton’s method solves <span class="math notranslate nohighlight">\(F(x) = 0\)</span> for any <code class="docutils literal notranslate"><span class="pre">NonlinearFunction</span></code> <span class="math notranslate nohighlight">\(F\)</span>.
+It needs nothing else than the two evaluation functions.</p></li>
+<li><p><strong>Time-steppers</strong>: the class <code class="docutils literal notranslate"><span class="pre">TimeStepper</span></code> has the virtual function <code class="docutils literal notranslate"><span class="pre">doStep(tau,</span> <span class="pre">y)</span></code>,
+which advances the state <code class="docutils literal notranslate"><span class="pre">y</span></code> by one time-step <code class="docutils literal notranslate"><span class="pre">tau</span></code>.
+An explicit method just evaluates the right-hand side. An implicit method sets up
+the equation for the new state as an expression of the function algebra, and
+calls Newton’s method.</p></li>
+</ol>
+<p>The essential point is how these layers work together: For the implicit Euler method, the new state is the solution of</p>
+<div class="math notranslate nohighlight">
+\[
+F(y) := y - y_{\text{old}} - \tau f(y) = 0.
+\]</div>
+<p>Newton’s method needs the Jacobi-matrix <span class="math notranslate nohighlight">\(F^\prime(y) = I - \tau f^\prime(y)\)</span>. We never implement this formula.
+The expression <code class="docutils literal notranslate"><span class="pre">ynew</span> <span class="pre">-</span> <span class="pre">yold</span> <span class="pre">-</span> <span class="pre">tau</span> <span class="pre">*</span> <span class="pre">rhs</span></code> builds <span class="math notranslate nohighlight">\(F\)</span> from building blocks, and every building block
+knows how to differentiate itself by the sum-, product-, and chain-rules. The same mechanism
+gives us Crank-Nicolson, and later implicit Runge-Kutta methods, without additional derivative code.
+The user only provides <span class="math notranslate nohighlight">\(f\)</span> and <span class="math notranslate nohighlight">\(f^\prime\)</span>, and in <a class="reference internal" href="implementation_ad.html"><span class="doc">Automatic Differentiation</span></a> we will see how
+to obtain <span class="math notranslate nohighlight">\(f^\prime\)</span> automatically.</p>
+<p>The code is organized in these files:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>file</p></th>
+<th class="head"><p>content</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">src/nonlinfunc.hpp</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">NonlinearFunction</span></code> and the building blocks of the function algebra</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">src/Newton.hpp</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">NewtonSolver</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">src/timestepper.hpp</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TimeStepper</span></code>, <code class="docutils literal notranslate"><span class="pre">ExplicitEuler</span></code>, <code class="docutils literal notranslate"><span class="pre">ImplicitEuler</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">src/autodiff.hpp</span></code></p></td>
+<td><p>the <code class="docutils literal notranslate"><span class="pre">AutoDiff</span></code> class for automatic differentiation</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">demos/test_ode.cpp</span></code></p></td>
+<td><p>the mass-spring example</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">demos/plotmassspring.py</span></code></p></td>
+<td><p>plotting the results</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The following sections discuss these parts:</p>
 <div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="functionalgebra.html">17.1. Function algebra</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementation_ee.html">17.2. Implementing the explicit Euler method</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementation_newton.html">17.3. Implementing a Newton solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="implementation_ie.html">17.4. Coding the Implicit Euler method</a></li>
+</ul>
 </div>
 </section>
 

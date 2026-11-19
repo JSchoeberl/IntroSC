@@ -34,7 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -253,7 +253,7 @@
 <li class="toctree-l1"><a class="reference internal" href="ODEs.html">14. Solving ordinary differential equations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theory.html">15. A little bit of theory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="firstmethods.html">16. Some simple time-stepping methods</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="implementation.html">17. Implementation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="implementation.html">17. Implementing time-stepping methods</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="functionalgebra.html">17.1. Function algebra</a></li>
 <li class="toctree-l2"><a class="reference internal" href="implementation_ee.html">17.2. Implementing the explicit Euler method</a></li>
 <li class="toctree-l2"><a class="reference internal" href="implementation_newton.html">17.3. Implementing a Newton solver</a></li>
@@ -485,11 +485,19 @@
             </div>
             <nav aria-label="Page">
                 <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">20.1. Examples</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#arenstorf-orbit">20.1.1. Arenstorf-Orbit</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#chemical-reaction-equations">20.1.2. Chemical reaction equations:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estimating-the-local-error">20.1. Estimating the local error</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#in-practice">20.1.1. In practice</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#embedded-runge-kutta-methods">20.2. Embedded Runge-Kutta methods</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stiff-problems">20.3. Stiff problems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interfaces-for-the-implementation">20.4. Interfaces for the implementation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">20.5. Examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#arenstorf-orbit">20.5.1. Arenstorf-Orbit</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#chemical-reaction-equations">20.5.2. Chemical reaction equations</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">20.6. Exercises</a></li>
 </ul>
             </nav>
         </div>
@@ -503,11 +511,15 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="automatic-step-size-control">
 <h1><span class="section-number">20. </span>Automatic step-size control<a class="headerlink" href="#automatic-step-size-control" title="Link to this heading">#</a></h1>
-<p>Some ODEs have local features, which require locally small step sizes. For other regions on can use larger step sizes,
+<p>Some ODEs have local features, which require locally small step sizes. For other regions one can use larger step sizes,
 and save computations. A simple adaptive algorithm is as follows.</p>
+<section id="estimating-the-local-error">
+<h2><span class="section-number">20.1. </span>Estimating the local error<a class="headerlink" href="#estimating-the-local-error" title="Link to this heading">#</a></h2>
 <p>To estimate the local error, we apply two different time stepping methods, and take the difference as error estimation.
+Method 1 has order <span class="math notranslate nohighlight">\(p\)</span>, method 2 is more accurate. Then the difference estimates the local error of method 1, which behaves like <span class="math notranslate nohighlight">\(C \tau^{p+1}\)</span>.
 The error in one time-step should be about <span class="math notranslate nohighlight">\(\tau \times \text{tol}\)</span>.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">while</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">Tend</span>
+    <span class="n">tau</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="n">Tend</span><span class="o">-</span><span class="n">t</span><span class="p">);</span>
     <span class="n">y1</span> <span class="o">=</span> <span class="n">y</span><span class="p">;</span>
     <span class="n">method1</span><span class="o">.</span><span class="n">doStep</span><span class="p">(</span><span class="n">tau</span><span class="p">,</span> <span class="n">y1</span><span class="p">);</span>
     <span class="n">y2</span> <span class="o">=</span> <span class="n">y</span><span class="p">;</span>
@@ -516,110 +528,234 @@ The error in one time-step should be about <span class="math notranslate nohighl
 
     <span class="k">if</span> <span class="n">errest</span> <span class="o">&lt;</span> <span class="n">tau</span><span class="o">*</span><span class="n">tol</span>
         <span class="n">t</span> <span class="o">=</span> <span class="n">t</span> <span class="o">+</span> <span class="n">tau</span><span class="p">;</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">y1</span><span class="p">;</span>  <span class="o">//</span> <span class="n">accept</span> <span class="n">step</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">y2</span><span class="p">;</span>  <span class="o">//</span> <span class="n">accept</span> <span class="n">step</span><span class="p">,</span> <span class="k">continue</span> <span class="k">with</span> <span class="n">the</span> <span class="n">more</span> <span class="n">accurate</span> <span class="n">solution</span>
         <span class="n">tau</span> <span class="o">=</span> <span class="n">tau</span> <span class="o">*</span> <span class="mf">1.5</span><span class="p">;</span>  <span class="o">//</span> <span class="n">increase</span> <span class="n">step</span> <span class="n">size</span>
     <span class="k">else</span>
-        <span class="n">tau</span> <span class="o">=</span> <span class="n">tau</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">;</span>  <span class="o">//</span> <span class="n">decrease</span> <span class="n">step</span> <span class="n">size</span>       
+        <span class="n">tau</span> <span class="o">=</span> <span class="n">tau</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">;</span>  <span class="o">//</span> <span class="n">decrease</span> <span class="n">step</span> <span class="n">size</span>
 </pre></div>
 </div>
 <p>A better way to increase the time-step is</p>
 <div class="math notranslate nohighlight">
 \[
-  \tau = \sqrt[p+1]{\frac{0.5 * tol}{errest}} \; \tau
+  \tau_{\text{new}} = \sqrt[p]{\frac{0.5 \, \tau \, \text{tol}}{\text{errest}}} \; \tau,
 \]</div>
+<p>which aims at <span class="math notranslate nohighlight">\(\text{errest} \approx 0.5 \, \tau_{\text{new}} \, \text{tol}\)</span> in the next step.</p>
 <p>If Newton’s method did not converge, we also try with a smaller time-step:</p>
-<div class="highlight-code notranslate"><div class="highlight"><pre><span></span>try {
-  method1.doStep(tau,y1);
-  method2.doStep(tau,y2);
-}
-catch (std::exception &amp; e) {. // Nowton did not converge
-  tau *= 0.5;
-  continue;
-}
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">method1</span><span class="p">.</span><span class="n">doStep</span><span class="p">(</span><span class="n">tau</span><span class="p">,</span><span class="n">y1</span><span class="p">);</span>
+<span class="w">  </span><span class="n">method2</span><span class="p">.</span><span class="n">doStep</span><span class="p">(</span><span class="n">tau</span><span class="p">,</span><span class="n">y2</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">// Newton did not converge</span>
+<span class="w">  </span><span class="n">tau</span><span class="w"> </span><span class="o">*=</span><span class="w"> </span><span class="mf">0.5</span><span class="p">;</span>
+<span class="w">  </span><span class="k">continue</span><span class="p">;</span>
+<span class="p">}</span>
 </pre></div>
 </div>
+<section id="in-practice">
+<h3><span class="section-number">20.1.1. </span>In practice<a class="headerlink" href="#in-practice" title="Link to this heading">#</a></h3>
+<p>Production codes use a few more ingredients:</p>
+<ul>
+<li><p>The tolerance is often posed per step, i.e. accept if <span class="math notranslate nohighlight">\(\text{errest} \leq \text{tol}\)</span>. Then
+<span class="math notranslate nohighlight">\(\tau_{\text{new}} = \tau \, \big( \text{fac} \cdot \text{tol} / \text{errest} \big)^{1/(p+1)}\)</span>, with a safety factor like <span class="math notranslate nohighlight">\(\text{fac} = 0.9\)</span>.</p></li>
+<li><p>The change of the time-step is limited, for example <span class="math notranslate nohighlight">\(0.2 \, \tau \leq \tau_{\text{new}} \leq 5 \, \tau\)</span>.</p></li>
+<li><p>If the components of <span class="math notranslate nohighlight">\(y\)</span> have very different magnitudes (in the chemical example below from <span class="math notranslate nohighlight">\(10^{-11}\)</span> to <span class="math notranslate nohighlight">\(10^{-1}\)</span>),
+the Euclidean norm only sees the large components. One uses absolute and relative tolerances, and the scaled norm</p>
+<div class="math notranslate nohighlight">
+\[
+  \text{errest} = \Big( \frac{1}{d} \sum_{k=1}^d \Big( \frac{y_{2,k} - y_{1,k}}{\text{atol} + \text{rtol} \, |y_k|} \Big)^2 \Big)^{1/2},
+  \]</div>
+<p>which is compared with <span class="math notranslate nohighlight">\(\text{tol} = 1\)</span>.</p>
+</li>
+</ul>
+</section>
+</section>
+<section id="embedded-runge-kutta-methods">
+<h2><span class="section-number">20.2. </span>Embedded Runge-Kutta methods<a class="headerlink" href="#embedded-runge-kutta-methods" title="Link to this heading">#</a></h2>
+<p>Computing two independent methods is expensive. Embedded Runge-Kutta methods share all stages <span class="math notranslate nohighlight">\(k^j\)</span>,
+i.e. the <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(c\)</span> coefficients, and use two different weight vectors <span class="math notranslate nohighlight">\(b\)</span> and <span class="math notranslate nohighlight">\(\hat b\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+y_{n+1} = y_n + \tau \sum_j b_j k^j, \qquad \hat y_{n+1} = y_n + \tau \sum_j \hat b_j k^j.
+\]</div>
+<p>The weights are chosen such that <span class="math notranslate nohighlight">\(y_{n+1}\)</span> has order <span class="math notranslate nohighlight">\(p+1\)</span>, and <span class="math notranslate nohighlight">\(\hat y_{n+1}\)</span> has order <span class="math notranslate nohighlight">\(p\)</span>.
+The error estimate</p>
+<div class="math notranslate nohighlight">
+\[
+\text{errest} = \| y_{n+1} - \hat y_{n+1} \| = \tau \, \Big\| \sum_j (b_j - \hat b_j) k^j \Big\|
+\]</div>
+<p>comes for free, no additional evaluations of <span class="math notranslate nohighlight">\(f\)</span> are needed. The estimate is for the lower order
+solution <span class="math notranslate nohighlight">\(\hat y_{n+1}\)</span>, so <span class="math notranslate nohighlight">\(p\)</span> is the exponent in the step-size formula, but we continue with the more accurate <span class="math notranslate nohighlight">\(y_{n+1}\)</span>.
+The Butcher tableau is extended by one row for <span class="math notranslate nohighlight">\(\hat b\)</span>.</p>
+<p>The simplest example is the Heun-Euler pair of orders 2 and 1:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{array}{c|cc}
+0 &amp; &amp; \\
+1 &amp; 1 &amp; \\
+\hline
+ &amp; \frac{1}{2} &amp; \frac{1}{2} \\
+ &amp; 1 &amp; 0
+\end{array}
+\end{split}\]</div>
+<p>The Bogacki-Shampine pair has orders 3 and 2:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{array}{c|cccc}
+0 &amp; &amp; &amp; &amp; \\
+\frac{1}{2} &amp; \frac{1}{2} &amp; &amp; &amp; \\
+\frac{3}{4} &amp; 0 &amp; \frac{3}{4} &amp; &amp; \\
+1 &amp; \frac{2}{9} &amp; \frac{1}{3} &amp; \frac{4}{9} &amp; \\
+\hline
+ &amp; \frac{2}{9} &amp; \frac{1}{3} &amp; \frac{4}{9} &amp; 0 \\
+ &amp; \frac{7}{24} &amp; \frac{1}{4} &amp; \frac{1}{3} &amp; \frac{1}{8}
+\end{array}
+\end{split}\]</div>
+<p>The last row of <span class="math notranslate nohighlight">\(a\)</span> coincides with <span class="math notranslate nohighlight">\(b\)</span>. Thus the last stage is <span class="math notranslate nohighlight">\(k^3 = f(y_{n+1})\)</span>, which is also the first stage
+of the next time-step. This trick is called <em>first same as last</em> (FSAL), and the method needs only three evaluations of <span class="math notranslate nohighlight">\(f\)</span> per step.</p>
+<p>The most popular embedded method is the 7-stage Dormand-Prince pair of orders 5 and 4, also using FSAL.
+It is the default method <code class="docutils literal notranslate"><span class="pre">ode45</span></code> in Matlab, and <code class="docutils literal notranslate"><span class="pre">RK45</span></code> in scipy.</p>
+</section>
+<section id="stiff-problems">
+<h2><span class="section-number">20.3. </span>Stiff problems<a class="headerlink" href="#stiff-problems" title="Link to this heading">#</a></h2>
+<p>Adaptive explicit methods do not fail for stiff problems, but they become very expensive:
+When <span class="math notranslate nohighlight">\(\tau \lambda\)</span> leaves the domain of stability, the numerical solution starts to grow, the error estimator
+detects this, and reduces the time-step. Thus the time-step is determined by stability, and not by accuracy,
+even when the solution is smooth.</p>
+<p>For the Oregonator example below, an explicit adaptive 3(2) method needs about one million steps on the interval <span class="math notranslate nohighlight">\([0, 50]\)</span>,
+while an implicit Radau IIA method needs about 300 steps (both computed with scipy, <span class="math notranslate nohighlight">\(\text{rtol} = 10^{-6}\)</span>).</p>
+<p>For stiff problems we use a pair of implicit methods, preferably both <span class="math notranslate nohighlight">\(L\)</span>-stable. An example is the implicit
+Euler method (<span class="math notranslate nohighlight">\(p = 1\)</span>) for the error estimate, together with the two-stage Radau IIA method (order 3).</p>
+</section>
+<section id="interfaces-for-the-implementation">
+<h2><span class="section-number">20.4. </span>Interfaces for the implementation<a class="headerlink" href="#interfaces-for-the-implementation" title="Link to this heading">#</a></h2>
+<p>Step-size control is your own implementation, the following interfaces are a suggestion.
+A time-stepper which provides an error estimate extends the <code class="docutils literal notranslate"><span class="pre">TimeStepper</span></code> interface:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">EmbeddedTimeStepper</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">TimeStepper</span>
+<span class="p">{</span>
+<span class="k">public</span><span class="o">:</span>
+<span class="w">  </span><span class="k">using</span><span class="w"> </span><span class="n">TimeStepper</span><span class="o">::</span><span class="n">TimeStepper</span><span class="p">;</span>
+<span class="w">  </span><span class="c1">// advances y by tau, returns the estimated local error</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="nf">doStepWithError</span><span class="w"> </span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">tau</span><span class="p">,</span><span class="w"> </span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="c1">// order p of the method used for the error estimate</span>
+<span class="w">  </span><span class="k">virtual</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">order</span><span class="p">()</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p>Two implementations are needed: an embedded Runge-Kutta method with weights <span class="math notranslate nohighlight">\(b\)</span> and <span class="math notranslate nohighlight">\(\hat b\)</span>, and a pair of two
+independent <code class="docutils literal notranslate"><span class="pre">TimeStepper</span></code> objects, such as the implicit Euler and the Radau IIA method.
+The adaptive loop only uses the interface, and works for both:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">SolveODE_Adaptive</span><span class="w"> </span><span class="p">(</span><span class="n">EmbeddedTimeStepper</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">stepper</span><span class="p">,</span>
+<span class="w">                        </span><span class="kt">double</span><span class="w"> </span><span class="n">tend</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">tau</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">tol</span><span class="p">,</span>
+<span class="w">                        </span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">y</span><span class="p">,</span>
+<span class="w">                        </span><span class="n">std</span><span class="o">::</span><span class="n">function</span><span class="o">&lt;</span><span class="kt">void</span><span class="p">(</span><span class="kt">double</span><span class="p">,</span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="p">)</span><span class="o">&gt;</span><span class="w"> </span><span class="n">callback</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">nullptr</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>It must</p>
+<ul class="simple">
+<li><p>not step beyond <code class="docutils literal notranslate"><span class="pre">tend</span></code>,</p></li>
+<li><p>reject a step if the error is too large, or if Newton’s method throws, and restore <code class="docutils literal notranslate"><span class="pre">y</span></code>,</p></li>
+<li><p>limit the change of the time-step,</p></li>
+<li><p>count accepted and rejected steps, which is the main measure of efficiency.</p></li>
+</ul>
+</section>
 <section id="examples">
-<h2><span class="section-number">20.1. </span>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">20.5. </span>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h2>
 <section id="arenstorf-orbit">
-<h3><span class="section-number">20.1.1. </span>Arenstorf-Orbit<a class="headerlink" href="#arenstorf-orbit" title="Link to this heading">#</a></h3>
-<p><em>vgl. Aufgabe 4.4 aus Numerische Mathematik II, P. Deuflhard, F. Bornemann</em>
-Die Differentialgleichungen der Bewegung eines Satelliten um das System Erde-Mond lautet in den Koordinaten <span class="math notranslate nohighlight">\(x =(x_1,x_2)\)</span> des mitrotierenden Schwerpunktsystems</p>
+<h3><span class="section-number">20.5.1. </span>Arenstorf-Orbit<a class="headerlink" href="#arenstorf-orbit" title="Link to this heading">#</a></h3>
+<p><em>cf. Exercise 4.4 in P. Deuflhard, F. Bornemann, Numerische Mathematik II</em></p>
+<p>The equations of motion of a satellite in the earth-moon system, in coordinates <span class="math notranslate nohighlight">\(x =(x_1,x_2)\)</span> of the co-rotating barycentric frame, are</p>
 <div class="amsmath math notranslate nohighlight">
-\[\begin{align*} 
+\[\begin{align*}
 x_1'' &amp; = x_1 + 2 x_2' - \hat{\mu} \frac{x_1 + \mu}{N_1}- \mu \frac{x_1-\hat{\mu}}{N_2} \\
 x_2'' &amp;= x_2 - 2 x_1' - \hat{\mu} \frac{x_2}{N_1} - \mu \frac{x_2}{N_2}
 \end{align*}\]</div>
-<p>mit  den Abkürzungen</p>
+<p>with the abbreviations</p>
 <div class="amsmath math notranslate nohighlight">
 \[\begin{equation*}
 N_1 = ( (x_1 + \mu)^2 + x_2^2)^{3/2}, \quad N_2 = ( (x_1 - \hat{\mu})^2 + x_2^2 )^{3/2}
 \end{equation*}\]</div>
-<p>und den Daten</p>
+<p>and the data</p>
 <div class="amsmath math notranslate nohighlight">
 \[\begin{equation*}
 \mu = 0.012277471 , \quad \hat{\mu} = 1  - \mu.
 \end{equation*}\]</div>
-<p>Dabei ist <span class="math notranslate nohighlight">\(\mu\)</span> das Verhältnis der Mondmasse zur Masse der Gesamtsystems. L”angeneinheit f”ur die euklidische Norm <span class="math notranslate nohighlight">\(|x|\)</span> ist die mittlere Entfernung Erde-Mond (ca. <span class="math notranslate nohighlight">\(384000 \, km\)</span>),
-Zeiteinheit ein Monat.
-Die Anfangswerte</p>
+<p>Here, <span class="math notranslate nohighlight">\(\mu\)</span> is the ratio of the moon’s mass to the mass of the total system. The unit of length for the Euclidean norm <span class="math notranslate nohighlight">\(|x|\)</span> is the mean earth-moon distance (about <span class="math notranslate nohighlight">\(384000 \, km\)</span>),
+the unit of time is one month.
+The initial values</p>
 <div class="amsmath math notranslate nohighlight">
 \[\begin{equation*}
 x_1(0) = 0.994, \quad x_1'(0) = 0, \quad x_2(0) = 0, \quad x_2'(0) = -2.0015851063790825
 \end{equation*}\]</div>
-<p>sind so gewählt, dass sich der kleeblattförmige <a class="reference external" href="http://en.wikipedia.org/wiki/Richard_Arenstorf">Arenstorf-Orbit ergibt</a>. Die Periode dieses Orbits beträgt</p>
+<p>are chosen such that the cloverleaf-shaped <a class="reference external" href="http://en.wikipedia.org/wiki/Richard_Arenstorf">Arenstorf orbit</a> is obtained. The period of this orbit is</p>
 <div class="amsmath math notranslate nohighlight">
 \[\begin{equation*}
 T = 17.0652166.
 \end{equation*}\]</div>
-<p>Berechnen und plotten Sie die Bahnkurve <span class="math notranslate nohighlight">\(x(t)\)</span> (Empfehlung: RK4 Verfahren und automatische Schrittweitensteuerung). Es wird eine Genauigkeit von <span class="math notranslate nohighlight">\(x(T)\)</span> von 1 km gewünscht.</p>
+<p>The solution is non-stiff, but it has phases of very fast motion close to the earth and the moon.</p>
 </section>
 <section id="chemical-reaction-equations">
-<h3><span class="section-number">20.1.2. </span>Chemical reaction equations:<a class="headerlink" href="#chemical-reaction-equations" title="Link to this heading">#</a></h3>
-<p>molecules of type A and type B react to form molecules of type C and type D.</p>
+<h3><span class="section-number">20.5.2. </span>Chemical reaction equations<a class="headerlink" href="#chemical-reaction-equations" title="Link to this heading">#</a></h3>
+<p>Molecules of type A and type B react to form molecules of type C and type D:</p>
 <div class="math notranslate nohighlight">
 \[
 A + B \stackrel{k}{\longrightarrow } C + D
 \]</div>
-<p>The probability of the reaction is <span class="math notranslate nohighlight">\(k c_A c_B\)</span>, where <span class="math notranslate nohighlight">\(c_A, c_B, ...\)</span> are concentrations of molecules.
+<p>The reaction rate is <span class="math notranslate nohighlight">\(k c_A c_B\)</span>, where <span class="math notranslate nohighlight">\(c_A, c_B, ...\)</span> are concentrations of molecules.
 This leads to differential equations:</p>
 <div class="amsmath math notranslate nohighlight">
 \[\begin{eqnarray*}
 c_A^\prime &amp; = &amp; - k c_A c_B \\
 c_B^\prime &amp; = &amp; - k c_A c_B \\
-c_C^\prime &amp; = &amp;   k c_A c_B \\ 
-c_D^\prime &amp; = &amp;  k c_A c_B. 
+c_C^\prime &amp; = &amp;   k c_A c_B \\
+c_D^\prime &amp; = &amp;  k c_A c_B.
 \end{eqnarray*}\]</div>
-<p>An interesting example is the  Zhabotinski-Belousov-Reaction (the so called Oregonator) in simplified form is</p>
+<p>An interesting example is the Belousov-Zhabotinsky reaction. Its simplified model, the so called Oregonator, is</p>
 <div class="amsmath math notranslate nohighlight">
 \[\begin{eqnarray*}
-Br O_3 + Br &amp; \stackrel{k_1}{\longrightarrow } &amp; H Br O_2 + HOBr \\
-HBrO_2 + Br &amp; \stackrel{k_2}{\longrightarrow } &amp; 2 HOBr \\
-BrO_3 + H Br O_2 &amp; \stackrel{k_3}{\longrightarrow } &amp; 2 HBrO_2 + H_2O \\
-HBrO_2 + HBrO_2  &amp; \stackrel{k_4}{\longrightarrow } &amp; HOBr + BrO_3\\
-H_2O   &amp; \stackrel{k_5}{\longrightarrow } &amp; Br
+\mathrm{BrO_3^- + Br^-} &amp; \stackrel{k_1}{\longrightarrow } &amp; \mathrm{HBrO_2 + HOBr} \\
+\mathrm{HBrO_2 + Br^-} &amp; \stackrel{k_2}{\longrightarrow } &amp; \mathrm{2 \, HOBr} \\
+\mathrm{BrO_3^- + HBrO_2} &amp; \stackrel{k_3}{\longrightarrow } &amp; \mathrm{2 \, HBrO_2 + Ce^{4+}} \\
+\mathrm{2 \, HBrO_2} &amp; \stackrel{k_4}{\longrightarrow } &amp; \mathrm{HOBr + BrO_3^-} \\
+\mathrm{Ce^{4+}} &amp; \stackrel{k_5}{\longrightarrow } &amp; \mathrm{Br^-}
 \end{eqnarray*}\]</div>
-<p>The concentrations <span class="math notranslate nohighlight">\((c_1, c_2, c_3, c_4, c_5)\)</span> give the densities of (<span class="math notranslate nohighlight">\(BrO_3\)</span>, <span class="math notranslate nohighlight">\(Br\)</span>, <span class="math notranslate nohighlight">\(HBrO_2\)</span>, <span class="math notranslate nohighlight">\(HOBr\)</span>, <span class="math notranslate nohighlight">\(H_2O\)</span>), hydrogen is available as much as needed.</p>
+<p>The concentrations <span class="math notranslate nohighlight">\((c_1, c_2, c_3, c_4, c_5)\)</span> give the densities of (<span class="math notranslate nohighlight">\(\mathrm{BrO_3^-}\)</span>, <span class="math notranslate nohighlight">\(\mathrm{Br^-}\)</span>, <span class="math notranslate nohighlight">\(\mathrm{HBrO_2}\)</span>, <span class="math notranslate nohighlight">\(\mathrm{HOBr}\)</span>, <span class="math notranslate nohighlight">\(\mathrm{Ce^{4+}}\)</span>).
+The cerium ions act as catalyst, the last reaction summarizes the oxidation of an organic substance (malonic acid), which
+releases bromide. Hydrogen ions and the organic substance are available as much as needed.</p>
 <p>This results in the ODE system</p>
 <div class="amsmath math notranslate nohighlight">
 \[\begin{eqnarray*}
 c_1^\prime &amp; = &amp; -k_1 c_1 c_2 - k_3 c_1 c_3 + k_4 c_3^2\\
 c_2^\prime &amp; = &amp; -k_1 c_1 c_2 - k_2 c_2 c_3 + k_5 c_5 \\
 c_3^\prime &amp; = &amp; k_1 c_1 c_2 - k_2 c_2 c_3 + k_3 c_1 c_3 - 2 k_4 c_3^2 \\
-c_4^\prime &amp; = &amp; k_1 c_1 c_2 + k_2 c_2 c_3 + k_4 c_3^2 \\
+c_4^\prime &amp; = &amp; k_1 c_1 c_2 + 2 k_2 c_2 c_3 + k_4 c_3^2 \\
 c_5^\prime &amp; = &amp; k_3 c_1 c_3 - k_5 c_5
 \end{eqnarray*}\]</div>
 <p>With reaction constants</p>
 <div class="math notranslate nohighlight">
 \[
-k_1 = 1.34, \quad k_2 = 1.6\cdot 10^9, \quad k_3 = 8.0 \cdot 10^3, \quad k_4 = 4.0 \cdot 10^7, \quad k_5 = 1.0, 
+k_1 = 1.34, \quad k_2 = 1.6\cdot 10^9, \quad k_3 = 8.0 \cdot 10^3, \quad k_4 = 4.0 \cdot 10^7, \quad k_5 = 1.0,
 \]</div>
 <p>Initial conditions are</p>
 <div class="math notranslate nohighlight">
 \[
-c_1(0) = 0.05, \quad c_2(0) = 1 \cdot 10^{-4}, \quad c_3(0) = 1 \cdot 10^{-10}, \quad c_4(0) = 0.1, c_5(0) = 1 \cdot 10^{-4}.
+c_1(0) = 0.05, \quad c_2(0) = 1 \cdot 10^{-4}, \quad c_3(0) = 1 \cdot 10^{-10}, \quad c_4(0) = 0.1, \quad c_5(0) = 1 \cdot 10^{-4}.
 \]</div>
-<p>Solve the equation with automatic step-size control.</p>
+<p>The concentrations oscillate with a period of roughly 60 time units. The eigenvalues of the Jacobi-matrix reach <span class="math notranslate nohighlight">\(-4 \cdot 10^5\)</span>, the system is stiff.</p>
 </section>
+</section>
+<section id="exercises">
+<h2><span class="section-number">20.6. </span>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Implement <code class="docutils literal notranslate"><span class="pre">SolveODE_Adaptive</span></code>, and an <code class="docutils literal notranslate"><span class="pre">EmbeddedTimeStepper</span></code> combining two <code class="docutils literal notranslate"><span class="pre">TimeStepper</span></code> objects, including the handling of non-converging Newton iterations.</p></li>
+<li><p>Extend your <code class="docutils literal notranslate"><span class="pre">ExplicitRungeKutta</span></code> class to an <code class="docutils literal notranslate"><span class="pre">EmbeddedTimeStepper</span></code> with weights <span class="math notranslate nohighlight">\(b\)</span> and <span class="math notranslate nohighlight">\(\hat b\)</span>.
+Implement the Bogacki-Shampine pair, and verify the orders of <span class="math notranslate nohighlight">\(b\)</span> and <span class="math notranslate nohighlight">\(\hat b\)</span> with constant time-steps.</p></li>
+<li><p>Test the step-size control: the error at the end time should decrease proportional to <code class="docutils literal notranslate"><span class="pre">tol</span></code>.</p></li>
+<li><p>Compute and plot the Arenstorf orbit <span class="math notranslate nohighlight">\(x(t)\)</span> with automatic step-size control. The desired accuracy of <span class="math notranslate nohighlight">\(x(T)\)</span> is 1 km.
+Plot the time-step <span class="math notranslate nohighlight">\(\tau\)</span> over time. How many steps does the classical <span class="math notranslate nohighlight">\(RK_4\)</span> method with constant time-step need for the same accuracy?</p></li>
+<li><p>Solve the Oregonator equations on the interval <span class="math notranslate nohighlight">\([0, 300]\)</span> with automatic step-size control, using the scaled error norm.
+Plot the concentrations in logarithmic scale. Compare the number of time-steps of the explicit Bogacki-Shampine pair
+with the implicit pair of implicit Euler and Radau IIA.</p></li>
+</ul>
 </section>
 </section>
 
@@ -689,11 +825,19 @@ c_1(0) = 0.05, \quad c_2(0) = 1 \cdot 10^{-4}, \quad c_3(0) = 1 \cdot 10^{-10}, 
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">20.1. Examples</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#arenstorf-orbit">20.1.1. Arenstorf-Orbit</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#chemical-reaction-equations">20.1.2. Chemical reaction equations:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estimating-the-local-error">20.1. Estimating the local error</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#in-practice">20.1.1. In practice</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#embedded-runge-kutta-methods">20.2. Embedded Runge-Kutta methods</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stiff-problems">20.3. Stiff problems</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interfaces-for-the-implementation">20.4. Interfaces for the implementation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">20.5. Examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#arenstorf-orbit">20.5.1. Arenstorf-Orbit</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#chemical-reaction-equations">20.5.2. Chemical reaction equations</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">20.6. Exercises</a></li>
 </ul>
   </nav></div>
 

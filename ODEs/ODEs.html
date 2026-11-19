@@ -34,7 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -60,6 +60,8 @@
     <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'ODEs/ODEs';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -152,6 +154,10 @@
     </div>
   
 
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
   
 </div>
 
@@ -247,7 +253,7 @@
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">14. Solving ordinary differential equations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theory.html">15. A little bit of theory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="firstmethods.html">16. Some simple time-stepping methods</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="implementation.html">17. Implementation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="implementation.html">17. Implementing time-stepping methods</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="functionalgebra.html">17.1. Function algebra</a></li>
 <li class="toctree-l2"><a class="reference internal" href="implementation_ee.html">17.2. Implementing the explicit Euler method</a></li>
 <li class="toctree-l2"><a class="reference internal" href="implementation_newton.html">17.3. Implementing a Newton solver</a></li>
@@ -456,7 +462,9 @@
 <button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
 </button>
-
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
 </div></div>
       
     </div>
@@ -472,6 +480,14 @@
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-the-code">14.1. Getting the code</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -483,18 +499,26 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="solving-ordinary-differential-equations">
 <h1><span class="section-number">14. </span>Solving ordinary differential equations<a class="headerlink" href="#solving-ordinary-differential-equations" title="Link to this heading">#</a></h1>
-<p>We are developing a library for solving nonlinear ordinary differential equations. First we build an abstraction of nonlinear functions, and implement solvers for nonlinear equations. On this basis we can simply define time-stepping algorithms. We apply it to multi-body systems. OpenGL visualization is provided based on the python interface to threejs.</p>
+<p>We are developing a library for solving nonlinear ordinary differential equations, and learn the numerical analysis behind the methods.
+First we build an abstraction of nonlinear functions, and implement solvers for nonlinear equations. On this basis we can simply define time-stepping algorithms.
+We apply it to mechanical systems of masses connected by springs and constraints. 3D visualization in Jupyter notebooks is provided by pythreejs.</p>
+<p>The chapter covers:</p>
 <ul class="simple">
-<li><p>Solving non-linear equations</p></li>
-<li><p>Explicit and implicit time-stepping methods</p></li>
-<li><p>Connecting masses with springs</p></li>
-<li><p>Introducing constraints</p></li>
+<li><p><a class="reference internal" href="theory.html"><span class="doc">A little bit of theory</span></a>: existence, uniqueness, and stability of solutions</p></li>
+<li><p><a class="reference internal" href="firstmethods.html"><span class="doc">Some simple time-stepping methods</span></a>: the explicit and implicit Euler and the Crank-Nicolson methods, their convergence and stability, stiff ODEs</p></li>
+<li><p><a class="reference internal" href="implementation.html"><span class="doc">Implementing time-stepping methods</span></a>: function algebra, Newton’s method, explicit and implicit time-steppers in C++</p></li>
+<li><p><a class="reference internal" href="implementation_ad.html"><span class="doc">Automatic Differentiation</span></a>: numerical and automatic differentiation</p></li>
+<li><p><a class="reference internal" href="RungeKutta.html"><span class="doc">Runge-Kutta methods</span></a>: explicit and implicit Runge-Kutta methods of arbitrary order</p></li>
+<li><p><a class="reference internal" href="adaptive.html"><span class="doc">Automatic step-size control</span></a>: embedded methods, and automatic step-size control for non-stiff and stiff problems</p></li>
+<li><p><a class="reference internal" href="mechanical.html"><span class="doc">Mechanical Systems</span></a>: energy conservation, the Newmark, Störmer-Verlet, and generalized-<span class="math notranslate nohighlight">\(\alpha\)</span> methods, systems with constraints</p></li>
 </ul>
+<section id="getting-the-code">
+<h2><span class="section-number">14.1. </span>Getting the code<a class="headerlink" href="#getting-the-code" title="Link to this heading">#</a></h2>
 <p>Fork that github repo <a class="reference external" href="https://github.com/TUWien-ASC/ASC-ODE.git">ASC-ODE</a>, and clone it via</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/my_fork_on_github/ASC-ODE.git
 </pre></div>
 </div>
-<p>It contains the basic linear algebra package nanoblas as an git submodule. Populate it using</p>
+<p>It contains the basic linear algebra package nanoblas as a git submodule. Populate it using</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>cd ASC-ODE
 git submodule update --init
 </pre></div>
@@ -512,6 +536,9 @@ cmake ..
 make
 </pre></div>
 </div>
+<p>The Runge-Kutta methods and the mechanical systems are provided in the branches <code class="docutils literal notranslate"><span class="pre">RungeKutta</span></code> and <code class="docutils literal notranslate"><span class="pre">Newmark</span></code>.
+The corresponding sections explain how to merge them into your fork.</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -568,6 +595,23 @@ make
             </div>
             
             
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-the-code">14.1. Getting the code</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

@@ -9,10 +9,10 @@ $$
 using the explicit Euler method:
 
 $$
-y_{i+1} = y_i + \tau f(y_i) \qquad 0 \leq i < n
+y_{n+1} = y_n + \tau f(y_n) \qquad 0 \leq n < N
 $$
 
-with $\tau = T/n$.
+with $\tau = T/N$.
 
 Time-stepping methods are implemented in the file `timestepper.hpp`.
 The base class looks like
@@ -32,7 +32,7 @@ class TimeStepper
 
 It has the right-hand side of the ode as a member (`m_rhs`), and introduces a virtual function `doStep` which
 evolves the state vector `y` by the time-step `tau`. It is a pure virtual function, since the base class has no
-glue how to compute the time-step.
+clue how to compute the time-step.
 
 The explicit Euler method is a derived class from `TimeStepper`:
 
@@ -111,8 +111,8 @@ public:
 };
 ```
 
-We can now use the `TimerStepper` for soling the ode. We create a `NonlinearFunction` object as
-`MassSpring` object, and pass it to the `ExplicitEuler` timer-stepper. Then we can run a simple time-loop to evolve the state by time-steps $\tau$:
+We can now use the `TimeStepper` for solving the ODE. We create a `NonlinearFunction` object as
+`MassSpring` object, and pass it to the `ExplicitEuler` time-stepper. Then we can run a simple time-loop to evolve the state by time-steps $\tau$:
 
 ```cpp
 double tend = 4*M_PI;
@@ -135,7 +135,7 @@ for (int i = 0; i < steps; i++)
 
 This example is provided in `demos/test_ode.cpp`.
 
-Using matplotlib from the a python script `plotmassspring.py` we generated the
+Using matplotlib from the python script `plotmassspring.py` we generated the
 plots of the time evolution
 
 ```{image} pictures/massspring_time.png
@@ -160,7 +160,7 @@ and the phase plot via plotting (position(t), velocity(t)) as a two dimensional 
 
   \begin{eqnarray*}
   \tilde y & = & y_n + \tfrac{\tau}{2} f(y_n) \\
-  y_{n+1} & = &  y_n + \tau f(\tilde y) 
+  y_{n+1} & = &  y_n + \tau f(\tilde y)  
   \end{eqnarray*}
 
   Compare the obtained results with the explicit Euler method.

@@ -34,7 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -253,7 +253,7 @@
 <li class="toctree-l1"><a class="reference internal" href="ODEs.html">14. Solving ordinary differential equations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theory.html">15. A little bit of theory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="firstmethods.html">16. Some simple time-stepping methods</a></li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="implementation.html">17. Implementation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="implementation.html">17. Implementing time-stepping methods</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="functionalgebra.html">17.1. Function algebra</a></li>
 <li class="toctree-l2"><a class="reference internal" href="implementation_ee.html">17.2. Implementing the explicit Euler method</a></li>
 <li class="toctree-l2"><a class="reference internal" href="implementation_newton.html">17.3. Implementing a Newton solver</a></li>
@@ -485,8 +485,7 @@
             </div>
             <nav aria-label="Page">
                 <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#excercises">17.4.1. Excercises</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stability-function">17.4.2. Stability function</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">17.4.1. Exercises</a></li>
 </ul>
             </nav>
         </div>
@@ -500,22 +499,22 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="coding-the-implicit-euler-method">
 <h1><span class="section-number">17.4. </span>Coding the Implicit Euler method<a class="headerlink" href="#coding-the-implicit-euler-method" title="Link to this heading">#</a></h1>
-<p>In every time-step we have to solve for the new value <span class="math notranslate nohighlight">\(y^{n+1}\)</span>:</p>
+<p>In every time-step we have to solve for the new value <span class="math notranslate nohighlight">\(y_{n+1}\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[
-\frac{y_{i+1} - y_i}{\tau} = f(y_{i+1})
+\frac{y_{n+1} - y_n}{\tau} = f(y_{n+1})
 \]</div>
-<p>The function <span class="math notranslate nohighlight">\(f : {\mathbb R}^n \rightarrow {\mathbb R}^n\)</span> is the right-hand side of the ODE,
+<p>The function <span class="math notranslate nohighlight">\(f : {\mathbb R}^d \rightarrow {\mathbb R}^d\)</span> is the right-hand side of the ODE,
 which has been brought into autonomous form.</p>
-<p>For the current time-step we rename <span class="math notranslate nohighlight">\(y_i\)</span> and <span class="math notranslate nohighlight">\(y_{i+1}\)</span> to <span class="math notranslate nohighlight">\(y_{\text{old}}\)</span> and <span class="math notranslate nohighlight">\(y\)</span>, and rewrite the
+<p>For the current time-step we rename <span class="math notranslate nohighlight">\(y_n\)</span> and <span class="math notranslate nohighlight">\(y_{n+1}\)</span> to <span class="math notranslate nohighlight">\(y_{\text{old}}\)</span> and <span class="math notranslate nohighlight">\(y\)</span>, and rewrite the
 equation as</p>
 <div class="math notranslate nohighlight">
 \[
 y - y_{\text{old}} - \tau f(y) = 0
 \]</div>
 <p>We use our function algebra to build this composed function <code class="docutils literal notranslate"><span class="pre">m_equ</span></code>, and throw it into the Newton solver.
-If we make the time-step not too large, the value <span class="math notranslate nohighlight">\(y^n\)</span> of the old time-step is a good starting value.</p>
-<p>To express that the independent variable is <span class="math notranslate nohighlight">\(y^{n+1}\)</span>, we create an <code class="docutils literal notranslate"><span class="pre">IdentityFunction</span></code>. The old
+If we make the time-step not too large, the value <span class="math notranslate nohighlight">\(y_n\)</span> of the old time-step is a good starting value.</p>
+<p>To express that the independent variable is <span class="math notranslate nohighlight">\(y_{n+1}\)</span>, we create an <code class="docutils literal notranslate"><span class="pre">IdentityFunction</span></code>. The old
 value <span class="math notranslate nohighlight">\(y_{\text{old}}\)</span> is a constant, represented as <code class="docutils literal notranslate"><span class="pre">ConstantFunction</span></code>.
 In every time-step we reset the value for <span class="math notranslate nohighlight">\(y_{\text{old}}\)</span>.
 The time-step <span class="math notranslate nohighlight">\(\tau\)</span> itself goes as <code class="docutils literal notranslate"><span class="pre">Parameter</span></code> into the function algebra. Such a parameter can be set and changed later.
@@ -534,7 +533,7 @@ Then the implementation of the implicit Euler method looks like:</p>
 <span class="w">    </span><span class="n">m_equ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ynew</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">m_yold</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">m_tau</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m_rhs</span><span class="p">;</span>
 <span class="w">  </span><span class="p">}</span>
 
-<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="n">DoStep</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">tau</span><span class="p">,</span><span class="w"> </span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="k">override</span>
+<span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="n">doStep</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">tau</span><span class="p">,</span><span class="w"> </span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="k">override</span>
 <span class="w">  </span><span class="p">{</span>
 <span class="w">    </span><span class="n">m_yold</span><span class="o">-&gt;</span><span class="n">set</span><span class="p">(</span><span class="n">y</span><span class="p">);</span>
 <span class="w">    </span><span class="n">m_tau</span><span class="o">-&gt;</span><span class="n">set</span><span class="p">(</span><span class="n">tau</span><span class="p">);</span>
@@ -543,24 +542,31 @@ Then the implementation of the implicit Euler method looks like:</p>
 <span class="p">};</span>
 </pre></div>
 </div>
-<section id="excercises">
-<h2><span class="section-number">17.4.1. </span>Excercises<a class="headerlink" href="#excercises" title="Link to this heading">#</a></h2>
+<section id="exercises">
+<h2><span class="section-number">17.4.1. </span>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
 <ul>
-<li><p>Try the implicit Euler method for the mass-pring system</p></li>
+<li><p>Try the implicit Euler method for the mass-spring system</p></li>
 <li><p>Implement the Crank-Nicolson method.</p></li>
 <li><p>Compare the results of the mass-spring system for these three methods, and various time-steps.
-What do you oberve?</p></li>
+What do you observe?</p></li>
+<li><p>Measure the order of convergence, see section <a class="reference internal" href="firstmethods.html#sec-convergence"><span class="std std-ref">Consistency and convergence</span></a>:
+solve the mass-spring system with <span class="math notranslate nohighlight">\(m = k = 1\)</span> and <span class="math notranslate nohighlight">\(y(0) = (1, 0)\)</span> up to <span class="math notranslate nohighlight">\(T = 2 \pi\)</span>, where the exact solution is <span class="math notranslate nohighlight">\(y(T) = (1, 0)\)</span>.
+Use the explicit Euler, improved Euler, implicit Euler, and Crank-Nicolson methods with <span class="math notranslate nohighlight">\(N = 2^4, 2^5, \ldots, 2^{12}\)</span> time-steps.
+Plot the error <span class="math notranslate nohighlight">\(\| y_N - y(T) \|\)</span> over <span class="math notranslate nohighlight">\(\tau\)</span> in a double-logarithmic plot, and determine the orders.</p></li>
+<li><p>Turn the measurement into an automated test with Catch2, see <a class="reference internal" href="../basiclinalg/bla-testing.html"><span class="doc">Automatic testing</span></a>:
+compute <span class="math notranslate nohighlight">\(p \approx \log_2 \big( e(\tau) / e(\tau/2) \big)\)</span> for every method, and <code class="docutils literal notranslate"><span class="pre">REQUIRE</span></code> that it matches the expected order up to <span class="math notranslate nohighlight">\(\pm 0.1\)</span>.
+Use this test for all methods you implement later.</p></li>
 <li><p>Model an electric network by an ODE. Bring it to autonomous form.
 Solve the ODE numerically for various parameters with the three methods, and various time-steps.</p>
 <a class="reference internal image-reference" href="../_images/RC.png"><img alt="../_images/RC.png" class="align-center" src="../_images/RC.png" style="width: 200px;" />
 </a>
 <p>Voltage source <span class="math notranslate nohighlight">\(U_0(t) = \cos(100 \pi t)\)</span>, <span class="math notranslate nohighlight">\(R = C = 1\)</span> or <span class="math notranslate nohighlight">\(R = 100, C = 10^{-6}\)</span>.</p>
-<p>Ohm’s law for a resistor <span class="math notranslate nohighlight">\(R\)</span> with resistivity <span class="math notranslate nohighlight">\(R\)</span>:</p>
+<p>Ohm’s law for a resistor with resistance <span class="math notranslate nohighlight">\(R\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[
   U = R I
   \]</div>
-<p>Equation for a capacitor <span class="math notranslate nohighlight">\(C\)</span> with capacity <span class="math notranslate nohighlight">\(C\)</span>:</p>
+<p>Equation for a capacitor with capacitance <span class="math notranslate nohighlight">\(C\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[
   I = C \frac{dU }{dt}
@@ -583,66 +589,9 @@ Thus we have a constant current along the loop.</p></li>
   \]</div>
 <p>Use initial condition for voltage at capacitor <span class="math notranslate nohighlight">\(U_C(t_0) = 0\)</span>, for <span class="math notranslate nohighlight">\(t_0=0\)</span>.</p>
 </li>
+<li><p>Explain your observations with the stability functions from section <a class="reference internal" href="firstmethods.html#sec-stability"><span class="std std-ref">Stability for linear ODEs</span></a>.
+Which of the two parameter sets for the RC circuit is stiff?</p></li>
 </ul>
-</section>
-<section id="stability-function">
-<h2><span class="section-number">17.4.2. </span>Stability function<a class="headerlink" href="#stability-function" title="Link to this heading">#</a></h2>
-<p>The observations you made can be explained by the stability function of the method.</p>
-<p>An ODE <span class="math notranslate nohighlight">\(y^\prime(t) = A y(t)\)</span> with <span class="math notranslate nohighlight">\(A \in {\mathbb R}^n\)</span> diagonizable can be brought to <span class="math notranslate nohighlight">\(n\)</span> scalar ODEs</p>
-<div class="math notranslate nohighlight">
-\[
-y_i^\prime(t) = \lambda_i y_i(t),
-\]</div>
-<p>where <span class="math notranslate nohighlight">\(\lambda_i\)</span> are eigenvalues of <span class="math notranslate nohighlight">\(A\)</span>. If <span class="math notranslate nohighlight">\(\lambda_i\)</span> has negative (non-positive) real part, the solution
-is decaying (non-increasing). Skip index <span class="math notranslate nohighlight">\(i\)</span>.</p>
-<p>The explicit Euler method with time-step <span class="math notranslate nohighlight">\(h\)</span> leads to</p>
-<div class="math notranslate nohighlight">
-\[
-y_{i+1} = (1 + \tau \lambda) y_i,
-\]</div>
-<p>the implicit Euler method to</p>
-<div class="math notranslate nohighlight">
-\[
-y_{i+1} = \frac{1}{1-\tau \lambda} y_i,
-\]</div>
-<p>and the Crank-Nicolson to</p>
-<div class="math notranslate nohighlight">
-\[
-y_{i+1} = \frac{ 2 + \tau \lambda }  { 2 - \tau \lambda } y_i
-\]</div>
-<p>The stability function <span class="math notranslate nohighlight">\(g(\cdot)\)</span> of a method is defined such that</p>
-<div class="math notranslate nohighlight">
-\[
-y_{i+1} = g(\tau \lambda) y_i
-\]</div>
-<p>These are for the explicit Euler, the implicit Euler, and the Crank-Nicolson:</p>
-<div class="math notranslate nohighlight">
-\[
-g_{EE}(z) = 1+z \qquad g_{IE}(z) = \frac{1}{1-z}  \qquad g_{CN}(z) = \frac{2+z}{2-z}
-\]</div>
-<p>The domain of stability is</p>
-<div class="math notranslate nohighlight">
-\[
-S = \{ z : | g(z) | \leq 1 \}
-\]</div>
-<p>What is</p>
-<div class="math notranslate nohighlight">
-\[
-S_{EE} = \{ z : |z + 1| \leq 1 \}
-\]</div>
-<div class="math notranslate nohighlight">
-\[
-S_{IE} = \{ z : | z - 1 | \geq 1 \}
-\]</div>
-<div class="math notranslate nohighlight">
-\[
-S_{CN} = \{ z : {\text Re} (z) \leq 0 \}
-\]</div>
-<p>If Re<span class="math notranslate nohighlight">\((\lambda) \leq 0\)</span>, then <span class="math notranslate nohighlight">\(\tau \lambda\)</span> is always in the domain of stability of the implicit Euler,
-and of the Crank-Nicolson. This property of an method is called <span class="math notranslate nohighlight">\(A\)</span>-stability. The explicit Euler leads to
-(quickly) increasing numerical solutions if <span class="math notranslate nohighlight">\(\tau\)</span> is not small enough.</p>
-<p>If <span class="math notranslate nohighlight">\(\lim_{z \rightarrow -\infty} g(z) = 0\)</span>, quickly decaying solutions lead to quickly decaying
-numerical solutions. This is the case for the implicit Euler, but not for the Crank-Nicolson. This property is called <span class="math notranslate nohighlight">\(L\)</span>-stability. One observes (slowly decreasing) oscillations with the CR - method when <span class="math notranslate nohighlight">\(-\tau \lambda\)</span> is large.</p>
 </section>
 </section>
 
@@ -712,8 +661,7 @@ numerical solutions. This is the case for the implicit Euler, but not for the Cr
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#excercises">17.4.1. Excercises</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stability-function">17.4.2. Stability function</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">17.4.1. Exercises</a></li>
 </ul>
   </nav></div>
 

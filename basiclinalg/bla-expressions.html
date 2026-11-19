@@ -34,7 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -253,7 +253,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../ODEs/ODEs.html">14. Solving ordinary differential equations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ODEs/theory.html">15. A little bit of theory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ODEs/firstmethods.html">16. Some simple time-stepping methods</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../ODEs/implementation.html">17. Implementation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ODEs/implementation.html">17. Implementing time-stepping methods</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../ODEs/functionalgebra.html">17.1. Function algebra</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ODEs/implementation_ee.html">17.2. Implementing the explicit Euler method</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ODEs/implementation_newton.html">17.3. Implementing a Newton solver</a></li>
@@ -597,25 +597,25 @@ In the breaking work by Todd Veldhuizen <a class="reference download internal" d
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>With this we can, for example, zero elements with indices in semi-open interval <span class="math notranslate nohighlight">\([10,15)\)</span> via <code class="docutils literal notranslate"><span class="pre">vec.Range(10,15)</span> <span class="pre">=</span> <span class="pre">0</span></code>.</p>
-<p>A generalization of a <code class="docutils literal notranslate"><span class="pre">VectorView</span></code> allows vectors whose value don’t have to lie consecutively in memory. For that we provide the <code class="docutils literal notranslate"><span class="pre">dist</span></code> member variable:</p>
+<p>With this we can, for example, zero elements with indices in semi-open interval <span class="math notranslate nohighlight">\([10,15)\)</span> via <code class="docutils literal notranslate"><span class="pre">vec.range(10,15)</span> <span class="pre">=</span> <span class="pre">0</span></code>.</p>
+<p>A generalization of a <code class="docutils literal notranslate"><span class="pre">VectorView</span></code> allows vectors whose value don’t have to lie consecutively in memory. For that we provide the <code class="docutils literal notranslate"><span class="pre">stride</span></code> member variable, the distance in memory between two consecutive entries:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">VectorView</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">m_size</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">m_dist</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">m_stride</span><span class="p">;</span>
 <span class="w">  </span><span class="n">T</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m_data</span><span class="p">;</span>
 <span class="w">  </span><span class="p">...</span><span class="w"> </span>
-<span class="w">  </span><span class="n">T</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="p">()(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">m_data</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="n">m_dist</span><span class="p">];</span><span class="w"> </span><span class="p">}</span><span class="w">  </span>
+<span class="w">  </span><span class="n">T</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="p">()(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">m_data</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="n">m_stride</span><span class="p">];</span><span class="w"> </span><span class="p">}</span><span class="w">  </span>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Ok, this is more general - but the index calculation comes with some price, which we do not want to pay if we do not need it. As a solution we define the <code class="docutils literal notranslate"><span class="pre">dist_</span></code> variable of a template type, which is set to <code class="docutils literal notranslate"><span class="pre">std::integral_constant&lt;1&gt;</span></code> as a default. The compiler can easily optimize out the multiplication with a constant 1:</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">TDIST</span><span class="o">=</span><span class="n">std</span><span class="o">::</span><span class="n">integral_constant</span><span class="o">&lt;</span><span class="mi">1</span><span class="o">&gt;&gt;</span>
+<p>Ok, this is more general - but the index calculation comes with some price, which we do not want to pay if we do not need it. As a solution we define the <code class="docutils literal notranslate"><span class="pre">m_stride</span></code> variable of a template type, which is set to <code class="docutils literal notranslate"><span class="pre">std::integral_constant&lt;size_t,1&gt;</span></code> as a default. The compiler can easily optimize out the multiplication with a constant 1:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">TSTRIDE</span><span class="o">=</span><span class="n">std</span><span class="o">::</span><span class="n">integral_constant</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="p">,</span><span class="mi">1</span><span class="o">&gt;&gt;</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">VectorView</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">m_size</span><span class="p">;</span>
-<span class="w">  </span><span class="n">TDIST</span><span class="w"> </span><span class="n">m_dist</span><span class="p">;</span>
+<span class="w">  </span><span class="n">TSTRIDE</span><span class="w"> </span><span class="n">m_stride</span><span class="p">;</span>
 <span class="w">  </span><span class="n">T</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m_data</span><span class="p">;</span>
 <span class="w">  </span><span class="p">...</span><span class="w"> </span>
-<span class="w">  </span><span class="n">T</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="p">()(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">m_data</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="n">m_dist</span><span class="p">];</span><span class="w"> </span><span class="p">}</span><span class="w">  </span>
+<span class="w">  </span><span class="n">T</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="k">operator</span><span class="p">()(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">m_data</span><span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="n">m_stride</span><span class="p">];</span><span class="w"> </span><span class="p">}</span><span class="w">  </span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -625,15 +625,15 @@ In the breaking work by Todd Veldhuizen <a class="reference download internal" d
 <ul>
 <li><p>Merge the expr - branch from TUWien-ASC/ASC-bla into your main branch <a class="reference internal" href="inst_merge.html"><span class="std std-doc">instructions</span></a></p></li>
 <li><p>Implement a <code class="docutils literal notranslate"><span class="pre">MatrixView</span></code> class</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="k">template</span><span class="w"> </span><span class="n">ORDERING</span><span class="o">&gt;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="p">,</span><span class="w"> </span><span class="n">ORDERING</span><span class="w"> </span><span class="n">ORD</span><span class="o">&gt;</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">MatrixView</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">m_rows</span><span class="p">,</span><span class="w"> </span><span class="n">m_cols</span><span class="p">,</span><span class="w"> </span><span class="n">m_dist</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">m_rows</span><span class="p">,</span><span class="w"> </span><span class="n">m_cols</span><span class="p">,</span><span class="w"> </span><span class="n">m_stride</span><span class="p">;</span>
 <span class="w">  </span><span class="n">T</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m_data</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>Index calculation is <code class="docutils literal notranslate"><span class="pre">i*m_dist+j</span></code> in the row-major case, and <code class="docutils literal notranslate"><span class="pre">i+j*m_dist</span></code> in the col-major case.</p>
-<p>Let your <code class="docutils literal notranslate"><span class="pre">Matrix</span></code> class derive from <code class="docutils literal notranslate"><span class="pre">MatrixView</span></code>. Initialize the <code class="docutils literal notranslate"><span class="pre">m_dist</span></code> variable either with the width, or the height of the matrix, depending on row or column-major storage.</p>
+<p>Index calculation is <code class="docutils literal notranslate"><span class="pre">i*m_stride+j</span></code> in the row-major case, and <code class="docutils literal notranslate"><span class="pre">i+j*m_stride</span></code> in the col-major case.</p>
+<p>Let your <code class="docutils literal notranslate"><span class="pre">Matrix</span></code> class derive from <code class="docutils literal notranslate"><span class="pre">MatrixView</span></code>. Initialize the <code class="docutils literal notranslate"><span class="pre">m_stride</span></code> variable either with the width, or the height of the matrix, depending on row or column-major storage.</p>
 </li>
 <li><p>Introduce expression templates for matrices, including</p>
 <ul class="simple">
@@ -651,7 +651,7 @@ TSUM sum = 0;
 <p>You may first implement an inner product (<code class="docutils literal notranslate"><span class="pre">dot</span></code> - function) and use that in matrix-vector and matrix-matrix products.</p>
 </li>
 <li><p>Implement <code class="docutils literal notranslate"><span class="pre">matrix.row(i)</span></code> and <code class="docutils literal notranslate"><span class="pre">matrix.col(j)</span></code> methods returning a <code class="docutils literal notranslate"><span class="pre">VectorView</span></code> of individual rows and columns.</p></li>
-<li><p>Implement <code class="docutils literal notranslate"><span class="pre">matrix.rows(first,next)</span></code> and <code class="docutils literal notranslate"><span class="pre">matrix.cols(first,next)</span></code> methods returning a <code class="docutils literal notranslate"><span class="pre">MatrixView</span></code> of a range of rows/cols.</p></li>
+<li><p>Implement <code class="docutils literal notranslate"><span class="pre">matrix.rowRange(first,next)</span></code> and <code class="docutils literal notranslate"><span class="pre">matrix.colRange(first,next)</span></code> methods returning a <code class="docutils literal notranslate"><span class="pre">MatrixView</span></code> of a range of rows/cols.</p></li>
 <li><p>Implement a <code class="docutils literal notranslate"><span class="pre">transpose(matrix)</span></code> function resulting in a <code class="docutils literal notranslate"><span class="pre">MatrixView</span></code> of opposite ordering</p></li>
 <li><p>Simplify the <code class="docutils literal notranslate"><span class="pre">inverse</span></code> function using these new features</p></li>
 </ul>

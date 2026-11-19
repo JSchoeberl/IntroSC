@@ -34,7 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -253,7 +253,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../ODEs/ODEs.html">14. Solving ordinary differential equations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ODEs/theory.html">15. A little bit of theory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ODEs/firstmethods.html">16. Some simple time-stepping methods</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../ODEs/implementation.html">17. Implementation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ODEs/implementation.html">17. Implementing time-stepping methods</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../ODEs/functionalgebra.html">17.1. Function algebra</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ODEs/implementation_ee.html">17.2. Implementing the explicit Euler method</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../ODEs/implementation_newton.html">17.3. Implementing a Newton solver</a></li>
@@ -519,8 +519,8 @@
 <span class="w">      </span><span class="kt">size_t</span><span class="w"> </span><span class="n">j2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">min</span><span class="p">(</span><span class="n">A</span><span class="p">.</span><span class="n">Width</span><span class="p">(),</span><span class="w"> </span><span class="n">j1</span><span class="o">+</span><span class="n">BW</span><span class="p">);</span>
 
 <span class="w">      </span><span class="n">MatrixView</span><span class="w"> </span><span class="n">Ablock</span><span class="p">(</span><span class="n">i2</span><span class="o">-</span><span class="n">i1</span><span class="p">,</span><span class="w"> </span><span class="n">j2</span><span class="o">-</span><span class="n">j1</span><span class="p">,</span><span class="w"> </span><span class="n">BW</span><span class="p">,</span><span class="w"> </span><span class="n">memBA</span><span class="p">);</span>
-<span class="w">      </span><span class="n">Ablock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="n">Rows</span><span class="p">(</span><span class="n">i1</span><span class="p">,</span><span class="n">i2</span><span class="p">).</span><span class="n">Cols</span><span class="p">(</span><span class="n">j1</span><span class="p">,</span><span class="n">j2</span><span class="p">);</span>
-<span class="w">      </span><span class="n">AddMatMat2</span><span class="w"> </span><span class="p">(</span><span class="n">Ablock</span><span class="p">,</span><span class="w"> </span><span class="n">B</span><span class="p">.</span><span class="n">Rows</span><span class="p">(</span><span class="n">j1</span><span class="p">,</span><span class="n">j2</span><span class="p">),</span><span class="w"> </span><span class="n">c</span><span class="p">.</span><span class="n">Rows</span><span class="p">(</span><span class="n">i1</span><span class="p">,</span><span class="n">i2</span><span class="p">));</span>
+<span class="w">      </span><span class="n">Ablock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">A</span><span class="p">.</span><span class="n">rowRange</span><span class="p">(</span><span class="n">i1</span><span class="p">,</span><span class="n">i2</span><span class="p">).</span><span class="n">colRange</span><span class="p">(</span><span class="n">j1</span><span class="p">,</span><span class="n">j2</span><span class="p">);</span>
+<span class="w">      </span><span class="n">AddMatMat2</span><span class="w"> </span><span class="p">(</span><span class="n">Ablock</span><span class="p">,</span><span class="w"> </span><span class="n">B</span><span class="p">.</span><span class="n">rowRange</span><span class="p">(</span><span class="n">j1</span><span class="p">,</span><span class="n">j2</span><span class="p">),</span><span class="w"> </span><span class="n">c</span><span class="p">.</span><span class="n">rowRange</span><span class="p">(</span><span class="n">i1</span><span class="p">,</span><span class="n">i2</span><span class="p">));</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>

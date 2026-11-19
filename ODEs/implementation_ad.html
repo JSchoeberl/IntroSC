@@ -34,7 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -253,7 +253,7 @@
 <li class="toctree-l1"><a class="reference internal" href="ODEs.html">14. Solving ordinary differential equations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theory.html">15. A little bit of theory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="firstmethods.html">16. Some simple time-stepping methods</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="implementation.html">17. Implementation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="implementation.html">17. Implementing time-stepping methods</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="functionalgebra.html">17.1. Function algebra</a></li>
 <li class="toctree-l2"><a class="reference internal" href="implementation_ee.html">17.2. Implementing the explicit Euler method</a></li>
 <li class="toctree-l2"><a class="reference internal" href="implementation_newton.html">17.3. Implementing a Newton solver</a></li>
@@ -504,7 +504,7 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="automatic-differentiation">
 <h1><span class="section-number">18. </span>Automatic Differentiation<a class="headerlink" href="#automatic-differentiation" title="Link to this heading">#</a></h1>
-<p>Often it is cumbersome and error prune to compute derivatives exactly. Two <em>different</em> ways to avoid manual differentiation are numerical differentiation, and automatic differentiation. We don’t cover symbolic differentiation as provided by computer algebra libraries as <em>sympy</em>.</p>
+<p>Often it is cumbersome and error prone to compute derivatives exactly. Two <em>different</em> ways to avoid manual differentiation are numerical differentiation, and automatic differentiation. We don’t cover symbolic differentiation as provided by computer algebra libraries as <em>sympy</em>.</p>
 <section id="numerical-differentiation">
 <h2><span class="section-number">18.1. </span>Numerical differentiation<a class="headerlink" href="#numerical-differentiation" title="Link to this heading">#</a></h2>
 <p>To approximate the derivative of a function one may use finite differences, for example use a central difference quotient for the <span class="math notranslate nohighlight">\(i^{th}\)</span> partial derivative:</p>
@@ -512,7 +512,7 @@
 \[
 \frac{\partial f}{\partial x_i}(x) \approx \frac{f(x + \varepsilon e_i) - f(x - \varepsilon e_i)}{2 \varepsilon}
 \]</div>
-<p>Here, <span class="math notranslate nohighlight">\(e_i\)</span> is the <span class="math notranslate nohighlight">\(i^{th}\)</span> unit-vector, and <span class="math notranslate nohighlight">\(\varepsilon\)</span> is a small value. If the function is smooth, one easily verifies using Taylor expansion that the approximation error is <span class="math notranslate nohighlight">\(O(\varepsilon^2)\)</span>. To have a good approximation, one should choose <span class="math notranslate nohighlight">\(\epsilon\)</span> small.</p>
+<p>Here, <span class="math notranslate nohighlight">\(e_i\)</span> is the <span class="math notranslate nohighlight">\(i^{th}\)</span> unit-vector, and <span class="math notranslate nohighlight">\(\varepsilon\)</span> is a small value. If the function is smooth, one easily verifies using Taylor expansion that the approximation error is <span class="math notranslate nohighlight">\(O(\varepsilon^2)\)</span>. To have a good approximation, one should choose <span class="math notranslate nohighlight">\(\varepsilon\)</span> small.</p>
 <p>On the other hand, one subtracts two similar values in the numerator, and observes numerical cancellation if <span class="math notranslate nohighlight">\(\varepsilon\)</span> is very small. Thus, a good compromise is needed.</p>
 <p>The advantage of numerical differentiation is that it is non-invasive, it works without any change of the code evaluating the function <span class="math notranslate nohighlight">\(f\)</span>.</p>
 </section>
@@ -524,7 +524,7 @@
 \[
 f(u,v) = u * v.
 \]</div>
-<p>Say <span class="math notranslate nohighlight">\((x_1, \ldots x_n)\)</span> are the independent variables after whom we want to differentiate. Say <span class="math notranslate nohighlight">\(u\)</span> and <span class="math notranslate nohighlight">\(v\)</span> are intermediate results, for which we know the value, and all partial derivatives (the gradient <span class="math notranslate nohighlight">\(\nabla u\)</span>). They are represented as</p>
+<p>Say <span class="math notranslate nohighlight">\((x_1, \ldots x_n)\)</span> are the independent variables with respect to which we want to differentiate. Say <span class="math notranslate nohighlight">\(u\)</span> and <span class="math notranslate nohighlight">\(v\)</span> are intermediate results, for which we know the value, and all partial derivatives (the gradient <span class="math notranslate nohighlight">\(\nabla u\)</span>). They are represented as</p>
 <div class="math notranslate nohighlight">
 \[
 {\bf u} = \left( \begin{array}{c} u \atop g_u \end{array} \right) \quad \text{and} \quad
@@ -540,7 +540,7 @@ f(u,v) = u * v.
 \[
 {\bf w} = \left( \begin{array}{c} w \atop g_w \end{array} \right) =  \left( \begin{array}{c} u v \atop u g_v + v g_u \end{array} \right)
 \]</div>
-<p>We now from the chain rule that</p>
+<p>We know from the chain rule that</p>
 <div class="math notranslate nohighlight">
 \[
 \nabla \sin (u) = \cos(u) \nabla u
@@ -555,7 +555,7 @@ f(u,v) = u * v.
 </section>
 <section id="implementation-of-an-autodiff-data-type">
 <h2><span class="section-number">18.3. </span>Implementation of an <code class="docutils literal notranslate"><span class="pre">AutoDiff</span></code> data type<a class="headerlink" href="#implementation-of-an-autodiff-data-type" title="Link to this heading">#</a></h2>
-<p>We implement a data type for automatic differentiation. It stores the function value (<code class="docutils literal notranslate"><span class="pre">m_val</span></code>), and the gradient (<code class="docutils literal notranslate"><span class="pre">m_deriv</span></code>). We use a template argument <code class="docutils literal notranslate"><span class="pre">N</span></code> to specify the number of independent variables, what is the dimension of the gradient:</p>
+<p>We implement a data type for automatic differentiation. It stores the function value (<code class="docutils literal notranslate"><span class="pre">m_val</span></code>), and the gradient (<code class="docutils literal notranslate"><span class="pre">m_deriv</span></code>). We use a template argument <code class="docutils literal notranslate"><span class="pre">N</span></code> to specify the number of independent variables, which is the dimension of the gradient:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="kt">size_t</span><span class="w"> </span><span class="n">N</span><span class="p">,</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">double</span><span class="o">&gt;</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">AutoDiff</span>
 <span class="p">{</span>
@@ -616,53 +616,53 @@ f(x,y) = x * y
 </pre></div>
 </div>
 <p>and define</p>
-<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="o">*</span><span class="n">y</span><span class="p">;</span>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">AutoDiff</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="o">*</span><span class="n">y</span><span class="p">;</span>
 </pre></div>
 </div>
-<p>to obtain the gradient.</p>
-<p>Find the code in <code class="docutils literal notranslate"><span class="pre">src\autodiff.hpp</span></code> and some demos in <code class="docutils literal notranslate"><span class="pre">demos\demo_autodiff.cpp</span></code>.</p>
+<p>Then <code class="docutils literal notranslate"><span class="pre">f.value()</span></code> is the function value, and <code class="docutils literal notranslate"><span class="pre">f.deriv()</span></code> contains the gradient.</p>
+<p>Find the code in <code class="docutils literal notranslate"><span class="pre">src/autodiff.hpp</span></code> and some demos in <code class="docutils literal notranslate"><span class="pre">demos/demo_autodiff.cpp</span></code>.</p>
 </section>
 <section id="using-numerical-and-automatic-differentiation-for-the-nonlinear-function-class">
 <h2><span class="section-number">18.4. </span>Using numerical and automatic differentiation for the nonlinear-function class<a class="headerlink" href="#using-numerical-and-automatic-differentiation-for-the-nonlinear-function-class" title="Link to this heading">#</a></h2>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">NonlinearFunctionNumDiff</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">NonlinearFunction</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">m_eps</span><span class="p">;</span>
 <span class="k">public</span><span class="o">:</span>
-<span class="w">  </span><span class="n">NonlinearFunctionNumDiff</span><span class="w"> </span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">eps</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">m_eps</span><span class="p">(</span><span class="n">eps</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="n">NonlinearFunctionNumDiff</span><span class="w"> </span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">eps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1e-6</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">m_eps</span><span class="p">(</span><span class="n">eps</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
 <span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="n">evaluateDeriv</span><span class="w"> </span><span class="p">(</span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">MatrixView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">df</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">Vector</span><span class="w"> </span><span class="nf">xl</span><span class="p">(</span><span class="n">dimX</span><span class="p">()),</span><span class="w"> </span><span class="n">xr</span><span class="p">(</span><span class="n">dimX</span><span class="p">());</span>
-<span class="w">    </span><span class="n">Vector</span><span class="w"> </span><span class="nf">fl</span><span class="p">(</span><span class="n">dimF</span><span class="p">()),</span><span class="w"> </span><span class="n">fr</span><span class="p">(</span><span class="n">dimF</span><span class="p">());</span>
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">dimX</span><span class="p">();</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">xl</span><span class="p">(</span><span class="n">dimX</span><span class="p">()),</span><span class="w"> </span><span class="n">xr</span><span class="p">(</span><span class="n">dimX</span><span class="p">());</span>
+<span class="w">    </span><span class="n">Vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">fl</span><span class="p">(</span><span class="n">dimF</span><span class="p">()),</span><span class="w"> </span><span class="n">fr</span><span class="p">(</span><span class="n">dimF</span><span class="p">());</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">dimX</span><span class="p">();</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="n">xl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="n">xr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
-<span class="w">      </span><span class="n">xl</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="n">eps</span><span class="p">;</span><span class="w"> </span><span class="n">xr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">eps</span><span class="p">;</span>
-<span class="w">      </span><span class="n">evaluate</span><span class="p">(</span><span class="n">xl</span><span class="p">,</span><span class="n">fl</span><span class="p">);</span>
-<span class="w">      </span><span class="n">evaluate</span><span class="p">(</span><span class="n">xr</span><span class="p">,</span><span class="n">fr</span><span class="p">);</span>
-<span class="w">      </span><span class="n">df</span><span class="p">.</span><span class="n">Col</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">eps</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">fr</span><span class="o">-</span><span class="n">fl</span><span class="p">);</span>
+<span class="w">      </span><span class="n">xl</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="n">m_eps</span><span class="p">;</span><span class="w"> </span><span class="n">xr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">m_eps</span><span class="p">;</span>
+<span class="w">      </span><span class="n">evaluate</span><span class="p">(</span><span class="n">xl</span><span class="p">,</span><span class="w"> </span><span class="n">fl</span><span class="p">);</span>
+<span class="w">      </span><span class="n">evaluate</span><span class="p">(</span><span class="n">xr</span><span class="p">,</span><span class="w"> </span><span class="n">fr</span><span class="p">);</span>
+<span class="w">      </span><span class="n">df</span><span class="p">.</span><span class="n">col</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">m_eps</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">fr</span><span class="o">-</span><span class="n">fl</span><span class="p">);</span>
 <span class="w">    </span><span class="p">}</span>
-<span class="w">  </span><span class="p">};</span>
-<span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">};</span>
 </pre></div>
 </div>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">NLF</span><span class="o">&gt;</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">NonlinearFunctionAutoDif</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">NonlinearFunction</span><span class="w"> </span><span class="p">{</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">NonlinearFunctionAutoDiff</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">NonlinearFunction</span><span class="w"> </span><span class="p">{</span>
 <span class="k">public</span><span class="o">:</span>
 
 <span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="n">evaluate</span><span class="p">(</span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="n">NFL</span><span class="o">*&gt;</span><span class="p">(</span><span class="k">this</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">T_evaluate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">);</span>
+<span class="w">    </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="n">NLF</span><span class="o">*&gt;</span><span class="p">(</span><span class="k">this</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">T_evaluate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">);</span>
 <span class="w">  </span><span class="p">}</span>
 
 <span class="w">  </span><span class="kt">void</span><span class="w"> </span><span class="n">evaluateDeriv</span><span class="w"> </span><span class="p">(</span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">MatrixView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">df</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">Vector</span><span class="o">&lt;</span><span class="n">AutoDiff</span><span class="o">&lt;</span><span class="mi">1</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">adx</span><span class="p">(</span><span class="n">dimX</span><span class="p">());</span>
 <span class="w">    </span><span class="n">Vector</span><span class="o">&lt;</span><span class="n">AutoDiff</span><span class="o">&lt;</span><span class="mi">1</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">adf</span><span class="p">(</span><span class="n">dimF</span><span class="p">());</span>
 
-<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">dimX</span><span class="p">();</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">dimX</span><span class="p">();</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">dimX</span><span class="p">();</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">dimX</span><span class="p">();</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span>
 <span class="w">        </span><span class="n">adx</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">(</span><span class="n">j</span><span class="p">);</span>
 <span class="w">      </span><span class="n">adx</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Variable</span><span class="o">&lt;</span><span class="mi">0</span><span class="o">&gt;</span><span class="p">(</span><span class="n">x</span><span class="p">(</span><span class="n">i</span><span class="p">));</span>
-<span class="w">      </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="n">NFL</span><span class="o">*&gt;</span><span class="p">(</span><span class="k">this</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">T_evaluate</span><span class="p">(</span><span class="n">adx</span><span class="p">,</span><span class="w"> </span><span class="n">adf</span><span class="p">);</span>
-<span class="w">      </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">dimF</span><span class="p">();</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span>
+<span class="w">      </span><span class="k">static_cast</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="n">NLF</span><span class="o">*&gt;</span><span class="p">(</span><span class="k">this</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">T_evaluate</span><span class="p">(</span><span class="n">adx</span><span class="p">,</span><span class="w"> </span><span class="n">adf</span><span class="p">);</span>
+<span class="w">      </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">dimF</span><span class="p">();</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span>
 <span class="w">        </span><span class="n">df</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">adf</span><span class="p">(</span><span class="n">j</span><span class="p">).</span><span class="n">deriv</span><span class="p">()[</span><span class="mi">0</span><span class="p">];</span>
 <span class="w">    </span><span class="p">}</span>
-<span class="w">  </span><span class="p">}</span><span class="w">  </span>
+<span class="w">  </span><span class="p">}</span>
 <span class="p">};</span>
 </pre></div>
 </div>
@@ -674,7 +674,7 @@ f(x,y) = x * y
 <span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">T_evaluate</span><span class="p">(</span><span class="n">VectorView</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">VectorView</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// evaluation of function</span>
 <span class="w"> </span><span class="p">}</span>
-<span class="p">}</span>
+<span class="p">};</span>
 </pre></div>
 </div>
 </section>
@@ -690,7 +690,7 @@ their derivatives (using AutoDiff).</p>
 \[\begin{eqnarray*}
 P_0(x) &amp; = &amp; 1 \\
 P_1(x) &amp; = &amp; x \\
-P_n(x) &amp; = &amp; \frac{2n-1}{n} x P_{n-1}(x) + \frac{n-1}{n} P_{n-2}(x) \qquad n \geq 2
+P_n(x) &amp; = &amp; \frac{2n-1}{n} x P_{n-1}(x) - \frac{n-1}{n} P_{n-2}(x) \qquad n \geq 2
 \end{eqnarray*}\]</div>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">T</span><span class="o">&gt;</span>
 <span class="kt">void</span><span class="w"> </span><span class="n">LegendrePolynomials</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;</span><span class="w"> </span><span class="n">P</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -713,10 +713,10 @@ P_n(x) &amp; = &amp; \frac{2n-1}{n} x P_{n-1}(x) + \frac{n-1}{n} P_{n-2}(x) \qqu
 </section>
 <section id="exercise-test-the-autodiff-class-for-the-pendulum">
 <h2><span class="section-number">18.6. </span>Exercise: test the <code class="docutils literal notranslate"><span class="pre">AutoDiff</span></code> class for the pendulum<a class="headerlink" href="#exercise-test-the-autodiff-class-for-the-pendulum" title="Link to this heading">#</a></h2>
-<p>The pendulum is modeled by an ode whith non-linear right-hand side. The ode as second order equation is</p>
+<p>The pendulum is modeled by an ODE with non-linear right-hand side. The ode as second order equation is</p>
 <div class="math notranslate nohighlight">
 \[
-\alpha^{\prime \prime} = -\frac{g}{l} \sin (\alpha), \qquad \alpha(t_0) = \alpha_0, \; \alpha^\prime(0) = \alpha_{0p},
+\alpha^{\prime \prime} = -\frac{g}{l} \sin (\alpha), \qquad \alpha(t_0) = \alpha_0, \; \alpha^\prime(t_0) = \alpha_{0p},
 \]</div>
 <p>where <span class="math notranslate nohighlight">\(\alpha\)</span> is the angular displacement, <span class="math notranslate nohighlight">\(l\)</span> is the length of the pendulum, and <span class="math notranslate nohighlight">\(g\)</span> the gravitational acceleration
 (roughly <span class="math notranslate nohighlight">\(9.81 m s^{-2}\)</span> on earth).</p>

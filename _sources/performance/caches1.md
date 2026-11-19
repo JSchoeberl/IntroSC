@@ -88,8 +88,8 @@ void addMatMat (MatrixView<> A, MatrixView<> B, MatrixView<> C) {
       size_t j2 = min(A.cols(), j1+BW);
 
       MatrixView<> Ablock(i2-i1, j2-j1, BW, memBA);
-      Ablock = A.rows(i1,i2).cols(j1,j2);
-      addMatMat2 (Ablock, B.rows(j1,j2), C.rows(i1,i2));
+      Ablock = A.rowRange(i1,i2).colRange(j1,j2);
+      addMatMat2 (Ablock, B.rowRange(j1,j2), C.rowRange(i1,i2));
     }
 }
 ```

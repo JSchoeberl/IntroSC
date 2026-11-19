@@ -119,29 +119,29 @@ class VectorView {
     { return VectorView(next-first, m_data+first); }
 }
 ```
-With this we can, for example, zero elements with indices in semi-open interval $[10,15)$ via `vec.Range(10,15) = 0`.
+With this we can, for example, zero elements with indices in semi-open interval $[10,15)$ via `vec.range(10,15) = 0`.
 
-A generalization of a `VectorView` allows vectors whose value don't have to lie consecutively in memory. For that we provide the `dist` member variable:
+A generalization of a `VectorView` allows vectors whose value don't have to lie consecutively in memory. For that we provide the `stride` member variable, the distance in memory between two consecutive entries:
 ```cpp
 class VectorView {
   size_t m_size;
-  size_t m_dist;
+  size_t m_stride;
   T * m_data;
   ... 
-  T & operator()(size_t i) { return m_data[i*m_dist]; }  
+  T & operator()(size_t i) { return m_data[i*m_stride]; }  
 }
 ```
 
-Ok, this is more general - but the index calculation comes with some price, which we do not want to pay if we do not need it. As a solution we define the `dist_` variable of a template type, which is set to `std::integral_constant<1>` as a default. The compiler can easily optimize out the multiplication with a constant 1:
+Ok, this is more general - but the index calculation comes with some price, which we do not want to pay if we do not need it. As a solution we define the `m_stride` variable of a template type, which is set to `std::integral_constant<size_t,1>` as a default. The compiler can easily optimize out the multiplication with a constant 1:
 
 ```cpp
-template <typename T, typename TDIST=std::integral_constant<1>>
+template <typename T, typename TSTRIDE=std::integral_constant<size_t,1>>
 class VectorView {
   size_t m_size;
-  TDIST m_dist;
+  TSTRIDE m_stride;
   T * m_data;
   ... 
-  T & operator()(size_t i) { return m_data[i*m_dist]; }  
+  T & operator()(size_t i) { return m_data[i*m_stride]; }  
 }
 ```
 
@@ -152,15 +152,15 @@ class VectorView {
   * Implement a `MatrixView` class
 
     ```cpp
-    template <typename T, template ORDERING>
+    template <typename T, ORDERING ORD>
     class MatrixView {
-      size_t m_rows, m_cols, m_dist;
+      size_t m_rows, m_cols, m_stride;
       T * m_data;
     }
     ```
-    Index calculation is `i*m_dist+j` in the row-major case, and `i+j*m_dist` in the col-major case.
+    Index calculation is `i*m_stride+j` in the row-major case, and `i+j*m_stride` in the col-major case.
 
-    Let your `Matrix` class derive from `MatrixView`. Initialize the `m_dist` variable either with the width, or the height of the matrix, depending on row or column-major storage.
+    Let your `Matrix` class derive from `MatrixView`. Initialize the `m_stride` variable either with the width, or the height of the matrix, depending on row or column-major storage.
 
   * Introduce expression templates for matrices, including
     - MatExpr + MatExpr -> MatExpr
@@ -178,7 +178,7 @@ class VectorView {
 
   * Implement `matrix.row(i)` and `matrix.col(j)` methods returning a `VectorView` of individual rows and columns.
 
-  * Implement `matrix.rows(first,next)` and `matrix.cols(first,next)` methods returning a `MatrixView` of a range of rows/cols.
+  * Implement `matrix.rowRange(first,next)` and `matrix.colRange(first,next)` methods returning a `MatrixView` of a range of rows/cols.
 
   * Implement a `transpose(matrix)` function resulting in a `MatrixView` of opposite ordering
   

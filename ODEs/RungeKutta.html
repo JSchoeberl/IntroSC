@@ -34,7 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -253,7 +253,7 @@
 <li class="toctree-l1"><a class="reference internal" href="ODEs.html">14. Solving ordinary differential equations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theory.html">15. A little bit of theory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="firstmethods.html">16. Some simple time-stepping methods</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="implementation.html">17. Implementation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="implementation.html">17. Implementing time-stepping methods</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="functionalgebra.html">17.1. Function algebra</a></li>
 <li class="toctree-l2"><a class="reference internal" href="implementation_ee.html">17.2. Implementing the explicit Euler method</a></li>
 <li class="toctree-l2"><a class="reference internal" href="implementation_newton.html">17.3. Implementing a Newton solver</a></li>
@@ -487,11 +487,12 @@
                 <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#explicit-rk-methods">19.1. Explicit RK methods</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implicit-runge-kutta-methods">19.2. Implicit Runge Kutta methods</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation-of-a-runge-kutta-time-stepper-for-arbitrary-butcher-tableaus">19.3. Implementation of a Runge-Kutta time-stepper for arbitrary Butcher tableaus.</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#runge-kutta-methods-of-arbitrary-order">19.3.1. Runge-Kutta methods of arbitrary order</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#order-and-stability-of-runge-kutta-methods">19.3. Order and stability of Runge-Kutta methods</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation-of-a-runge-kutta-time-stepper-for-arbitrary-butcher-tableaus">19.4. Implementation of a Runge-Kutta time-stepper for arbitrary Butcher tableaus.</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#runge-kutta-methods-of-arbitrary-order">19.4.1. Runge-Kutta methods of arbitrary order</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">19.4. Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">19.5. Exercises</a></li>
 </ul>
             </nav>
         </div>
@@ -505,16 +506,16 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="runge-kutta-methods">
 <h1><span class="section-number">19. </span>Runge-Kutta methods<a class="headerlink" href="#runge-kutta-methods" title="Link to this heading">#</a></h1>
-<p>Recall the integral formulation of the ODE on time interval <span class="math notranslate nohighlight">\([t_i, t_{i+1}]\)</span>:</p>
+<p>Recall the integral formulation of the ODE on time interval <span class="math notranslate nohighlight">\([t_n, t_{n+1}]\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[
-y(t_{i+1}) = y(t_i) + \int_{t_i}^{t_{i+1}} f(s, y(s)) ds
+y(t_{n+1}) = y(t_n) + \int_{t_n}^{t_{n+1}} f(s, y(s)) ds
 \]</div>
 <p>The goal of Runge-Kutta methods is to obtain higher accuracy by
 using more accurate numerical integration rule:</p>
 <div class="math notranslate nohighlight">
 \[
-y_{i+1} = y_i + \tau \sum_{j=0}^{s-1} b_j f(t_i+c_j \tau, y_i^j)
+y_{n+1} = y_n + \tau \sum_{j=0}^{s-1} b_j f(t_n+c_j \tau, y_n^j)
 \]</div>
 <p>where</p>
 <ul class="simple">
@@ -526,19 +527,19 @@ y_{i+1} = y_i + \tau \sum_{j=0}^{s-1} b_j f(t_i+c_j \tau, y_i^j)
 \int_0^1 f(t) dt \approx \sum_{j=0}^{s-1} b_j f(c_j)
 \]</div>
 <ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(y_i^j\)</span> are approximations to <span class="math notranslate nohighlight">\(y(t_i + c_j \tau)\)</span>, which are also unknown</p></li>
+<li><p><span class="math notranslate nohighlight">\(y_n^j\)</span> are approximations to <span class="math notranslate nohighlight">\(y(t_n + c_j \tau)\)</span>, which are also unknown</p></li>
 </ul>
 <p>The exact values at the stage-points are</p>
 <div class="math notranslate nohighlight">
 \[
-y(t_i+c_j \tau) = y(t_i) + \int_{t_i}^{t_i+c_j \tau} f(t, y(t)) dt
+y(t_n+c_j \tau) = y(t_n) + \int_{t_n}^{t_n+c_j \tau} f(t, y(t)) dt
 \]</div>
-<p>Again, we use numerical integration to define the numerical stage values (skipping the index <span class="math notranslate nohighlight">\(i\)</span>):</p>
+<p>Again, we use numerical integration to define the numerical stage values (skipping the index <span class="math notranslate nohighlight">\(n\)</span>):</p>
 <div class="math notranslate nohighlight">
 \[
-y^j = y_i + \tau \sum_{l=0}^{s-1}  a_{jl} f(t_i+c_l \tau, y^l) \qquad 0 \leq j &lt; s
+y^j = y_n + \tau \sum_{l=0}^{s-1}  a_{jl} f(t_n+c_l \tau, y^l) \qquad 0 \leq j &lt; s
 \]</div>
-<p>We use the same integration points as above, however the weigths are adjusted
+<p>We use the same integration points as above, however the weights are adjusted
 to the smaller interval such that</p>
 <div class="math notranslate nohighlight">
 \[
@@ -556,15 +557,15 @@ c_{s-1} &amp; a_{s-1,0} &amp; \dots &amp; a_{s-1,s-1} \\
  &amp; b_0 &amp; \dots &amp; b_{s-1}
 \end{array}
 \end{split}\]</div>
-<p>Instead of having the <span class="math notranslate nohighlight">\(y^j\)</span> as unknonws, one often solves for <span class="math notranslate nohighlight">\(k\)</span>-values (<span class="math notranslate nohighlight">\(k\)</span> like slope):</p>
+<p>Instead of having the <span class="math notranslate nohighlight">\(y^j\)</span> as unknowns, one often solves for <span class="math notranslate nohighlight">\(k\)</span>-values (<span class="math notranslate nohighlight">\(k\)</span> like slope):</p>
 <div class="math notranslate nohighlight">
 \[
-k^j = f(y_i + c_j \tau, y_i + \tau \sum_{l=0}^{s-1} a_{jl} k^l)
+k^j = f(t_n + c_j \tau, y_n + \tau \sum_{l=0}^{s-1} a_{jl} k^l)
 \]</div>
 <p>and then</p>
 <div class="math notranslate nohighlight">
 \[
-y_{i+1} = y_i + \tau \sum_{l=0}^{s-1} b_l k^l
+y_{n+1} = y_n + \tau \sum_{l=0}^{s-1} b_l k^l
 \]</div>
 <section id="explicit-rk-methods">
 <h2><span class="section-number">19.1. </span>Explicit RK methods<a class="headerlink" href="#explicit-rk-methods" title="Link to this heading">#</a></h2>
@@ -586,27 +587,27 @@ The <span class="math notranslate nohighlight">\(a_{jk}\)</span> coefficients fo
 <div class="math notranslate nohighlight">
 \[\begin{split}
   \begin{array}{rcl}
-  y^0 &amp; = &amp; y_i \\
-  y^1 &amp; = &amp; y_i + \tfrac{\tau}{2} f(t_i, y^0)
+  y^0 &amp; = &amp; y_n \\
+  y^1 &amp; = &amp; y_n + \tfrac{\tau}{2} f(t_n, y^0)
   \end{array}
   \end{split}\]</div>
 <p>and then</p>
 <div class="math notranslate nohighlight">
 \[
-  y_{i+1} = y_i + \tau f(t_i+\tfrac{h}{2}, y^1)
+  y_{n+1} = y_n + \tau f(t_n+\tfrac{\tau}{2}, y^1)
   \]</div>
 <p>Evaluation in <span class="math notranslate nohighlight">\(k\)</span>-values:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
   \begin{array}{rcl}
-  k^0 &amp; = &amp; f(t_i, y_i) \\
-  k^1 &amp; = &amp; f(t_i+\frac{\tau}{2}, y_i + \frac{\tau}{2} k^0)
+  k^0 &amp; = &amp; f(t_n, y_n) \\
+  k^1 &amp; = &amp; f(t_n+\frac{\tau}{2}, y_n + \frac{\tau}{2} k^0)
   \end{array}
   \end{split}\]</div>
 <p>and then</p>
 <div class="math notranslate nohighlight">
 \[
-  y_{i+1} = y_i + \tau k^1
+  y_{n+1} = y_n + \tau k^1
   \]</div>
 </li>
 <li><p>the <span class="math notranslate nohighlight">\(RK_4\)</span> - method, aka THE classical Runge Kutta method</p></li>
@@ -625,48 +626,48 @@ The <span class="math notranslate nohighlight">\(a_{jk}\)</span> coefficients fo
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \begin{array}{rcl}
-y^0  &amp; = &amp; y_i \\
-y^1  &amp; = &amp; y_i + \tfrac{\tau}{2} f(t_i, y^0) \\
-y^2  &amp; = &amp; y_i + \tfrac{\tau}{2} f(t_i+\tfrac{\tau}{2}, y^1) \\
-y^3  &amp; = &amp; y_i + \tau f(t_i+\tfrac{\tau}{2}, y^2) \\
+y^0  &amp; = &amp; y_n \\
+y^1  &amp; = &amp; y_n + \tfrac{\tau}{2} f(t_n, y^0) \\
+y^2  &amp; = &amp; y_n + \tfrac{\tau}{2} f(t_n+\tfrac{\tau}{2}, y^1) \\
+y^3  &amp; = &amp; y_n + \tau f(t_n+\tfrac{\tau}{2}, y^2) \\
 \end{array}
 \end{split}\]</div>
 <p>and then</p>
 <div class="math notranslate nohighlight">
 \[
-y_{i+1} = y_i + \frac{\tau}{6} \big(f(t_i, y^0) + 2 f(t_i+\tfrac{h}{\tau}, y^1)
-+ 2 f(t_i+\tfrac{\tau}{2}, y^2) + f(t_i+\tau, y^3) \big)
+y_{n+1} = y_n + \frac{\tau}{6} \big(f(t_n, y^0) + 2 f(t_n+\tfrac{\tau}{2}, y^1)
++ 2 f(t_n+\tfrac{\tau}{2}, y^2) + f(t_n+\tau, y^3) \big)
 \]</div>
 <div class="math notranslate nohighlight">
 \[\begin{split}
   \begin{array}{rcl}
-  k^0  &amp; = &amp; f(t_i, y_i) \\
-  k^1  &amp; = &amp; f(t_i+\frac{\tau}{2}, y_i + \frac{\tau}{2} k^0) \\
-  k^2  &amp; = &amp; f(t_i+\frac{\tau}{2}, y_i + \frac{\tau}{2} k^1) \\
-  k^3  &amp; = &amp; f(t_i + \tau, y_i + \tau k^2)
+  k^0  &amp; = &amp; f(t_n, y_n) \\
+  k^1  &amp; = &amp; f(t_n+\frac{\tau}{2}, y_n + \frac{\tau}{2} k^0) \\
+  k^2  &amp; = &amp; f(t_n+\frac{\tau}{2}, y_n + \frac{\tau}{2} k^1) \\
+  k^3  &amp; = &amp; f(t_n + \tau, y_n + \tau k^2)
   \end{array}
   \end{split}\]</div>
 <p>and then</p>
 <div class="math notranslate nohighlight">
 \[
-  y_{i+1} = y_i + \frac{\tau}{6} \big( k^0 + 2 k^1 + 2 k^2 + k^3 \big)
+  y_{n+1} = y_n + \frac{\tau}{6} \big( k^0 + 2 k^1 + 2 k^2 + k^3 \big)
   \]</div>
 </section>
 <section id="implicit-runge-kutta-methods">
 <h2><span class="section-number">19.2. </span>Implicit Runge Kutta methods<a class="headerlink" href="#implicit-runge-kutta-methods" title="Link to this heading">#</a></h2>
-<p>Methods of optimal accuracy are obtained based on Gaussian quadrature:</p>
+<p>Methods of optimal accuracy (order <span class="math notranslate nohighlight">\(2s\)</span>) are obtained based on Gaussian quadrature:</p>
 <p>Gauss-Legendre 2 method:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
-\begin{array}{c|cccc}
+\begin{array}{c|cc}
 \frac{1}{2} - \frac{\sqrt{3}}{6} &amp;  \frac{1}{4} &amp; \frac{1}{4} - \frac{\sqrt{3}}{6} \\
 \frac{1}{2} + \frac{\sqrt{3}}{6} &amp; \frac{1}{4} + \frac{\sqrt{3}}{6}  &amp; \frac{1}{4} \\
 \hline
  &amp; \frac{1}{2} &amp; \frac{1}{2}
 \end{array}
 \end{split}\]</div>
-<p>If not all time-scales are resolved, then <span class="math notranslate nohighlight">\(c_s = 1\)</span> leads to better stability (i.e. L-stability).
-The other points are chosen for optimal accuracy. These methods are called Radau IIA.</p>
+<p>If not all time-scales are resolved, then <span class="math notranslate nohighlight">\(c_{s-1} = 1\)</span> leads to better stability (i.e. L-stability).
+The other points are chosen for optimal accuracy. These methods are called Radau IIA, they have order <span class="math notranslate nohighlight">\(2s-1\)</span>.</p>
 <p>Two-point Radau IIA method:</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
@@ -679,15 +680,95 @@ The other points are chosen for optimal accuracy. These methods are called Radau
 \end{split}\]</div>
 <p>Many examples can be found here: <a class="reference external" href="https://en.wikipedia.org/wiki/List_of_Runge%E2%80%93Kutta_methods">Butcher tableaus examples</a>.</p>
 </section>
+<section id="order-and-stability-of-runge-kutta-methods">
+<span id="sec-rk-order"></span><h2><span class="section-number">19.3. </span>Order and stability of Runge-Kutta methods<a class="headerlink" href="#order-and-stability-of-runge-kutta-methods" title="Link to this heading">#</a></h2>
+<p>The order <span class="math notranslate nohighlight">\(p\)</span> of a Runge-Kutta method (see section <a class="reference internal" href="firstmethods.html#sec-convergence"><span class="std std-ref">Consistency and convergence</span></a>) is determined by algebraic conditions
+on the coefficients, obtained by Taylor expansion. For example, the quadrature rule <span class="math notranslate nohighlight">\((b, c)\)</span> must be exact for polynomials
+of degree <span class="math notranslate nohighlight">\(p-1\)</span>, further conditions involve the <span class="math notranslate nohighlight">\(a\)</span>-coefficients. The number of conditions grows quickly with the order (8 conditions for <span class="math notranslate nohighlight">\(p = 4\)</span>).
+An explicit method with <span class="math notranslate nohighlight">\(s\)</span> stages has order at most <span class="math notranslate nohighlight">\(s\)</span>, for <span class="math notranslate nohighlight">\(p \geq 5\)</span> more than <span class="math notranslate nohighlight">\(p\)</span> stages are needed.</p>
+<p>For the test equation <span class="math notranslate nohighlight">\(y^\prime = \lambda y\)</span> (see section <a class="reference internal" href="firstmethods.html#sec-stability"><span class="std std-ref">Stability for linear ODEs</span></a>), the stability function of an explicit
+method is a polynomial. Thus <span class="math notranslate nohighlight">\(|g(z)| \rightarrow \infty\)</span> for <span class="math notranslate nohighlight">\(|z| \rightarrow \infty\)</span>, and no explicit method is <span class="math notranslate nohighlight">\(A\)</span>-stable.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>method</p></th>
+<th class="head"><p>stages <span class="math notranslate nohighlight">\(s\)</span></p></th>
+<th class="head"><p>order <span class="math notranslate nohighlight">\(p\)</span></p></th>
+<th class="head"><p>type</p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(A\)</span>-stable</p></th>
+<th class="head"><p><span class="math notranslate nohighlight">\(L\)</span>-stable</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>explicit Euler</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>explicit</p></td>
+<td><p>no</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>explicit mid-point (<span class="math notranslate nohighlight">\(RK_2\)</span>)</p></td>
+<td><p>2</p></td>
+<td><p>2</p></td>
+<td><p>explicit</p></td>
+<td><p>no</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p>classical <span class="math notranslate nohighlight">\(RK_4\)</span></p></td>
+<td><p>4</p></td>
+<td><p>4</p></td>
+<td><p>explicit</p></td>
+<td><p>no</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>implicit Euler (= Radau IIA, <span class="math notranslate nohighlight">\(s=1\)</span>)</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>implicit</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-even"><td><p>implicit mid-point (= Gauss-Legendre, <span class="math notranslate nohighlight">\(s=1\)</span>)</p></td>
+<td><p>1</p></td>
+<td><p>2</p></td>
+<td><p>implicit</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>Crank-Nicolson</p></td>
+<td><p>2</p></td>
+<td><p>2</p></td>
+<td><p>implicit</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-even"><td><p>Gauss-Legendre</p></td>
+<td><p><span class="math notranslate nohighlight">\(s\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(2s\)</span></p></td>
+<td><p>implicit</p></td>
+<td><p>yes</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p>Radau IIA</p></td>
+<td><p><span class="math notranslate nohighlight">\(s\)</span></p></td>
+<td><p><span class="math notranslate nohighlight">\(2s-1\)</span></p></td>
+<td><p>implicit</p></td>
+<td><p>yes</p></td>
+<td><p>yes</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The Crank-Nicolson method is the RK method with <span class="math notranslate nohighlight">\(c = (0, 1)\)</span>, <span class="math notranslate nohighlight">\(b = (\frac{1}{2}, \frac{1}{2})\)</span>, and <span class="math notranslate nohighlight">\(a_{0,\cdot} = (0, 0)\)</span>, <span class="math notranslate nohighlight">\(a_{1,\cdot} = (\frac{1}{2}, \frac{1}{2})\)</span>.</p>
+</section>
 <section id="implementation-of-a-runge-kutta-time-stepper-for-arbitrary-butcher-tableaus">
-<h2><span class="section-number">19.3. </span>Implementation of a Runge-Kutta time-stepper for arbitrary Butcher tableaus.<a class="headerlink" href="#implementation-of-a-runge-kutta-time-stepper-for-arbitrary-butcher-tableaus" title="Link to this heading">#</a></h2>
+<h2><span class="section-number">19.4. </span>Implementation of a Runge-Kutta time-stepper for arbitrary Butcher tableaus.<a class="headerlink" href="#implementation-of-a-runge-kutta-time-stepper-for-arbitrary-butcher-tableaus" title="Link to this heading">#</a></h2>
 <p>They are implemented in ASC-ODE, branch RungeKutta. Merge that branch into your main branch:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>git remote add upstream https://github.com/TUWien-ASC/ASC-ODE.git
 git fetch upstream
 git merge upstream/RungeKutta
 </pre></div>
 </div>
-<p>Solve a non-linear system of equations for <span class="math notranslate nohighlight">\(k^0, \ldots k^{s-1}\)</span> such that</p>
+<p>For an autonomous ODE, we solve a non-linear system of equations for <span class="math notranslate nohighlight">\(k^0, \ldots k^{s-1}\)</span> such that</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}
 \left( \begin{array}{c}
@@ -695,32 +776,93 @@ k^0 \\ \vdots \\ k^{s-1}
 \end{array} \right)
 -
 \left( \begin{array}{c}
-f( y_i + \tau (a_{0,0} k^0 + \cdots + a_{0,s-1} k^{s-1}) ) \\
+f( y_n + \tau (a_{0,0} k^0 + \cdots + a_{0,s-1} k^{s-1}) ) \\
 \vdots \\
-f( y_i + \tau (a_{s-1,0} k^0 + \cdots + a_{s-1,s-1} k^{s-1}) )
+f( y_n + \tau (a_{s-1,0} k^0 + \cdots + a_{s-1,s-1} k^{s-1}) )
 \end{array} \right)
 = 0
 \end{split}\]</div>
 <p>This system of equations is rewritten in compact form for
-the unknown <span class="math notranslate nohighlight">\(k \in {\mathbb R}^{sn}\)</span>:</p>
+the unknown <span class="math notranslate nohighlight">\(k \in {\mathbb R}^{sd}\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[
-k - \widetilde f ( \tilde y_i  + \tau A \otimes k) = 0
+k - \widetilde f ( \tilde y_n  + \tau A \otimes k) = 0
 \]</div>
 <p>Where</p>
 <ul class="simple">
-<li><p><span class="math notranslate nohighlight">\(k = (k^0, \ldots k^{s-1})\)</span>, with <span class="math notranslate nohighlight">\(k^j \in {\mathbb R}^n\)</span></p></li>
-<li><p><span class="math notranslate nohighlight">\(\tilde y_i = (\underbrace{y_i, \ldots , y_i}_{s-{\text times}}) \in {\mathbb R}^{sn}\)</span></p></li>
-<li><p><span class="math notranslate nohighlight">\(\tilde f : {\mathbb R}^{sn} \rightarrow {\mathbb R}^{sn} : (x_0, \ldots, x_{s_-1}) \mapsto (f(x_0), \ldots, f(x_{s-1}))\)</span></p></li>
-<li><p>for <span class="math notranslate nohighlight">\(A \in {\mathbb R}^{h \times w}\)</span> define
-<span class="math notranslate nohighlight">\(A \otimes :  {\mathbb R}^{wn} \rightarrow {\mathbb R}^{hn} : (x_0, \ldots, x_{w-1}) \mapsto (y_0, \ldots , y_{h-1})\)</span> such that <span class="math notranslate nohighlight">\(y_j = \sum_l a_{jl} x_l\)</span>.</p></li>
+<li><p><span class="math notranslate nohighlight">\(k = (k^0, \ldots k^{s-1})\)</span>, with <span class="math notranslate nohighlight">\(k^j \in {\mathbb R}^d\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\tilde y_n = (\underbrace{y_n, \ldots , y_n}_{s \text{ times}}) \in {\mathbb R}^{sd}\)</span></p></li>
+<li><p><span class="math notranslate nohighlight">\(\tilde f : {\mathbb R}^{sd} \rightarrow {\mathbb R}^{sd} : (x_0, \ldots, x_{s-1}) \mapsto (f(x_0), \ldots, f(x_{s-1}))\)</span></p></li>
+<li><p>for <span class="math notranslate nohighlight">\(A \in {\mathbb R}^{p \times q}\)</span> define
+<span class="math notranslate nohighlight">\(A \otimes :  {\mathbb R}^{qd} \rightarrow {\mathbb R}^{pd} : (x_0, \ldots, x_{q-1}) \mapsto (z_0, \ldots , z_{p-1})\)</span> such that <span class="math notranslate nohighlight">\(z_j = \sum_l a_{jl} x_l\)</span>,
+i.e. multiplication with the Kronecker product <span class="math notranslate nohighlight">\(A \otimes I_d\)</span>.</p></li>
 </ul>
-<p>We derive two classes from <code class="docutils literal notranslate"><span class="pre">NonlinearFunction</span></code> for that (named <code class="docutils literal notranslate"><span class="pre">MultipleFunction</span></code> and <code class="docutils literal notranslate"><span class="pre">MatVecFunc</span></code>).</p>
-<p>Setup the Runge-Kutta time-stepper, and solve the ODE.</p>
+<p>For <span class="math notranslate nohighlight">\(\widetilde f\)</span> and <span class="math notranslate nohighlight">\(A \otimes\)</span> the branch adds two building blocks to the function algebra in <code class="docutils literal notranslate"><span class="pre">src/nonlinfunc.hpp</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">MultipleFunc</span></code> applies <span class="math notranslate nohighlight">\(f\)</span> to every block of the vector. Its Jacobi matrix is block-diagonal, every block is computed
+by <code class="docutils literal notranslate"><span class="pre">evaluateDeriv</span></code> of <span class="math notranslate nohighlight">\(f\)</span> itself:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">evaluate</span><span class="w"> </span><span class="p">(</span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">num</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<span class="w">    </span><span class="n">func</span><span class="o">-&gt;</span><span class="n">evaluate</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">range</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="n">fdimx</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">fdimx</span><span class="p">),</span>
+<span class="w">                   </span><span class="n">f</span><span class="p">.</span><span class="n">range</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="n">fdimf</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">fdimf</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">evaluateDeriv</span><span class="w"> </span><span class="p">(</span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">MatrixView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">df</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="n">df</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">;</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">num</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<span class="w">    </span><span class="n">func</span><span class="o">-&gt;</span><span class="n">evaluateDeriv</span><span class="p">(</span><span class="n">x</span><span class="p">.</span><span class="n">range</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="n">fdimx</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">fdimx</span><span class="p">),</span>
+<span class="w">                        </span><span class="n">df</span><span class="p">.</span><span class="n">rowRange</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="n">fdimf</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">fdimf</span><span class="p">).</span><span class="n">colRange</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="n">fdimx</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">fdimx</span><span class="p">));</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Here we see why <code class="docutils literal notranslate"><span class="pre">evaluate</span></code> and <code class="docutils literal notranslate"><span class="pre">evaluateDeriv</span></code> take vector- and matrix-views: <span class="math notranslate nohighlight">\(f\)</span> writes directly into a block of the
+big vector and the big matrix, no copies are needed.</p>
+<p><code class="docutils literal notranslate"><span class="pre">MatVecFunc</span></code> implements the linear map <span class="math notranslate nohighlight">\(A \otimes\)</span>. If we interpret the vector <span class="math notranslate nohighlight">\(x \in {\mathbb R}^{qd}\)</span> as a <span class="math notranslate nohighlight">\(q \times d\)</span> matrix <span class="math notranslate nohighlight">\(X\)</span>,
+where row <span class="math notranslate nohighlight">\(l\)</span> holds the block <span class="math notranslate nohighlight">\(x_l\)</span>, then <span class="math notranslate nohighlight">\(A \otimes x\)</span> is simply the matrix product <span class="math notranslate nohighlight">\(A X\)</span>:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">evaluate</span><span class="w"> </span><span class="p">(</span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="k">override</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="n">MatrixView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">mx</span><span class="p">(</span><span class="n">m_a</span><span class="p">.</span><span class="n">cols</span><span class="p">(),</span><span class="w"> </span><span class="n">m_n</span><span class="p">,</span><span class="w"> </span><span class="n">m_n</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="p">.</span><span class="n">data</span><span class="p">());</span>
+<span class="w">  </span><span class="n">MatrixView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">mf</span><span class="p">(</span><span class="n">m_a</span><span class="p">.</span><span class="n">rows</span><span class="p">(),</span><span class="w"> </span><span class="n">m_n</span><span class="p">,</span><span class="w"> </span><span class="n">m_n</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">data</span><span class="p">());</span>
+<span class="w">  </span><span class="n">mf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m_a</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">mx</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Its Jacobi matrix is the constant matrix <span class="math notranslate nohighlight">\(A \otimes I_d\)</span>, consisting of the diagonal blocks <span class="math notranslate nohighlight">\(a_{jl} I_d\)</span>.</p>
+<p>With these building blocks, the constructor of <code class="docutils literal notranslate"><span class="pre">ImplicitRungeKutta</span></code> in <code class="docutils literal notranslate"><span class="pre">src/implicitRK.hpp</span></code> writes down the equation
+<span class="math notranslate nohighlight">\(k - \widetilde f ( \tilde y_n  + \tau A \otimes k) = 0\)</span> almost literally:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">multiple_rhs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">MultipleFunc</span><span class="o">&gt;</span><span class="p">(</span><span class="n">rhs</span><span class="p">,</span><span class="w"> </span><span class="n">m_stages</span><span class="p">);</span>
+<span class="n">m_yold</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">ConstantFunction</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_stages</span><span class="o">*</span><span class="n">m_n</span><span class="p">);</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">knew</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">IdentityFunction</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m_stages</span><span class="o">*</span><span class="n">m_n</span><span class="p">);</span>
+<span class="n">m_equ</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">knew</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">Compose</span><span class="p">(</span><span class="n">multiple_rhs</span><span class="p">,</span><span class="w"> </span><span class="n">m_yold</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">m_tau</span><span class="o">*</span><span class="n">std</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">MatVecFunc</span><span class="o">&gt;</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">m_n</span><span class="p">));</span>
+</pre></div>
+</div>
+<p>The time-step sets the constant <span class="math notranslate nohighlight">\(\tilde y_n\)</span> and the parameter <span class="math notranslate nohighlight">\(\tau\)</span>, solves for <span class="math notranslate nohighlight">\(k\)</span> with Newton’s method, and
+combines the stages with the weights <span class="math notranslate nohighlight">\(b_j\)</span>:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">doStep</span><span class="p">(</span><span class="kt">double</span><span class="w"> </span><span class="n">tau</span><span class="p">,</span><span class="w"> </span><span class="n">VectorView</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="k">override</span>
+<span class="p">{</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">m_stages</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span>
+<span class="w">    </span><span class="n">m_y</span><span class="p">.</span><span class="n">range</span><span class="p">(</span><span class="n">j</span><span class="o">*</span><span class="n">m_n</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">m_n</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">y</span><span class="p">;</span>
+<span class="w">  </span><span class="n">m_yold</span><span class="o">-&gt;</span><span class="n">set</span><span class="p">(</span><span class="n">m_y</span><span class="p">);</span>
+<span class="w">  </span><span class="n">m_tau</span><span class="o">-&gt;</span><span class="n">set</span><span class="p">(</span><span class="n">tau</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">m_k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">;</span>
+<span class="w">  </span><span class="n">NewtonSolver</span><span class="p">(</span><span class="n">m_equ</span><span class="p">,</span><span class="w"> </span><span class="n">m_k</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">m_stages</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span>
+<span class="w">    </span><span class="n">y</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">tau</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m_b</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m_k</span><span class="p">.</span><span class="n">range</span><span class="p">(</span><span class="n">j</span><span class="o">*</span><span class="n">m_n</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">m_n</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>As for the implicit Euler method, nobody codes the Jacobi matrix <span class="math notranslate nohighlight">\(I - \tau \, \widetilde f^\prime \, (A \otimes I_d)\)</span> of the stage equations,
+it follows from the chain-rule in <code class="docutils literal notranslate"><span class="pre">ComposeFunction</span></code>. Newton’s method solves a dense system of size <span class="math notranslate nohighlight">\(sd\)</span>, which is fine for small systems.
+For large systems one exploits the block structure, but this is beyond this class.</p>
+<p>For explicit methods, the matrix <span class="math notranslate nohighlight">\(A\)</span> is strictly lower triangular, and the stages can be computed one after the other
+without Newton’s method.</p>
 <section id="runge-kutta-methods-of-arbitrary-order">
-<h3><span class="section-number">19.3.1. </span>Runge-Kutta methods of arbitrary order<a class="headerlink" href="#runge-kutta-methods-of-arbitrary-order" title="Link to this heading">#</a></h3>
+<h3><span class="section-number">19.4.1. </span>Runge-Kutta methods of arbitrary order<a class="headerlink" href="#runge-kutta-methods-of-arbitrary-order" title="Link to this heading">#</a></h3>
 <p>If we have fixed the integration points <span class="math notranslate nohighlight">\(c_j\)</span>, we can compute the <span class="math notranslate nohighlight">\(a_{jl}\)</span> and <span class="math notranslate nohighlight">\(b_j\)</span> coefficients
-such that the integration rules are (at least) exact for polynomials up to order <span class="math notranslate nohighlight">\(s-1\)</span>:</p>
+such that the integration rules are (at least) exact for polynomials up to degree <span class="math notranslate nohighlight">\(s-1\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[
 \sum_{l=0}^{s-1} b_{l} {c_l}^k = \int_0^1 x^k \, dx \qquad 0 \leq k &lt; s
@@ -730,22 +872,38 @@ such that the integration rules are (at least) exact for polynomials up to order
 \[
 \sum_{l=0}^{s-1} a_{jl} {c_l}^k = \int_0^{c_j} x^k \, dx \qquad 0 \leq j,k &lt; s
 \]</div>
-<p>Setup and solve linear equations for computing the <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> coefficients.</p>
-<p>Use the <span class="math notranslate nohighlight">\(c\)</span>-coefficients from Gauss-Legendre 2, and two-point Radau IIA, and check whether you recover the same <span class="math notranslate nohighlight">\(a\)</span> and <span class="math notranslate nohighlight">\(b\)</span> coefficients.</p>
-<p>Try <span class="math notranslate nohighlight">\(c\)</span>-coefficients from Gauss-Legendre 3, and three-point Radau II A (from the web-page above).</p>
-<p>Then, find <span class="math notranslate nohighlight">\(c\)</span>-coefficients by solving for the roots of Legendre-polynomials, and transform to <span class="math notranslate nohighlight">\([0,1]\)</span>.
-A ready to use function can be taken from
-<a class="reference external" href="https://numerical.recipes/book.html">Numerical recipes, section 4.6</a></p>
-<p>Similar for the Radau IIA: Find roots of the <span class="math notranslate nohighlight">\(P^{(1,0)}\)</span> Jacobi-polynomial, transform to <span class="math notranslate nohighlight">\([0,1]\)</span>, and add <span class="math notranslate nohighlight">\(c_j=1\)</span>.
-This is done by function <code class="docutils literal notranslate"><span class="pre">gaujac</span></code> from Numerical recipes. The logarithmic-gamma function is lgamma in C++.</p>
+<p>These are linear equations with the Vandermonde matrix <span class="math notranslate nohighlight">\((c_l^k)_{k,l}\)</span>, they are solved by the function <code class="docutils literal notranslate"><span class="pre">computeABfromC</span></code>.
+The resulting methods are called collocation methods: the stage values are the values of the polynomial of degree <span class="math notranslate nohighlight">\(s\)</span>
+which satisfies the ODE in the points <span class="math notranslate nohighlight">\(t_n + c_j \tau\)</span>.</p>
+<p>If the <span class="math notranslate nohighlight">\(c_j\)</span> are the Gauss points, the quadrature rule <span class="math notranslate nohighlight">\((b,c)\)</span> is exact even up to degree <span class="math notranslate nohighlight">\(2s-1\)</span>,
+and we obtain the Gauss-Legendre methods of order <span class="math notranslate nohighlight">\(2s\)</span>.
+The Gauss points are the roots of the Legendre polynomial <span class="math notranslate nohighlight">\(P_s\)</span>, transformed from <span class="math notranslate nohighlight">\([-1,1]\)</span> to <span class="math notranslate nohighlight">\([0,1]\)</span>.</p>
+<p>For the Radau IIA methods, the points are the roots of the Jacobi polynomial <span class="math notranslate nohighlight">\(P^{(1,0)}_{s-1}\)</span>, transformed to <span class="math notranslate nohighlight">\([0,1]\)</span>,
+together with <span class="math notranslate nohighlight">\(c_{s-1} = 1\)</span>.</p>
+<p>The functions <code class="docutils literal notranslate"><span class="pre">GaussLegendre</span></code> and <code class="docutils literal notranslate"><span class="pre">GaussRadau</span></code> compute these points, they are taken from
+<a class="reference external" href="https://numerical.recipes/book.html">Numerical recipes, section 4.6</a>.</p>
 </section>
 </section>
 <section id="exercises">
-<h2><span class="section-number">19.4. </span>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
-<ul class="simple">
+<h2><span class="section-number">19.5. </span>Exercises<a class="headerlink" href="#exercises" title="Link to this heading">#</a></h2>
+<ul>
 <li><p>Try out and compare various Runge-Kutta methods already implemented for the examples above.</p></li>
-<li><p>Implement and test an <code class="docutils literal notranslate"><span class="pre">ExplicitRungeKutta</span></code> time-stepper for arbitrary Butcher tableaus (with a lower triangular matrix for
-the <span class="math notranslate nohighlight">\(a\)</span>-coefficents).</p></li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">computeABfromC</span></code> with the <span class="math notranslate nohighlight">\(c\)</span>-coefficients from Gauss-Legendre 2 and two-point Radau IIA, and check whether you recover the
+Butcher tableaus above. Do the same for Gauss-Legendre 3 and three-point Radau IIA (from the web-page above).</p></li>
+<li><p>Measure the order of convergence of Gauss-Legendre and Radau IIA methods with <span class="math notranslate nohighlight">\(s = 1, 2, 3\)</span> stages, as in
+the exercise for the implicit Euler method. Do you observe orders <span class="math notranslate nohighlight">\(2s\)</span> and <span class="math notranslate nohighlight">\(2s-1\)</span>?
+What happens for very small time-steps?</p></li>
+<li><p>Compute the Gauss points yourself: evaluate <span class="math notranslate nohighlight">\(P_s\)</span> and its derivative with the Legendre polynomials
+and the <code class="docutils literal notranslate"><span class="pre">AutoDiff</span></code> class from section <a class="reference internal" href="implementation_ad.html"><span class="doc">Automatic Differentiation</span></a>, and find the roots by Newton’s method.
+Good initial guesses are <span class="math notranslate nohighlight">\(x_j = \cos \big( \pi \frac{j + 3/4}{s + 1/2} \big)\)</span>, <span class="math notranslate nohighlight">\(0 \leq j &lt; s\)</span>. Compare with <code class="docutils literal notranslate"><span class="pre">GaussLegendre</span></code>.</p></li>
+<li><p>Implement and test an <code class="docutils literal notranslate"><span class="pre">ExplicitRungeKutta</span></code> time-stepper for arbitrary Butcher tableaus (with a strictly lower triangular matrix for
+the <span class="math notranslate nohighlight">\(a\)</span>-coefficients). Use the same constructor as <code class="docutils literal notranslate"><span class="pre">ImplicitRungeKutta</span></code>, such that both can be exchanged:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">ExplicitRungeKutta</span><span class="w"> </span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">NonlinearFunction</span><span class="o">&gt;</span><span class="w"> </span><span class="n">rhs</span><span class="p">,</span>
+<span class="w">                    </span><span class="k">const</span><span class="w"> </span><span class="n">Matrix</span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Vector</span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Vector</span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">c</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Verify the order of the <span class="math notranslate nohighlight">\(RK_4\)</span> method with the convergence test.</p>
+</li>
 </ul>
 </section>
 </section>
@@ -818,11 +976,12 @@ the <span class="math notranslate nohighlight">\(a\)</span>-coefficents).</p></l
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#explicit-rk-methods">19.1. Explicit RK methods</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implicit-runge-kutta-methods">19.2. Implicit Runge Kutta methods</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation-of-a-runge-kutta-time-stepper-for-arbitrary-butcher-tableaus">19.3. Implementation of a Runge-Kutta time-stepper for arbitrary Butcher tableaus.</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#runge-kutta-methods-of-arbitrary-order">19.3.1. Runge-Kutta methods of arbitrary order</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#order-and-stability-of-runge-kutta-methods">19.3. Order and stability of Runge-Kutta methods</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation-of-a-runge-kutta-time-stepper-for-arbitrary-butcher-tableaus">19.4. Implementation of a Runge-Kutta time-stepper for arbitrary Butcher tableaus.</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#runge-kutta-methods-of-arbitrary-order">19.4.1. Runge-Kutta methods of arbitrary order</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">19.4. Exercises</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exercises">19.5. Exercises</a></li>
 </ul>
   </nav></div>
 

@@ -34,7 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -253,7 +253,7 @@
 <li class="toctree-l1"><a class="reference internal" href="ODEs.html">14. Solving ordinary differential equations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theory.html">15. A little bit of theory</a></li>
 <li class="toctree-l1"><a class="reference internal" href="firstmethods.html">16. Some simple time-stepping methods</a></li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="implementation.html">17. Implementation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="implementation.html">17. Implementing time-stepping methods</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="functionalgebra.html">17.1. Function algebra</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">17.2. Implementing the explicit Euler method</a></li>
 <li class="toctree-l2"><a class="reference internal" href="implementation_newton.html">17.3. Implementing a Newton solver</a></li>
@@ -508,9 +508,9 @@ y^\prime (t) = f(y(t)) \qquad \forall t \in [0, T], \qquad y(0) = y_0
 <p>using the explicit Euler method:</p>
 <div class="math notranslate nohighlight">
 \[
-y_{i+1} = y_i + \tau f(y_i) \qquad 0 \leq i &lt; n
+y_{n+1} = y_n + \tau f(y_n) \qquad 0 \leq n &lt; N
 \]</div>
-<p>with <span class="math notranslate nohighlight">\(\tau = T/n\)</span>.</p>
+<p>with <span class="math notranslate nohighlight">\(\tau = T/N\)</span>.</p>
 <p>Time-stepping methods are implemented in the file <code class="docutils literal notranslate"><span class="pre">timestepper.hpp</span></code>.
 The base class looks like</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">TimeStepper</span>
@@ -526,7 +526,7 @@ The base class looks like</p>
 </div>
 <p>It has the right-hand side of the ode as a member (<code class="docutils literal notranslate"><span class="pre">m_rhs</span></code>), and introduces a virtual function <code class="docutils literal notranslate"><span class="pre">doStep</span></code> which
 evolves the state vector <code class="docutils literal notranslate"><span class="pre">y</span></code> by the time-step <code class="docutils literal notranslate"><span class="pre">tau</span></code>. It is a pure virtual function, since the base class has no
-glue how to compute the time-step.</p>
+clue how to compute the time-step.</p>
 <p>The explicit Euler method is a derived class from <code class="docutils literal notranslate"><span class="pre">TimeStepper</span></code>:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ExplicitEuler</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">TimeStepper</span>
 <span class="p">{</span>
@@ -591,8 +591,8 @@ y_1^\prime &amp; = &amp; -\frac{k}{m} y_0
 <span class="p">};</span>
 </pre></div>
 </div>
-<p>We can now use the <code class="docutils literal notranslate"><span class="pre">TimerStepper</span></code> for soling the ode. We create a <code class="docutils literal notranslate"><span class="pre">NonlinearFunction</span></code> object as
-<code class="docutils literal notranslate"><span class="pre">MassSpring</span></code> object, and pass it to the <code class="docutils literal notranslate"><span class="pre">ExplicitEuler</span></code> timer-stepper. Then we can run a simple time-loop to evolve the state by time-steps <span class="math notranslate nohighlight">\(\tau\)</span>:</p>
+<p>We can now use the <code class="docutils literal notranslate"><span class="pre">TimeStepper</span></code> for solving the ODE. We create a <code class="docutils literal notranslate"><span class="pre">NonlinearFunction</span></code> object as
+<code class="docutils literal notranslate"><span class="pre">MassSpring</span></code> object, and pass it to the <code class="docutils literal notranslate"><span class="pre">ExplicitEuler</span></code> time-stepper. Then we can run a simple time-loop to evolve the state by time-steps <span class="math notranslate nohighlight">\(\tau\)</span>:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="kt">double</span><span class="w"> </span><span class="n">tend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="o">*</span><span class="n">M_PI</span><span class="p">;</span>
 <span class="kt">int</span><span class="w"> </span><span class="n">steps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span>
 <span class="kt">double</span><span class="w"> </span><span class="n">tau</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tend</span><span class="o">/</span><span class="n">steps</span><span class="p">;</span>
@@ -611,7 +611,7 @@ y_1^\prime &amp; = &amp; -\frac{k}{m} y_0
 </pre></div>
 </div>
 <p>This example is provided in <code class="docutils literal notranslate"><span class="pre">demos/test_ode.cpp</span></code>.</p>
-<p>Using matplotlib from the a python script <code class="docutils literal notranslate"><span class="pre">plotmassspring.py</span></code> we generated the
+<p>Using matplotlib from the python script <code class="docutils literal notranslate"><span class="pre">plotmassspring.py</span></code> we generated the
 plots of the time evolution</p>
 <a class="reference internal image-reference" href="../_images/massspring_time.png"><img alt="../_images/massspring_time.png" class="align-center" src="../_images/massspring_time.png" style="width: 40%;" />
 </a>
@@ -628,7 +628,7 @@ Look at the time evolution and phase plots.</p></li>
 <div class="amsmath math notranslate nohighlight">
 \[\begin{eqnarray*}
 \tilde y &amp; = &amp; y_n + \tfrac{\tau}{2} f(y_n) \\
-y_{n+1} &amp; = &amp;  y_n + \tau f(\tilde y) 
+y_{n+1} &amp; = &amp;  y_n + \tau f(\tilde y)  
 \end{eqnarray*}\]</div>
 <p>Compare the obtained results with the explicit Euler method.</p>
 <p>Push your extensions to your github fork.</p>

@@ -34,7 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -66,7 +66,7 @@
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="17. Implementation" href="implementation.html" />
+    <link rel="next" title="17. Implementing time-stepping methods" href="implementation.html" />
     <link rel="prev" title="15. A little bit of theory" href="theory.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -253,7 +253,7 @@
 <li class="toctree-l1"><a class="reference internal" href="ODEs.html">14. Solving ordinary differential equations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="theory.html">15. A little bit of theory</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">16. Some simple time-stepping methods</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="implementation.html">17. Implementation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="implementation.html">17. Implementing time-stepping methods</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="functionalgebra.html">17.1. Function algebra</a></li>
 <li class="toctree-l2"><a class="reference internal" href="implementation_ee.html">17.2. Implementing the explicit Euler method</a></li>
 <li class="toctree-l2"><a class="reference internal" href="implementation_newton.html">17.3. Implementing a Newton solver</a></li>
@@ -489,6 +489,12 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implicit-euler-method">16.2. Implicit Euler method</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#crank-nicolson-method">16.3. Crank-Nicolson method</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#derivation-from-the-integral-equation">16.4. Derivation from the integral equation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#consistency-and-convergence">16.5. Consistency and convergence</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#measuring-the-order">16.5.1. Measuring the order</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stability-for-linear-odes">16.6. Stability for linear ODEs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stiff-odes">16.7. Stiff ODEs</a></li>
 </ul>
             </nav>
         </div>
@@ -511,51 +517,51 @@ y^\prime(t) = f(t, y(t)) \; \; \forall \, t \in (t_0, T), \quad y(t_0) = y_0
 <p>We introduce time points</p>
 <div class="math notranslate nohighlight">
 \[
-t_0 &lt; t_1 &lt; \ldots &lt; t_n = T,
+t_0 &lt; t_1 &lt; \ldots &lt; t_N = T,
 \]</div>
-<p>usually we choose <span class="math notranslate nohighlight">\(n \in {\mathbb N}\)</span>, define <span class="math notranslate nohighlight">\(\tau := \frac{T-t_0}{n}\)</span>, and
-<span class="math notranslate nohighlight">\(t_i := t_0 + i \tau\)</span>.</p>
+<p>usually we choose <span class="math notranslate nohighlight">\(N \in {\mathbb N}\)</span>, define <span class="math notranslate nohighlight">\(\tau := \frac{T-t_0}{N}\)</span>, and
+<span class="math notranslate nohighlight">\(t_n := t_0 + n \tau\)</span>.</p>
 <p>We compute a discrete approximate solution</p>
 <div class="math notranslate nohighlight">
 \[
-y_i \approx y(t_i) \qquad \forall \, i \in { 0, \ldots , n}
+y_n \approx y(t_n) \qquad \forall \, n \in \{ 0, \ldots , N \}
 \]</div>
 <section id="explicit-euler-method">
 <h2><span class="section-number">16.1. </span>Explicit Euler method<a class="headerlink" href="#explicit-euler-method" title="Link to this heading">#</a></h2>
 <p>The derivative <span class="math notranslate nohighlight">\(y^\prime\)</span> is approximated by the forward difference quotient</p>
 <div class="math notranslate nohighlight">
 \[
-y^\prime (t_i)
-\approx \frac{y(t_{i+1}) - y(t_i)}{t_{i+1} - t_i}
-\approx \frac{y_{i+1} - y_i}{t_{i+1}-t_i}
+y^\prime (t_n)
+\approx \frac{y(t_{n+1}) - y(t_n)}{t_{n+1} - t_n}
+\approx \frac{y_{n+1} - y_n}{t_{n+1}-t_n}
 \]</div>
 <p>Inserting this approximation into the equation we get the numerical scheme</p>
 <div class="math notranslate nohighlight">
 \[
-\frac{y_{i+1} - y_i}{t_{i+1}-t_i} = f(t_i, y_i)
+\frac{y_{n+1} - y_n}{t_{n+1}-t_n} = f(t_n, y_n)
 \]</div>
-<p>or (with constant mesh size <span class="math notranslate nohighlight">\(\tau = t_{i+1} - t_i\)</span>)</p>
+<p>or (with constant mesh size <span class="math notranslate nohighlight">\(\tau = t_{n+1} - t_n\)</span>)</p>
 <div class="math notranslate nohighlight">
 \[
-y_{i+1} = y_i + \tau f(t_i, y_i) \qquad 0 \leq i &lt; n
+y_{n+1} = y_n + \tau f(t_n, y_n) \qquad 0 \leq n &lt; N
 \]</div>
-<p>This method is very simple, it is a fully explicit algorithm. The next step <span class="math notranslate nohighlight">\(y_{i+1}\)</span> is
+<p>This method is very simple, it is a fully explicit algorithm. The next step <span class="math notranslate nohighlight">\(y_{n+1}\)</span> is
 defined by simply evaluating this formula.</p>
 </section>
 <section id="implicit-euler-method">
 <h2><span class="section-number">16.2. </span>Implicit Euler method<a class="headerlink" href="#implicit-euler-method" title="Link to this heading">#</a></h2>
 <p>One can also start with the backward difference formula. The same difference quotient is
-now seen as an approximation to <span class="math notranslate nohighlight">\(y^\prime(t_{i+1})\)</span>. This leads to the discrete scheme</p>
+now seen as an approximation to <span class="math notranslate nohighlight">\(y^\prime(t_{n+1})\)</span>. This leads to the discrete scheme</p>
 <div class="math notranslate nohighlight">
 \[
-\frac{y_{i+1} - y_i}{t_{i+1}-t_i} = f(t_{i+1}, y_{i+1})
+\frac{y_{n+1} - y_n}{t_{n+1}-t_n} = f(t_{n+1}, y_{n+1})
 \]</div>
 <p>or</p>
 <div class="math notranslate nohighlight">
 \[
-y_{i+1} = y_i + \tau f(t_{i+1}, y_{i+1}) \qquad 0 \leq i &lt; n
+y_{n+1} = y_n + \tau f(t_{n+1}, y_{n+1}) \qquad 0 \leq n &lt; N
 \]</div>
-<p>Now, the new step <span class="math notranslate nohighlight">\(y_{i+1}\)</span> shows up also within the right-hand side. We cannot simply
+<p>Now, the new step <span class="math notranslate nohighlight">\(y_{n+1}\)</span> shows up also within the right-hand side. We cannot simply
 evaluate a formula, but have to solve a system of equations. If the right-hand side <span class="math notranslate nohighlight">\(f(t,y)\)</span>
 depends non-linear on the state <span class="math notranslate nohighlight">\(y\)</span>, one has to solve a non-linear system. Typically,
 this is done using Newton’s method.</p>
@@ -563,27 +569,30 @@ this is done using Newton’s method.</p>
 <section id="crank-nicolson-method">
 <h2><span class="section-number">16.3. </span>Crank-Nicolson method<a class="headerlink" href="#crank-nicolson-method" title="Link to this heading">#</a></h2>
 <p>Interpreting the difference quotient as an approximation to the derivative in
-the mid-point <span class="math notranslate nohighlight">\(\frac{t_{i}+t_{i+1}}{2}\)</span>, we end up with the Crank-Nicolson method</p>
+the mid-point <span class="math notranslate nohighlight">\(\frac{t_{n}+t_{n+1}}{2}\)</span>, and approximating the right-hand side there by the average of its values
+at <span class="math notranslate nohighlight">\(t_n\)</span> and <span class="math notranslate nohighlight">\(t_{n+1}\)</span>, we end up with the Crank-Nicolson method</p>
 <div class="math notranslate nohighlight">
 \[
-y_{i+1} = y_i + \frac{\tau}{2} \big( f(t_i, y_i) + f(t_{i+1}, y_{i+1}) \big) \qquad 0 \leq i &lt; n.
+y_{n+1} = y_n + \frac{\tau}{2} \big( f(t_n, y_n) + f(t_{n+1}, y_{n+1}) \big) \qquad 0 \leq n &lt; N.
 \]</div>
-<p>Like the implicit Euler method, it is an implicit method as well. Numerical analysis proves that
-this method provides a better rate of convergence.</p>
+<p>Evaluating <span class="math notranslate nohighlight">\(f\)</span> at the average <span class="math notranslate nohighlight">\(\big(\frac{t_n+t_{n+1}}{2}, \frac{y_n+y_{n+1}}{2}\big)\)</span> instead
+leads to the implicit mid-point rule, a different method.</p>
+<p>Like the implicit Euler method, Crank-Nicolson is an implicit method. We will see in section <a class="reference internal" href="#sec-convergence"><span class="std std-ref">Consistency and convergence</span></a> that
+it converges with order 2, while both Euler methods converge with order 1.</p>
 </section>
 <section id="derivation-from-the-integral-equation">
 <h2><span class="section-number">16.4. </span>Derivation from the integral equation<a class="headerlink" href="#derivation-from-the-integral-equation" title="Link to this heading">#</a></h2>
 <p>We consider the ODE</p>
 <div class="math notranslate nohighlight">
 \[
-y^\prime(t) = f(t, y(t)) \qquad y(t_i) = y_i
+y^\prime(t) = f(t, y(t)) \qquad y(t_n) = y_n
 \]</div>
-<p>on the time interval <span class="math notranslate nohighlight">\([t_i, t_{i+1}]\)</span>. We rewrite it as an integral equation</p>
+<p>on the time interval <span class="math notranslate nohighlight">\([t_n, t_{n+1}]\)</span>. We rewrite it as an integral equation</p>
 <div class="math notranslate nohighlight">
 \[
-y(t) = y_i + \int_{t_i}^t f(s, y(s)) \, ds \qquad \forall \, t \in [t_i, t_{i+1}]
+y(t) = y_n + \int_{t_n}^t f(s, y(s)) \, ds \qquad \forall \, t \in [t_n, t_{n+1}]
 \]</div>
-<p>We insert <span class="math notranslate nohighlight">\(t = t_{i+1}\)</span> to obtain the next time-step,
+<p>We insert <span class="math notranslate nohighlight">\(t = t_{n+1}\)</span> to obtain the next time-step,
 and use numerical integration to approximate the integral on the right-hand side. The left-sided rectangular rule</p>
 <div class="math notranslate nohighlight">
 \[
@@ -592,7 +601,7 @@ and use numerical integration to approximate the integral on the right-hand side
 <p>leads to</p>
 <div class="math notranslate nohighlight">
 \[
-y_{i+1} = y_i + \tau f(t_i, y_i),
+y_{n+1} = y_n + \tau f(t_n, y_n),
 \]</div>
 <p>the right-sided rectangular rule</p>
 <div class="math notranslate nohighlight">
@@ -602,7 +611,7 @@ y_{i+1} = y_i + \tau f(t_i, y_i),
 <p>leads to</p>
 <div class="math notranslate nohighlight">
 \[
-y_{i+1} = y_i + \tau f(t_{i+1}, y_{i+1}).
+y_{n+1} = y_n + \tau f(t_{n+1}, y_{n+1}).
 \]</div>
 <p>The more accurate trapezoidal rule</p>
 <div class="math notranslate nohighlight">
@@ -612,11 +621,128 @@ y_{i+1} = y_i + \tau f(t_{i+1}, y_{i+1}).
 <p>leads to the Crank-Nicolson method</p>
 <div class="math notranslate nohighlight">
 \[
-y_{i+1} = y_i + \frac{\tau}{2} \big( f(t_i, y_i) +  f(t_{i+1}, y_{i+1})\big)
+y_{n+1} = y_n + \frac{\tau}{2} \big( f(t_n, y_n) +  f(t_{n+1}, y_{n+1})\big)
 \]</div>
 <p>We see that we have recovered the same three methods from numerical integration, as we
 had already motivated before from numerical differentiation.
 We will use more accurate integration rules to develop more accurate time-stepping methods later.</p>
+</section>
+<section id="consistency-and-convergence">
+<span id="sec-convergence"></span><h2><span class="section-number">16.5. </span>Consistency and convergence<a class="headerlink" href="#consistency-and-convergence" title="Link to this heading">#</a></h2>
+<p>All methods above are one-step methods, which can be written in the form</p>
+<div class="math notranslate nohighlight">
+\[
+y_{n+1} = y_n + \tau \, \Phi(t_n, y_n, \tau),
+\]</div>
+<p>with the increment function <span class="math notranslate nohighlight">\(\Phi\)</span>. For the explicit Euler method we have <span class="math notranslate nohighlight">\(\Phi(t,y,\tau) = f(t,y)\)</span>. For implicit
+methods, <span class="math notranslate nohighlight">\(\Phi\)</span> is defined implicitly by solving the equation in every time-step.</p>
+<p>The local error is the error produced in one time-step, if we start the step with the exact value <span class="math notranslate nohighlight">\(y(t_n)\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+\eta_{n+1} := y(t_{n+1}) - y(t_n) - \tau \, \Phi(t_n, y(t_n), \tau).
+\]</div>
+<p>A method is called consistent of order <span class="math notranslate nohighlight">\(p\)</span> if <span class="math notranslate nohighlight">\(\| \eta_{n+1} \| \leq C \, \tau^{p+1}\)</span>.
+Taylor expansion shows order <span class="math notranslate nohighlight">\(p = 1\)</span> for the explicit and the implicit Euler methods.
+For the Crank-Nicolson method, the local error is the error of the trapezoidal rule, which is <span class="math notranslate nohighlight">\(O(\tau^3)\)</span>, thus <span class="math notranslate nohighlight">\(p = 2\)</span>.</p>
+<p>In every time-step we make a local error of order <span class="math notranslate nohighlight">\(\tau^{p+1}\)</span>. After <span class="math notranslate nohighlight">\(N = (T-t_0)/\tau\)</span> steps these errors
+add up to a global error of order <span class="math notranslate nohighlight">\(\tau^p\)</span>, as long as errors from previous steps are not amplified too much.
+This is ensured by stability of the method. In short:</p>
+<blockquote>
+<div><p>consistency of order <span class="math notranslate nohighlight">\(p\)</span> + stability <span class="math notranslate nohighlight">\(\Rightarrow\)</span> convergence of order <span class="math notranslate nohighlight">\(p\)</span>:
+<span class="math notranslate nohighlight">\(\| y(t_n) - y_n \| \leq C(T) \, \tau^p\)</span>.</p>
+</div></blockquote>
+<p>For a Lipschitz continuous increment function <span class="math notranslate nohighlight">\(\Phi\)</span>, the constant <span class="math notranslate nohighlight">\(C(T)\)</span> grows like <span class="math notranslate nohighlight">\(e^{L (T-t_0)}\)</span>, similar as in the stability estimate
+with respect to initial conditions. For stiff problems with large <span class="math notranslate nohighlight">\(L\)</span> this bound is useless, a better
+understanding of stability is obtained from the test equation in the next section.</p>
+<section id="measuring-the-order">
+<h3><span class="section-number">16.5.1. </span>Measuring the order<a class="headerlink" href="#measuring-the-order" title="Link to this heading">#</a></h3>
+<p>If the error behaves like <span class="math notranslate nohighlight">\(e(\tau) \approx C \tau^p\)</span>, then</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{e(\tau)}{e(\tau/2)} \approx 2^p, \qquad p \approx \log_2 \frac{e(\tau)}{e(\tau/2)}.
+\]</div>
+<p>In a double-logarithmic plot of the error over <span class="math notranslate nohighlight">\(\tau\)</span>, we observe a straight line with slope <span class="math notranslate nohighlight">\(p\)</span>.
+This is the standard test of a time-stepping implementation: if the observed order does not match the
+theoretical order, there is a bug.</p>
+</section>
+</section>
+<section id="stability-for-linear-odes">
+<span id="sec-stability"></span><h2><span class="section-number">16.6. </span>Stability for linear ODEs<a class="headerlink" href="#stability-for-linear-odes" title="Link to this heading">#</a></h2>
+<p>An ODE <span class="math notranslate nohighlight">\(y^\prime(t) = A y(t)\)</span> with <span class="math notranslate nohighlight">\(A \in {\mathbb R}^{d \times d}\)</span> diagonalizable (over <span class="math notranslate nohighlight">\({\mathbb C}\)</span>)
+is transformed by the eigenvector basis into <span class="math notranslate nohighlight">\(d\)</span> decoupled scalar ODEs</p>
+<div class="math notranslate nohighlight">
+\[
+w_k^\prime(t) = \lambda_k w_k(t), \qquad 1 \leq k \leq d,
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\lambda_k \in {\mathbb C}\)</span> are eigenvalues of <span class="math notranslate nohighlight">\(A\)</span>. If <span class="math notranslate nohighlight">\(\lambda_k\)</span> has negative (non-positive) real part, the solution
+is decaying (non-increasing). The three methods above commute with this transformation,
+thus it is enough to study the scalar test equation <span class="math notranslate nohighlight">\(y^\prime = \lambda y\)</span>.</p>
+<p>The explicit Euler method with time-step <span class="math notranslate nohighlight">\(\tau\)</span> leads to</p>
+<div class="math notranslate nohighlight">
+\[
+y_{n+1} = (1 + \tau \lambda) y_n,
+\]</div>
+<p>the implicit Euler method to</p>
+<div class="math notranslate nohighlight">
+\[
+y_{n+1} = \frac{1}{1-\tau \lambda} y_n,
+\]</div>
+<p>and the Crank-Nicolson to</p>
+<div class="math notranslate nohighlight">
+\[
+y_{n+1} = \frac{ 2 + \tau \lambda }  { 2 - \tau \lambda } y_n
+\]</div>
+<p>The stability function <span class="math notranslate nohighlight">\(g(\cdot)\)</span> of a method is defined such that</p>
+<div class="math notranslate nohighlight">
+\[
+y_{n+1} = g(\tau \lambda) y_n
+\]</div>
+<p>These are for the explicit Euler, the implicit Euler, and the Crank-Nicolson:</p>
+<div class="math notranslate nohighlight">
+\[
+g_{EE}(z) = 1+z \qquad g_{IE}(z) = \frac{1}{1-z}  \qquad g_{CN}(z) = \frac{2+z}{2-z}
+\]</div>
+<p>The domain of stability is</p>
+<div class="math notranslate nohighlight">
+\[
+S = \{ z \in {\mathbb C} : | g(z) | \leq 1 \}
+\]</div>
+<p>For the three methods we obtain</p>
+<div class="math notranslate nohighlight">
+\[
+S_{EE} = \{ z : |z + 1| \leq 1 \}
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+S_{IE} = \{ z : | z - 1 | \geq 1 \}
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+S_{CN} = \{ z : \operatorname{Re} (z) \leq 0 \}
+\]</div>
+<p>If <span class="math notranslate nohighlight">\(\operatorname{Re}(\lambda) \leq 0\)</span>, then <span class="math notranslate nohighlight">\(\tau \lambda\)</span> is always in the domain of stability of the implicit Euler,
+and of the Crank-Nicolson. This property of a method is called <span class="math notranslate nohighlight">\(A\)</span>-stability. The explicit Euler leads to
+(quickly) increasing numerical solutions if <span class="math notranslate nohighlight">\(\tau\)</span> is not small enough.</p>
+<p>If, in addition to <span class="math notranslate nohighlight">\(A\)</span>-stability, <span class="math notranslate nohighlight">\(\lim_{|z| \rightarrow \infty} g(z) = 0\)</span>, quickly decaying solutions lead to quickly decaying
+numerical solutions. This is the case for the implicit Euler, but not for the Crank-Nicolson. This property is called <span class="math notranslate nohighlight">\(L\)</span>-stability. One observes (slowly decreasing) oscillations with the CN method when <span class="math notranslate nohighlight">\(-\tau \lambda\)</span> is large.</p>
+<p>An undamped oscillator <span class="math notranslate nohighlight">\(y^{\prime \prime} = -\omega^2 y\)</span> leads to purely imaginary eigenvalues <span class="math notranslate nohighlight">\(\lambda = \pm i \omega\)</span>.
+Then <span class="math notranslate nohighlight">\(|g_{EE}(i \omega \tau)| &gt; 1\)</span>, <span class="math notranslate nohighlight">\(|g_{IE}(i \omega \tau)| &lt; 1\)</span>, and <span class="math notranslate nohighlight">\(|g_{CN}(i \omega \tau)| = 1\)</span>:
+the explicit Euler increases the amplitude, the implicit Euler damps it, and the Crank-Nicolson preserves it exactly.</p>
+</section>
+<section id="stiff-odes">
+<h2><span class="section-number">16.7. </span>Stiff ODEs<a class="headerlink" href="#stiff-odes" title="Link to this heading">#</a></h2>
+<p>An ODE is called stiff if it contains components decaying much faster than the time-scale of interest.
+For a linear system these are eigenvalues with large negative real part. Explicit methods
+require <span class="math notranslate nohighlight">\(\tau \lambda \in S\)</span> for all eigenvalues, i.e. the time-step is limited by the fastest, though
+already decayed component, not by the accuracy needed for the slow components.</p>
+<p>As an example, the voltage <span class="math notranslate nohighlight">\(U_C\)</span> at the capacitor of an RC circuit with source <span class="math notranslate nohighlight">\(U_0(t)\)</span> satisfies</p>
+<div class="math notranslate nohighlight">
+\[
+U_C^\prime(t) = -\frac{1}{RC} U_C(t) + \frac{1}{RC} U_0(t).
+\]</div>
+<p>For <span class="math notranslate nohighlight">\(R = 100\)</span>, <span class="math notranslate nohighlight">\(C = 10^{-6}\)</span> we have <span class="math notranslate nohighlight">\(\lambda = -1/(RC) = -10^4\)</span>, and the explicit Euler method
+is stable only for <span class="math notranslate nohighlight">\(\tau \leq 2 \cdot 10^{-4}\)</span>, even if the source <span class="math notranslate nohighlight">\(U_0(t) = \cos(100 \pi t)\)</span> changes on a time-scale of
+<span class="math notranslate nohighlight">\(10^{-2}\)</span>. <span class="math notranslate nohighlight">\(A\)</span>-stable methods allow to choose the time-step according to accuracy requirements only.</p>
 </section>
 </section>
 
@@ -664,7 +790,7 @@ We will use more accurate integration rules to develop more accurate time-steppi
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title"><span class="section-number">17. </span>Implementation</p>
+        <p class="prev-next-title"><span class="section-number">17. </span>Implementing time-stepping methods</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -690,6 +816,12 @@ We will use more accurate integration rules to develop more accurate time-steppi
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implicit-euler-method">16.2. Implicit Euler method</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#crank-nicolson-method">16.3. Crank-Nicolson method</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#derivation-from-the-integral-equation">16.4. Derivation from the integral equation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#consistency-and-convergence">16.5. Consistency and convergence</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#measuring-the-order">16.5.1. Measuring the order</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stability-for-linear-odes">16.6. Stability for linear ODEs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stiff-odes">16.7. Stiff ODEs</a></li>
 </ul>
   </nav></div>
 
