@@ -267,6 +267,56 @@ def rk4_step():
     plt.close(fig)
 
 
+# ---------- sketch: pendulum with length constraint
+
+def pendulum():
+    from matplotlib.patches import Arc, FancyArrowPatch
+    l, alpha = 1.0, np.radians(35)
+    x0 = np.array([0.0, 0.0])
+    x = x0 + l*np.array([np.sin(alpha), -np.cos(alpha)])
+    e = (x0 - x) / l                              # unit vector from the mass to the anchor
+
+    fig, ax = plt.subplots(figsize=(5.0, 4.6))
+    ax.set_aspect("equal"); ax.axis("off")
+
+    # ceiling with hatching
+    ax.plot([-0.45, 0.45], [0, 0], color=INK, lw=1.5)
+    for s in np.linspace(-0.42, 0.42, 10):
+        ax.plot([s, s + 0.07], [0, 0.07], color=INK2, lw=0.8)
+
+    # admissible positions c(x) = 0
+    ax.add_patch(Arc(x0, 2*l, 2*l, theta1=200, theta2=340, color=MUTED, lw=1.2, ls="--"))
+    ax.text(-0.98, -0.52, "$c(x) = 0$", color=INK2, ha="right")
+
+    # vertical axis and angle
+    ax.plot([0, 0], [0, -1.05*l], color=MUTED, lw=1, ls=":")
+    ax.add_patch(Arc(x0, 0.6, 0.6, theta1=270, theta2=270 + np.degrees(alpha), color=INK2, lw=1))
+    ax.text(0.39*np.sin(alpha/2), -0.39*np.cos(alpha/2), r"$\alpha$", color=INK, ha="center", va="center")
+
+    # stick and mass
+    n = np.array([np.cos(alpha), np.sin(alpha)])  # normal to the stick
+    ax.plot([x0[0], x[0]], [x0[1], x[1]], color=INK, lw=2)
+    ax.text(*(x0 + 0.3*(x - x0) + 0.08*n), "$l$", color=INK, ha="center", va="center")
+    ax.plot(*x0, "o", color=INK, ms=6, zorder=5)
+    ax.text(x0[0] - 0.05, x0[1] - 0.12, "$x_0$", color=INK, ha="right")
+    ax.plot(*x, "o", color=BLUE, ms=18, markeredgecolor="white", markeredgewidth=2, zorder=5)
+    ax.text(x[0] + 0.12, x[1] + 0.02, "$x$, mass $m$", color=INK, va="center")
+
+    # forces
+    def arrow(start, vec, color):
+        ax.add_patch(FancyArrowPatch(start, start + vec, arrowstyle="-|>", mutation_scale=14,
+                                     color=color, lw=2, zorder=4, shrinkA=9, shrinkB=0))
+    g = np.array([0, -0.5])
+    arrow(x, g, ORANGE)
+    ax.text(x[0] + 0.05, x[1] - 0.42, r"$-m g\, e_z$", color=INK)
+    arrow(x + 0.07*n, 0.4*e, AQUA)                # parallel to the stick, not on top of it
+    ax.text(*(x + 0.07*n + 0.4*e + np.array([0.06, 0.0])), r"$\lambda \nabla_x c$", color=INK, va="center")
+
+    ax.set_xlim(-1.3, 1.35); ax.set_ylim(-1.45, 0.2)
+    fig.savefig("pendulum.png", bbox_inches="tight", pad_inches=0.1)
+    plt.close(fig)
+
+
 if __name__ == "__main__":
     stability_domains()
     rk_stability()
@@ -275,3 +325,4 @@ if __name__ == "__main__":
     explicit_euler()
     improved_euler()
     rk4_step()
+    pendulum()
