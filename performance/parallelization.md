@@ -86,7 +86,7 @@ RunParallel(12, [n, &a, &b,&c] (int i, int size) {
     size_t first = (i*n) / size;
     size_t next = ((i+1)*n) / size;
 
-    c.Rows(first, next) = a.Rows(first, next) * b; });
+    c.rowRange(first, next) = a.rowRange(first, next) * b; });
 ```
 
 Variables from outside are passed to the lambda-function within brackets `[n,

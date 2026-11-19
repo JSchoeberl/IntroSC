@@ -287,7 +287,7 @@ void evaluateDeriv (VectorView<double> x, MatrixView<double> df) const override
   df = 0.0;
   for (size_t i = 0; i < num; i++)
     func->evaluateDeriv(x.range(i*fdimx, (i+1)*fdimx),
-                        df.rows(i*fdimf, (i+1)*fdimf).cols(i*fdimx, (i+1)*fdimx));
+                        df.rowRange(i*fdimf, (i+1)*fdimf).colRange(i*fdimx, (i+1)*fdimx));
 }
 ```
 
