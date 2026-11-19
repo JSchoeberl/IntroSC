@@ -135,18 +135,18 @@ for (int i = 0; i < steps; i++)
 
 This example is provided in `demos/test_ode.cpp`.
 
-Using matplotlib from the python script `plotmassspring.py` we generated the
-plots of the time evolution
+The python script `plotmassspring.py` plots the results. Here we show the time evolution,
+together with the exact solution (dashed),
 
 ```{image} pictures/massspring_time.png
-:width: 40%
+:width: 75%
 :align: center
 ```
 
 and the phase plot via plotting (position(t), velocity(t)) as a two dimensional curve:
 
 ```{image} pictures/massspring_phase.png
-:width: 40%
+:width: 50%
 :align: center
 ```
 
@@ -162,6 +162,14 @@ and the phase plot via plotting (position(t), velocity(t)) as a two dimensional 
   \tilde y & = & y_n + \tfrac{\tau}{2} f(y_n) \\
   y_{n+1} & = &  y_n + \tau f(\tilde y)  
   \end{eqnarray*}
+
+  ```{figure} pictures/improved_euler.png
+  :width: 60%
+  :align: center
+
+  One step of the improved Euler method for $y^\prime = y$: a half step to $\tilde y$, then the
+  full step from $y_n$ with the slope $f(\tilde y)$ at the midpoint.
+  ```
 
   Compare the obtained results with the explicit Euler method.
   

@@ -611,12 +611,12 @@ y_1^\prime &amp; = &amp; -\frac{k}{m} y_0
 </pre></div>
 </div>
 <p>This example is provided in <code class="docutils literal notranslate"><span class="pre">demos/test_ode.cpp</span></code>.</p>
-<p>Using matplotlib from the python script <code class="docutils literal notranslate"><span class="pre">plotmassspring.py</span></code> we generated the
-plots of the time evolution</p>
-<a class="reference internal image-reference" href="../_images/massspring_time.png"><img alt="../_images/massspring_time.png" class="align-center" src="../_images/massspring_time.png" style="width: 40%;" />
+<p>The python script <code class="docutils literal notranslate"><span class="pre">plotmassspring.py</span></code> plots the results. Here we show the time evolution,
+together with the exact solution (dashed),</p>
+<a class="reference internal image-reference" href="../_images/massspring_time.png"><img alt="../_images/massspring_time.png" class="align-center" src="../_images/massspring_time.png" style="width: 75%;" />
 </a>
 <p>and the phase plot via plotting (position(t), velocity(t)) as a two dimensional curve:</p>
-<a class="reference internal image-reference" href="../_images/massspring_phase.png"><img alt="../_images/massspring_phase.png" class="align-center" src="../_images/massspring_phase.png" style="width: 40%;" />
+<a class="reference internal image-reference" href="../_images/massspring_phase.png"><img alt="../_images/massspring_phase.png" class="align-center" src="../_images/massspring_phase.png" style="width: 50%;" />
 </a>
 </section>
 <section id="exercise">
@@ -630,6 +630,14 @@ Look at the time evolution and phase plots.</p></li>
 \tilde y &amp; = &amp; y_n + \tfrac{\tau}{2} f(y_n) \\
 y_{n+1} &amp; = &amp;  y_n + \tau f(\tilde y)  
 \end{eqnarray*}\]</div>
+<figure class="align-center" id="id1">
+<a class="reference internal image-reference" href="../_images/improved_euler.png"><img alt="../_images/improved_euler.png" src="../_images/improved_euler.png" style="width: 60%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Fig. 17.1 </span><span class="caption-text">One step of the improved Euler method for <span class="math notranslate nohighlight">\(y^\prime = y\)</span>: a half step to <span class="math notranslate nohighlight">\(\tilde y\)</span>, then the
+full step from <span class="math notranslate nohighlight">\(y_n\)</span> with the slope <span class="math notranslate nohighlight">\(f(\tilde y)\)</span> at the midpoint.</span><a class="headerlink" href="#id1" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
 <p>Compare the obtained results with the explicit Euler method.</p>
 <p>Push your extensions to your github fork.</p>
 </li>

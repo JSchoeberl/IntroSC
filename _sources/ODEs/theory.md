@@ -17,6 +17,14 @@ where
 * $t \in [t_0, T]$ is called **time**
 * $y_0 \in {\mathbb R}^d$ is the **initial value**
 
+```{figure} pictures/direction_field.png
+:width: 85%
+:align: center
+
+Direction field of $y^\prime = f(t,y)$ for $f(t,y) = \cos t - y/2$ ($d = 1$): the arrows have slope $f(t,y)$.
+The solution through $(t_0, y_0)$ is tangent to the arrows everywhere, other initial values lead to other solutions.
+```
+
 
 ## Some examples:
 

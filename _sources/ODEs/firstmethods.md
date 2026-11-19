@@ -49,6 +49,14 @@ $$
 This method is very simple, it is a fully explicit algorithm. The next step $y_{n+1}$ is
 defined by simply evaluating this formula.
 
+```{figure} pictures/explicit_euler.png
+:width: 65%
+:align: center
+
+Explicit Euler for $y^\prime = y$, $y(0) = 1$: every step follows the slope $f(t_n, y_n)$
+at the current point. The errors of the steps add up.
+```
+
 ## Implicit Euler method
 
 One can also start with the backward difference formula. The same difference quotient is
@@ -251,6 +259,13 @@ $$
 $$
 S_{CN} = \{ z : \operatorname{Re} (z) \leq 0 \}
 $$
+
+```{figure} pictures/stability_domains.png
+:width: 100%
+:align: center
+
+Domains of stability (shaded) of the three methods in the complex plane of $z = \tau \lambda$.
+```
 
 If $\operatorname{Re}(\lambda) \leq 0$, then $\tau \lambda$ is always in the domain of stability of the implicit Euler,
 and of the Crank-Nicolson. This property of a method is called $A$-stability. The explicit Euler leads to

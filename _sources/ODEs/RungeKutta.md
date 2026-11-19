@@ -217,6 +217,14 @@ An explicit method with $s$ stages has order at most $s$, for $p \geq 5$ more th
 For the test equation $y^\prime = \lambda y$ (see section {ref}`sec:stability`), the stability function of an explicit
 method is a polynomial. Thus $|g(z)| \rightarrow \infty$ for $|z| \rightarrow \infty$, and no explicit method is $A$-stable.
 
+```{figure} pictures/rk_stability.png
+:width: 55%
+:align: center
+
+Boundaries of the domains of stability of explicit Runge-Kutta methods with $s = p$ stages,
+the domain is the inside of each curve. The domains grow with the order, but stay bounded.
+```
+
 | method | stages $s$ | order $p$ | type | $A$-stable | $L$-stable |
 |--------|-----------|-----------|------|------------|------------|
 | explicit Euler | 1 | 1 | explicit | no | no |

@@ -547,6 +547,14 @@ y_{n+1} = y_n + \tau f(t_n, y_n) \qquad 0 \leq n &lt; N
 \]</div>
 <p>This method is very simple, it is a fully explicit algorithm. The next step <span class="math notranslate nohighlight">\(y_{n+1}\)</span> is
 defined by simply evaluating this formula.</p>
+<figure class="align-center" id="id1">
+<a class="reference internal image-reference" href="../_images/explicit_euler.png"><img alt="../_images/explicit_euler.png" src="../_images/explicit_euler.png" style="width: 65%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Fig. 16.1 </span><span class="caption-text">Explicit Euler for <span class="math notranslate nohighlight">\(y^\prime = y\)</span>, <span class="math notranslate nohighlight">\(y(0) = 1\)</span>: every step follows the slope <span class="math notranslate nohighlight">\(f(t_n, y_n)\)</span>
+at the current point. The errors of the steps add up.</span><a class="headerlink" href="#id1" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
 </section>
 <section id="implicit-euler-method">
 <h2><span class="section-number">16.2. </span>Implicit Euler method<a class="headerlink" href="#implicit-euler-method" title="Link to this heading">#</a></h2>
@@ -720,6 +728,13 @@ S_{IE} = \{ z : | z - 1 | \geq 1 \}
 \[
 S_{CN} = \{ z : \operatorname{Re} (z) \leq 0 \}
 \]</div>
+<figure class="align-center" id="id2">
+<a class="reference internal image-reference" href="../_images/stability_domains.png"><img alt="../_images/stability_domains.png" src="../_images/stability_domains.png" style="width: 100%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Fig. 16.2 </span><span class="caption-text">Domains of stability (shaded) of the three methods in the complex plane of <span class="math notranslate nohighlight">\(z = \tau \lambda\)</span>.</span><a class="headerlink" href="#id2" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
 <p>If <span class="math notranslate nohighlight">\(\operatorname{Re}(\lambda) \leq 0\)</span>, then <span class="math notranslate nohighlight">\(\tau \lambda\)</span> is always in the domain of stability of the implicit Euler,
 and of the Crank-Nicolson. This property of a method is called <span class="math notranslate nohighlight">\(A\)</span>-stability. The explicit Euler leads to
 (quickly) increasing numerical solutions if <span class="math notranslate nohighlight">\(\tau\)</span> is not small enough.</p>
