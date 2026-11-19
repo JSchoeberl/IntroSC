@@ -1,6 +1,6 @@
 # Solving ordinary differential equations
 
-We are developing a library for solving nonlinear ordinary differential equations. First we build an abstraction of nonlinear functions, and implement solvers for nonlinear equations. On this basis we can simply define time-stepping algorithms. We apply it to multi-body systems. OpenGL visualization is provided based on the python interface to threejs.
+We are developing a library for solving nonlinear ordinary differential equations. First we build an abstraction of nonlinear functions, and implement solvers for nonlinear equations. On this basis we can simply define time-stepping algorithms. We apply it to multi-body systems. 3D visualization in Jupyter notebooks is provided by pythreejs.
 
 - Solving non-linear equations
 - Explicit and implicit time-stepping methods
@@ -13,7 +13,7 @@ Fork that github repo [ASC-ODE](https://github.com/TUWien-ASC/ASC-ODE.git), and 
 
     git clone https://github.com/my_fork_on_github/ASC-ODE.git
 
-It contains the basic linear algebra package nanoblas as an git submodule. Populate it using
+It contains the basic linear algebra package nanoblas as a git submodule. Populate it using
 
     cd ASC-ODE
     git submodule update --init

@@ -37,7 +37,7 @@ $$
 y^j = y_i + \tau \sum_{l=0}^{s-1}  a_{jl} f(t_i+c_l \tau, y^l) \qquad 0 \leq j < s
 $$
 
-We use the same integration points as above, however the weigths are adjusted
+We use the same integration points as above, however the weights are adjusted
 to the smaller interval such that
 
 $$
@@ -58,10 +58,10 @@ c_{s-1} & a_{s-1,0} & \dots & a_{s-1,s-1} \\
 \end{array}
 $$
 
-Instead of having the $y^j$ as unknonws, one often solves for $k$-values ($k$ like slope):
+Instead of having the $y^j$ as unknowns, one often solves for $k$-values ($k$ like slope):
 
 $$
-k^j = f(y_i + c_j \tau, y_i + \tau \sum_{l=0}^{s-1} a_{jl} k^l)
+k^j = f(t_i + c_j \tau, y_i + \tau \sum_{l=0}^{s-1} a_{jl} k^l)
 $$
 
 and then
@@ -101,7 +101,7 @@ Examples are
   and then
 
   $$
-  y_{i+1} = y_i + \tau f(t_i+\tfrac{h}{2}, y^1)
+  y_{i+1} = y_i + \tau f(t_i+\tfrac{\tau}{2}, y^1)
   $$
 
   Evaluation in $k$-values:
@@ -147,7 +147,7 @@ $$
 and then
 
 $$
-y_{i+1} = y_i + \frac{\tau}{6} \big(f(t_i, y^0) + 2 f(t_i+\tfrac{h}{\tau}, y^1)
+y_{i+1} = y_i + \frac{\tau}{6} \big(f(t_i, y^0) + 2 f(t_i+\tfrac{\tau}{2}, y^1)
 + 2 f(t_i+\tfrac{\tau}{2}, y^2) + f(t_i+\tau, y^3) \big)
 $$
 
@@ -175,12 +175,12 @@ $$
 
 ## Implicit Runge Kutta methods
 
-Methods of optimal accuracy are obtained based on Gaussian quadrature:
+Methods of optimal accuracy (order $2s$) are obtained based on Gaussian quadrature:
 
 Gauss-Legendre 2 method:
 
 $$
-\begin{array}{c|cccc}
+\begin{array}{c|cc}
 \frac{1}{2} - \frac{\sqrt{3}}{6} &  \frac{1}{4} & \frac{1}{4} - \frac{\sqrt{3}}{6} \\
 \frac{1}{2} + \frac{\sqrt{3}}{6} & \frac{1}{4} + \frac{\sqrt{3}}{6}  & \frac{1}{4} \\
 \hline
@@ -189,8 +189,8 @@ $$
 $$
 
 
-If not all time-scales are resolved, then $c_s = 1$ leads to better stability (i.e. L-stability).
-The other points are chosen for optimal accuracy. These methods are called Radau IIA.
+If not all time-scales are resolved, then $c_{s-1} = 1$ leads to better stability (i.e. L-stability).
+The other points are chosen for optimal accuracy. These methods are called Radau IIA, they have order $2s-1$.
 
 Two-point Radau IIA method:
 
@@ -238,10 +238,11 @@ $$
 
 Where
 * $k = (k^0, \ldots k^{s-1})$, with $k^j \in {\mathbb R}^n$
-* $\tilde y_i = (\underbrace{y_i, \ldots , y_i}_{s-{\text times}}) \in {\mathbb R}^{sn}$
-* $\tilde f : {\mathbb R}^{sn} \rightarrow {\mathbb R}^{sn} : (x_0, \ldots, x_{s_-1}) \mapsto (f(x_0), \ldots, f(x_{s-1}))$
-* for $A \in {\mathbb R}^{h \times w}$ define
-$A \otimes :  {\mathbb R}^{wn} \rightarrow {\mathbb R}^{hn} : (x_0, \ldots, x_{w-1}) \mapsto (y_0, \ldots , y_{h-1})$ such that $y_j = \sum_l a_{jl} x_l$.
+* $\tilde y_i = (\underbrace{y_i, \ldots , y_i}_{s \text{ times}}) \in {\mathbb R}^{sn}$
+* $\tilde f : {\mathbb R}^{sn} \rightarrow {\mathbb R}^{sn} : (x_0, \ldots, x_{s-1}) \mapsto (f(x_0), \ldots, f(x_{s-1}))$
+* for $A \in {\mathbb R}^{p \times q}$ define
+$A \otimes :  {\mathbb R}^{qn} \rightarrow {\mathbb R}^{pn} : (x_0, \ldots, x_{q-1}) \mapsto (z_0, \ldots , z_{p-1})$ such that $z_j = \sum_l a_{jl} x_l$,
+i.e. multiplication with the Kronecker product $A \otimes I_n$.
 
 We derive two classes from `NonlinearFunction` for that (named `MultipleFunction` and `MatVecFunc`).
 

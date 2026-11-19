@@ -20,7 +20,7 @@ $t_i := t_0 + i \tau$.
 We compute a discrete approximate solution
 
 $$
-y_i \approx y(t_i) \qquad \forall \, i \in { 0, \ldots , n}
+y_i \approx y(t_i) \qquad \forall \, i \in \{ 0, \ldots , n \}
 $$
 
 
@@ -72,14 +72,18 @@ this is done using Newton's method.
 ## Crank-Nicolson method
 
 Interpreting the difference quotient as an approximation to the derivative in
-the mid-point $\frac{t_{i}+t_{i+1}}{2}$, we end up with the Crank-Nicolson method
+the mid-point $\frac{t_{i}+t_{i+1}}{2}$, and approximating the right-hand side there by the average of its values
+at $t_i$ and $t_{i+1}$, we end up with the Crank-Nicolson method
 
 $$
 y_{i+1} = y_i + \frac{\tau}{2} \big( f(t_i, y_i) + f(t_{i+1}, y_{i+1}) \big) \qquad 0 \leq i < n.
 $$
 
-Like the implicit Euler method, it is an implicit method as well. Numerical analysis proves that
-this method provides a better rate of convergence.
+Evaluating $f$ at the average $\big(\frac{t_i+t_{i+1}}{2}, \frac{y_i+y_{i+1}}{2}\big)$ instead
+leads to the implicit mid-point rule, a different method.
+
+Like the implicit Euler method, Crank-Nicolson is an implicit method. Numerical analysis proves that
+it converges with order 2, while both Euler methods converge with order 1.
 
 
 ## Derivation from the integral equation

@@ -4,7 +4,7 @@ We implement a function algebra, which allows us to write expressions like
 ```cpp
   func = Id + 3 * Compose (f, g);
 ```
-where `f` and `g` are functions, and `Id` is the identic function. Then
+where `f` and `g` are functions, and `Id` is the identity function. Then
 the composed function `func` shall be able to compute the function value
 and the derivative at a given point $x$ (of type `Vector`).
 ```cpp
@@ -34,11 +34,11 @@ The function algebra is implemented in the file `nonlinfunc.hpp`.
 
 
 We build expression trees, similar as the expression templates for vectors and matrices.
-But now we use virtual inheritance instead of the Barton Neckman trick (i.e. dynamic
+But now we use virtual functions instead of the Barton–Nackman trick (i.e. dynamic
 polymorphism instead of static polymorphism). This is more expensive to create, but it allows to
 pass `NonlinearFunction` objects between C++ functions.
 
-A `SumFunction` implements the sum $f_A+f_B$. The two childs are provided by pointers.
+A `SumFunction` implements the sum $f_A+f_B$. The two children are provided by pointers.
 Shared pointers allow simple life-time management:
 
 ```cpp
@@ -71,7 +71,7 @@ public:
 ```
 
 To generate such a `SumFunction` object, we overload the `operator+` for two `NonlinearFunction` objects,
-represented as shared objectes:
+represented as shared pointers:
 ```cpp
 auto operator+ (shared_ptr<NonlinearFunction> fa, shared_ptr<NonlinearFunction> fb)
 {
@@ -84,7 +84,7 @@ Some more building blocks for our function hierarchy are:
 
 * The IdentityFunction $f(x) = x$
 * A constant function $f(x) = val$
-* A scaled function $\alpha f$, wehere $\alpha$ is a scalar
+* A scaled function $\alpha f$, where $\alpha$ is a scalar
 * A composed function $f \circ g$
 * ...
 

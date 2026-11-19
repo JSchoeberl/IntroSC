@@ -32,7 +32,7 @@ class TimeStepper
 
 It has the right-hand side of the ode as a member (`m_rhs`), and introduces a virtual function `doStep` which
 evolves the state vector `y` by the time-step `tau`. It is a pure virtual function, since the base class has no
-glue how to compute the time-step.
+clue how to compute the time-step.
 
 The explicit Euler method is a derived class from `TimeStepper`:
 
@@ -52,7 +52,7 @@ public:
 };
 ```
 
-It implements the update of the state vector by adding $\tau f(y_n)$ to the vector.
+It implements the update of the state vector by adding $\tau f(y_i)$ to the vector.
 It requires one help vector for evaluating $f$. To avoid reallocation of the vector in every time-step we made it a private class member.
 
 
@@ -111,8 +111,8 @@ public:
 };
 ```
 
-We can now use the `TimerStepper` for soling the ode. We create a `NonlinearFunction` object as
-`MassSpring` object, and pass it to the `ExplicitEuler` timer-stepper. Then we can run a simple time-loop to evolve the state by time-steps $\tau$:
+We can now use the `TimeStepper` for solving the ODE. We create a `NonlinearFunction` object as
+`MassSpring` object, and pass it to the `ExplicitEuler` time-stepper. Then we can run a simple time-loop to evolve the state by time-steps $\tau$:
 
 ```cpp
 double tend = 4*M_PI;
@@ -135,7 +135,7 @@ for (int i = 0; i < steps; i++)
 
 This example is provided in `demos/test_ode.cpp`.
 
-Using matplotlib from the a python script `plotmassspring.py` we generated the
+Using matplotlib from the python script `plotmassspring.py` we generated the
 plots of the time evolution
 
 ```{image} pictures/massspring_time.png
@@ -159,8 +159,8 @@ and the phase plot via plotting (position(t), velocity(t)) as a two dimensional 
 * Implement a `ImprovedEuler` time-stepping method defined as:
 
   \begin{eqnarray*}
-  \tilde y & = & y_n + \tfrac{\tau}{2} f(y_n) \\
-  y_{n+1} & = &  y_n + \tau f(\tilde y) 
+  \tilde y & = & y_i + \tfrac{\tau}{2} f(y_i) \\
+  y_{i+1} & = &  y_i + \tau f(\tilde y)  
   \end{eqnarray*}
 
   Compare the obtained results with the explicit Euler method.

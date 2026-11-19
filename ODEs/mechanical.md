@@ -41,7 +41,7 @@ $$
 m_i \ddot x_i = -\frac{\partial U}{\partial x_i}
 $$
 
-Now we denote the derivative w.r.t. time $t$ as $\dot {x}$.
+Here, $\dot {x}$ denotes the derivative w.r.t. time $t$.
 
 ## The Newmark method
 
@@ -50,7 +50,7 @@ We start with reducing the second order equation to a first order system. Theref
 $$
 \begin{array}{rcl}
 \dot x_i & = & v_i \\
-m_i \dot v_i & = & -F_i(x)
+m_i \dot v_i & = & F_i(x)
 \end{array}
 $$
 
@@ -104,8 +104,8 @@ a_{n+1-\alpha_m} & = & (1-\alpha_m) a_{n+1} + \alpha_m a_n
 \end{array}
 $$
 
-Depending of one free parameter $\rho^\infty$, parameters tuned for optimal accuracy
-and stabilty are obtained by
+Depending on one free parameter $\rho^\infty$, parameters tuned for optimal accuracy
+and stability are obtained by
 
 $$
 \begin{array}{rcl}
@@ -139,23 +139,25 @@ However, such a direct modeling with angles (so called generalized coordinates) 
 difficult for more complex systems. A simpler possibility is to pose the length constraint
 
 $$
-0 = g(x) := | x - x_0 |^2 - l^2,
+0 = c(x) := | x - x_0 |^2 - l^2,
 $$
 
 where $x_0$ is the anchor point of the pendulum, and define the Lagrange function
 
 $$
-L(x, \lambda) = -U(x) + \left< \lambda , g(x) \right>,
+L(x, \lambda) = -U(x) + \left< \lambda , c(x) \right>,
 $$
 
 with $U(x) = m g x_z$, and pose the equation
 
 $$
+\begin{array}{rcl}
 m_i \ddot x_i & = & \frac{\partial}{\partial x_i} L(x, \lambda) \\
  0 & = & \nabla_\lambda L(x, \lambda)
+\end{array}
 $$
 
-The physical meaning of the Lagrange parameter $\lambda$ is the longitudinal force in the pendulum (precisely: $\lambda \nabla_x g$ is the force vector).
+The physical meaning of the Lagrange parameter $\lambda$ is the longitudinal force in the pendulum (precisely: $\lambda \nabla_x c$ is the force vector).
 This is an ordinary differential equation, with algebraic constraints,
 a so called differential-algebraic equation (DAE).
 
@@ -166,7 +168,7 @@ $$
  M & 0 \\
  0 & 0
  \end{array} \right)
-\left( \begin{array}{cc}
+\left( \begin{array}{c}
    \ddot x \\
    0
  \end{array} \right) =

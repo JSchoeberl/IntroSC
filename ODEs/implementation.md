@@ -4,4 +4,4 @@ We give an implementation of time-stepping methods.
 
 * We introduce the class `NonlinearFunction`. It represents the right-hand side of the ODE. It allows composing functions to build up complex expressions from simple building blocks.
 
-* We introduce a class hierarchy of `TimerStepper`s for implementing different methods
+* We introduce a class hierarchy of `TimeStepper`s for implementing different methods

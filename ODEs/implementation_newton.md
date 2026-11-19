@@ -12,13 +12,13 @@ $$
 x^{n+1} = x^n - f^\prime(x^n)^{-1} f(x^n)
 $$
 
-If the Jacobi-matrix at the solution $x^\ast$ is regular, and the initial guess $x^0$ is sufficiently close to $x^\ast$,
+If $f^\prime$ is Lipschitz continuous, the Jacobi-matrix at the solution $x^\ast$ is regular, and the initial guess $x^0$ is sufficiently close to $x^\ast$,
 Newton's method converges quadratically:
 
 $$
 \| x^{n+1} - x^\ast \| \leq c \, \| x^n - x^\ast \|^2
 $$
-This means the number of valid digits double in every iteration.
+This means the number of valid digits doubles in every iteration.
 
 Here is a simple implementation of Newton's method using `NonlinearFunction`.
 The vector `x` is used to provide the initial guess, as well as for the solution:
@@ -34,17 +34,18 @@ void NewtonSolver (shared_ptr<NonlinearFunction> func, VectorView<double> x,
   for (int i = 0; i < maxsteps; i++)
     {
       func->evaluate(x, res);
+      double err = norm(res);
+      if (err < tol) return;
+
       func->evaluateDeriv(x, fprime);
       calcInverse(fprime);
       x -= fprime*res;
 
-      double err = norm(res);
       if (callback) callback(i, err, x);
-      if (err < tol) return;
     }
 
-    throw std::domain_error("Newton did not converge");
-  }
+  throw std::domain_error("Newton did not converge");
+}
 
 ```
 
@@ -57,6 +58,6 @@ Vector<double> x = { 1.0, 2.0, 3.0 };
 NewtonSolver (myfunc, x, 1e-8, 20,
              [](int step, double err, VectorView<double> x) {
              cout << "step " << step << ", err " << err << ", x = " << x << endl;
-             }
+             });
 ```
 

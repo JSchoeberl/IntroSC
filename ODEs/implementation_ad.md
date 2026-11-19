@@ -1,6 +1,6 @@
 # Automatic Differentiation
 
-Often it is cumbersome and error prune to compute derivatives exactly. Two *different* ways to avoid manual differentiation are numerical differentiation, and automatic differentiation. We don't cover symbolic differentiation as provided by computer algebra libraries as *sympy*.
+Often it is cumbersome and error prone to compute derivatives exactly. Two *different* ways to avoid manual differentiation are numerical differentiation, and automatic differentiation. We don't cover symbolic differentiation as provided by computer algebra libraries as *sympy*.
 
 ## Numerical differentiation
 
@@ -10,7 +10,7 @@ $$
 \frac{\partial f}{\partial x_i}(x) \approx \frac{f(x + \varepsilon e_i) - f(x - \varepsilon e_i)}{2 \varepsilon}
 $$
 
-Here, $e_i$ is the $i^{th}$ unit-vector, and $\varepsilon$ is a small value. If the function is smooth, one easily verifies using Taylor expansion that the approximation error is $O(\varepsilon^2)$. To have a good approximation, one should choose $\epsilon$ small.
+Here, $e_i$ is the $i^{th}$ unit-vector, and $\varepsilon$ is a small value. If the function is smooth, one easily verifies using Taylor expansion that the approximation error is $O(\varepsilon^2)$. To have a good approximation, one should choose $\varepsilon$ small.
 
 On the other hand, one subtracts two similar values in the numerator, and observes numerical cancellation if $\varepsilon$ is very small. Thus, a good compromise is needed.
 
@@ -26,7 +26,7 @@ $$
 f(u,v) = u * v.
 $$
 
-Say $(x_1, \ldots x_n)$ are the independent variables after whom we want to differentiate. Say $u$ and $v$ are intermediate results, for which we know the value, and all partial derivatives (the gradient $\nabla u$). They are represented as
+Say $(x_1, \ldots x_n)$ are the independent variables with respect to which we want to differentiate. Say $u$ and $v$ are intermediate results, for which we know the value, and all partial derivatives (the gradient $\nabla u$). They are represented as
 
 $$
 {\bf u} = \left( \begin{array}{c} u \atop g_u \end{array} \right) \quad \text{and} \quad
@@ -45,7 +45,7 @@ $$
 {\bf w} = \left( \begin{array}{c} w \atop g_w \end{array} \right) =  \left( \begin{array}{c} u v \atop u g_v + v g_u \end{array} \right)
 $$
 
-We now from the chain rule that
+We know from the chain rule that
 
 $$
 \nabla \sin (u) = \cos(u) \nabla u
@@ -62,7 +62,7 @@ The advantage of automatic differentiation is that no choice of a small paramete
 
 ## Implementation of an `AutoDiff` data type
 
-We implement a data type for automatic differentiation. It stores the function value (`m_val`), and the gradient (`m_deriv`). We use a template argument `N` to specify the number of independent variables, what is the dimension of the gradient:
+We implement a data type for automatic differentiation. It stores the function value (`m_val`), and the gradient (`m_deriv`). We use a template argument `N` to specify the number of independent variables, which is the dimension of the gradient:
 
 ```cpp
 template <size_t N, typename T = double>
@@ -136,12 +136,12 @@ AutoDiff<2> y = Variable<1>(2.0);
 and define
 
 ```cpp
-f = x*y;
+AutoDiff<2> f = x*y;
 ```
 
-to obtain the gradient.
+Then `f.value()` is the function value, and `f.deriv()` contains the gradient.
 
-Find the code in `src\autodiff.hpp` and some demos in `demos\demo_autodiff.cpp`.
+Find the code in `src/autodiff.hpp` and some demos in `demos/demo_autodiff.cpp`.
 
 
 ## Using numerical and automatic differentiation for the nonlinear-function class
@@ -150,44 +150,44 @@ Find the code in `src\autodiff.hpp` and some demos in `demos\demo_autodiff.cpp`.
 class NonlinearFunctionNumDiff : public NonlinearFunction {
   double m_eps;
 public:
-  NonlinearFunctionNumDiff (double eps) : m_eps(eps) { }
+  NonlinearFunctionNumDiff (double eps = 1e-6) : m_eps(eps) { }
   void evaluateDeriv (VectorView<double> x, MatrixView<double> df) const override {
-    Vector xl(dimX()), xr(dimX());
-    Vector fl(dimF()), fr(dimF());
-    for (int i = 0; i < dimX(); i++) {
+    Vector<double> xl(dimX()), xr(dimX());
+    Vector<double> fl(dimF()), fr(dimF());
+    for (size_t i = 0; i < dimX(); i++) {
       xl = x; xr = x;
-      xl(i) -= eps; xr(i) += eps;
-      evaluate(xl,fl);
-      evaluate(xr,fr);
-      df.Col(i) = 1/(2*eps)*(fr-fl);
+      xl(i) -= m_eps; xr(i) += m_eps;
+      evaluate(xl, fl);
+      evaluate(xr, fr);
+      df.col(i) = 1/(2*m_eps) * (fr-fl);
     }
-  };
-}
+  }
+};
 ```
 
 
 ```cpp
 template <typename NLF>
-class NonlinearFunctionAutoDif : public NonlinearFunction {
+class NonlinearFunctionAutoDiff : public NonlinearFunction {
 public:
 
   void evaluate(VectorView<double> x, VectorView<double> f) const override {
-    static_cast<const NFL*>(this) -> T_evaluate(x, f);
+    static_cast<const NLF*>(this) -> T_evaluate(x, f);
   }
 
   void evaluateDeriv (VectorView<double> x, MatrixView<double> df) const override {
     Vector<AutoDiff<1>> adx(dimX());
     Vector<AutoDiff<1>> adf(dimF());
 
-    for (int i = 0; i < dimX(); i++) {
-      for (int j = 0; j < dimX(); j++)
+    for (size_t i = 0; i < dimX(); i++) {
+      for (size_t j = 0; j < dimX(); j++)
         adx(j) = x(j);
       adx(i) = Variable<0>(x(i));
-      static_cast<const NFL*>(this) -> T_evaluate(adx, adf);
-      for (int j = 0; j < dimF(); j++)
+      static_cast<const NLF*>(this) -> T_evaluate(adx, adf);
+      for (size_t j = 0; j < dimF(); j++)
         df(j,i) = adf(j).deriv()[0];
     }
-  }  
+  }
 };
 ```
 
@@ -201,7 +201,7 @@ class MyFunc : public NonlinearFunctionAutoDiff<MyFunc> {
  void T_evaluate(VectorView<T> x, VectorView<T> f) const {
     // evaluation of function
  }
-}
+};
 ```
 
 
@@ -219,7 +219,7 @@ their derivatives (using AutoDiff).
   \begin{eqnarray*}
   P_0(x) & = & 1 \\
   P_1(x) & = & x \\
-  P_n(x) & = & \frac{2n-1}{n} x P_{n-1}(x) + \frac{n-1}{n} P_{n-2}(x) \qquad n \geq 2
+  P_n(x) & = & \frac{2n-1}{n} x P_{n-1}(x) - \frac{n-1}{n} P_{n-2}(x) \qquad n \geq 2
   \end{eqnarray*}
 
   ```cpp
@@ -242,10 +242,10 @@ their derivatives (using AutoDiff).
 
 ## Exercise: test the `AutoDiff` class for the pendulum
 
-The pendulum is modeled by an ode whith non-linear right-hand side. The ode as second order equation is
+The pendulum is modeled by an ODE with non-linear right-hand side. The ode as second order equation is
 
 $$
-\alpha^{\prime \prime} = -\frac{g}{l} \sin (\alpha), \qquad \alpha(t_0) = \alpha_0, \; \alpha^\prime(0) = \alpha_{0p},
+\alpha^{\prime \prime} = -\frac{g}{l} \sin (\alpha), \qquad \alpha(t_0) = \alpha_0, \; \alpha^\prime(t_0) = \alpha_{0p},
 $$
 
 where $\alpha$ is the angular displacement, $l$ is the length of the pendulum, and $g$ the gravitational acceleration

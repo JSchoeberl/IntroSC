@@ -48,7 +48,7 @@ Its solution is $y(t) = y_0 \cos( \omega t ) + \frac{y_{0p}}{\omega} \sin (\omeg
 
 **Theorem: Picard Lindelöf**
 
-Assume the right hand side satisfies a Lipschitz condition in the second argument
+Assume the right hand side $f$ is continuous, and satisfies a Lipschitz condition in the second argument
 
 $$
 \| f(t, y) - f(t, z) \| \leq L \, \| y - z \| \qquad \forall \, t \in [t_0, T], \, \forall \, y,z \in {\mathbb R}^n.
@@ -61,13 +61,13 @@ Then there exists a unique solution of the ODE.
 Consider two ODEs differing only in the initial values:
 
 $$
-y^\prime(t) = f(t, y(t)), \quad y(t_0) = y_0 \\
-$$
-$$
-z^\prime(t) = f(t, z(t)), & & \quad z(t_0) = z_0 \\
+\begin{array}{ll}
+y^\prime(t) = f(t, y(t)), & y(t_0) = y_0 \\
+z^\prime(t) = f(t, z(t)), & z(t_0) = z_0
+\end{array}
 $$
 
-Then there holds:
+Under the Lipschitz condition there holds:
 
 $$
 \| y(t) - z(t) \| \leq e^{L (t-t_0)} \| y_0 - z_0 \|
