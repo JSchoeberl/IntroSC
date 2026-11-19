@@ -12,15 +12,15 @@ y(t_0) = y_0,
 $$
 
 where
-* $f : [t_0, T] \times {\mathbb R}^n \rightarrow {\mathbb R}^n$ is the given **right-hand side**
-* $y : [t_0, T] \rightarrow {\mathbb R}^n$ is the unknown function, called **state**
+* $f : [t_0, T] \times {\mathbb R}^d \rightarrow {\mathbb R}^d$ is the given **right-hand side**
+* $y : [t_0, T] \rightarrow {\mathbb R}^d$ is the unknown function, called **state**
 * $t \in [t_0, T]$ is called **time**
-* $y_0 \in {\mathbb R}^n$ is the **initial value**
+* $y_0 \in {\mathbb R}^d$ is the **initial value**
 
 
 ## Some examples:
 
-* $n = 1$, $f(t,y) = a y$:
+* $d = 1$, $f(t,y) = a y$:
 
 $$
 y^\prime(t) = a y, \quad y(t_0) = y_0
@@ -51,7 +51,7 @@ Its solution is $y(t) = y_0 \cos( \omega t ) + \frac{y_{0p}}{\omega} \sin (\omeg
 Assume the right hand side $f$ is continuous, and satisfies a Lipschitz condition in the second argument
 
 $$
-\| f(t, y) - f(t, z) \| \leq L \, \| y - z \| \qquad \forall \, t \in [t_0, T], \, \forall \, y,z \in {\mathbb R}^n.
+\| f(t, y) - f(t, z) \| \leq L \, \| y - z \| \qquad \forall \, t \in [t_0, T], \, \forall \, y,z \in {\mathbb R}^d.
 $$
 
 Then there exists a unique solution of the ODE.
@@ -99,9 +99,9 @@ This is an essential improvement for the first example above when $a < 0$. The s
 An ODE is called autonomous iff the right hand side does not depend explicitly on $t$, i.e.
 $y^\prime(t) = f(y(t))$. Then the time axis can be shifted arbitrarily.
 
-A non-autonomous ODE in ${\mathbb R}^n$ can be transformed to an autonomous one in
-${\mathbb R}^{n+1}$ by letting $y_{n+1}(t) := t$ be another unknown state variable, which satisfies
-the ODE $y_{n+1}^\prime = 1$ and i.c. $y_{n+1}(t_0) = t_0$.
+A non-autonomous ODE in ${\mathbb R}^d$ can be transformed to an autonomous one in
+${\mathbb R}^{d+1}$ by letting $y_{d+1}(t) := t$ be another unknown state variable, which satisfies
+the ODE $y_{d+1}^\prime = 1$ and i.c. $y_{d+1}(t_0) = t_0$.
 
 ## An equivalent integral equation
 

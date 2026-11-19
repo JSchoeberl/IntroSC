@@ -9,10 +9,10 @@ $$
 using the explicit Euler method:
 
 $$
-y_{i+1} = y_i + \tau f(y_i) \qquad 0 \leq i < n
+y_{n+1} = y_n + \tau f(y_n) \qquad 0 \leq n < N
 $$
 
-with $\tau = T/n$.
+with $\tau = T/N$.
 
 Time-stepping methods are implemented in the file `timestepper.hpp`.
 The base class looks like
@@ -52,7 +52,7 @@ public:
 };
 ```
 
-It implements the update of the state vector by adding $\tau f(y_i)$ to the vector.
+It implements the update of the state vector by adding $\tau f(y_n)$ to the vector.
 It requires one help vector for evaluating $f$. To avoid reallocation of the vector in every time-step we made it a private class member.
 
 
@@ -159,8 +159,8 @@ and the phase plot via plotting (position(t), velocity(t)) as a two dimensional 
 * Implement a `ImprovedEuler` time-stepping method defined as:
 
   \begin{eqnarray*}
-  \tilde y & = & y_i + \tfrac{\tau}{2} f(y_i) \\
-  y_{i+1} & = &  y_i + \tau f(\tilde y)  
+  \tilde y & = & y_n + \tfrac{\tau}{2} f(y_n) \\
+  y_{n+1} & = &  y_n + \tau f(\tilde y)  
   \end{eqnarray*}
 
   Compare the obtained results with the explicit Euler method.

@@ -43,6 +43,28 @@ $$
 
 Here, $\dot {x}$ denotes the derivative w.r.t. time $t$.
 
+## Energy conservation
+
+The total energy is the sum of kinetic and potential energy:
+
+$$
+E(t) = \sum_i \frac{1}{2} m_i |\dot x_i(t)|^2 + U(x(t)).
+$$
+
+Along a solution it is constant:
+
+$$
+\frac{d}{dt} E = \sum_i m_i \, \dot x_i \cdot \ddot x_i + \sum_i \frac{\partial U}{\partial x_i} \cdot \dot x_i
+= \sum_i \Big( m_i \ddot x_i + \frac{\partial U}{\partial x_i} \Big) \cdot \dot x_i = 0.
+$$
+
+For simulations over long times, a numerical method should not destroy this property.
+We have seen in section {ref}`sec:stability` for the oscillator $y^{\prime \prime} = -\omega^2 y$ that the explicit Euler method increases the
+energy, the implicit Euler method damps it, and the Crank-Nicolson method preserves it exactly.
+For non-linear problems, so called symplectic methods (for example the implicit mid-point rule, Gauss-Legendre methods, and
+the Störmer-Verlet method below) do not preserve the energy exactly. But the energy error stays bounded by $O(\tau^p)$ over very long times,
+there is no drift.
+
 ## The Newmark method
 
 We start with reducing the second order equation to a first order system. Therefore, we introduce velocity $v_i = \dot x_i$:
@@ -81,6 +103,31 @@ $$
 The dimension of the nonlinear system is the same as the number of state variables (and not twice the size,
 as it looks after introducing the first order system).
 
+## The Störmer-Verlet method
+
+An explicit alternative is the Störmer-Verlet method:
+
+$$
+\begin{array}{rcl}
+v_{n+1/2} & = & v_n + \frac{\tau}{2} a(x_n) \\
+x_{n+1} & = & x_n + \tau \, v_{n+1/2} \\
+v_{n+1} & = & v_{n+1/2} + \frac{\tau}{2} a(x_{n+1})
+\end{array}
+$$
+
+with $a(x) = M^{-1} F(x)$. In the notation of the generalized-$\alpha$ method below, it is the Newmark family with $\beta = 0$, $\gamma = \frac{1}{2}$,
+i.e. $x_{n+1} = x_n + \tau v_n + \frac{\tau^2}{2} a_n$, while the method above has $\beta = \frac{1}{4}$, $\gamma = \frac{1}{2}$.
+It needs one evaluation of the force per time-step, since $a(x_{n+1})$ is reused in the next step.
+The method is of second order, symplectic, and time-reversible. Eliminating the velocities gives the two-step form
+
+$$
+x_{n+1} - 2 x_n + x_{n-1} = \tau^2 a(x_n),
+$$
+
+which we use for the wave equation in {doc}`../PDEs/timedependent/verlet`.
+As an explicit method it is only conditionally stable: for the oscillator $\ddot x = -\omega^2 x$ one needs $\tau \omega < 2$.
+Stiff springs therefore require small time-steps, and implicit methods are preferred.
+
 ## Generalized-$\alpha$ method
 
 Although the Newmark method preserves energy exactly for linear ODEs, it leads to
@@ -116,7 +163,10 @@ $$
 \end{array}
 $$
 
-The parameter $\rho^\infty$ specifies the damping for high frequency functions.
+The parameter $\rho^\infty \in [0,1]$ specifies the damping for high frequency functions: $\rho^\infty = 1$
+gives no numerical damping (like the Newmark method), smaller values damp high frequencies stronger.
+The implementation `SolveODE_Alpha` in ASC-ODE uses the variant $(1-\alpha_f) F(x_{n+1}) + \alpha_f F(x_n)$
+instead of $F(x_{n+1-\alpha_f})$, which coincides for linear $F$.
 The reference is J. Chung and G.M. Hulbert *A Time Integration Algorithm for Structural Dynamics With Improved Numerical Dissipation: The Generalized-α Method*, J. Appl. Mech., 1993, [see](https://asmedigitalcollection.asme.org/appliedmechanics/article/60/2/371/423023/A-Time-Integration-Algorithm-for-Structural?casa_token=PkMuU1hl_4AAAAAA:btyl_IyLpSdrI9q5LjNYSDLzOECUIoT1b3IRqcF86A773ZNWRnyuN94Tizg4kQUaVw2gZftWhg)
 
 An easy to read derivation is [here](https://miaodi.github.io/finite%20element%20method/newmark-generalized/).
@@ -175,6 +225,26 @@ $$
  \nabla L (x, \lambda)
 $$
 
+The Lagrange parameter is treated like an additional position variable. Its "acceleration" is an auxiliary unknown,
+only the resulting $\lambda_{n+1}$ has a meaning. With the variant used in ASC-ODE, the rows of the Lagrange parameters enforce
+
+$$
+(1-\alpha_f) \, c(x_{n+1}) + \alpha_f \, c(x_n) = 0,
+$$
+
+thus the constraint is satisfied exactly in every time-step, provided it is satisfied initially.
+
+There is no equation for $\dot \lambda$. One has to differentiate the constraint three times
+with respect to time to obtain an ODE for $\lambda$, thus the DAE has *index 3*. Consequences are:
+
+* Explicit methods cannot be applied directly.
+
+* The initial values must be consistent: $c(x(0)) = 0$, and also the time derivative $\nabla c(x(0)) \cdot \dot x(0) = 0$,
+  i.e. the initial velocity is tangential to the constraint.
+
+* The Lagrange parameter is sensitive to perturbations. Without numerical damping ($\rho^\infty = 1$), $\lambda$ oscillates
+  from time-step to time-step, while the positions are fine. Numerical damping with $\rho^\infty < 1$ removes these oscillations.
+
 
 
 ## Exercises
@@ -193,12 +263,12 @@ $$
 
 Merge branch `Newmark` from ASC-ODE into your main branch.
 
-For small system it is reasonable to implement directly the right-hand-side function.
-For larger mechanical system it is of advantage to build some data structures describing the system.
+For small systems it is reasonable to implement directly the right-hand-side function.
+For larger mechanical systems it is of advantage to build some data structures describing the system.
 See files [here](https://github.com/TUWien-ASC/ASC-ODE/tree/Newmark).
 The class `MassSpringSystem` has containers for lists of masses, fixations and spring connections.
 By Python-bindings one can setup such a system by adding these components.
-The `MSS_Functions` implements the right-hand-side function for the ODE based on the `MassSpringSystem` model.
+The class `MSS_Function` implements the right-hand-side function for the ODE based on the `MassSpringSystem` model.
 There is
 - file `mass_spring.cpp` for testing a system from C++
 - file `test_mass_spring.py` for testing the system from Python
@@ -215,6 +285,15 @@ Exercise:
   * Build a spinning top (German: Kreisel). We know angular momentum keeps it spinning.
     Connect three masses by distance constraints modeling the spinning top.
     Start with velocities consistent to a rotating motion
+
+### Energy and constraints
+
+- Simulate the pendulum $\ddot \alpha = -\frac{g}{l} \sin \alpha$ over a long time (e.g. 1000 periods) with the explicit Euler,
+  implicit Euler, Crank-Nicolson, and Störmer-Verlet methods. Plot the energy over time.
+- Implement the Störmer-Verlet method for the `MassSpringSystem`. Find the largest stable time-step for a chain of masses
+  and springs, and compare with the eigenvalues of the linearized system.
+- Simulate the pendulum as DAE with the generalized-$\alpha$ method for $\rho^\infty = 1$ and $\rho^\infty = 0.8$.
+  Plot the constraint $c(x)$ and the Lagrange parameter $\lambda$ over time.
 
 
 

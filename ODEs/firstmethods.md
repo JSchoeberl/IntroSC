@@ -11,16 +11,16 @@ using a numerical method.
 We introduce time points
 
 $$
-t_0 < t_1 < \ldots < t_n = T,
+t_0 < t_1 < \ldots < t_N = T,
 $$
 
-usually we choose $n \in {\mathbb N}$, define $\tau := \frac{T-t_0}{n}$, and
-$t_i := t_0 + i \tau$.
+usually we choose $N \in {\mathbb N}$, define $\tau := \frac{T-t_0}{N}$, and
+$t_n := t_0 + n \tau$.
 
 We compute a discrete approximate solution
 
 $$
-y_i \approx y(t_i) \qquad \forall \, i \in \{ 0, \ldots , n \}
+y_n \approx y(t_n) \qquad \forall \, n \in \{ 0, \ldots , N \}
 $$
 
 
@@ -29,42 +29,42 @@ $$
 The derivative $y^\prime$ is approximated by the forward difference quotient
 
 $$
-y^\prime (t_i)
-\approx \frac{y(t_{i+1}) - y(t_i)}{t_{i+1} - t_i}
-\approx \frac{y_{i+1} - y_i}{t_{i+1}-t_i}
+y^\prime (t_n)
+\approx \frac{y(t_{n+1}) - y(t_n)}{t_{n+1} - t_n}
+\approx \frac{y_{n+1} - y_n}{t_{n+1}-t_n}
 $$
 
 Inserting this approximation into the equation we get the numerical scheme
 
 $$
-\frac{y_{i+1} - y_i}{t_{i+1}-t_i} = f(t_i, y_i)
+\frac{y_{n+1} - y_n}{t_{n+1}-t_n} = f(t_n, y_n)
 $$
 
-or (with constant mesh size $\tau = t_{i+1} - t_i$)
+or (with constant mesh size $\tau = t_{n+1} - t_n$)
 
 $$
-y_{i+1} = y_i + \tau f(t_i, y_i) \qquad 0 \leq i < n
+y_{n+1} = y_n + \tau f(t_n, y_n) \qquad 0 \leq n < N
 $$
 
-This method is very simple, it is a fully explicit algorithm. The next step $y_{i+1}$ is
+This method is very simple, it is a fully explicit algorithm. The next step $y_{n+1}$ is
 defined by simply evaluating this formula.
 
 ## Implicit Euler method
 
 One can also start with the backward difference formula. The same difference quotient is
-now seen as an approximation to $y^\prime(t_{i+1})$. This leads to the discrete scheme
+now seen as an approximation to $y^\prime(t_{n+1})$. This leads to the discrete scheme
 
 $$
-\frac{y_{i+1} - y_i}{t_{i+1}-t_i} = f(t_{i+1}, y_{i+1})
+\frac{y_{n+1} - y_n}{t_{n+1}-t_n} = f(t_{n+1}, y_{n+1})
 $$
 
 or
 
 $$
-y_{i+1} = y_i + \tau f(t_{i+1}, y_{i+1}) \qquad 0 \leq i < n
+y_{n+1} = y_n + \tau f(t_{n+1}, y_{n+1}) \qquad 0 \leq n < N
 $$
 
-Now, the new step $y_{i+1}$ shows up also within the right-hand side. We cannot simply
+Now, the new step $y_{n+1}$ shows up also within the right-hand side. We cannot simply
 evaluate a formula, but have to solve a system of equations. If the right-hand side $f(t,y)$
 depends non-linear on the state $y$, one has to solve a non-linear system. Typically,
 this is done using Newton's method.
@@ -72,17 +72,17 @@ this is done using Newton's method.
 ## Crank-Nicolson method
 
 Interpreting the difference quotient as an approximation to the derivative in
-the mid-point $\frac{t_{i}+t_{i+1}}{2}$, and approximating the right-hand side there by the average of its values
-at $t_i$ and $t_{i+1}$, we end up with the Crank-Nicolson method
+the mid-point $\frac{t_{n}+t_{n+1}}{2}$, and approximating the right-hand side there by the average of its values
+at $t_n$ and $t_{n+1}$, we end up with the Crank-Nicolson method
 
 $$
-y_{i+1} = y_i + \frac{\tau}{2} \big( f(t_i, y_i) + f(t_{i+1}, y_{i+1}) \big) \qquad 0 \leq i < n.
+y_{n+1} = y_n + \frac{\tau}{2} \big( f(t_n, y_n) + f(t_{n+1}, y_{n+1}) \big) \qquad 0 \leq n < N.
 $$
 
-Evaluating $f$ at the average $\big(\frac{t_i+t_{i+1}}{2}, \frac{y_i+y_{i+1}}{2}\big)$ instead
+Evaluating $f$ at the average $\big(\frac{t_n+t_{n+1}}{2}, \frac{y_n+y_{n+1}}{2}\big)$ instead
 leads to the implicit mid-point rule, a different method.
 
-Like the implicit Euler method, Crank-Nicolson is an implicit method. Numerical analysis proves that
+Like the implicit Euler method, Crank-Nicolson is an implicit method. We will see in section {ref}`sec:convergence` that
 it converges with order 2, while both Euler methods converge with order 1.
 
 
@@ -91,16 +91,16 @@ it converges with order 2, while both Euler methods converge with order 1.
 We consider the ODE
 
 $$
-y^\prime(t) = f(t, y(t)) \qquad y(t_i) = y_i
+y^\prime(t) = f(t, y(t)) \qquad y(t_n) = y_n
 $$
 
-on the time interval $[t_i, t_{i+1}]$. We rewrite it as an integral equation
+on the time interval $[t_n, t_{n+1}]$. We rewrite it as an integral equation
 
 $$
-y(t) = y_i + \int_{t_i}^t f(s, y(s)) \, ds \qquad \forall \, t \in [t_i, t_{i+1}]
+y(t) = y_n + \int_{t_n}^t f(s, y(s)) \, ds \qquad \forall \, t \in [t_n, t_{n+1}]
 $$
 
-We insert $t = t_{i+1}$ to obtain the next time-step, 
+We insert $t = t_{n+1}$ to obtain the next time-step, 
 and use numerical integration to approximate the integral on the right-hand side. The left-sided rectangular rule
 
 $$
@@ -110,7 +110,7 @@ $$
 leads to
 
 $$
-y_{i+1} = y_i + \tau f(t_i, y_i),
+y_{n+1} = y_n + \tau f(t_n, y_n),
 $$
 
 the right-sided rectangular rule
@@ -122,7 +122,7 @@ $$
 leads to
 
 $$
-y_{i+1} = y_i + \tau f(t_{i+1}, y_{i+1}).
+y_{n+1} = y_n + \tau f(t_{n+1}, y_{n+1}).
 $$
 
 The more accurate trapezoidal rule
@@ -134,11 +134,207 @@ $$
 leads to the Crank-Nicolson method
 
 $$
-y_{i+1} = y_i + \frac{\tau}{2} \big( f(t_i, y_i) +  f(t_{i+1}, y_{i+1})\big)
+y_{n+1} = y_n + \frac{\tau}{2} \big( f(t_n, y_n) +  f(t_{n+1}, y_{n+1})\big)
 $$
 
 We see that we have recovered the same three methods from numerical integration, as we
 had already motivated before from numerical differentiation.
 We will use more accurate integration rules to develop more accurate time-stepping methods later.
+
+
+(sec:convergence)=
+## Consistency and convergence
+
+All methods above are one-step methods, which can be written in the form
+
+$$
+y_{n+1} = y_n + \tau \, \Phi(t_n, y_n, \tau),
+$$
+
+with the increment function $\Phi$. For the explicit Euler method we have $\Phi(t,y,\tau) = f(t,y)$. For implicit
+methods, $\Phi$ is defined implicitly by solving the equation in every time-step.
+
+### Local error
+
+We insert the exact solution into the method, and call the defect
+
+$$
+\eta_{n+1} := y(t_{n+1}) - y(t_n) - \tau \, \Phi(t_n, y(t_n), \tau)
+$$
+
+the local error. It is the error produced in one time-step, if we start the step with the exact value $y(t_n)$.
+A method is called consistent of order $p$ if
+
+$$
+\| \eta_{n+1} \| \leq C \, \tau^{p+1},
+$$
+
+where the constant $C$ depends on derivatives of the exact solution, but not on $\tau$.
+
+For the explicit Euler method, Taylor expansion gives
+
+$$
+y(t_{n+1}) = y(t_n) + \tau y^\prime(t_n) + \frac{\tau^2}{2} y^{\prime \prime}(\xi) = y(t_n) + \tau f(t_n, y(t_n)) + \frac{\tau^2}{2} y^{\prime \prime}(\xi),
+$$
+
+with some $\xi \in (t_n, t_{n+1})$ (for each component). Thus $\eta_{n+1} = \frac{\tau^2}{2} y^{\prime \prime}(\xi)$, and the
+explicit Euler method is consistent of order $p = 1$. In the same way one shows order 1 for the implicit Euler method.
+
+For the Crank-Nicolson method, the local error is the error of the trapezoidal rule applied to $y^\prime$:
+
+$$
+\eta_{n+1} = \int_{t_n}^{t_{n+1}} y^\prime(s) \, ds - \frac{\tau}{2} \big( y^\prime(t_n) + y^\prime(t_{n+1}) \big) = -\frac{\tau^3}{12} y^{\prime \prime \prime}(\xi),
+$$
+
+thus it is consistent of order $p = 2$. In general, a quadrature rule exact for polynomials up to degree $p-1$
+leads to a method of order $p$ (as long as the stage values are accurate enough, see Runge-Kutta methods).
+
+### From local to global error
+
+In every time-step we make a local error of order $\tau^{p+1}$. After $N = (T-t_0)/\tau$ steps these errors
+add up to an error of order $\tau^p$, as long as errors from previous steps are not amplified too much.
+This is ensured by stability of the method:
+
+**Theorem: Convergence of one-step methods**
+
+Assume the method is consistent of order $p$, and $\Phi$ satisfies a Lipschitz condition
+$\| \Phi(t,y,\tau) - \Phi(t,z,\tau) \| \leq L \, \| y - z \|$. Then the global error satisfies
+
+$$
+\| y(t_n) - y_n \| \leq \frac{C}{L} \, \big( e^{L(t_n-t_0)} - 1 \big) \, \tau^p.
+$$
+
+*Proof:* Subtracting the method from the definition of the local error, the error $e_n := y(t_n) - y_n$ satisfies
+
+$$
+e_{n+1} = e_n + \tau \big( \Phi(t_n, y(t_n), \tau) - \Phi(t_n, y_n, \tau) \big) + \eta_{n+1},
+$$
+
+and thus
+
+$$
+\| e_{n+1} \| \leq (1 + \tau L) \, \| e_n \| + C \tau^{p+1}.
+$$
+
+With $e_0 = 0$ we obtain by induction
+
+$$
+\| e_n \| \leq C \tau^{p+1} \sum_{j=0}^{n-1} (1 + \tau L)^j = C \tau^{p+1} \frac{(1+\tau L)^n - 1}{\tau L}
+\leq \frac{C}{L} \big( e^{L (t_n - t_0)} - 1 \big) \, \tau^p,
+$$
+
+where we used $1 + \tau L \leq e^{\tau L}$ and $n \tau = t_n - t_0$. $\square$
+
+In short: consistency and stability imply convergence. The order of convergence is the order of consistency.
+
+The theorem is the discrete counterpart of the stability estimate with respect to initial conditions.
+As there, the factor $e^{L (t_n-t_0)}$ may be huge, for example for stiff problems with
+large Lipschitz constant $L$. A better understanding of stability is obtained from the test equation in the next section.
+
+### Measuring the order
+
+If the error behaves like $e(\tau) \approx C \tau^p$, then
+
+$$
+\frac{e(\tau)}{e(\tau/2)} \approx 2^p, \qquad p \approx \log_2 \frac{e(\tau)}{e(\tau/2)}.
+$$
+
+In a double-logarithmic plot of the error over $\tau$, we observe a straight line with slope $p$.
+This is the standard test of a time-stepping implementation: if the observed order does not match the
+theoretical order, there is a bug.
+
+
+(sec:stability)=
+## Stability for linear ODEs
+
+An ODE $y^\prime(t) = A y(t)$ with $A \in {\mathbb R}^{d \times d}$ diagonalizable (over ${\mathbb C}$)
+is transformed by the eigenvector basis into $d$ decoupled scalar ODEs
+
+$$
+w_k^\prime(t) = \lambda_k w_k(t), \qquad 1 \leq k \leq d,
+$$
+
+where $\lambda_k \in {\mathbb C}$ are eigenvalues of $A$. If $\lambda_k$ has negative (non-positive) real part, the solution
+is decaying (non-increasing). The three methods above commute with this transformation,
+thus it is enough to study the scalar test equation $y^\prime = \lambda y$.
+
+The explicit Euler method with time-step $\tau$ leads to
+
+$$
+y_{n+1} = (1 + \tau \lambda) y_n,
+$$
+
+the implicit Euler method to
+
+$$
+y_{n+1} = \frac{1}{1-\tau \lambda} y_n,
+$$
+
+and the Crank-Nicolson to
+
+$$
+y_{n+1} = \frac{ 2 + \tau \lambda }  { 2 - \tau \lambda } y_n
+$$
+
+The stability function $g(\cdot)$ of a method is defined such that
+
+$$
+y_{n+1} = g(\tau \lambda) y_n
+$$
+
+These are for the explicit Euler, the implicit Euler, and the Crank-Nicolson:
+
+$$
+g_{EE}(z) = 1+z \qquad g_{IE}(z) = \frac{1}{1-z}  \qquad g_{CN}(z) = \frac{2+z}{2-z}
+$$
+
+The domain of stability is
+
+$$
+S = \{ z \in {\mathbb C} : | g(z) | \leq 1 \}
+$$
+
+For the three methods we obtain
+
+$$
+S_{EE} = \{ z : |z + 1| \leq 1 \}
+$$
+
+$$
+S_{IE} = \{ z : | z - 1 | \geq 1 \}
+$$
+
+$$
+S_{CN} = \{ z : \operatorname{Re} (z) \leq 0 \}
+$$
+
+If $\operatorname{Re}(\lambda) \leq 0$, then $\tau \lambda$ is always in the domain of stability of the implicit Euler,
+and of the Crank-Nicolson. This property of a method is called $A$-stability. The explicit Euler leads to
+(quickly) increasing numerical solutions if $\tau$ is not small enough.
+
+If, in addition to $A$-stability, $\lim_{|z| \rightarrow \infty} g(z) = 0$, quickly decaying solutions lead to quickly decaying
+numerical solutions. This is the case for the implicit Euler, but not for the Crank-Nicolson. This property is called $L$-stability. One observes (slowly decreasing) oscillations with the CN method when $-\tau \lambda$ is large.
+
+An undamped oscillator $y^{\prime \prime} = -\omega^2 y$ leads to purely imaginary eigenvalues $\lambda = \pm i \omega$.
+Then $|g_{EE}(i \omega \tau)| > 1$, $|g_{IE}(i \omega \tau)| < 1$, and $|g_{CN}(i \omega \tau)| = 1$:
+the explicit Euler increases the amplitude, the implicit Euler damps it, and the Crank-Nicolson preserves it exactly.
+
+
+## Stiff ODEs
+
+An ODE is called stiff if it contains components decaying much faster than the time-scale of interest.
+For a linear system these are eigenvalues with large negative real part. Explicit methods
+require $\tau \lambda \in S$ for all eigenvalues, i.e. the time-step is limited by the fastest, though
+already decayed component, not by the accuracy needed for the slow components.
+
+As an example, the voltage $U_C$ at the capacitor of an RC circuit with source $U_0(t)$ satisfies
+
+$$
+U_C^\prime(t) = -\frac{1}{RC} U_C(t) + \frac{1}{RC} U_0(t).
+$$
+
+For $R = 100$, $C = 10^{-6}$ we have $\lambda = -1/(RC) = -10^4$, and the explicit Euler method
+is stable only for $\tau \leq 2 \cdot 10^{-4}$, even if the source $U_0(t) = \cos(100 \pi t)$ changes on a time-scale of
+$10^{-2}$. $A$-stable methods allow to choose the time-step according to accuracy requirements only.
 
 

@@ -9,14 +9,14 @@ $$
 is this iterative method:
 
 $$
-x^{n+1} = x^n - f^\prime(x^n)^{-1} f(x^n)
+x^{k+1} = x^k - f^\prime(x^k)^{-1} f(x^k)
 $$
 
 If $f^\prime$ is Lipschitz continuous, the Jacobi-matrix at the solution $x^\ast$ is regular, and the initial guess $x^0$ is sufficiently close to $x^\ast$,
 Newton's method converges quadratically:
 
 $$
-\| x^{n+1} - x^\ast \| \leq c \, \| x^n - x^\ast \|^2
+\| x^{k+1} - x^\ast \| \leq c \, \| x^k - x^\ast \|^2
 $$
 This means the number of valid digits doubles in every iteration.
 
