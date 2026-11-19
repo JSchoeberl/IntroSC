@@ -524,11 +524,12 @@ git submodule update --init
 </pre></div>
 </div>
 <p>You are welcome to replace nanoblas by your preferred linear algebra package.</p>
-<p>ASC-ODE has the following dependencies which must be installed:</p>
+<p>ASC-ODE has the following dependency which must be installed:</p>
 <ul class="simple">
 <li><p>pybind11</p></li>
-<li><p>lapack</p></li>
 </ul>
+<p>The LAPACK interface of nanoblas is not needed for ASC-ODE. It is switched off by default,
+and can be enabled by <code class="docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">-DNANOBLAS_USE_LAPACK=ON</span> <span class="pre">..</span></code>.</p>
 <p>Then you can use cmake to build ASC-ODE:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>mkdir build
 cd build
