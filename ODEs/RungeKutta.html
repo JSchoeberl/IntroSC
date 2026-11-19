@@ -652,6 +652,15 @@ y_{n+1} = y_n + \frac{\tau}{6} \big(f(t_n, y^0) + 2 f(t_n+\tfrac{\tau}{2}, y^1)
 \[
   y_{n+1} = y_n + \frac{\tau}{6} \big( k^0 + 2 k^1 + 2 k^2 + k^3 \big)
   \]</div>
+<figure class="align-center" id="id1">
+<a class="reference internal image-reference" href="../_images/rk4_step.png"><img alt="../_images/rk4_step.png" src="../_images/rk4_step.png" style="width: 65%;" />
+</a>
+<figcaption>
+<p><span class="caption-number">Fig. 19.1 </span><span class="caption-text">One step of the classical <span class="math notranslate nohighlight">\(RK_4\)</span> method for <span class="math notranslate nohighlight">\(y^\prime = -y\)</span>. Each stage value <span class="math notranslate nohighlight">\(y^j\)</span> is reached from <span class="math notranslate nohighlight">\(y_n\)</span>
+with the slope <span class="math notranslate nohighlight">\(k^{j-1}\)</span> of the previous stage (dotted), <span class="math notranslate nohighlight">\(y^1\)</span> and <span class="math notranslate nohighlight">\(y^2\)</span> both at <span class="math notranslate nohighlight">\(t_n + \tau/2\)</span>.
+The step uses the mean slope <span class="math notranslate nohighlight">\(\frac{1}{6} (k^0 + 2 k^1 + 2 k^2 + k^3)\)</span>, and lands close to the exact solution.</span><a class="headerlink" href="#id1" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
 </section>
 <section id="implicit-runge-kutta-methods">
 <h2><span class="section-number">19.2. </span>Implicit Runge Kutta methods<a class="headerlink" href="#implicit-runge-kutta-methods" title="Link to this heading">#</a></h2>
@@ -688,12 +697,12 @@ of degree <span class="math notranslate nohighlight">\(p-1\)</span>, further con
 An explicit method with <span class="math notranslate nohighlight">\(s\)</span> stages has order at most <span class="math notranslate nohighlight">\(s\)</span>, for <span class="math notranslate nohighlight">\(p \geq 5\)</span> more than <span class="math notranslate nohighlight">\(p\)</span> stages are needed.</p>
 <p>For the test equation <span class="math notranslate nohighlight">\(y^\prime = \lambda y\)</span> (see section <a class="reference internal" href="firstmethods.html#sec-stability"><span class="std std-ref">Stability for linear ODEs</span></a>), the stability function of an explicit
 method is a polynomial. Thus <span class="math notranslate nohighlight">\(|g(z)| \rightarrow \infty\)</span> for <span class="math notranslate nohighlight">\(|z| \rightarrow \infty\)</span>, and no explicit method is <span class="math notranslate nohighlight">\(A\)</span>-stable.</p>
-<figure class="align-center" id="id1">
+<figure class="align-center" id="id2">
 <a class="reference internal image-reference" href="../_images/rk_stability.png"><img alt="../_images/rk_stability.png" src="../_images/rk_stability.png" style="width: 55%;" />
 </a>
 <figcaption>
-<p><span class="caption-number">Fig. 19.1 </span><span class="caption-text">Boundaries of the domains of stability of explicit Runge-Kutta methods with <span class="math notranslate nohighlight">\(s = p\)</span> stages,
-the domain is the inside of each curve. The domains grow with the order, but stay bounded.</span><a class="headerlink" href="#id1" title="Link to this image">#</a></p>
+<p><span class="caption-number">Fig. 19.2 </span><span class="caption-text">Boundaries of the domains of stability of explicit Runge-Kutta methods with <span class="math notranslate nohighlight">\(s = p\)</span> stages,
+the domain is the inside of each curve. The domains grow with the order, but stay bounded.</span><a class="headerlink" href="#id2" title="Link to this image">#</a></p>
 </figcaption>
 </figure>
 <div class="pst-scrollable-table-container"><table class="table">
