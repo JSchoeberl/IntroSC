@@ -210,6 +210,14 @@ $$
 \ddot \alpha = -\frac{g}{l} \sin \alpha
 $$
 
+```{figure} pictures/pendulum.png
+:width: 55%
+:align: center
+
+Pendulum with anchor point $x_0$, stick of length $l$, and angle $\alpha$. The constraint $c(x) = 0$ keeps the
+mass on a circle. Gravity $-m g\, e_z$ and the constraint force $\lambda \nabla_x c$ act on the mass.
+```
+
 However, such a direct modeling with angles (so called generalized coordinates) becomes
 difficult for more complex systems. A simpler possibility is to pose the length constraint
 
