@@ -225,6 +225,48 @@ def improved_euler():
     plt.close(fig)
 
 
+# ---------- one step of the classical RK4 method for y' = -y
+
+def rk4_step():
+    f = lambda y: -y
+    tau, yn = 1.0, 1.0
+    c = [0, tau/2, tau/2, tau]
+    ys, ks = [yn], [f(yn)]                       # stage values y^j and slopes k^j
+    for j, fac in enumerate([0.5, 0.5, 1.0]):    # y^{j+1} = y_n + fac*tau*k^j
+        ys.append(yn + fac*tau*ks[j])
+        ks.append(f(ys[-1]))
+    slope = (ks[0] + 2*ks[1] + 2*ks[2] + ks[3]) / 6
+    ynew = yn + tau*slope
+    te = np.linspace(0, tau, 200)
+
+    fig, ax = plt.subplots(figsize=(5.8, 4.0))
+    ax.plot(te, np.exp(-te), color=INK2, lw=1.2, ls="--", label="exact solution")
+    for j in (1, 2, 3):                          # how the stages are reached from y_n
+        ax.plot([0, c[j]], [yn, ys[j]], color=MUTED, lw=1, ls=":", zorder=2)
+    ax.plot([], [], color=MUTED, lw=1, ls=":", label="stage $y^j$ from $y_n$ with slope $k^{j-1}$")
+    d = 0.11
+    for j in range(4):                           # stage slopes as short segments
+        ax.plot([c[j] - d, c[j] + d], [ys[j] - d*ks[j], ys[j] + d*ks[j]], color=ORANGE, lw=2, zorder=3)
+        ax.plot(c[j], ys[j], "o", color=ORANGE, ms=8, markeredgecolor="white", markeredgewidth=2, zorder=4)
+    ax.plot([], [], color=ORANGE, lw=2, marker="o", ms=8, markeredgecolor="white",
+            label="stage values $y^j$, slopes $k^j = f(y^j)$")
+    ax.plot([0, tau], [yn, ynew], color=BLUE, lw=2, zorder=3, label="RK4 step, mean slope")
+    ax.plot(tau, ynew, "o", color=BLUE, ms=8, markeredgecolor="white", markeredgewidth=2, zorder=5)
+
+    ax.annotate("$y_n = y^0$", xy=(0, yn), xytext=(0.03, yn + 0.04), color=INK)
+    ax.annotate("$y^1$", xy=(c[1], ys[1]), xytext=(c[1] + 0.03, ys[1] - 0.08), color=INK)
+    ax.annotate("$y^2$", xy=(c[2], ys[2]), xytext=(c[2] + 0.03, ys[2] + 0.04), color=INK)
+    ax.annotate("$y^3$", xy=(c[3], ys[3]), xytext=(c[3] + 0.04, ys[3] - 0.08), color=INK, va="center")
+    ax.annotate("$y_{n+1}$", xy=(tau, ynew), xytext=(tau + 0.05, ynew + 0.01), color=INK, va="center")
+    ax.set_xticks([0, tau/2, tau], ["$t_n$", "$t_n + \\tau/2$", "$t_{n+1}$"])
+    ax.set_xlim(-0.15, tau + 0.25); ax.set_ylim(0.1, 1.15)
+    ax.set_ylabel("$y$")
+    ax.legend(loc="upper right", fontsize=9)
+    fig.tight_layout()
+    fig.savefig("rk4_step.png")
+    plt.close(fig)
+
+
 if __name__ == "__main__":
     stability_domains()
     rk_stability()
@@ -232,3 +274,4 @@ if __name__ == "__main__":
     direction_field()
     explicit_euler()
     improved_euler()
+    rk4_step()

@@ -168,9 +168,14 @@ $$
   y_{n+1} = y_n + \frac{\tau}{6} \big( k^0 + 2 k^1 + 2 k^2 + k^3 \big)
   $$
 
+```{figure} pictures/rk4_step.png
+:width: 65%
+:align: center
 
-
-
+One step of the classical $RK_4$ method for $y^\prime = -y$. Each stage value $y^j$ is reached from $y_n$
+with the slope $k^{j-1}$ of the previous stage (dotted), $y^1$ and $y^2$ both at $t_n + \tau/2$.
+The step uses the mean slope $\frac{1}{6} (k^0 + 2 k^1 + 2 k^2 + k^3)$, and lands close to the exact solution.
+```
 
 
 ## Implicit Runge Kutta methods
